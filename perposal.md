@@ -21,7 +21,7 @@ https://www.youtube.com/watch?v=gXAkmzV-9MQ
 - Week 02: 前置、基礎物件與環境建立
     - [x] 撰寫 Proposal
     - [x] 完成練習
-    - [ ] 確認全組開發環境同步與Git版控設定
+    - [x] 確認全組開發環境同步與Git版控設定
     - [ ] 建立Base Object
     - [ ] 建立遊戲座標系統
         - [ ] 遊戲內座標系統

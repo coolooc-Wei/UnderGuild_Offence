@@ -5,25 +5,22 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
-void App::Start() {
-    LOG_TRACE("Start");
-    m_CurrentState = State::UPDATE;
-}
-
-void App::Update() {
-    
-    //TODO: do your things here and delete this line <3
-    
-    /*
-     * Do not touch the code below as they serve the purpose for
-     * closing the window.
-     */
-    if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) ||
-        Util::Input::IfExit()) {
-        m_CurrentState = State::END;
-    }
-}
-
 void App::End() { // NOLINT(this method will mutate members in the future)
     LOG_TRACE("End");
+}
+
+void App::ChangeGameState(App::GameState state) {
+    if (state == m_CurrentGameState) { return; }
+    
+    // Hide all pages
+    for (auto& page: m_Pages) {
+        page.second->SetVisible(false);
+    }
+
+    m_CurrentGameState = state;
+    if (m_Pages.count(m_CurrentGameState) && m_Pages[m_CurrentGameState]) {
+        m_Pages[m_CurrentGameState]->SetVisible(true);
+    }
+
+    LOG_TRACE("Changing state to ", (int)state);
 }

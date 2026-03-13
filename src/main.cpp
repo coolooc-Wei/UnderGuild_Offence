@@ -8,18 +8,20 @@ int main(int, char**) {
 
     while (!context->GetExit()) {
         switch (app.GetCurrentState()) {
-            case App::State::START:
+            case App::State::START: {
                 app.Start();
                 break;
-
-            case App::State::UPDATE:
+            }
+            case App::State::UPDATE: {
                 app.Update();
                 break;
-
-            case App::State::END:
+            }
+            case App::State::END: {
                 app.End();
                 context->SetExit(true);
                 break;
+            }
+            default: { break; }
         }
         context->Update();
     }
