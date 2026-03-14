@@ -1,10 +1,11 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include "pch.hpp" // IWYU pragma: export
-#include "DUO_pch.hpp"
+#include "UGO_pch.hpp"
 #include "Page.hpp"
 #include "Util/Renderer.hpp"
+
+namespace UGO {
 
 class App {
 public:
@@ -45,5 +46,7 @@ private:
         {GameState::END, nullptr},
     };
 };
+
+} // namespace UGO
 
 #endif

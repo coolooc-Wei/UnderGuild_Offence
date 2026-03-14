@@ -5,7 +5,7 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
-void App::Update() {
+void UGO::App::Update() {
     switch (m_CurrentGameState) {
     case GameState::WELCOME: {
         if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||

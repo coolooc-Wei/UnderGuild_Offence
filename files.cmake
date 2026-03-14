@@ -8,7 +8,7 @@ set(SRC_FILES
 set(INCLUDE_FILES
     App.hpp
     Page.hpp
-    DUO_pch.hpp
+    UGO_pch.hpp
 )
 
 set(TEST_FILES

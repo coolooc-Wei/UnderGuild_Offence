@@ -1,9 +1,9 @@
 #ifndef PAGE_HPP
 #define PAGE_HPP
 
-#include "Util/GameObject.hpp"
-#include "Util/Text.hpp"
+#include "UGO_pch.hpp"
 
+namespace UGO {
 
 // temp page
 // TODO: Need to rewrite after.
@@ -18,5 +18,6 @@ private:
     std::shared_ptr<Util::Text> m_Text;
 };
 
+} // namespace UGO
 
-#endif
+#endif // PAGE_HPP

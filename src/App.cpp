@@ -5,16 +5,18 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
-void App::End() { // NOLINT(this method will mutate members in the future)
+void UGO::App::End() { // NOLINT(this method will mutate members in the future)
     LOG_TRACE("End");
 }
 
-void App::ChangeGameState(App::GameState state) {
+void UGO::App::ChangeGameState(App::GameState state) {
     if (state == m_CurrentGameState) { return; }
     
     // Hide all pages
     for (auto& page: m_Pages) {
-        page.second->SetVisible(false);
+        if (page.second) {
+            page.second->SetVisible(false);
+        }
     }
 
     m_CurrentGameState = state;
@@ -22,5 +24,15 @@ void App::ChangeGameState(App::GameState state) {
         m_Pages[m_CurrentGameState]->SetVisible(true);
     }
 
-    LOG_TRACE("Changing state to ", (int)state);
+    std::string stateName;
+    switch (state) {
+        case GameState::START:   stateName = "START"; break;
+        case GameState::WELCOME: stateName = "WELCOME"; break;
+        case GameState::MENU:    stateName = "MENU"; break;
+        case GameState::GAMING:  stateName = "GAMING"; break;
+        case GameState::PAUSE:   stateName = "PAUSE"; break;
+        case GameState::END:     stateName = "END"; break;
+    }
+
+    LOG_INFO("Changing GameState to: {}", stateName);
 }

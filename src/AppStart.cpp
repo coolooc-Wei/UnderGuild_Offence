@@ -5,7 +5,7 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
-void App::Start() {
+void UGO::App::Start() {
     LOG_TRACE("Start");
 
     // Add pages
@@ -15,17 +15,10 @@ void App::Start() {
     m_Pages[GameState::PAUSE] = std::make_shared<Page>("Pause - Press ESC to close");
     m_Pages[GameState::END] = std::make_shared<Page>("Game Over");
 
-    m_Root.AddChild(m_Pages[GameState::WELCOME]);
-    m_Root.AddChild(m_Pages[GameState::MENU]);
-    m_Root.AddChild(m_Pages[GameState::GAMING]);
-    m_Root.AddChild(m_Pages[GameState::PAUSE]);
-    m_Root.AddChild(m_Pages[GameState::END]);
-
-    m_Pages[GameState::WELCOME]->SetVisible(false);
-    m_Pages[GameState::MENU]->SetVisible(false);
-    m_Pages[GameState::GAMING]->SetVisible(false);
-    m_Pages[GameState::PAUSE]->SetVisible(false);
-    m_Pages[GameState::END]->SetVisible(false);
+    for (const auto& page: m_Pages) {
+        m_Root.AddChild(page.second);
+        page.second->SetVisible(false);
+    }
 
     // Change states
     ChangeGameState(GameState::WELCOME);

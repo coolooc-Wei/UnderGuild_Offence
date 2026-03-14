@@ -4,19 +4,19 @@
 
 int main(int, char**) {
     auto context = Core::Context::GetInstance();
-    App app;
+    UGO::App app;
 
     while (!context->GetExit()) {
         switch (app.GetCurrentState()) {
-            case App::State::START: {
+            case UGO::App::State::START: {
                 app.Start();
                 break;
             }
-            case App::State::UPDATE: {
+            case UGO::App::State::UPDATE: {
                 app.Update();
                 break;
             }
-            case App::State::END: {
+            case UGO::App::State::END: {
                 app.End();
                 context->SetExit(true);
                 break;

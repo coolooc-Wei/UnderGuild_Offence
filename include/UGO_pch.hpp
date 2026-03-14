@@ -1,9 +1,13 @@
-#ifndef PCH_HPP
-#define PCH_HPP
+#ifndef UGO_PCH_HPP
+#define UGO_PCH_HPP
 
 // standard includes
 #include <algorithm>
 #include <vector>
+#include <string>
+#include <memory>
+#include <unordered_map>
+#include <iostream>
 
 // PTSD includes
 #include "Util/GameObject.hpp"
@@ -15,8 +19,7 @@
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 
-// Project includes
-#include "App.hpp"
-#include "Page.hpp"
+// Mathematical Tools
+#include <glm/glm.hpp>
 
-#endif
+#endif // UGO_PCH_HPP
