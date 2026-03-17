@@ -8,6 +8,7 @@
 #include <memory>
 #include <unordered_map>
 #include <iostream>
+#include <cmath>
 
 // PTSD includes
 #include "Util/GameObject.hpp"

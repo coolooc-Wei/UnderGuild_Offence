@@ -1,15 +1,73 @@
+# --- Core ---
+set(CORE_SRC
+    Core/Coordinate.cpp
+)
+set(CORE_INC
+    Core/Coordinate.hpp
+)
+
+# --- UI ---
+set(UI_SRC
+    UI/Page.cpp
+)
+set(UI_INC
+    UI/Page.hpp
+)
+
+# --- Input ---
+set(INPUT_SRC)
+set(INPUT_INC)
+
+# --- Graphics ---
+set(GRAPHICS_SRC
+    Graphics/Camera.cpp
+)
+set(GRAPHICS_INC
+    Graphics/Camera.hpp
+)
+
+# --- Audio ---
+set(AUDIO_SRC)
+set(AUDIO_INC)
+
+# --- Resource ---
+set(RESOURCE_SRC)
+set(RESOURCE_INC)
+
+# --- Physics ---
+set(PHYSICS_SRC)
+set(PHYSICS_INC)
+
+# --- Scene ---
+set(SCENE_SRC)
+set(SCENE_INC)
+
+# --- Combine All ---
 set(SRC_FILES
     App.cpp
     AppStart.cpp
     AppUpdate.cpp
-    Page.cpp
+    ${CORE_SRC}
+    ${UI_SRC}
+    ${INPUT_SRC}
+    ${GRAPHICS_SRC}
+    ${AUDIO_SRC}
+    ${RESOURCE_SRC}
+    ${PHYSICS_SRC}
+    ${SCENE_SRC}
 )
 
 set(INCLUDE_FILES
     App.hpp
-    Page.hpp
     UGO_pch.hpp
+    ${CORE_INC}
+    ${UI_INC}
+    ${INPUT_INC}
+    ${GRAPHICS_INC}
+    ${AUDIO_INC}
+    ${RESOURCE_INC}
+    ${PHYSICS_INC}
+    ${SCENE_INC}
 )
 
-set(TEST_FILES
-)
+set(TEST_FILES)
