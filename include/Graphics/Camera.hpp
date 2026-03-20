@@ -19,9 +19,11 @@ namespace Graphics {
         Core::WorldPosition GetCameraPos() const;
         
     private:
-        float ZoomLevel = 1.0f; // TODO: Add zoom functionality
+        /* TODO: Add zoom functionality
+        */
+        float ZoomLevel = 1.0f;
 
-        Core::WorldPosition cameraPos = {.0f, .0f};
+        Core::WorldPosition m_cameraPos = {.0f, .0f};
     };
 
 } // namespace Graphics

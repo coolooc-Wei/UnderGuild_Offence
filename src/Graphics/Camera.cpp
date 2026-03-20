@@ -1,12 +1,13 @@
 #include "Graphics/Camera.hpp"
 
 UGO::Core::WorldPosition UGO::Graphics::Camera::ScreenToWorld(const glm::vec2& screenPos) const{
-    return screenPos + cameraPos;
+    return screenPos + m_cameraPos;
 }
 
 UGO::Core::WorldPosition UGO::Graphics::Camera::GridToWorld(const UGO::Core::GridPosition& gridPos) const {
     return {
-        // TODO: TOP-LEFT or CENTER relative
+        /* TODO: TOP-LEFT or CENTER relative
+        */
         static_cast<float>(gridPos.x * Core::TILE_SIZE) + (Core::TILE_SIZE / 2.0f),
         static_cast<float>(gridPos.y * Core::TILE_SIZE) + (Core::TILE_SIZE / 2.0f)
     };
@@ -20,15 +21,16 @@ UGO::Core::GridPosition UGO::Graphics::Camera::WorldToGrid(const UGO::Core::Worl
 }
 
 glm::vec2 UGO::Graphics::Camera::WorldToScreen(const UGO::Core::WorldPosition& worldPos) const {
-    return worldPos - cameraPos;
+    return worldPos - m_cameraPos;
 }
 
 
-void UGO::Graphics::Camera::SetCameraPos(const UGO::Core::WorldPosition& cameraPos) {
-    // TODO: Check if the position is valid
-    this->cameraPos = cameraPos;
+void UGO::Graphics::Camera::SetCameraPos(const UGO::Core::WorldPosition& m_cameraPos) {
+    /* TODO: Check if the position is valid
+    */
+    this->m_cameraPos = m_cameraPos;
 }
 
 UGO::Core::WorldPosition UGO::Graphics::Camera::GetCameraPos() const {
-    return cameraPos;
+    return m_cameraPos;
 }

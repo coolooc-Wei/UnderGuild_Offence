@@ -39,8 +39,12 @@ set(PHYSICS_SRC)
 set(PHYSICS_INC)
 
 # --- Scene ---
-set(SCENE_SRC)
-set(SCENE_INC)
+set(SCENE_SRC
+    Scene/BasicObject.cpp
+)
+set(SCENE_INC
+    Scene/BasicObject.hpp
+)
 
 # --- Combine All ---
 set(SRC_FILES
