@@ -35,7 +35,7 @@ void UGO::App::Update() {
         else if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
             auto screenPos = Util::Input::GetCursorPosition();
             auto worldPos = m_Camera.ScreenToWorld(screenPos);
-            auto gridPos = m_Camera.WorldToGrid(worldPos);
+            auto gridPos = m_Converter.WorldToGrid(worldPos);
             LOG_INFO("Mouse Clicked! Screen: ({}, {}), World: ({}, {}), Grid: [{}, {}]",
                       screenPos.x, screenPos.y, worldPos.x, worldPos.y, gridPos.x, gridPos.y
             );

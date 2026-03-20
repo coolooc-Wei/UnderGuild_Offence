@@ -24,7 +24,10 @@ namespace Scene {
         void SetImage(const std::shared_ptr<Util::Image>& image);
 
         // System methods
-        virtual void Update() = 0;
+        // virtual void Update(){
+        //     Move();
+        //     ApplyBounds();
+        // };
         virtual void OnDraw() = 0;
         /* TODO: Add Core::Time class
          > virtual void OffsetCalculator(Core::WorldPosition& direction, UGO::Core::Time& dt) = 0; // Check validity in Update()

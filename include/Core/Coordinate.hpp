@@ -17,6 +17,16 @@ namespace Core {
 
     const int WindowHeight = 720;
     const int WindowWidth = 1280;
+
+    class WorldAndGridConverter {
+        public:
+            Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos) const;
+            Core::GridPosition WorldToGrid(const Core::WorldPosition &worldPos) const;
+        
+        private:
+            Core::GridPosition m_gridPos;
+            Core::WorldPosition m_worldPos;
+    };
 } // namespace Core
 } // namespace UGO
 

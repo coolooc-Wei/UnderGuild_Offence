@@ -43,6 +43,7 @@ private:
     GameState m_CurrentGameState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
+    Core::WorldAndGridConverter m_Converter;
 
     /* HACK[#13]: Need the find the better method to manage the object
     */
