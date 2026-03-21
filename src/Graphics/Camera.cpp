@@ -25,10 +25,10 @@ glm::vec2 UGO::Graphics::Camera::WorldToScreen(const UGO::Core::WorldPosition& w
 }
 
 
-void UGO::Graphics::Camera::SetCameraPos(const UGO::Core::WorldPosition& m_cameraPos) {
+void UGO::Graphics::Camera::SetCameraPos(const UGO::Core::WorldPosition& cameraPos) {
     /* TODO: Check if the position is valid
     */
-    this->m_cameraPos = m_cameraPos;
+    m_cameraPos = cameraPos;
 }
 
 UGO::Core::WorldPosition UGO::Graphics::Camera::GetCameraPos() const {

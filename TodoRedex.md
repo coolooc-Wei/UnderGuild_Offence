@@ -32,6 +32,7 @@
 // Todo Tree settings
     "todo-tree.general.tags": [
         "TODO",
+        "URGENT",
         "FIXME",
         "XXX",
         "HACK",
@@ -57,12 +58,18 @@
             "background": "#5c98ff",
             "iconColour": "#5c98ff"
         },
+        "URGENT": {
+            "icon": "flame",
+            "foreground": "#ffffff",
+            "background": "#ff0055",
+            "iconColour": "#ff0055",
+            "fontWeight": "bold"
+        },
         "FIXME": {
             "icon": "alert",
             "foreground": "#ffffff",
             "background": "#ff3333",
             "iconColour": "#ff3333",
-            "type": "text",
             "fontWeight": "bold"
         },
         "XXX": {

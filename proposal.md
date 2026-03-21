@@ -22,7 +22,7 @@ https://www.youtube.com/watch?v=gXAkmzV-9MQ
     - [x] 撰寫 Proposal
     - [x] 完成練習
     - [x] 確認全組開發環境同步與Git版控設定
-    - [ ] 建立Base Object
+    - [x] 建立Base Object
     - [x] 建立遊戲座標系統
         - [x] 遊戲內座標系統
         - [x] 螢幕座標轉換

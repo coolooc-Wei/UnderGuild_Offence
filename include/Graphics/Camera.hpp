@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include "UGO_pch.hpp"
+
 #include "Core/Coordinate.hpp"
 
 namespace UGO {
