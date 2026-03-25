@@ -4,28 +4,33 @@
 
 
 
-UGO::Scene::BasicObject::BasicObject() {
-    bounds = UGO::Core::WorldBounds;
+UGO::Scene::BasicObject::BasicObject() {}
+
+UGO::Scene::BasicObject::~BasicObject() = default;
+
+UGO::Core::WorldPosition UGO::Scene::BasicObject::GetWorldPosition() const {
+    return m_Position;
 }
 
-void UGO::Scene::BasicObject::ApplyBounds() {
-    if (!useBounds) return;
+void UGO::Scene::BasicObject::SetWorldPosition(const Core::WorldPosition& pos) {
+    m_Position = pos;
+    x = pos.x;
+    y = pos.y;
+}
 
-    float oldX = x;
-    float oldY = y;
+void UGO::Scene::BasicObject::Update() {
+    Move(); //TODO: Implement Move() in derived class
+}
 
-    x = glm::clamp(x,
-        bounds.minX + width / 2,
-        bounds.maxX - width / 2);
+void UGO::Scene::BasicObject::SetSize(float w, float h) {
+    width = w;
+    height = h;
+}
 
-    y = glm::clamp(y,
-        bounds.minY + height / 2,
-        bounds.maxY - height / 2);
+float UGO::Scene::BasicObject::GetWidth() const {
+    return width;
+}
 
-    // ⭐ 同步回 position（非常关键）
-    m_Position = {x, y};
-
-    if (oldX != x || oldY != y) {
-        LOG_INFO("Clamped! New Pos: ({}, {})\n", x, y);
-    }
+float UGO::Scene::BasicObject::GetHeight() const {
+    return height;
 }

@@ -5,6 +5,7 @@
 #include "UI/Page.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
+#include "Scene/BoundarySystem.hpp"
 
 #include "Util/Renderer.hpp"
 
@@ -42,7 +43,8 @@ private:
     GameState m_CurrentGameState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    Core::WorldAndGridConverter m_Converter;
+    std::shared_ptr<Scene::BoundarySystem> m_BoundarySystem;
+
 
     std::unordered_map<GameState, std::shared_ptr<UI::Page>> m_Pages = {
         {GameState::WELCOME, nullptr},

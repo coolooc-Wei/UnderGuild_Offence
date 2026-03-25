@@ -10,25 +10,19 @@ namespace Scene {
     class BasicObject : public Util::GameObject {
     public:
         BasicObject();
-        ~BasicObject() = default;
+        ~BasicObject();
 
         // Getters
-        Core::WorldPosition GetWorldPosition() const {
-            return m_Position;
-        };
+        Core::WorldPosition GetWorldPosition() const;
     
         // Setters
-        void SetWorldPosition(const Core::WorldPosition& pos) {
-            m_Position = pos;
-            x = pos.x;
-            y = pos.y;
-        };
+        void SetWorldPosition(const Core::WorldPosition& pos);
+        void SetSize(float w, float h);
+        float GetWidth() const;
+        float GetHeight() const;
 
         // System methods
-        virtual void Update(){
-            Move();
-            ApplyBounds();
-        };
+        virtual void Update();
         virtual void OnDraw() = 0;
         /* TODO: Add Core::Time class
 
@@ -41,15 +35,11 @@ namespace Scene {
 
     protected:
         virtual void Move() = 0;
-        virtual void ApplyBounds();
-
     private:
         UGO::Core::WorldPosition m_Position;
-        Core::Bounds bounds;
-        bool useBounds = true;
 
         float x, y, vx, vy;
-        float width = 100, height = 200; //之後外部帶入
+        float width, height;
     };
 
 } // namespace Scene

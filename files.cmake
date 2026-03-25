@@ -41,9 +41,11 @@ set(PHYSICS_INC)
 # --- Scene ---
 set(SCENE_SRC
     Scene/BasicObject.cpp
+    Scene/BoundarySystem.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
+    Scene/BoundarySystem.hpp
 )
 
 # --- Combine All ---
