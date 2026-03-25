@@ -31,7 +31,7 @@ namespace Scene {
     class Weapon {
     public:
         Weapon(WeaponData* data);
-        virtual ~Weapon() = default;
+        virtual ~Weapon();
 
         // Getters
         std::string GetName() const;
@@ -40,14 +40,14 @@ namespace Scene {
         Core::Time::TimeStep GetCooldownTime() const;
 
         // Setters
-        void SetData(WeaponData* data);
+        void SetData(const WeaponData* data);
         void SetName(const std::string& name);
         void SetType(const WeaponType type);
         void SetAttackPower(const HpValue attackPower);
         void SetCooldownTime(const Core::Time::TimeStep cooldownTime);
 
         // Events
-        virtual void Attack(Character& target);
+        void Attack(Character& target);
 
         // System methods
         void Update(); // Called by Character::Update()

@@ -1,4 +1,7 @@
 #include "Scene/Character.hpp"
+#include "Scene/Weapon.hpp"
+#include "Scene/StatusEffect.hpp"
+
 namespace UGO::Scene {
 
     Character::Character(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed)

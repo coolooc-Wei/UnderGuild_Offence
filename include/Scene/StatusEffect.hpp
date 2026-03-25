@@ -30,7 +30,7 @@ namespace Scene {
     class StatusEffect {
     public:
         StatusEffect(const StatusEffectData& data);
-        virtual ~StatusEffect() = default;
+        virtual ~StatusEffect();
 
         virtual void ApplyEffect(Character& target) = 0;
 
