@@ -6,6 +6,7 @@
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
+#include "Scene/BoundarySystem.hpp"
 
 #include "Util/Renderer.hpp"
 
@@ -43,7 +44,8 @@ private:
     GameState m_CurrentGameState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    Core::WorldAndGridConverter m_Converter;
+    std::shared_ptr<Scene::BoundarySystem> m_BoundarySystem;
+
 
     /* HACK[#13]: Need the find the better method to manage the object
     */

@@ -18,31 +18,20 @@ namespace Core {
     const int WindowHeight = 720;
     const int WindowWidth = 1280;
 
-    struct Bounds {
+    
+    struct Bounds { 
     float minX, minY;
     float maxX, maxY;
 
-    static Bounds FromCenter(float width, float height) {
-        return {
-            -width / 2.0f,
-            -height / 2.0f,
-            width / 2.0f,
-            height / 2.0f
-        };
-    }
-};
+    static Bounds FromCenter(float width, float height);
+    };
 
+    extern GridPosition MapGridSize;
     extern Bounds WorldBounds;
 
-    class WorldAndGridConverter {
-        public:
-            Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos) const;
-            Core::GridPosition WorldToGrid(const Core::WorldPosition &worldPos) const;
-        
-        private:
-            Core::GridPosition m_gridPos;
-            Core::WorldPosition m_worldPos;
-    };
+    Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos);
+    Core::GridPosition WorldToGrid(const Core::WorldPosition &worldPos);
+    
 } // namespace Core
 } // namespace UGO
 

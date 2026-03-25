@@ -13,7 +13,7 @@ namespace Scene {
     public:
         BasicObject();
         BasicObject(std::string imagePath, SpeedValue speed);
-        virtual ~BasicObject() = default;
+        virtual ~BasicObject();
 
         // Getters
         Core::WorldPosition GetWorldPosition() const;
@@ -22,12 +22,12 @@ namespace Scene {
         // Setters
         void SetWorldPosition(const Core::WorldPosition& pos);
         void SetImage(const std::shared_ptr<Util::Image>& image);
+        void SetSize(float w, float h);
+        float GetWidth() const;
+        float GetHeight() const;
 
         // System methods
-        virtual void Update(){
-            Move();
-            ApplyBounds();
-        };
+        virtual void Update();
         virtual void OnDraw() = 0;
         /* TODO: Add Core::Time class
          > virtual void OffsetCalculator(Core::WorldPosition& direction, UGO::Core::Time& dt) = 0; // Check validity in Update()
@@ -38,20 +38,15 @@ namespace Scene {
         /* TODO[#13]: Remove after testing
         */
         std::string name;
-    protected:
+
+    private:
         std::shared_ptr<Util::Image> m_Image = nullptr;
         SpeedValue m_Speed;
 
-        virtual void Move() = 0;
-        virtual void ApplyBounds();
-        
-    private:
         UGO::Core::WorldPosition m_Position;
-        Core::Bounds bounds;
-        bool useBounds = true;
 
         float x, y, vx, vy;
-        float width = 100, height = 200; //之後外部帶入
+        float width, height;
     };
 
 } // namespace Scene
