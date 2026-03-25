@@ -13,6 +13,22 @@ namespace Core {
     const int WindowHeight = 720;
     const int WindowWidth = 1280;
 
+    struct Bounds {
+    float minX, minY;
+    float maxX, maxY;
+
+    static Bounds FromCenter(float width, float height) {
+        return {
+            -width / 2.0f,
+            -height / 2.0f,
+            width / 2.0f,
+            height / 2.0f
+        };
+    }
+};
+
+    extern Bounds WorldBounds;
+
     class WorldAndGridConverter {
         public:
             Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos) const;

@@ -10,19 +10,25 @@ namespace Scene {
     class BasicObject : public Util::GameObject {
     public:
         BasicObject();
-        ~BasicObject();
+        ~BasicObject() = default;
 
         // Getters
-        Core::WorldPosition GetWorldPosition() const;
+        Core::WorldPosition GetWorldPosition() const {
+            return m_Position;
+        };
     
         // Setters
-        void SetWorldPosition(const Core::WorldPosition& pos);
+        void SetWorldPosition(const Core::WorldPosition& pos) {
+            m_Position = pos;
+            x = pos.x;
+            y = pos.y;
+        };
 
         // System methods
-        // virtual void Update(){
-        //     Move();
-        //     ApplyBounds();
-        // };
+        virtual void Update(){
+            Move();
+            ApplyBounds();
+        };
         virtual void OnDraw() = 0;
         /* TODO: Add Core::Time class
 
@@ -33,22 +39,17 @@ namespace Scene {
         virtual void OnAttack() = 0;
         virtual void OnDeath() = 0;
 
-    // protected:
-    //     virtual void Move() = 0;
-    //     virtual void ApplyBounds(){
-    //         if(!useBounds) return;
-
-    //         x = std::clamp(x, bounds.minX + width / 2.0f, bounds.maxX - width / 2.0f);
-    //         y = std::clamp(y, bounds.minY + height / 2.0f, bounds.maxY - height / 2.0f);
-    //     };
+    protected:
+        virtual void Move() = 0;
+        virtual void ApplyBounds();
 
     private:
         UGO::Core::WorldPosition m_Position;
-        // Bounds bounds;
-        // bool useBounds = true;
+        Core::Bounds bounds;
+        bool useBounds = true;
 
-        // float x, y, vx, vy;
-        // float width, height;
+        float x, y, vx, vy;
+        float width = 100, height = 200; //之後外部帶入
     };
 
 } // namespace Scene
