@@ -16,7 +16,7 @@ namespace Scene {
     class Character : public BasicObject {
     public:
         Character(HpValue maxHP, HpValue attackPower);
-        virtual ~Character() = default;
+        virtual ~Character();
 
         // Getters
         HpValue GetMaxHP() const;
@@ -50,7 +50,7 @@ namespace Scene {
          */
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_statusEffects;
-        
+
     };
 
 } // namespace Scene

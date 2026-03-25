@@ -5,6 +5,8 @@
 
 #include "Scene/SceneTypes.hpp"
 #include "Scene/BasicObject.hpp"
+#include "Scene/Character.hpp"
+#include "Scene/Weapon.hpp"
 #include "Core/Coordinate.hpp"
 #include "Core/Time.hpp"
 
@@ -16,7 +18,7 @@ namespace Scene {
     class Projectile : public BasicObject {
     public:
         Projectile();
-        virtual ~Projectile() = default;
+        virtual ~Projectile();
 
         // Getters
         Core::WorldPosition GetDirection() const;
