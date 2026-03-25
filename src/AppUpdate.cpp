@@ -2,11 +2,41 @@
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 #include "UI/Page.hpp"
+#include "Scene/BasicObject.hpp"
 
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
+
+class TestObject : public UGO::Scene::BasicObject {
+    public:
+        TestObject() = default;
+        ~TestObject() = default;
+    
+
+        // System methods
+        void Update() override {
+            Move();
+            ApplyBounds();
+        };
+        void OnDraw() override {};
+        /* TODO: Add Core::Time class
+
+         * virtual void OffsetCalculator(Core::WorldPosition& direction, UGO::Core::Time& dt) = 0; // Check validity in Update()
+         */
+
+        // Events
+        void OnAttack() override {};
+        void OnDeath() override {};
+
+    protected:
+        void Move() override {};
+        void ApplyBounds() override {
+            BasicObject::ApplyBounds();
+        };
+
+    };
 
 void UGO::App::Update() {
     switch (m_CurrentGameState) {
@@ -37,11 +67,13 @@ void UGO::App::Update() {
             auto worldPos = m_Camera.ScreenToWorld(screenPos);
             auto gridPos = m_Converter.WorldToGrid(worldPos);
             LOG_INFO("Mouse Clicked! Screen: ({}, {}), World: ({}, {}), Grid: [{}, {}]",
-                      screenPos.x, screenPos.y, worldPos.x, worldPos.y, gridPos.x, gridPos.y
+                    screenPos.x, screenPos.y, worldPos.x, worldPos.y, gridPos.x, gridPos.y
             );
-            auto newObj = std::make_shared<Util::GameObject>();
+            auto newObj = std::make_shared<TestObject>();
+            newObj->SetWorldPosition(worldPos);
+            newObj->Update();
             newObj->SetDrawable(std::make_shared<Util::Image>("../PTSD/assets/sprites/giraffe.png"));
-            newObj->m_Transform.translation = m_Camera.WorldToScreen(worldPos);
+            newObj->m_Transform.translation = m_Camera.WorldToScreen(newObj->GetWorldPosition());
             m_Root.AddChild(newObj);
             newObj->SetVisible(true);
         }

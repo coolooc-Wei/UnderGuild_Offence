@@ -16,3 +16,5 @@ UGO::Core::GridPosition UGO::Core::WorldAndGridConverter::WorldToGrid(const UGO:
         static_cast<int>(std::floor(worldPos.y / static_cast<float>(Core::TILE_SIZE)))
     };
 }
+
+UGO::Core::Bounds UGO::Core::WorldBounds = UGO::Core::Bounds::FromCenter(static_cast<float>(WindowWidth), static_cast<float>(WindowHeight));

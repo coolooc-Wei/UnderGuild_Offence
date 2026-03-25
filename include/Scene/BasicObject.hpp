@@ -24,10 +24,10 @@ namespace Scene {
         void SetImage(const std::shared_ptr<Util::Image>& image);
 
         // System methods
-        // virtual void Update(){
-        //     Move();
-        //     ApplyBounds();
-        // };
+        virtual void Update(){
+            Move();
+            ApplyBounds();
+        };
         virtual void OnDraw() = 0;
         /* TODO: Add Core::Time class
          > virtual void OffsetCalculator(Core::WorldPosition& direction, UGO::Core::Time& dt) = 0; // Check validity in Update()
@@ -40,8 +40,18 @@ namespace Scene {
         std::string name;
     protected:
         std::shared_ptr<Util::Image> m_Image = nullptr;
-        UGO::Core::WorldPosition m_Position;
         SpeedValue m_Speed;
+
+        virtual void Move() = 0;
+        virtual void ApplyBounds();
+        
+    private:
+        UGO::Core::WorldPosition m_Position;
+        Core::Bounds bounds;
+        bool useBounds = true;
+
+        float x, y, vx, vy;
+        float width = 100, height = 200; //之後外部帶入
     };
 
 } // namespace Scene
