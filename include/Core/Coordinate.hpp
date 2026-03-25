@@ -7,6 +7,9 @@ namespace UGO {
 namespace Core {
     using GridPosition = glm::ivec2;
     using WorldPosition = glm::vec2;
+
+    using Direction = glm::vec2;
+    using Distance = float;
     
     const int TILE_SIZE = 32;
 

@@ -22,7 +22,7 @@ https://www.youtube.com/watch?v=gXAkmzV-9MQ
     - [x] 撰寫 Proposal
     - [x] 完成練習
     - [x] 確認全組開發環境同步與Git版控設定
-    - [ ] 建立Base Object
+    - [x] 建立Base Object
     - [x] 建立遊戲座標系統
         - [x] 遊戲內座標系統
         - [x] 螢幕座標轉換
@@ -48,7 +48,6 @@ https://www.youtube.com/watch?v=gXAkmzV-9MQ
         - [ ] 近戰敵人
         - [ ] 遠程敵人
     - [ ] 建立敵人行為模式
-    
 - Week 06:碰撞偵測系統
     - [ ] 實作圖形重疊判斷
         - [ ] 兩個矩形

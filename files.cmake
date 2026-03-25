@@ -1,9 +1,11 @@
 # --- Core ---
 set(CORE_SRC
     Core/Coordinate.cpp
+    Core/Time.cpp
 )
 set(CORE_INC
     Core/Coordinate.hpp
+    Core/Time.hpp
 )
 
 # --- UI ---
@@ -39,8 +41,25 @@ set(PHYSICS_SRC)
 set(PHYSICS_INC)
 
 # --- Scene ---
-set(SCENE_SRC)
-set(SCENE_INC)
+set(SCENE_SRC
+    Scene/BasicObject.cpp
+    Scene/Character.cpp
+    Scene/Weapon.cpp
+    Scene/StatusEffect.cpp
+    Scene/Drop.cpp
+    Scene/Interactable.cpp
+    Scene/Projectile.cpp
+)
+set(SCENE_INC
+    Scene/BasicObject.hpp
+    Scene/Character.hpp
+    Scene/Weapon.hpp
+    Scene/StatusEffect.hpp
+    Scene/SceneTypes.hpp
+    Scene/Drop.hpp
+    Scene/Interactable.hpp
+    Scene/Projectile.hpp
+)
 
 # --- Combine All ---
 set(SRC_FILES

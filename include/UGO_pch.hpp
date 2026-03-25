@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <cmath>
+#include <cassert>
 
 // PTSD includes
 #include "Util/GameObject.hpp"
@@ -19,6 +20,7 @@
 #include "Util/Color.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
+#include "Util/Image.hpp"
 
 // Mathematical Tools
 #include <glm/glm.hpp>
