@@ -49,6 +49,7 @@ set(SCENE_SRC
     Scene/Drop.cpp
     Scene/Interactable.cpp
     Scene/Projectile.cpp
+    Scene/Hero.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -59,6 +60,7 @@ set(SCENE_INC
     Scene/Drop.hpp
     Scene/Interactable.hpp
     Scene/Projectile.hpp
+    Scene/Hero.hpp
 )
 
 # --- Combine All ---

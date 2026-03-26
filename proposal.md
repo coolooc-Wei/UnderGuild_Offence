@@ -36,7 +36,7 @@ https://www.youtube.com/watch?v=gXAkmzV-9MQ
     - [x] 素材收集
 ### 第二階段: 最小可行模型(MVP)
 - Week 04: 武器系統
-    - [ ] 建立`Player`類別
+    - [x] 建立`Player`類別
     - [ ] 實作基礎武器邏輯
         - [ ] 近戰武器
         - [ ] 遠程武器

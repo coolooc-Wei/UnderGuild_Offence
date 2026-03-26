@@ -23,7 +23,7 @@ namespace Scene {
 
     private:
         Core::Distance m_interactRange;
-        Core::TimeStep m_interactTimer;
+        Core::Time::TimeStep m_interactTimer;
     };
 
 } // namespace Scene

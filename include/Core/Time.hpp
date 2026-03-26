@@ -5,9 +5,17 @@
 
 namespace UGO {
 namespace Core {
+namespace Time {
 
     using TimeStep = float;
 
+    /* TODO[#13]: Change the value
+    */
+    inline TimeStep DeltaTime = 1.0f;
+
+    TimeStep GetDeltaTime();
+
+} // namespace Time
 } // namespace Core
 } // namespace UGO
 

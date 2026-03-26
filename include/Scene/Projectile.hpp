@@ -31,7 +31,7 @@ namespace Scene {
     private:
         Core::WorldPosition m_direction;
         HpValue m_damage;
-        Core::TimeStep m_lifetime;
+        Core::Time::TimeStep m_lifetime;
         std::unique_ptr<Character> m_owner = nullptr;
     };
 

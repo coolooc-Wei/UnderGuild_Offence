@@ -3,6 +3,7 @@
 
 #include "UGO_pch.hpp"
 #include "UI/Page.hpp"
+#include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 
@@ -42,6 +43,12 @@ private:
     GameState m_CurrentGameState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
+
+    /* HACK[#13]: Need the find the better method to manage the object
+    */
+    // Object Management
+    std::vector<std::shared_ptr<Scene::BasicObject>> ObjectManagement;
+
 
     std::unordered_map<GameState, std::shared_ptr<UI::Page>> m_Pages = {
         {GameState::WELCOME, nullptr},

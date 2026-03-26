@@ -45,6 +45,15 @@ void UGO::App::Update() {
             m_Root.AddChild(newObj);
             newObj->SetVisible(true);
         }
+
+        /* TODO: Remove these lines after testing
+        */
+        for (auto obj: ObjectManagement) {
+            obj->Update();
+            // LOG_INFO("{}.Update() called", obj->name);
+        }
+        
+
         break;
         }
     default: { break; }

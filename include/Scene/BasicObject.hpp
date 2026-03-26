@@ -12,15 +12,16 @@ namespace Scene {
     class BasicObject : public Util::GameObject {
     public:
         BasicObject();
+        BasicObject(std::string imagePath, SpeedValue speed);
         virtual ~BasicObject() = default;
 
         // Getters
         Core::WorldPosition GetWorldPosition() const;
-        const std::unique_ptr<Util::Image>& GetImage() const;
+        const std::shared_ptr<Util::Image>& GetImage() const;
 
         // Setters
         void SetWorldPosition(const Core::WorldPosition& pos);
-        void SetImage(const std::unique_ptr<Util::Image>& image);
+        void SetImage(const std::shared_ptr<Util::Image>& image);
 
         // System methods
         virtual void Update() = 0;
@@ -29,12 +30,15 @@ namespace Scene {
          > virtual void OffsetCalculator(Core::WorldPosition& direction, UGO::Core::Time& dt) = 0; // Check validity in Update()
          */
 
-        // Events
+        void TryMove(const Core::Direction& direction, const Core::Distance& moveDis);  // Call Core::OffsetCalculator to get offset and update the position.
 
+        /* TODO[#13]: Remove after testing
+        */
+        std::string name;
     protected:
-        std::unique_ptr<Util::Image> m_Image = nullptr;
+        std::shared_ptr<Util::Image> m_Image = nullptr;
         UGO::Core::WorldPosition m_Position;
-        SpeedValue m_speed;
+        SpeedValue m_Speed;
     };
 
 } // namespace Scene

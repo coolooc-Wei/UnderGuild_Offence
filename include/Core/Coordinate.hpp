@@ -5,6 +5,8 @@
 
 namespace UGO {
 namespace Core {
+    /* TODO[#13]: Change the name of global variable
+    */
     using GridPosition = glm::ivec2;
     using WorldPosition = glm::vec2;
 
