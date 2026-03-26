@@ -15,21 +15,24 @@ void BoundarySystem::Update() {
     for (auto it = m_Objects.begin(); it != m_Objects.end(); ) {
         if (auto obj = it->lock()) {
             auto pos = obj->GetWorldPosition();
-            float width = obj->GetWidth();
-            float height = obj->GetHeight();
-
-            float newX = glm::clamp(pos.x, m_Bounds.minX + width / 2.0f, m_Bounds.maxX - width / 2.0f);
-            float newY = glm::clamp(pos.y, m_Bounds.minY + height / 2.0f, m_Bounds.maxY - height / 2.0f);
+            auto newPos = ClampPosition(m_Bounds, pos, obj->GetWidth() / 2.0f, obj->GetHeight() / 2.0f);
             
-            if (newX != pos.x || newY != pos.y) {
-                obj->SetWorldPosition({newX, newY});
-                LOG_INFO("BoundarySystem: Clamped Object! New Pos: ({}, {})\n", newX, newY);
+            if (newPos.x != pos.x || newPos.y != pos.y) {
+                obj->SetWorldPosition(newPos);
+                LOG_INFO("BoundarySystem: Clamped Object! New Pos: ({}, {})\n", newPos.x, newPos.y);
             }
             ++it;
         } else {
             it = m_Objects.erase(it);
         }
     }
+}
+
+Core::WorldPosition BoundarySystem::ClampPosition(const Core::Bounds& bounds, const Core::WorldPosition& pos, float halfW, float halfH) {
+    return {
+        glm::clamp(pos.x, bounds.minX + halfW, bounds.maxX - halfW),
+        glm::clamp(pos.y, bounds.minY + halfH, bounds.maxY - halfH)
+    };
 }
 
 void BoundarySystem::SetBounds(const Core::Bounds& bounds) {

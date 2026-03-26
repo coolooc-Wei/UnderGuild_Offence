@@ -29,11 +29,19 @@ namespace Scene {
         // System methods
         virtual void Update();
         virtual void OnDraw() = 0;
+
         /* TODO: Add Core::Time class
          > virtual void OffsetCalculator(Core::WorldPosition& direction, UGO::Core::Time& dt) = 0; // Check validity in Update()
          */
 
         void TryMove(const Core::Direction& direction, const Core::Distance& moveDis);  // Call Core::OffsetCalculator to get offset and update the position.
+
+        // Calculates the actual offset after boundary clamping.
+        // Given current position and intended movement offset,
+        // returns a corrected offset that won't exceed the boundary.
+        virtual Core::WorldPosition OffsetCalculator(
+            const Core::WorldPosition& currentPos,
+            const Core::WorldPosition& intendedOffset) const;
 
         /* TODO[#13]: Remove after testing
         */

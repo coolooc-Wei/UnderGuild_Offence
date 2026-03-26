@@ -1,4 +1,5 @@
 #include "Scene/BasicObject.hpp"
+#include "Scene/BoundarySystem.hpp"
 
 namespace UGO::Scene {
 
@@ -51,5 +52,16 @@ namespace UGO::Scene {
     
     float BasicObject::GetHeight() const {
         return height;
+    }
+
+    Core::WorldPosition BasicObject::OffsetCalculator(
+        const Core::WorldPosition& currentPos,
+        const Core::WorldPosition& intendedOffset) const {
+    
+        // Delegate to BoundarySystem::ClampPosition (static) to avoid duplication
+        Core::WorldPosition target = { currentPos.x + intendedOffset.x,
+                                       currentPos.y + intendedOffset.y };
+        Core::WorldPosition clamped = BoundarySystem::ClampPosition(Core::WorldBounds, target, width / 2.0f, height / 2.0f);
+        return { clamped.x - currentPos.x, clamped.y - currentPos.y };
     }
 }
