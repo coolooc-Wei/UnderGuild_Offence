@@ -18,6 +18,7 @@ namespace Scene {
 
         void AddObject(std::shared_ptr<BasicObject> obj);
         void Update();
+        static Core::WorldPosition ClampPosition(const Core::Bounds& bounds, const Core::WorldPosition& pos, float halfW, float halfH);
         
         void SetBounds(const Core::Bounds& bounds);
         Core::Bounds GetBounds() const;
