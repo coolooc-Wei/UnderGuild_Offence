@@ -29,10 +29,9 @@ namespace UGO::Scene {
         if (glm::length(direction) < 0.0001f) { return; }
         
         Core::Direction expectedOffset = glm::normalize(direction) * moveDis;
-        /* HACK: Remove the annotation mark after finishing the function
-         > Core::Direction safeOffset = UGO::Core::OffsetCalculator(this->m_Position, expectedOffset);
-        */
-        Core::Direction safeOffset = expectedOffset;
+
+        Core::Direction safeOffset = OffsetCalculator(this->m_Position, expectedOffset);
+
         
         m_Position += safeOffset;
     }

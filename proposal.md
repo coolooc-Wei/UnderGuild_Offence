@@ -17,6 +17,10 @@ https://www.youtube.com/watch?v=gXAkmzV-9MQ
 
 # Development Timeline
 
+- Bonus:
+    - [ ] giraffe as boss
+    - [ ] DVD animation in the GameOver page.
+
 ### 第一階段: 基礎架構
 - Week 02: 前置、基礎物件與環境建立
     - [x] 撰寫 Proposal

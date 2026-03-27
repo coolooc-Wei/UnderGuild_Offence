@@ -32,7 +32,7 @@ void UGO::App::Start() {
 
     /* TODO: Remove these lines after testing
     */
-    auto hero = std::make_shared<Scene::Hero>(100, 10, "../Resources/Image/character/hero/Hero_101_1.png", 1.0f);
+    auto hero = std::make_shared<Scene::Hero>(100, 10, "../Resources/Image/character/hero/Hero_101_1.png", 10.0f);
     hero->SetWorldPosition({100, 10});
     hero->SetVisible(true);
     hero->name = "hero";

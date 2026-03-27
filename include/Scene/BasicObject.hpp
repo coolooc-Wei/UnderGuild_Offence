@@ -47,7 +47,7 @@ namespace Scene {
         */
         std::string name;
 
-    private:
+    protected:
         std::shared_ptr<Util::Image> m_Image = nullptr;
         SpeedValue m_Speed;
 
