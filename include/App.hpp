@@ -7,7 +7,6 @@
 #include "Graphics/Camera.hpp"
 #include "Scene/BoundarySystem.hpp"
 
-#include "Util/Renderer.hpp"
 
 namespace UGO {
 
