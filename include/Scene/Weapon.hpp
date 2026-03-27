@@ -23,9 +23,9 @@ namespace Scene {
         std::string name;
         WeaponType type;
         HpValue attackPower;
-        Core::TimeStep cooldownTime;
+        Core::Time::TimeStep cooldownTime;
 
-        std::vector< std::pair<std::unique_ptr<StatusEffect>, Core::TimeStep> > skills;
+        std::vector< std::pair<std::unique_ptr<StatusEffect>, Core::Time::TimeStep> > skills;
     };
 
     class Weapon {
@@ -37,14 +37,14 @@ namespace Scene {
         std::string GetName() const;
         WeaponType GetType() const;
         HpValue GetAttackPower() const;
-        Core::TimeStep GetCooldownTime() const;
+        Core::Time::TimeStep GetCooldownTime() const;
 
         // Setters
         void SetData(const WeaponData* data);
         void SetName(const std::string& name);
         void SetType(const WeaponType type);
         void SetAttackPower(const HpValue attackPower);
-        void SetCooldownTime(const Core::TimeStep cooldownTime);
+        void SetCooldownTime(const Core::Time::TimeStep cooldownTime);
 
         // Events
         void Attack(Character& target);
@@ -55,7 +55,7 @@ namespace Scene {
 
     private:
         WeaponData* m_data;
-        Core::TimeStep m_currentCooldown;
+        Core::Time::TimeStep m_currentCooldown;
     };
 
 } // namespace Scene

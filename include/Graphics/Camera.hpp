@@ -11,9 +11,7 @@ namespace Graphics {
     class Camera {
     public:
         Core::WorldPosition ScreenToWorld(const glm::vec2& screenPos) const;
-        Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos) const;
-        Core::GridPosition WorldToGrid(const Core::WorldPosition &worldPos) const;
-
+        
         glm::vec2 WorldToScreen(const Core::WorldPosition& worldPos) const;
         
         void SetCameraPos(const Core::WorldPosition& cameraPos);

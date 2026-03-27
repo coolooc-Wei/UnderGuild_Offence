@@ -10,7 +10,7 @@ namespace UGO::Scene {
     std::string Weapon::GetName() const { return m_data->name; }
     WeaponType Weapon::GetType() const { return m_data->type; }
     HpValue Weapon::GetAttackPower() const { return m_data->attackPower; }
-    Core::TimeStep Weapon::GetCooldownTime() const { return m_data->cooldownTime; }
+    Core::Time::TimeStep Weapon::GetCooldownTime() const { return m_data->cooldownTime; }
 
     void Weapon::SetData(const WeaponData* data) {
         (void) data;
@@ -25,7 +25,7 @@ namespace UGO::Scene {
         assert(attackPower >= 0);
         m_data->attackPower = attackPower;
     }
-    void Weapon::SetCooldownTime(const Core::TimeStep cooldownTime) {
+    void Weapon::SetCooldownTime(const Core::Time::TimeStep cooldownTime) {
         assert(cooldownTime >= 0);
         m_data->cooldownTime = cooldownTime;
     }

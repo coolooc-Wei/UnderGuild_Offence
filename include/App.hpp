@@ -3,10 +3,11 @@
 
 #include "UGO_pch.hpp"
 #include "UI/Page.hpp"
+#include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
+#include "Scene/BoundarySystem.hpp"
 
-#include "Util/Renderer.hpp"
 
 namespace UGO {
 
@@ -42,6 +43,14 @@ private:
     GameState m_CurrentGameState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
+    std::shared_ptr<Scene::BoundarySystem> m_BoundarySystem;
+
+
+    /* HACK[#13]: Need the find the better method to manage the object
+    */
+    // Object Management
+    std::vector<std::shared_ptr<Scene::BasicObject>> ObjectManagement;
+
 
     std::unordered_map<GameState, std::shared_ptr<UI::Page>> m_Pages = {
         {GameState::WELCOME, nullptr},

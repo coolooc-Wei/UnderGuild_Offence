@@ -1,4 +1,7 @@
 #include "App.hpp"
+/* TODO: Remove these lines after testing
+*/
+#include "Scene/Hero.hpp"
 
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
@@ -26,4 +29,18 @@ void UGO::App::Start() {
 
     // Initialize camera position
     m_Camera.SetCameraPos({.0f, .0f});
+
+    /* TODO: Remove these lines after testing
+    */
+    auto hero = std::make_shared<Scene::Hero>(100, 10, "../Resources/Image/character/hero/Hero_101_1.png", 10.0f);
+    hero->SetWorldPosition({100, 10});
+    hero->SetVisible(true);
+    hero->name = "hero";
+    m_Root.AddChild(hero);
+    ObjectManagement.emplace_back(hero);
+    
+    
+
+
+
 }

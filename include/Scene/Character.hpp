@@ -15,7 +15,7 @@ namespace Scene {
 
     class Character : public BasicObject {
     public:
-        Character(HpValue maxHP, HpValue attackPower);
+        Character(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed);
         virtual ~Character();
 
         // Getters
@@ -34,22 +34,21 @@ namespace Scene {
         virtual void OnDeath() = 0;
 
         // System methods
-        virtual void Update() override;
-        virtual void OnDraw() override;
+        void Update() override;
+        void OnDraw() override;
 
 
     private:
-        HpValue m_maxHP;
-        HpValue m_currentHP;
-        HpValue m_attackPower;
-        /* TODO:*/
+        HpValue m_MaxHP;
+        HpValue m_CurrentHP;
+        HpValue m_AttackPower;
         /* URGENT: Check info.
          *       1. If attack animation is decided by weapon
          *       2. The "drawable" when the character is idle is either image or animation.
          > std::shared_ptr<Util::Image> ;
          */
         std::unique_ptr<Weapon> m_Weapon = nullptr;
-        std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_statusEffects;
+        std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
 
     };
 

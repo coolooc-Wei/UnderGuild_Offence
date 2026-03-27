@@ -21,8 +21,8 @@ namespace Scene {
 
     struct StatusEffectData {
         StatusEffectType type;
-        Core::TimeStep duration;
-        Core::TimeStep tickRate;
+        Core::Time::TimeStep duration;
+        Core::Time::TimeStep tickRate;
         HpValue tickDamage;
     };
 
