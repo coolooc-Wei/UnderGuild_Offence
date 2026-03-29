@@ -30,11 +30,17 @@ namespace Core {
     static Bounds FromCenter(float width, float height);
     };
 
-    extern GridPosition g_MapGridSize;
-    extern Bounds g_WorldBounds;
+    namespace Map {
+        extern GridPosition g_MapGridSize;
+        extern Bounds g_WorldBounds;
+    }
 
+    /* Grid:  Top-Left Based, int
+     * World: Center Based  , float
+     */
     Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos);
     Core::GridPosition WorldToGrid(const Core::WorldPosition &worldPos);
+    Core::WorldPosition ClampPosition(const Core::Bounds& bounds, const Core::WorldPosition& pos, Core::Distance halfWidth, Core::Distance halfHeight);
 
 } // namespace Core
 } // namespace UGO

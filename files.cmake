@@ -50,7 +50,6 @@ set(SCENE_SRC
     Scene/Interactable.cpp
     Scene/Projectile.cpp
     Scene/Hero.cpp
-    Scene/BoundarySystem.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -62,7 +61,6 @@ set(SCENE_INC
     Scene/Interactable.hpp
     Scene/Projectile.hpp
     Scene/Hero.hpp
-    Scene/BoundarySystem.hpp
 )
 
 # --- Combine All ---

@@ -31,10 +31,6 @@ public:
 };
 
 void UGO::App::Update() {
-  if (!m_BoundarySystem) {
-    m_BoundarySystem =
-        std::make_shared<Scene::BoundarySystem>(Core::g_WorldBounds);
-  }
   switch (m_CurrentGameState) {
   case GameState::WELCOME: {
       if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
@@ -65,6 +61,9 @@ void UGO::App::Update() {
       else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
           ChangeGameState(GameState::END);
       }
+      /* TODO: Remove these lines
+       *       These lines are for testing
+       */
       else if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
           auto screenPos = Util::Input::GetCursorPosition();
           auto worldPos = m_Camera.ScreenToWorld(screenPos);
@@ -76,8 +75,6 @@ void UGO::App::Update() {
           newObj->SetWorldPosition(worldPos);
           newObj->SetSize(100.0f, 200.0f);
           newObj->Update();
-          m_BoundarySystem->AddObject(newObj);
-          m_BoundarySystem->Update();
           newObj->SetDrawable(std::make_shared<Util::Image>("../PTSD/assets/sprites/giraffe.png"));
           newObj->m_Transform.translation = m_Camera.WorldToScreen(newObj->GetWorldPosition());
           m_Root.AddChild(newObj);
@@ -96,9 +93,6 @@ void UGO::App::Update() {
   }
 
   m_Root.Update();
-  if (m_BoundarySystem) {
-    m_BoundarySystem->Update();
-  }
   /*
    * Do not touch the code below as they serve the purpose for
    * closing the window.

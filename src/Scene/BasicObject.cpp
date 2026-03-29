@@ -1,5 +1,4 @@
 #include "Scene/BasicObject.hpp"
-#include "Scene/BoundarySystem.hpp"
 
 namespace UGO::Scene {
 
@@ -60,7 +59,8 @@ namespace UGO::Scene {
         // Delegate to BoundarySystem::ClampPosition (static) to avoid duplication
         Core::WorldPosition target = { currentPos.x + intendedOffset.x,
                                        currentPos.y + intendedOffset.y };
-        Core::WorldPosition clamped = BoundarySystem::ClampPosition(Core::g_WorldBounds, target, m_Width / 2.0f, m_Height / 2.0f);
+        Core::WorldPosition clamped = Core::ClampPosition(Core::Map::g_WorldBounds, target, m_Width / 2.0f, m_Height / 2.0f);
+
         return { clamped.x - currentPos.x, clamped.y - currentPos.y };
     }
 }
