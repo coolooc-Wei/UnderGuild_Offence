@@ -3,8 +3,6 @@
 
 #include "UGO_pch.hpp"
 #include "Core/Coordinate.hpp"
-#include <memory>
-#include <vector>
 
 namespace UGO {
 namespace Scene {
@@ -17,17 +15,24 @@ namespace Scene {
         ~BoundarySystem() = default;
 
         void AddObject(std::shared_ptr<BasicObject> obj);
+
+        /* FIXME: Changes other objects' member.
+         */
         void Update();
-        static Core::WorldPosition ClampPosition(const Core::Bounds& bounds, const Core::WorldPosition& pos, float halfW, float halfH);
-        
+        static Core::WorldPosition ClampPosition(
+            const Core::Bounds& bounds, const Core::WorldPosition& pos, 
+            const Core::Distance halfWidth, const Core::Distance halfHeight );
+
         void SetBounds(const Core::Bounds& bounds);
         Core::Bounds GetBounds() const;
+
 
     private:
         Core::Bounds m_Bounds;
         std::vector<std::weak_ptr<BasicObject>> m_Objects;
     };
 
-}
-}
-#endif
+} // namespace Scene
+} // namespace UGO
+
+#endif // BOUNDARY_SYSTEM_HPP

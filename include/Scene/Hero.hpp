@@ -1,5 +1,5 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#ifndef HERO_HPP
+#define HERO_HPP
 
 #include "UGO_pch.hpp"
 
@@ -23,4 +23,4 @@ namespace Scene {
 } // namespace Scene
 } // namespace UGO
 
-#endif
+#endif // HERO_HPP

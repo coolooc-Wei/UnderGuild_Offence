@@ -13,9 +13,9 @@ void UGO::App::Start() {
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
-    m_Pages[GameState::MENU] = std::make_shared<UI::Page>("Menu - Press ESC to close");
-    m_Pages[GameState::GAMING] = std::make_shared<UI::Page>("Gaming");
-    m_Pages[GameState::PAUSE] = std::make_shared<UI::Page>("Pause - Press ESC to close");
+    m_Pages[GameState::MENU] = std::make_shared<UI::Page>("Menu - Press ENTER to start");
+    m_Pages[GameState::GAMING] = std::make_shared<UI::Page>("Gaming\n - Press P to pause\n - Press G to end");
+    m_Pages[GameState::PAUSE] = std::make_shared<UI::Page>("Pause - Press P to close");
     m_Pages[GameState::END] = std::make_shared<UI::Page>("Game Over");
 
     for (const auto& page: m_Pages) {
@@ -35,7 +35,6 @@ void UGO::App::Start() {
     auto hero = std::make_shared<Scene::Hero>(100, 10, "../Resources/Image/character/hero/Hero_101_1.png", 10.0f);
     hero->SetWorldPosition({100, 10});
     hero->SetVisible(true);
-    hero->name = "hero";
     m_Root.AddChild(hero);
     ObjectManagement.emplace_back(hero);
     

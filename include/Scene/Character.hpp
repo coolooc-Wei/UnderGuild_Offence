@@ -42,11 +42,6 @@ namespace Scene {
         HpValue m_MaxHP;
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
-        /* URGENT: Check info.
-         *       1. If attack animation is decided by weapon
-         *       2. The "drawable" when the character is idle is either image or animation.
-         > std::shared_ptr<Util::Image> ;
-         */
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
 

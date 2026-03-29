@@ -12,7 +12,7 @@ namespace Scene {
     class Interactable : public BasicObject {
     public:
         Interactable();
-        virtual ~Interactable() = default;
+        virtual ~Interactable();
 
         // System methods
         void Update() override;
@@ -30,3 +30,14 @@ namespace Scene {
 } // namespace UGO
 
 #endif // INTERACTABLE_HPP
+
+
+
+/* URGENT, 
+/* TODO,
+/* FIXME
+/* HACK:
+1. bounds bug(run and you will know what i say.)
+2. check Weapon and StatusEffect, that are a disaster
+3. if the situation is too terrible, just retry by back to the lastest version.
+*/

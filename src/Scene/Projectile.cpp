@@ -2,7 +2,7 @@
 
 namespace UGO::Scene {
 
-    Projectile::Projectile() {};
+    Projectile::Projectile() {}
     Projectile::~Projectile() = default;
 
     void Projectile::Update() {}

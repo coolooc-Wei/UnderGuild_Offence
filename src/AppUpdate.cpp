@@ -9,6 +9,8 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
+/* TODO: Remove this after testing
+ */
 class TestObject : public UGO::Scene::BasicObject {
 public:
   TestObject() = default;
@@ -31,10 +33,17 @@ public:
 void UGO::App::Update() {
   if (!m_BoundarySystem) {
     m_BoundarySystem =
-        std::make_shared<Scene::BoundarySystem>(Core::WorldBounds);
+        std::make_shared<Scene::BoundarySystem>(Core::g_WorldBounds);
   }
   switch (m_CurrentGameState) {
   case GameState::WELCOME: {
+      if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
+          Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
+          ChangeGameState(GameState::MENU);
+      }
+      break;
+  }
+  case GameState::MENU: {
       if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
           Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
           ChangeGameState(GameState::GAMING);

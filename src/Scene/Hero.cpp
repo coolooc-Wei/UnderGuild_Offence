@@ -17,24 +17,20 @@ namespace UGO::Scene {
 
         // Method 1; keyboard input
          if (Util::Input::IsKeyPressed(Util::Keycode::A) || Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
-             LOG_INFO("left");
-             direction.x -= 1;
+            direction.x -= 1;
          }
          if (Util::Input::IsKeyPressed(Util::Keycode::D) || Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
-             LOG_INFO("right");
-             direction.x += 1;
+            direction.x += 1;
          }
          if (Util::Input::IsKeyPressed(Util::Keycode::W) || Util::Input::IsKeyPressed(Util::Keycode::UP)) {
-             LOG_INFO("up");
-             direction.y += 1;
+            direction.y += 1;
          }
          if (Util::Input::IsKeyPressed(Util::Keycode::S) || Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
-             LOG_INFO("down");
-             direction.y -= 1;
+            direction.y -= 1;
          }
 
         //  Method 2; mouse input
-        /* URGENT: Create this feature after moving trans. funcs to coordinate.
+        /* TODO: Create this feature after trans. funcs are moved to coordinate.
         */
 
 

@@ -10,7 +10,7 @@ namespace Scene{
     class Drop : public BasicObject {
     public:
         Drop();
-        ~Drop() = default;
+        ~Drop();
 
         // System methods
         void Update() override;
