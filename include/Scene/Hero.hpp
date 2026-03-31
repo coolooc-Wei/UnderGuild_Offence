@@ -17,6 +17,7 @@ namespace Scene {
         void OnDraw() override;
         void OnAttack() override;
         void OnDeath() override;
+    protected:
     private:
     };
 

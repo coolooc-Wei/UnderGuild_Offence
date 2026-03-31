@@ -18,7 +18,8 @@ namespace Scene{
 
         // Events
         void OnPickup();
-        
+
+    protected:
     private:
     };
 

@@ -23,12 +23,6 @@ namespace Scene {
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
 
-        // Setters
-        void SetMaxHP(HpValue newMaxHP);
-        void TakeDamage(HpValue amount);
-        void Heal(HpValue amount);
-        void SetAttackPower(HpValue attackPower);
-
         // Events
         virtual void OnAttack() = 0;
         virtual void OnDeath() = 0;
@@ -37,6 +31,12 @@ namespace Scene {
         void Update() override;
         void OnDraw() override;
 
+    protected:
+        // Setters
+        void SetMaxHP(HpValue newMaxHP);
+        void TakeDamage(HpValue amount);
+        void Heal(HpValue amount);
+        void SetAttackPower(HpValue attackPower);
 
     private:
         HpValue m_MaxHP;

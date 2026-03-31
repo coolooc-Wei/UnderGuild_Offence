@@ -33,18 +33,12 @@ namespace Scene {
         virtual void Update();
         virtual void OnDraw();
 
+    protected:
         void TryMove(const Core::Direction& direction, const Core::Distance& moveDis);  // Call Core::OffsetCalculator to get offset and update the position.
-
-        /* Calculates the actual offset after boundary clamping.
-         * Given current position and intended movement offset,
-         * returns a corrected offset that won't exceed the boundary.
-         */
         Core::WorldPosition OffsetCalculator(
             const Core::WorldPosition& currentPos,
             const Core::WorldPosition& intendedOffset ) const;
 
-
-    protected:
         /* TODO: Add Animation
         */
         std::shared_ptr<Util::Image> m_Image = nullptr;
@@ -56,6 +50,7 @@ namespace Scene {
         */
         float x, y, vx, vy;
         Core::Distance m_Width, m_Height;
+
     };
 
 } // namespace Scene

@@ -14,13 +14,10 @@ namespace UGO::Scene {
 
     Core::WorldPosition BasicObject::GetWorldPosition() const { return m_Position; }
 
-    Core::Distance BasicObject::GetWidth() const {
-        return m_Width;
-    }
+    Core::Distance BasicObject::GetWidth() const { return m_Width; }
 
-    Core::Distance BasicObject::GetHeight() const {
-        return m_Height;
-    }
+    Core::Distance BasicObject::GetHeight() const { return m_Height; }
+
 
     void BasicObject::SetWorldPosition(const Core::WorldPosition& pos) {
         /* TODO: Check if the position is valid
@@ -28,6 +25,11 @@ namespace UGO::Scene {
         m_Position = pos;
         x = pos.x;
         y = pos.y;
+    }
+
+    void BasicObject::SetSize(Core::Distance width, Core::Distance height) {
+        m_Width = width;
+        m_Height = height;
     }
 
 
@@ -41,16 +43,11 @@ namespace UGO::Scene {
     }
 
 
-    void BasicObject::SetSize(Core::Distance width, Core::Distance height) {
-        m_Width = width;
-        m_Height = height;
-    }
-
-
     void BasicObject::OnDraw() {}
     void BasicObject::Update() {
         m_Transform.translation = {m_Position.x, m_Position.y};
     }
+
 
     Core::WorldPosition BasicObject::OffsetCalculator(
         const Core::WorldPosition& currentPos,
