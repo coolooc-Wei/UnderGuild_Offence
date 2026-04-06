@@ -7,13 +7,16 @@ namespace UGO {
 namespace Core {
 namespace Time {
 
+    using Tick = uint64_t; 
+    using Second   = float;
     using TimeStep = float;
 
-    /* TODO[#13]: Change the value
-    */
-    extern TimeStep g_DeltaTime;
+    constexpr TimeStep FIXED_DELTA_TIME = 1.0f / 60.0f;
+    inline constexpr TimeStep GetDeltaTime() { return FIXED_DELTA_TIME; }
 
-    TimeStep GetDeltaTime();
+    Tick GetCurrentTick();
+
+    void AdvanceTick(); // Only called by UGO::App::AppUpdate()
 
 } // namespace Time
 } // namespace Core

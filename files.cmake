@@ -8,6 +8,16 @@ set(CORE_INC
     Core/Time.hpp
 )
 
+# --- SYSTEM ---
+set(SYSTEM_SRC
+    System/BattleManager.cpp
+    System/SteeringSystem.cpp
+)
+set(SYSTEM_INC
+    System/BattleManager.hpp
+    System/SteeringSystem.hpp
+)
+
 # --- UI ---
 set(UI_SRC
     UI/Page.cpp
@@ -50,6 +60,7 @@ set(SCENE_SRC
     Scene/Interactable.cpp
     Scene/Projectile.cpp
     Scene/Hero.cpp
+    Scene/Enemy.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -61,6 +72,7 @@ set(SCENE_INC
     Scene/Interactable.hpp
     Scene/Projectile.hpp
     Scene/Hero.hpp
+    Scene/Enemy.hpp
 )
 
 # --- Combine All ---
@@ -69,6 +81,7 @@ set(SRC_FILES
     AppStart.cpp
     AppUpdate.cpp
     ${CORE_SRC}
+    ${SYSTEM_SRC}
     ${UI_SRC}
     ${INPUT_SRC}
     ${GRAPHICS_SRC}
@@ -82,6 +95,7 @@ set(INCLUDE_FILES
     App.hpp
     UGO_pch.hpp
     ${CORE_INC}
+    ${SYSTEM_INC}
     ${UI_INC}
     ${INPUT_INC}
     ${GRAPHICS_INC}

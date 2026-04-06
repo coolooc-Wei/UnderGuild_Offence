@@ -22,10 +22,14 @@ namespace Scene {
         HpValue GetMaxHP() const;
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
+        Core::Velocity GetIntendedMovement() const;
+
+        // Setters
+        void SetIntendedMovement(const Core::Velocity& intendedMovement);
 
         // Events
-        virtual void OnAttack() = 0;
-        virtual void OnDeath() = 0;
+        virtual void OnAttack();
+        virtual void OnDeath();
 
         // System methods
         void Update() override;
@@ -38,12 +42,15 @@ namespace Scene {
         void Heal(HpValue amount);
         void SetAttackPower(HpValue attackPower);
 
+        void AcceptIntendedMovement();
+
     private:
         HpValue m_MaxHP;
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
+        Core::Velocity m_intentedMovement = { 0.0f, 0.0f };
 
     };
 

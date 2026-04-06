@@ -13,10 +13,13 @@ namespace Scene {
         Hero(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed);
         ~Hero();
 
+        void KeyboardUpdate();
+
         void Update() override;
         void OnDraw() override;
         void OnAttack() override;
         void OnDeath() override;
+
     protected:
     private:
     };

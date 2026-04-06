@@ -2,11 +2,10 @@
 
 namespace UGO::Core::Time {
 
-    // GLOBAL VARIABLES
-    TimeStep g_DeltaTime = 1.0f;
+    static Tick s_CurrentTick = 0; 
 
+    Tick GetCurrentTick() { return s_CurrentTick; }
 
-    // FUNCTIONS
-    TimeStep GetDeltaTime() { return g_DeltaTime; }
+    void AdvanceTick() { s_CurrentTick++; }
 
 }

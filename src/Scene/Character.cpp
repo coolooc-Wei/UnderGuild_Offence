@@ -11,6 +11,12 @@ namespace UGO::Scene {
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
     HpValue Character::GetAttackPower() const { return m_AttackPower; }
+    Core::Velocity Character::GetIntendedMovement() const { return m_intentedMovement; }
+
+    void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_intentedMovement = intendedMovement; }
+
+    void Character::OnAttack() {}
+    void Character::OnDeath() {}
 
     void Character::SetMaxHP(HpValue newMaxHP) {
         /* TODO: Check if maxHP is valid
@@ -48,7 +54,14 @@ namespace UGO::Scene {
         m_AttackPower = attackPower;
     }
 
+    void Character::AcceptIntendedMovement() {
+        LOG_DEBUG("Accept intended movement: ({}, {})", m_intentedMovement.x, m_intentedMovement.y);
+        TryMove(m_intentedMovement);
+        m_intentedMovement = {0.f, 0.f};
+    }
+
     void Character::Update() {
+        AcceptIntendedMovement();
         BasicObject::Update();
     }
     void Character::OnDraw() {}
