@@ -47,6 +47,7 @@ private:
 
     State m_CurrentState = State::START;
     GameState m_CurrentGameState = GameState::START;
+    GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
 

@@ -13,10 +13,10 @@ namespace Scene {
 
     class Enemy : public Character {
     public:
-        Enemy(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed);
+        Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Enemy();
 
-        void OnAttack() override;
+        void OnAttack() override; // Set Facing Direction
         void OnDeath() override;
         /* TODO: Add Mercenaries parameter after implementing Mercenaries
          */
@@ -38,7 +38,7 @@ namespace Scene {
 
         /* TODO: Modify the value
          */
-        const Core::Distance m_STOP_PURSUIT_DISTANCE = 20.0f;
+        const Core::Distance m_STOP_PURSUIT_DISTANCE = 48.0f;
 
 
     };

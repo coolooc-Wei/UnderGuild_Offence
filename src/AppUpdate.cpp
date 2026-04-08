@@ -19,11 +19,6 @@ public:
   // System methods
   void Update() override {};
   void OnDraw() override {};
-  /* TODO: Add Core::Time class
-
-   * virtual void OffsetCalculator(Core::WorldPosition& direction,
-   UGO::Core::Time& dt) = 0; // Check validity in Update()
-   */
 
   // Events
   void OnAttack() {};
@@ -33,27 +28,46 @@ public:
 void UGO::App::Update() {
     switch (m_CurrentGameState) {
     case GameState::WELCOME: {
+        if (m_CurrentProgressState != App::GameState::WELCOME) {
+            m_CurrentProgressState = App::GameState::WELCOME;
+        }
         if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
             Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
             ChangeGameState(GameState::MENU);
         }
-        break;
     }
+    break;
     case GameState::MENU: {
+        if (m_CurrentProgressState != App::GameState::MENU) {
+            m_CurrentProgressState = App::GameState::MENU;
+        }
         if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
             Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
             ChangeGameState(GameState::GAMING);
         }
-        break;
     }
+    break;
     case GameState::PAUSE: {
+        if (m_CurrentProgressState != App::GameState::PAUSE) {
+            m_CurrentProgressState = App::GameState::PAUSE;
+            for (auto chars: m_battleManager.GetAllCharacters()) {
+                chars->GetGameObject()->SetVisible(false);
+            }
+        }
         // Use P temporarity instead of ESCAPE
         if (Util::Input::IsKeyDown(Util::Keycode::P)) {
             ChangeGameState(GameState::GAMING);
         }
-        break;
+
     }
+    break;
     case GameState::GAMING: {
+        if (m_CurrentProgressState != App::GameState::GAMING) {
+            m_CurrentProgressState = App::GameState::GAMING;
+            for (auto chars: m_battleManager.GetAllCharacters()) {
+                chars->GetGameObject()->SetVisible(true);
+            }
+        }
 
         /* Use P temporarity instead of ESCAPE
          */
@@ -67,34 +81,79 @@ void UGO::App::Update() {
         /* HACK: Remove these lines after testing
          */
         if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
-            Scene::Hero* hero = new Scene::Hero(100, 10, "../Resources/Image/character/hero/Hero_101_1.png", 3.0f);
+            std::vector<std::string> heroAnimationPath = {
+                "../Resources/Image/character/hero/Hero_101_1.png",
+                "../Resources/Image/character/hero/Hero_101_2.png",
+                "../Resources/Image/character/hero/Hero_101_3.png",
+                "../Resources/Image/character/hero/Hero_101_4.png",
+                "../Resources/Image/character/hero/Hero_101_5.png",
+                "../Resources/Image/character/hero/Hero_101_6.png",
+            };
+            auto heroAnimation = std::make_shared<Util::Animation>(
+                heroAnimationPath, false, 50, true, 50
+            );
+            auto hero = std::make_unique<Scene::Hero>(100, 10, 3.0f);
             hero->SetWorldPosition({-300.0f, -300.0f});
+            hero->SetAnimation(heroAnimation);
+            hero->SetImage("../Resources/Image/character/hero/Hero_101_1.png");
+            hero->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
+            hero->SetSize(32, 32);
             hero->GetGameObject()->SetVisible(true);
-            m_battleManager.AddHero(std::unique_ptr<Scene::Hero>(hero), m_Root);
+            heroAnimation->Play();
+            m_battleManager.AddHero(std::move(hero), m_Root);
 
-            Scene::Enemy* enemy = new Scene::Enemy(100, 10, "../Resources/Image/character/enemy/Boss_1_1.png", 3.0f);
+            std::vector<std::string> enemyAnimationPath = {
+                "../Resources/Image/character/enemy/Boss_1_1.png",
+                "../Resources/Image/character/enemy/Boss_1_2.png",
+                "../Resources/Image/character/enemy/Boss_1_3.png",
+                "../Resources/Image/character/enemy/Boss_1_4.png",
+            };
+            auto enemyAnimation = std::make_shared<Util::Animation>(
+                enemyAnimationPath, false, 50, true, 50
+            );
+            auto enemy = std::make_unique<Scene::Enemy>(100, 10, 3.0f);
             enemy->SetWorldPosition({300.0f, 300.0f});
+            enemy->SetAnimation(enemyAnimation);
+            enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
+            enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
+            enemy->SetSize(32, 32);
             enemy->GetGameObject()->SetVisible(true);
-            m_battleManager.AddEnemy(std::unique_ptr<Scene::Enemy>(enemy), m_Root);
-            enemy = new Scene::Enemy(100, 10, "../Resources/Image/character/enemy/Boss_1_1.png", 3.0f);
+            enemyAnimation->Play();
+            m_battleManager.AddEnemy(std::move(enemy), m_Root);
+
+            enemy = std::make_unique<Scene::Enemy>(100, 10, 3.0f);
             enemy->SetWorldPosition({-300.0f, 0.0f});
+            enemy->SetAnimation(enemyAnimation);
+            enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
+            enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
+            enemy->SetSize(32, 32);
             enemy->GetGameObject()->SetVisible(true);
-            m_battleManager.AddEnemy(std::unique_ptr<Scene::Enemy>(enemy), m_Root);
+            enemyAnimation->Play();
+            m_battleManager.AddEnemy(std::move(enemy), m_Root);
         }
 
         m_battleManager.AIUpdate();
         m_steeringSystem.AdjustMovement(m_battleManager.GetAllEnemies());
         m_battleManager.UpdateMovement();
 
-        
+
         /* DO NOT DELETE THIS LINE.
          * IT IS USED FOR THE GAME TIMING.
          */
         Core::Time::AdvanceTick();
 
-        break;
+    }
+    break;
+    case GameState::END: {
+        if (m_CurrentProgressState != App::GameState::END) {
+            m_CurrentProgressState = App::GameState::END;
+            for (auto chars: m_battleManager.GetAllCharacters()) {
+                chars->GetGameObject()->SetVisible(false);
+            }
         }
-        default: { break; }
+    }
+    break;
+    default: {} break;
     }
 
     m_Root.Update();

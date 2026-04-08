@@ -4,8 +4,8 @@
 
 namespace UGO::Scene {
 
-    Enemy::Enemy(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed)
-        : Character(maxHP, attackPower, imagePath, speed) {}
+    Enemy::Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed)
+        : Character(maxHP, attackPower, speed) {}
     Enemy::~Enemy() {}
     void Enemy::OnAttack() {}
     void Enemy::OnDeath() {}
@@ -30,11 +30,6 @@ namespace UGO::Scene {
                 Core::Distance len = glm::length(intendedMovement);
                 if (len >= m_STOP_PURSUIT_DISTANCE) {
                     SetIntendedMovement(glm::normalize(intendedMovement) * GetSpeed());
-                    LOG_DEBUG("Trying to moving to the target with velocity: ({}, {}). From ({}, {}) to ({}, {})",
-                        intendedMovement.x, intendedMovement.y,
-                        GetWorldPosition().x, GetWorldPosition().y,
-                        m_Target->GetWorldPosition().x, m_Target->GetWorldPosition().y
-                    );
                 }
                 else { SetIntendedMovement({ 0.0f, 0.0f }); }
             }
@@ -43,7 +38,6 @@ namespace UGO::Scene {
     }
 
     void Enemy::Update() {
-        LOG_DEBUG("=================Enemy:");
         Character::Update();
     }
 
@@ -63,7 +57,6 @@ namespace UGO::Scene {
                     m_Target = hero.get();
                 }
             }
-            LOG_DEBUG("Target Finded: ({}, {})", m_Target->GetWorldPosition().x, m_Target->GetWorldPosition().y);
         }
     }
 

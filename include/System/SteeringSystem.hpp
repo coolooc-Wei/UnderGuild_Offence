@@ -12,7 +12,7 @@ namespace System {
     public:
         SteeringSystem();
         ~SteeringSystem();
-        
+
 
         /* Adjusts the position of the enemies or heroes and mercenaries
          */
@@ -29,8 +29,8 @@ namespace System {
                     if (IsTooClose(char1->GetWorldPosition(), char2->GetWorldPosition())) {
                         Core::Velocity repelMovement = GetRepelMovement(char1->GetWorldPosition(), char2->GetWorldPosition());
 
-                        char1->SetIntendedMovement(char1->GetIntendedMovement() + repelMovement);
-                        char2->SetIntendedMovement(char2->GetIntendedMovement() - repelMovement);
+                        char1->SetRepelMovement(repelMovement);
+                        char2->SetRepelMovement(-repelMovement);
                     }
                 }
             }
@@ -45,8 +45,8 @@ namespace System {
 
         /* TODO: Fine-tune the values
          */
-        Core::Distance m_RepelDistance = 80.0f;
-        float m_Coefficients[2] = {-0.5f, .5f};
+        Core::Distance m_RepelDistance = 8.0f;
+        float m_Coefficients[2] = {-.25f, 5.f};
     };
 
 } // namespace System

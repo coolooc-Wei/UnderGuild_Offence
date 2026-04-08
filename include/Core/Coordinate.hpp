@@ -14,20 +14,16 @@ namespace Core {
     using Distance = float;
     using Size = glm::vec2;
 
-    const int TILE_SIZE = 32;
+    constexpr int TILE_SIZE = 32;
 
-    const int WINDOW_HEIGHT = 720;
-    const int WINDOW_WIDTH = 1280;
+    constexpr int WINDOW_HEIGHT = 720;
+    constexpr int WINDOW_WIDTH = 1280;
 
-    /* URGENT: Change to Top-Left Based
-     */
+    constexpr float EPSILON = 0.0001f;
+
     struct Bounds { 
     float minX, minY;
     float maxX, maxY;
-    /* TODO: Change to
-     > GridPosition topLeft;
-     > GridPosition bottomRight;
-     */
 
     static Bounds FromCenter(float width, float height);
     };

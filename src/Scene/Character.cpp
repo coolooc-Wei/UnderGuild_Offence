@@ -4,16 +4,18 @@
 
 namespace UGO::Scene {
 
-    Character::Character(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed)
-        : BasicObject(imagePath, speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
+    Character::Character(HpValue maxHP, HpValue attackPower, SpeedValue speed)
+        : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
     Character::~Character() = default;
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
     HpValue Character::GetAttackPower() const { return m_AttackPower; }
-    Core::Velocity Character::GetIntendedMovement() const { return m_intentedMovement; }
+    Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
+    Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
 
-    void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_intentedMovement = intendedMovement; }
+    void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
+    void Character::SetRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement = repelMovement; }
 
     void Character::OnAttack() {}
     void Character::OnDeath() {}
@@ -55,9 +57,9 @@ namespace UGO::Scene {
     }
 
     void Character::AcceptIntendedMovement() {
-        LOG_DEBUG("Accept intended movement: ({}, {})", m_intentedMovement.x, m_intentedMovement.y);
-        TryMove(m_intentedMovement);
-        m_intentedMovement = {0.f, 0.f};
+        TryMove(m_IntentedMovement, m_RepelMovement);
+        m_IntentedMovement = {0.f, 0.f};
+        m_RepelMovement = {0.f, 0.f};
     }
 
     void Character::Update() {

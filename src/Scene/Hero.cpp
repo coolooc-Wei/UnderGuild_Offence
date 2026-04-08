@@ -4,8 +4,8 @@
 
 namespace UGO::Scene {
 
-   Hero::Hero(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed)
-      : Character(maxHP, attackPower, imagePath, speed) {}
+   Hero::Hero(HpValue maxHP, HpValue attackPower, SpeedValue speed)
+      : Character(maxHP, attackPower, speed) {}
    Hero::~Hero() = default;
 
    void Hero::KeyboardUpdate() {
@@ -14,6 +14,8 @@ namespace UGO::Scene {
       Core::Distance moveDis = GetSpeed();
 
       // Method 1: keyboard input
+      /* TODO: Add acceleration-based movement mechanic
+       */
          if (Util::Input::IsKeyPressed(Util::Keycode::A) || Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
             vel.x -= 1;
          }
@@ -39,7 +41,6 @@ namespace UGO::Scene {
    }
 
    void Hero::Update() {
-        LOG_DEBUG("Hero:=================");
       Character::Update();
    }
 

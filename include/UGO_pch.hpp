@@ -21,6 +21,7 @@
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 #include "Util/Image.hpp"
+#include "Util/Animation.hpp"
 
 // Mathematical Tools
 #include <glm/glm.hpp>
