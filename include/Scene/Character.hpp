@@ -10,7 +10,6 @@
 namespace UGO {
 namespace Scene {
 
-    class Weapon;
     class StatusEffect;
 
     class Character : public BasicObject {
@@ -22,12 +21,16 @@ namespace Scene {
         HpValue GetMaxHP() const;
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
+        virtual HpValue GetEffectiveAttackPower() const;
 
         // Setters
         void SetMaxHP(HpValue newMaxHP);
         void TakeDamage(HpValue amount);
         void Heal(HpValue amount);
         void SetAttackPower(HpValue attackPower);
+
+        // 設定武器（純持有，Weapon 已由外部 Equip 設定好）
+        void SetWeapon(std::unique_ptr<Weapon> weapon);
 
         // Events
         virtual void OnAttack() = 0;
@@ -36,7 +39,6 @@ namespace Scene {
         // System methods
         void Update() override;
         void OnDraw() override;
-
 
     private:
         HpValue m_MaxHP;
@@ -49,7 +51,6 @@ namespace Scene {
          */
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
-
     };
 
 } // namespace Scene

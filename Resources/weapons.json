@@ -1,0 +1,12 @@
+{
+  "weapons": [
+    {
+      "id": "sword_001",
+      "name": "Sword",
+      "type": "Melee",
+      "attackPower": 10.0,
+      "cooldownTime": 2.0,
+      "imagePath": "Image/weapon/Weapon_021_3_1.png"
+    }
+  ]
+}
