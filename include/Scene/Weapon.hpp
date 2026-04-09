@@ -4,13 +4,12 @@
 #include "UGO_pch.hpp"
 
 #include "Scene/SceneTypes.hpp"
-#include "Scene/BasicObject.hpp"
 #include "Core/Time.hpp"
+#include "Core/Coordinate.hpp"
 
 namespace UGO {
 namespace Scene {
 
-    class Character;
     class StatusEffect;
 
     enum class WeaponType {
@@ -20,17 +19,19 @@ namespace Scene {
     };
 
     struct WeaponData {
+        std::string id;
         std::string name;
-        WeaponType type;
-        HpValue attackPower;
+        WeaponType  type;
+        HpValue     attackPower;
         Core::Time::TimeStep cooldownTime;
+        std::string imagePath;
 
-        std::vector< std::pair<std::unique_ptr<StatusEffect>, Core::Time::TimeStep> > skills;
+        std::vector< std::pair<std::shared_ptr<StatusEffect>, Core::Time::TimeStep> > skills;
     };
 
     class Weapon {
     public:
-        Weapon(WeaponData* data);
+        Weapon();
         virtual ~Weapon();
 
         // Getters
@@ -38,24 +39,30 @@ namespace Scene {
         WeaponType GetType() const;
         HpValue GetAttackPower() const;
         Core::Time::TimeStep GetCooldownTime() const;
+        
 
         // Setters
-        void SetData(const WeaponData* data);
         void SetName(const std::string& name);
-        void SetType(const WeaponType type);
-        void SetAttackPower(const HpValue attackPower);
-        void SetCooldownTime(const Core::Time::TimeStep cooldownTime);
+        void SetType(WeaponType type);
+        void SetAttackPower(HpValue attackPower);
+        void SetCooldownTime(Core::Time::TimeStep cooldownTime);
+        
 
         // Events
-        void Attack(Character& target);
+        void Attack(HpValue ownerEffAtk);
+        void Equip(const std::string& weaponId);
 
-        // System methods
-        void Update(); // Called by Character::Update()
-        void OnDraw();
+        // System methods — 由 Character::Update / OnDraw 呼叫
+        void Update(const Core::WorldPosition& ownerPos, HpValue ownerEffAtk);
+        void OnDraw(const Core::WorldPosition& ownerPos);
 
     private:
-        WeaponData* m_data;
-        Core::Time::TimeStep m_currentCooldown;
+        WeaponData m_data; 
+        Core::Time::TimeStep m_currentCooldown = 0.0f;
+        std::shared_ptr<Util::Image> m_Image = nullptr;
+        bool m_equipped = false;
+
+        static std::unordered_map<std::string, WeaponData> s_ParseWeaponsJson();
     };
 
 } // namespace Scene
