@@ -23,12 +23,6 @@ namespace Scene {
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
 
-        // Setters
-        void SetMaxHP(HpValue newMaxHP);
-        void TakeDamage(HpValue amount);
-        void Heal(HpValue amount);
-        void SetAttackPower(HpValue attackPower);
-
         // Events
         virtual void OnAttack() = 0;
         virtual void OnDeath() = 0;
@@ -37,16 +31,17 @@ namespace Scene {
         void Update() override;
         void OnDraw() override;
 
+    protected:
+        // Setters
+        void SetMaxHP(HpValue newMaxHP);
+        void TakeDamage(HpValue amount);
+        void Heal(HpValue amount);
+        void SetAttackPower(HpValue attackPower);
 
     private:
         HpValue m_MaxHP;
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
-        /* URGENT: Check info.
-         *       1. If attack animation is decided by weapon
-         *       2. The "drawable" when the character is idle is either image or animation.
-         > std::shared_ptr<Util::Image> ;
-         */
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
 

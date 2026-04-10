@@ -30,11 +30,13 @@ namespace Scene {
         virtual void Update() = 0;
         virtual void OnDraw() = 0;
 
+    protected:
     private:
         Core::WorldPosition m_direction;
         HpValue m_damage;
         Core::Time::TimeStep m_lifetime;
         std::unique_ptr<Character> m_owner = nullptr;
+
     };
 
 } // namespace Scene

@@ -12,7 +12,7 @@ namespace Scene {
     class Interactable : public BasicObject {
     public:
         Interactable();
-        virtual ~Interactable() = default;
+        virtual ~Interactable();
 
         // System methods
         void Update() override;
@@ -21,9 +21,11 @@ namespace Scene {
         // Events
         void OnInteract();
 
+    protected:
     private:
         Core::Distance m_interactRange;
         Core::Time::TimeStep m_interactTimer;
+
     };
 
 } // namespace Scene

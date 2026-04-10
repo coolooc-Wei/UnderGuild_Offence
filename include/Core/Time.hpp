@@ -11,7 +11,7 @@ namespace Time {
 
     /* TODO[#13]: Change the value
     */
-    inline TimeStep DeltaTime = 1.0f;
+    extern TimeStep g_DeltaTime;
 
     TimeStep GetDeltaTime();
 

@@ -1,22 +1,25 @@
 #include "Graphics/Camera.hpp"
 
-UGO::Core::WorldPosition UGO::Graphics::Camera::ScreenToWorld(const glm::vec2& screenPos) const{
-    return screenPos + m_cameraPos;
-}
+namespace UGO::Graphics {
 
+    Core::WorldPosition Camera::ScreenToWorld(const glm::vec2& screenPos) const {
+        return screenPos + m_cameraPos;
+    }
 
+    glm::vec2 Camera::WorldToScreen(const Core::WorldPosition& worldPos) const {
+        return worldPos - m_cameraPos;
+    }
 
-glm::vec2 UGO::Graphics::Camera::WorldToScreen(const UGO::Core::WorldPosition& worldPos) const {
-    return worldPos - m_cameraPos;
-}
+    void Camera::SetCameraPos(const Core::WorldPosition& cameraPos) {
+        /* TODO: Check if the position is valid
+        */
+        m_cameraPos = cameraPos;
+    }
 
+    Core::WorldPosition Camera::GetCameraPos() const {
+        return m_cameraPos;
+    }
 
-void UGO::Graphics::Camera::SetCameraPos(const UGO::Core::WorldPosition& cameraPos) {
-    /* TODO: Check if the position is valid
-    */
-    m_cameraPos = cameraPos;
-}
+    void Camera::Update() {}
 
-UGO::Core::WorldPosition UGO::Graphics::Camera::GetCameraPos() const {
-    return m_cameraPos;
 }

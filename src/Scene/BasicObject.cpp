@@ -1,11 +1,8 @@
 #include "Scene/BasicObject.hpp"
-#include "Scene/BoundarySystem.hpp"
 
 namespace UGO::Scene {
 
-    BasicObject::BasicObject() {
-        m_Position = {0.0f, 0.0f};
-    }
+    BasicObject::BasicObject() {}
     /* HACK: rewrite speed initializer
     */
     BasicObject::BasicObject(std::string imagePath, SpeedValue speed)
@@ -17,6 +14,11 @@ namespace UGO::Scene {
 
     Core::WorldPosition BasicObject::GetWorldPosition() const { return m_Position; }
 
+    Core::Distance BasicObject::GetWidth() const { return m_Width; }
+
+    Core::Distance BasicObject::GetHeight() const { return m_Height; }
+
+
     void BasicObject::SetWorldPosition(const Core::WorldPosition& pos) {
         /* TODO: Check if the position is valid
         */
@@ -25,33 +27,27 @@ namespace UGO::Scene {
         y = pos.y;
     }
 
+    void BasicObject::SetSize(Core::Distance width, Core::Distance height) {
+        m_Width = width;
+        m_Height = height;
+    }
+
+
     void BasicObject::TryMove(const Core::Direction& direction, const Core::Distance& moveDis) {
         if (glm::length(direction) < 0.0001f) { return; }
         
         Core::Direction expectedOffset = glm::normalize(direction) * moveDis;
-
         Core::Direction safeOffset = OffsetCalculator(this->m_Position, expectedOffset);
 
-        
         m_Position += safeOffset;
     }
 
+
+    void BasicObject::OnDraw() {}
     void BasicObject::Update() {
         m_Transform.translation = {m_Position.x, m_Position.y};
     }
 
-    void BasicObject::SetSize(float w, float h) {
-        width = w;
-        height = h;
-    }
-    
-    float BasicObject::GetWidth() const {
-        return width;
-    }
-    
-    float BasicObject::GetHeight() const {
-        return height;
-    }
 
     Core::WorldPosition BasicObject::OffsetCalculator(
         const Core::WorldPosition& currentPos,
@@ -60,7 +56,8 @@ namespace UGO::Scene {
         // Delegate to BoundarySystem::ClampPosition (static) to avoid duplication
         Core::WorldPosition target = { currentPos.x + intendedOffset.x,
                                        currentPos.y + intendedOffset.y };
-        Core::WorldPosition clamped = BoundarySystem::ClampPosition(Core::WorldBounds, target, width / 2.0f, height / 2.0f);
+        Core::WorldPosition clamped = Core::ClampPosition(Core::Map::g_WorldBounds, target, m_Width / 2.0f, m_Height / 2.0f);
+
         return { clamped.x - currentPos.x, clamped.y - currentPos.y };
     }
 }

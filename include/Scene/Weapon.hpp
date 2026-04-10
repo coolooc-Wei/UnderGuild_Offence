@@ -53,9 +53,11 @@ namespace Scene {
         void Update(); // Called by Character::Update()
         void OnDraw();
 
+    protected:
     private:
         WeaponData* m_data;
         Core::Time::TimeStep m_currentCooldown;
+
     };
 
 } // namespace Scene

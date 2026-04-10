@@ -9,6 +9,8 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
+/* TODO: Remove this after testing
+ */
 class TestObject : public UGO::Scene::BasicObject {
 public:
   TestObject() = default;
@@ -29,12 +31,15 @@ public:
 };
 
 void UGO::App::Update() {
-  if (!m_BoundarySystem) {
-    m_BoundarySystem =
-        std::make_shared<Scene::BoundarySystem>(Core::WorldBounds);
-  }
   switch (m_CurrentGameState) {
   case GameState::WELCOME: {
+      if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
+          Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
+          ChangeGameState(GameState::MENU);
+      }
+      break;
+  }
+  case GameState::MENU: {
       if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
           Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
           ChangeGameState(GameState::GAMING);
@@ -56,24 +61,6 @@ void UGO::App::Update() {
       else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
           ChangeGameState(GameState::END);
       }
-      else if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
-          auto screenPos = Util::Input::GetCursorPosition();
-          auto worldPos = m_Camera.ScreenToWorld(screenPos);
-          auto gridPos = Core::WorldToGrid(worldPos);
-          LOG_INFO("Mouse Clicked! Screen: ({}, {}), World: ({}, {}), Grid: [{}, {}]",
-                  screenPos.x, screenPos.y, worldPos.x, worldPos.y, gridPos.x, gridPos.y
-          );
-          auto newObj = std::make_shared<TestObject>();
-          newObj->SetWorldPosition(worldPos);
-          newObj->SetSize(100.0f, 200.0f);
-          newObj->Update();
-          m_BoundarySystem->AddObject(newObj);
-          m_BoundarySystem->Update();
-          newObj->SetDrawable(std::make_shared<Util::Image>("../PTSD/assets/sprites/giraffe.png"));
-          newObj->m_Transform.translation = m_Camera.WorldToScreen(newObj->GetWorldPosition());
-          m_Root.AddChild(newObj);
-          newObj->SetVisible(true);
-      }
 
       /* TODO: Remove these lines after testing
       */
@@ -87,9 +74,6 @@ void UGO::App::Update() {
   }
 
   m_Root.Update();
-  if (m_BoundarySystem) {
-    m_BoundarySystem->Update();
-  }
   /*
    * Do not touch the code below as they serve the purpose for
    * closing the window.

@@ -6,7 +6,6 @@
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
-#include "Scene/BoundarySystem.hpp"
 
 
 namespace UGO {
@@ -26,27 +25,30 @@ public:
         PAUSE,
         END,
     };
+    State GetCurrentState() const;
 
-    State GetCurrentState() const { return m_CurrentState; }
 
+    // CAMERA
+    void SetCameraPos(Core::WorldPosition pos);
+    Core::WorldPosition GetCameraPos() const;
+
+
+    // SYSTEM PROGRESS
     void Start();
     void Update();
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
-    void SetCameraPos(Core::WorldPosition pos);
-    Core::WorldPosition GetCameraPos() const;
 
 private:
-    void ChangeGameState(GameState state);
+    void ChangeGameState(const GameState state);
 
     State m_CurrentState = State::START;
     GameState m_CurrentGameState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    std::shared_ptr<Scene::BoundarySystem> m_BoundarySystem;
 
 
-    /* HACK[#13]: Need the find the better method to manage the object
+    /* HACK[#13]: Need the find the better method to manage the objects
     */
     // Object Management
     std::vector<std::shared_ptr<Scene::BasicObject>> ObjectManagement;
@@ -63,4 +65,4 @@ private:
 
 } // namespace UGO
 
-#endif
+#endif // APP_HPP

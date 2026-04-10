@@ -32,6 +32,7 @@ namespace Scene {
         StatusEffect(const StatusEffectData& data);
         virtual ~StatusEffect();
 
+    protected:
         virtual void ApplyEffect(Character& target) = 0;
 
     private:

@@ -3,8 +3,8 @@
 
 namespace UGO::Scene {
 
-using HpValue = float;
-using SpeedValue = float;
+    using HpValue = float;
+    using SpeedValue = float;
 
 }
 

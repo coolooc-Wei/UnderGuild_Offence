@@ -7,16 +7,21 @@
 
 namespace UGO {
 namespace Graphics {
-    
+
     class Camera {
     public:
         Core::WorldPosition ScreenToWorld(const glm::vec2& screenPos) const;
-        
+
         glm::vec2 WorldToScreen(const Core::WorldPosition& worldPos) const;
-        
+
+        // Setters
         void SetCameraPos(const Core::WorldPosition& cameraPos);
         Core::WorldPosition GetCameraPos() const;
-        
+
+        // System methods
+        void Update();
+
+
     private:
         /* TODO: Add zoom functionality
         */
