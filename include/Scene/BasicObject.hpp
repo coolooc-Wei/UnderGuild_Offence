@@ -5,6 +5,7 @@
 
 #include "Scene/SceneTypes.hpp"
 #include "Core/Coordinate.hpp"
+#include "Physics/CollisionMethod.hpp"
 
 namespace UGO {
 namespace Scene {
@@ -18,13 +19,20 @@ namespace Scene {
         // Getters
         Core::WorldPosition GetWorldPosition() const;
         const std::shared_ptr<Util::Image>& GetImage() const;
+        Physics::AABB GetAABB() const;
 
         // Setters
         void SetWorldPosition(const Core::WorldPosition& pos);
         void SetImage(const std::shared_ptr<Util::Image>& image);
         void SetSize(float w, float h);
+        void SetStatic(bool isStatic) { m_IsStatic = isStatic; }
+
         float GetWidth() const;
         float GetHeight() const;
+        bool GetStatic() const { return m_IsStatic; }
+        
+        bool GetMovingThisFrame() const { return m_MovingThisFrame; }
+        void ResetMovingThisFrame() { m_MovingThisFrame = false; }
 
         // System methods
         virtual void Update();
@@ -43,6 +51,8 @@ namespace Scene {
             const Core::WorldPosition& currentPos,
             const Core::WorldPosition& intendedOffset) const;
 
+        virtual void OnCollisionResolved(const Core::WorldPosition& newPos);
+
         /* TODO[#13]: Remove after testing
         */
         std::string name;
@@ -55,6 +65,15 @@ namespace Scene {
 
         float x, y, vx, vy;
         float width, height;
+        
+        // TODO: Drop
+        bool m_IsStatic = false;
+        //hero resting
+        bool m_MovingThisFrame = false;
+        
+        
+        // TODO: Implement custom Hitbox size and offset instead of using image width/height directly.
+        Physics::AABB m_AABB;
     };
 
 } // namespace Scene

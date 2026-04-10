@@ -15,7 +15,7 @@ public:
   ~TestObject() = default;
 
   // System methods
-  void Update() override {};
+  void Update() override { BasicObject::Update(); }
   void OnDraw() override {};
   /* TODO: Add Core::Time class
 
@@ -32,6 +32,9 @@ void UGO::App::Update() {
   if (!m_BoundarySystem) {
     m_BoundarySystem =
         std::make_shared<Scene::BoundarySystem>(Core::WorldBounds);
+  }
+  if (!m_CollisionSystem) {
+    m_CollisionSystem = std::make_shared<Physics::CollisionSystem>();
   }
   switch (m_CurrentGameState) {
   case GameState::WELCOME: {
@@ -66,9 +69,11 @@ void UGO::App::Update() {
           auto newObj = std::make_shared<TestObject>();
           newObj->SetWorldPosition(worldPos);
           newObj->SetSize(100.0f, 200.0f);
+          newObj->SetStatic(true);
           newObj->Update();
           m_BoundarySystem->AddObject(newObj);
-          m_BoundarySystem->Update();
+          m_CollisionSystem->AddObject(newObj);
+          
           newObj->SetDrawable(std::make_shared<Util::Image>("../PTSD/assets/sprites/giraffe.png"));
           newObj->m_Transform.translation = m_Camera.WorldToScreen(newObj->GetWorldPosition());
           m_Root.AddChild(newObj);
@@ -86,10 +91,14 @@ void UGO::App::Update() {
     default: { break; }
   }
 
-  m_Root.Update();
+  if (m_CollisionSystem) {
+    m_CollisionSystem->Update();
+  }
   if (m_BoundarySystem) {
     m_BoundarySystem->Update();
   }
+  
+  m_Root.Update();
   /*
    * Do not touch the code below as they serve the purpose for
    * closing the window.

@@ -7,6 +7,7 @@
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 #include "Scene/BoundarySystem.hpp"
+#include "Physics/CollisionSystem.hpp"
 
 
 namespace UGO {
@@ -41,9 +42,11 @@ private:
 
     State m_CurrentState = State::START;
     GameState m_CurrentGameState = GameState::START;
+
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
     std::shared_ptr<Scene::BoundarySystem> m_BoundarySystem;
+    std::shared_ptr<Physics::CollisionSystem> m_CollisionSystem;
 
 
     /* HACK[#13]: Need the find the better method to manage the object

@@ -37,8 +37,14 @@ set(RESOURCE_SRC)
 set(RESOURCE_INC)
 
 # --- Physics ---
-set(PHYSICS_SRC)
-set(PHYSICS_INC)
+set(PHYSICS_SRC
+    Physics/CollisionMethod.cpp
+    Physics/CollisionSystem.cpp
+)
+set(PHYSICS_INC
+    Physics/CollisionMethod.hpp
+    Physics/CollisionSystem.hpp
+)
 
 # --- Scene ---
 set(SCENE_SRC

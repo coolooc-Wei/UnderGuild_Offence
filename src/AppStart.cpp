@@ -2,6 +2,7 @@
 /* TODO: Remove these lines after testing
 */
 #include "Scene/Hero.hpp"
+#include "Physics/CollisionSystem.hpp"
 
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
@@ -34,13 +35,17 @@ void UGO::App::Start() {
     */
     auto hero = std::make_shared<Scene::Hero>(100, 10, "../Resources/Image/character/hero/Hero_101_1.png", 10.0f);
     hero->SetWorldPosition({100, 10});
+    hero->SetSize(50.0f, 50.0f);
     hero->SetVisible(true);
     hero->name = "hero";
     m_Root.AddChild(hero);
     ObjectManagement.emplace_back(hero);
     
-    
-
-
+    /* TODO: Remove these lines after testing
+    */
+    if (!m_CollisionSystem) {
+        m_CollisionSystem = std::make_shared<UGO::Physics::CollisionSystem>();
+    }
+    m_CollisionSystem->AddObject(hero);
 
 }
