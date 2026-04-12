@@ -21,7 +21,7 @@ void UGO::App::Start() {
     }
 
     // Change states
-    ChangeGameState(GameState::WELCOME);
+    ChangeGameState(GameState::GAMING);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position

@@ -45,7 +45,19 @@ namespace UGO::Scene {
    }
 
    void Hero::OnDraw() {}
-   void Hero::OnAttack() {}
-   void Hero::OnDeath() {}
+   void Hero::OnAttack() {
+      LOG_INFO("Hero::OnAttack");
+      Character::OnAttack();
+   }
+   void Hero::OnDamage(HpValue amount) {
+      LOG_INFO("Hero::OnDamage");
+      Character::OnDamage(amount);
+   }
+   void Hero::OnHeal(HpValue amount) {
+      Character::OnHeal(amount);
+   }
+   void Hero::OnDeath() {
+      Character::OnDeath();
+   }
 
 }

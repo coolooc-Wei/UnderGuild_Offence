@@ -10,6 +10,8 @@
 #include <iostream>
 #include <cmath>
 #include <cassert>
+#include <unordered_set>
+#include <algorithm>
 
 // PTSD includes
 #include "Util/GameObject.hpp"
@@ -22,6 +24,7 @@
 #include "Util/Time.hpp"
 #include "Util/Image.hpp"
 #include "Util/Animation.hpp"
+#include "Core/Drawable.hpp"
 
 // Mathematical Tools
 #include <glm/glm.hpp>

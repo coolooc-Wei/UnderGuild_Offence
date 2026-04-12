@@ -17,8 +17,39 @@ namespace UGO::Scene {
     void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
     void Character::SetRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement = repelMovement; }
 
-    void Character::OnAttack() {}
-    void Character::OnDeath() {}
+    void Character::OnAttack() {
+        if (m_AttackCooldown.IsTimeUp()) {
+            m_AttackCooldown.Start();
+            ActivateHitBox(false);
+        }
+    }
+
+    void Character::OnDamage(HpValue amount) {
+        if (m_InvincibleTimer.IsTimeUp()) {
+            assert(amount >= 0);
+
+            m_InvincibleTimer.Start();
+            ActivateHurtBox(false);
+        }
+
+        m_CurrentHP -= amount;
+
+        if (m_CurrentHP <= 0) {
+            m_CurrentHP = 0;
+            OnDeath();
+        }
+        LOG_INFO("From Character::OnDamage: HP = {}/{}", m_CurrentHP, m_MaxHP);
+    }
+
+    void Character::OnHeal(HpValue amount) {
+        assert(amount >= 0);
+        m_CurrentHP += amount;
+    }
+
+    void Character::OnDeath() {
+        GetGameObject()->SetVisible(false);
+        SetDead(true);
+    }
 
     void Character::SetMaxHP(HpValue newMaxHP) {
         /* TODO: Check if maxHP is valid
@@ -56,6 +87,9 @@ namespace UGO::Scene {
         m_AttackPower = attackPower;
     }
 
+    void Character::SetAttackCooldownDuration(Core::Time::Second duration) { m_AttackCooldown.SetDuration(duration); }
+    void Character::SetInvincibleDuration(Core::Time::Second duration) { m_InvincibleTimer.SetDuration(duration); }
+
     void Character::AcceptIntendedMovement() {
         TryMove(m_IntentedMovement, m_RepelMovement);
         m_IntentedMovement = {0.f, 0.f};
@@ -64,8 +98,18 @@ namespace UGO::Scene {
 
     void Character::Update() {
         AcceptIntendedMovement();
+        if (m_AttackCooldown.IsTimeUp()) { ActivateHitBox(true); }
+        if (m_InvincibleTimer.IsTimeUp()) { ActivateHurtBox(true); }
         BasicObject::Update();
     }
     void Character::OnDraw() {}
+
+
+
+    Character::EffectAnimationData Character::GetAttackAnimationData() const { return m_AttackAnimationData; }
+    Character::EffectAnimationData Character::GetDamageAnimationData() const { return m_DamageAnimationData; }
+
+    void Character::SetAttackAnimationData(const EffectAnimationData& data) { m_AttackAnimationData = data; }
+    void Character::SetDamageAnimationData(const EffectAnimationData& data) { m_DamageAnimationData = data; }
 
 }

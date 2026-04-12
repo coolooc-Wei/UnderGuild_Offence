@@ -24,7 +24,7 @@ namespace Scene {
     protected:
     private:
         Core::Distance m_interactRange;
-        Core::Time::TimeStep m_interactTimer;
+        Core::Time::CountDownTimer m_interactTimer = Core::Time::CountDownTimer(0.0f);
 
     };
 

@@ -17,7 +17,11 @@ namespace Scene {
 
         void Update() override;
         void OnDraw() override;
+
+        // Events
         void OnAttack() override;
+        void OnDamage(HpValue amount) override;
+        void OnHeal(HpValue amount) override;
         void OnDeath() override;
 
     protected:

@@ -12,6 +12,7 @@ namespace Core {
     using Direction = glm::vec2;  // Always normalized
     using Velocity = glm::vec2;
     using Distance = float;
+    using Angle = float;
     using Size = glm::vec2;
 
     constexpr int TILE_SIZE = 32;

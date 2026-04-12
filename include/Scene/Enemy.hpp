@@ -16,8 +16,6 @@ namespace Scene {
         Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Enemy();
 
-        void OnAttack() override; // Set Facing Direction
-        void OnDeath() override;
         /* TODO: Add Mercenaries parameter after implementing Mercenaries
          */
         void AIUpdate(const std::vector<std::unique_ptr<Hero>>& heroes);
@@ -25,6 +23,13 @@ namespace Scene {
         void OnDraw() override;
 
         void SetTarget(const Character* target);  // Only called by BattleManager (maybe...?)
+
+
+        // Events
+        void OnAttack() override;  // Set facing direction
+        void OnDamage(HpValue amount) override;
+        void OnHeal(HpValue amount) override;
+        void OnDeath() override;
 
     protected:
     private:

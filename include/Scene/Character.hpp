@@ -6,6 +6,7 @@
 #include "Scene/SceneTypes.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Scene/Weapon.hpp"
+#include "Core/Time.hpp"
 
 namespace UGO {
 namespace Scene {
@@ -15,6 +16,15 @@ namespace Scene {
 
     class Character : public BasicObject {
     public:
+        struct EffectAnimationData {
+            std::shared_ptr<Util::Animation> ainmation = nullptr;
+            Core::Time::Second duration = 0.0f;
+            bool isImage = false;
+            Core::Angle offsetAngle = 0.0f;
+            Core::Size size = { 32.0f, 32.0f };
+        };
+
+
         Character(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         virtual ~Character();
 
@@ -25,13 +35,21 @@ namespace Scene {
         Core::Velocity GetIntendedMovement() const;
         Core::Velocity GetRepelMovement() const;
 
+        EffectAnimationData GetAttackAnimationData() const;
+        EffectAnimationData GetDamageAnimationData() const;
         // Setters
         void SetIntendedMovement(const Core::Velocity& intendedMovement);
         void SetRepelMovement(const Core::Velocity& repelMovement);
+        void SetAttackAnimationData(const EffectAnimationData& data);
+        void SetDamageAnimationData(const EffectAnimationData& data);
+        void SetAttackCooldownDuration(Core::Time::Second duration);
+        void SetInvincibleDuration(Core::Time::Second duration);
 
         // Events
-        virtual void OnAttack();
-        virtual void OnDeath();
+        void OnAttack() override;
+        void OnDamage(HpValue amount) override;
+        void OnHeal(HpValue amount) override;
+        void OnDeath() override;
 
         // System methods
         void Update() override;
@@ -50,11 +68,15 @@ namespace Scene {
         HpValue m_MaxHP;
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
+        Core::Time::CountDownTimer m_AttackCooldown = Core::Time::CountDownTimer(0.0f);
+        Core::Time::CountDownTimer m_InvincibleTimer = Core::Time::CountDownTimer(0.0f);
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
         Core::Velocity m_IntentedMovement = { 0.0f, 0.0f };
         Core::Velocity m_RepelMovement = { 0.0f, 0.0f };
 
+        EffectAnimationData m_AttackAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
+        EffectAnimationData m_DamageAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
     };
 
 } // namespace Scene

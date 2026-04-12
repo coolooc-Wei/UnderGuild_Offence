@@ -5,13 +5,14 @@
 
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
+#include "System/EffectAnimationManager.hpp"
 
 namespace UGO {
 namespace System {
 
     class BattleManager {
     public:
-        BattleManager();
+        BattleManager(EffectAnimationManager& effectAnimationManager);
         ~BattleManager();
 
         std::vector<Scene::Hero*> GetAllHeroes() const;
@@ -26,12 +27,15 @@ namespace System {
 
         void AIUpdate();
         void UpdateMovement();
+        void Attack();
 
     protected:
     private:
         std::vector<std::unique_ptr<Scene::Hero>> m_AllHeroes; // only one hero (maybe~)
         std::vector<std::unique_ptr<Scene::Enemy>> m_AllEnemies;
         // std::vector<std::unique_ptr<Scene::Mercenary>> m_AllMercenaries;
+
+        EffectAnimationManager& m_EffectAnimationManager;
 
     };
 

@@ -42,8 +42,7 @@ namespace UGO::Core {
         };
     }
 
-    /* DEBUG: Here
-    */
+
     WorldPosition ClampPosition(const WorldPosition& pos, Distance halfWidth, Distance halfHeight) {
         return {
             glm::clamp(pos.x, Map::g_WorldBounds.minX + halfWidth,  Map::g_WorldBounds.maxX - halfWidth),
