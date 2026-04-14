@@ -8,6 +8,7 @@
 
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
+#include "Scene/Drop.hpp"
 #include "Util/Renderer.hpp"
 
 namespace UGO {
@@ -28,12 +29,14 @@ namespace System {
         void AddEnemy(std::unique_ptr<Scene::Enemy> enemy, Util::Renderer& renderer);
         // void AddMercenary(std::unique_ptr<Scene::Mercenary> mercenary, Util::Renderer& renderer);
         void AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer); // TODO: removed after implementing UI system
+        void AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer);
 
         void GrantExpToHero(Scene::ExpValue amount, Util::Renderer& renderer);
         void SpawnLevelUpIcon(Util::Renderer& renderer);
 
         void AIUpdate();
         void UpdateMovement();
+        void UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer);
 
     protected:
     private:
@@ -41,9 +44,10 @@ namespace System {
         std::vector<std::unique_ptr<Scene::Enemy>> m_AllEnemies;
         // std::vector<std::unique_ptr<Scene::Mercenary>> m_AllMercenaries;
 
-        // 級視覺回饋相關
+        // 升級視覺回饋相關
         int m_LevelUpIconCount = 0;
         std::vector<std::unique_ptr<Scene::BasicObject>> m_LevelUpIcons;
+        std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
     };
 
 } // namespace System

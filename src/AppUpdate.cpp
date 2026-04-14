@@ -147,6 +147,28 @@ void UGO::App::Update() {
         m_steeringSystem.AdjustMovement(m_battleManager.GetAllEnemies());
         m_battleManager.UpdateMovement();
 
+        // Update Drops (Pickup and Magnetic logic)
+        /* HACK: Remove after testing
+        */
+        auto heroes = m_battleManager.GetAllHeroes();
+        if (!heroes.empty()) {
+            m_battleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+        }
+
+        // Test Spawn ExpPack
+        /* HACK: Remove after testing
+        */
+        if (Util::Input::IsKeyDown(Util::Keycode::X)) {
+            auto expPack = std::make_unique<Scene::ExpPack>(100.0f);
+            expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
+            expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+            expPack->SetSize(16, 16);
+            expPack->SetWorldPosition({0.0f, 0.0f});
+            expPack->GetGameObject()->SetVisible(true);
+            m_battleManager.AddDrop(std::move(expPack), m_Root);
+            LOG_INFO("Spawned ExpPack at (0, 0)!");
+        }
+
 
         /* DO NOT DELETE THIS LINE.
          * IT IS USED FOR THE GAME TIMING.

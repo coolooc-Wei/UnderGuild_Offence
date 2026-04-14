@@ -46,6 +46,10 @@ namespace UGO::System {
         renderer.AddChild(pet->GetGameObject());
         m_LevelUpIcons.push_back(std::move(pet));
     }
+    void BattleManager::AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer) {
+        renderer.AddChild(drop->GetGameObject());
+        m_AllDrops.push_back(std::move(drop));
+    }
     
     
     /*Hack: Modifications will be made after tje official launch of hero*/
@@ -116,6 +120,33 @@ namespace UGO::System {
         }
         for (auto& icon: m_LevelUpIcons) {
             icon->Update();
+        }
+    }
+
+    /* HACK: refactor
+    */
+    void BattleManager::UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer) {
+        for (auto it = m_AllDrops.begin(); it != m_AllDrops.end(); ) {
+            auto& drop = *it;
+            
+            // 掉落物更新 (處理飛行位移)
+            drop->Update();
+
+            float distance = glm::distance(drop->GetWorldPosition(), playerPos);
+            
+            // 磁吸觸發範圍
+            if (distance < 150.0f) { 
+                drop->MoveTo(playerPos);
+            }
+
+            // 撿拾觸發範圍 (碰撞接口預留處)
+            if (distance < 20.0f) {
+                drop->OnPickup(); // 觸發子類別(如 ExpPack) 的撿拾邏輯
+                renderer.RemoveChild(drop->GetGameObject());
+                it = m_AllDrops.erase(it);
+            } else {
+                ++it;
+            }
         }
     }
 
