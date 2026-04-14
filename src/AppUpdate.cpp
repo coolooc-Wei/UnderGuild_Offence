@@ -2,7 +2,10 @@
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 #include "Scene/BasicObject.hpp"
+#include "Scene/ExpPack.hpp"
 #include "UI/Page.hpp"
+#include <memory>
+#include <glm/geometric.hpp>
 
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
@@ -131,6 +134,14 @@ void UGO::App::Update() {
             enemyAnimation->Play();
             m_battleManager.AddEnemy(std::move(enemy), m_Root);
         }
+
+        // TODO: Remove after testing
+        // test GrantExpToHero
+        if (Util::Input::IsKeyDown(Util::Keycode::E)) { // Press E to grant exp directly
+            m_battleManager.GrantExpToHero(100.0f, m_Root);
+            LOG_INFO("Granted 250 EXP to Hero via BattleManager!");
+        }
+        // End TODO
 
         m_battleManager.AIUpdate();
         m_steeringSystem.AdjustMovement(m_battleManager.GetAllEnemies());

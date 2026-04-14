@@ -57,6 +57,7 @@ set(SCENE_SRC
     Scene/Weapon.cpp
     Scene/StatusEffect.cpp
     Scene/Drop.cpp
+    Scene/ExpPack.cpp
     Scene/Interactable.cpp
     Scene/Projectile.cpp
     Scene/Hero.cpp
@@ -69,6 +70,7 @@ set(SCENE_INC
     Scene/StatusEffect.hpp
     Scene/SceneTypes.hpp
     Scene/Drop.hpp
+    Scene/ExpPack.hpp
     Scene/Interactable.hpp
     Scene/Projectile.hpp
     Scene/Hero.hpp

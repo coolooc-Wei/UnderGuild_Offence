@@ -3,7 +3,10 @@
 
 namespace UGO::Scene {
 
-    BasicObject::BasicObject() {}
+    BasicObject::BasicObject() {
+        m_GameObject = std::make_shared<Util::GameObject>();
+        m_Dead = false;
+    }
     /* HACK: rewrite speed initializer
     */
     BasicObject::BasicObject(SpeedValue speed)

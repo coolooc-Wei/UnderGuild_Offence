@@ -2,6 +2,8 @@
 #define ENEMY_HPP
 
 #include "UGO_pch.hpp"
+#include <vector>
+#include <memory>
 
 #include "Scene/Character.hpp"
 
@@ -25,12 +27,15 @@ namespace Scene {
         void OnDraw() override;
 
         void SetTarget(const Character* target);  // Only called by BattleManager (maybe...?)
+        ExpValue GetExpReward() const;
 
     protected:
     private:
         /* TODO: Add Mercenaries parameter after implementing Mercenaries
          */
         void FindTarget(const std::vector<std::unique_ptr<Hero>>& heroes);
+
+        ExpValue m_ExpReward = 10.0f;
 
         const Character* m_Target = nullptr;
         Core::Time::Tick m_TargetUpdateTimer = 0;
