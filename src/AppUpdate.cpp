@@ -167,6 +167,12 @@ void UGO::App::Update() {
     default: {} break;
     }
 
+    /* HACK: Remove maybe
+    */
+    if (m_Background) {
+        m_Background->Update();
+    }
+
     m_Root.Update();
     /*
      * Do not touch the code below as they serve the purpose for

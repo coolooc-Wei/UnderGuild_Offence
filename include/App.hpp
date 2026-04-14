@@ -50,6 +50,7 @@ private:
     GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
+    std::unique_ptr<Scene::BasicObject> m_Background; //HACK: remove maybe
 
     // Register Systems
     System::BattleManager m_battleManager;

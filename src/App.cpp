@@ -38,6 +38,13 @@ namespace UGO {
             m_Pages[m_CurrentGameState]->SetVisible(true);
         }
 
+        // Handle background visibility
+        /* HACK: Remove maybe
+        */
+        if (m_Background) {
+            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE);
+        }
+
 
         LOG_INFO("Changing GameState to: {}", stateName);
     }

@@ -20,6 +20,17 @@ void UGO::App::Start() {
         page.second->SetVisible(false);
     }
 
+    // Initialize background
+    /* HACK: Remove maybe
+    */
+    m_Background = std::make_unique<Scene::BasicObject>();
+    m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
+    m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Background->SetSize(1280, 720);
+    m_Background->GetGameObject()->SetZIndex(-10.0f);
+    m_Background->GetGameObject()->SetVisible(false);
+    m_Root.AddChild(m_Background->GetGameObject());
+
     // Change states
     ChangeGameState(GameState::WELCOME);
     m_CurrentState = State::UPDATE;
