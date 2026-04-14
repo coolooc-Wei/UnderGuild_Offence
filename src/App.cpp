@@ -35,7 +35,7 @@ namespace UGO {
 
         m_CurrentGameState = state;
         if (m_Pages[m_CurrentGameState]) {
-            m_Pages[m_CurrentGameState]->SetVisible(true);
+            m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING);
         }
 
         // Handle background visibility
