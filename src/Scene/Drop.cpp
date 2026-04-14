@@ -37,4 +37,8 @@ namespace UGO::Scene {
         m_State = State::FLYING;
     }
 
+    ExpValue Drop::GetExpAmount() const {
+        return 0.0f;
+    }
+
 }

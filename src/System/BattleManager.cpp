@@ -141,6 +141,10 @@ namespace UGO::System {
 
             // 撿拾觸發範圍 (碰撞接口預留處)
             if (distance < 20.0f) {
+                UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
+                if (expAmount > 0.0f) {
+                    GrantExpToHero(expAmount, renderer);
+                }
                 drop->OnPickup(); // 觸發子類別(如 ExpPack) 的撿拾邏輯
                 renderer.RemoveChild(drop->GetGameObject());
                 it = m_AllDrops.erase(it);

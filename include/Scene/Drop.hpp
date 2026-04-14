@@ -27,6 +27,8 @@ namespace Scene{
         void MoveTo(const Core::WorldPosition& target);
         State GetState() const { return m_State; }
 
+        virtual ExpValue GetExpAmount() const;
+
     protected:
         State m_State = State::IDLE;
         Core::WorldPosition m_TargetPosition;

@@ -19,6 +19,10 @@ namespace UGO::Scene {
        
     }
 
+    ExpValue ExpPack::GetExpAmount() const {
+        return m_ExpValue;
+    }
+
     ExpValue ExpPack::GetExpValue() const {
         return m_ExpValue;
     }

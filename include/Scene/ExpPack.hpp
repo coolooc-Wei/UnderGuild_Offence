@@ -17,8 +17,9 @@ namespace Scene {
         void OnDraw() override;
 
         // Events
-        void OnPickup();
+        void OnPickup() override;
 
+        ExpValue GetExpAmount() const override;
         ExpValue GetExpValue() const;
 
     protected:
