@@ -2,10 +2,25 @@
 set(CORE_SRC
     Core/Coordinate.cpp
     Core/Time.cpp
+    Core/Box.cpp
 )
 set(CORE_INC
     Core/Coordinate.hpp
     Core/Time.hpp
+    Core/Box.hpp
+    Core/UGO_Math.hpp
+)
+
+# --- SYSTEM ---
+set(SYSTEM_SRC
+    System/BattleManager.cpp
+    System/SteeringSystem.cpp
+    System/EffectAnimationManager.cpp
+    )
+    set(SYSTEM_INC
+    System/BattleManager.hpp
+    System/SteeringSystem.hpp
+    System/EffectAnimationManager.hpp
 )
 
 # --- SYSTEM ---
@@ -62,8 +77,11 @@ set(SCENE_SRC
     Scene/Projectile.cpp
     Scene/Hero.cpp
     Scene/Enemy.cpp
-)
-set(SCENE_INC
+    Scene/EffectAnimation.cpp
+    Scene/Mercenary.cpp
+    Scene/Bot.cpp
+    )
+    set(SCENE_INC
     Scene/BasicObject.hpp
     Scene/Character.hpp
     Scene/Weapon.hpp
@@ -75,6 +93,9 @@ set(SCENE_INC
     Scene/Projectile.hpp
     Scene/Hero.hpp
     Scene/Enemy.hpp
+    Scene/EffectAnimationhcpp
+    Scene/Mercenary.hpp
+    Scene/Bot.hpp
 )
 
 # --- Combine All ---

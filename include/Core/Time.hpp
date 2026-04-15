@@ -18,6 +18,19 @@ namespace Time {
 
     void AdvanceTick(); // Only called by UGO::App::AppUpdate()
 
+    class CountDownTimer {
+    public:
+        CountDownTimer(Second durationInSecond);
+        ~CountDownTimer();
+        void SetDuration(Second durationInSecond);
+        void Start();
+        void Start(Second durationInSecond);
+        bool IsTimeUp() const;
+    // private:
+        TimeStep duration;
+        Tick endTick;
+    };
+
 } // namespace Time
 } // namespace Core
 } // namespace UGO

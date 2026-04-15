@@ -9,6 +9,7 @@
 #include "Graphics/Camera.hpp"
 #include "System/BattleManager.hpp"
 #include "System/SteeringSystem.hpp"
+#include "System/EffectAnimationManager.hpp"
 
 
 namespace UGO {
@@ -58,6 +59,12 @@ private:
     System::BattleManager m_battleManager;
     System::SteeringSystem m_steeringSystem;
 
+
+
+    // Register Systems
+    System::SteeringSystem m_SteeringSystem = System::SteeringSystem();
+    System::EffectAnimationManager m_EffectAnimationManager = System::EffectAnimationManager(m_Root);
+    System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager);
 
 
 

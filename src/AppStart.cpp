@@ -33,7 +33,7 @@ void UGO::App::Start() {
     m_Root.AddChild(m_Background->GetGameObject());
 
     // Change states
-    ChangeGameState(GameState::WELCOME);
+    ChangeGameState(GameState::GAMING);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position

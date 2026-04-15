@@ -485,6 +485,7 @@ FodyWeavers.xsd
 /.idea/
 # Custom writen VSCode .gitignore
 .vscode/
+.agents/
 
 # Default build directory for CMake extension
 build/
@@ -494,3 +495,7 @@ lib/
 
 # Doxygen generated files
 docs/html/
+
+# Gemini
+GEMINI.md
+.gemini/
