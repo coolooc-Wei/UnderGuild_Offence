@@ -17,24 +17,7 @@ namespace System {
         /* Adjusts the position of the enemies or heroes and mercenaries
          */
         template<typename T>
-        void AdjustMovement(const std::vector<T*>& characters) {
-            size_t len = characters.size();
-            if (len <= 1) { return; }
-
-            for (size_t i = 0; i < len; ++i) {
-                for (size_t j = i + 1; j < len; ++j) {
-                    auto char1 = characters[i];
-                    auto char2 = characters[j];
-
-                    if (IsTooClose(char1->GetWorldPosition(), char2->GetWorldPosition())) {
-                        Core::Velocity repelMovement = GetRepelMovement(char1->GetWorldPosition(), char2->GetWorldPosition());
-
-                        char1->SetRepelMovement(repelMovement);
-                        char2->SetRepelMovement(-repelMovement);
-                    }
-                }
-            }
-        }
+        void AdjustMovement(const std::vector<T*>& characters);
 
     private:
         bool IsTooClose(const Core::WorldPosition& position1, const Core::WorldPosition& position2);

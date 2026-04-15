@@ -67,6 +67,8 @@ set(SCENE_SRC
     Scene/Hero.cpp
     Scene/Enemy.cpp
     Scene/EffectAnimation.cpp
+    Scene/Mercenary.cpp
+    Scene/Bot.cpp
     )
     set(SCENE_INC
     Scene/BasicObject.hpp
@@ -80,6 +82,8 @@ set(SCENE_SRC
     Scene/Hero.hpp
     Scene/Enemy.hpp
     Scene/EffectAnimationhcpp
+    Scene/Mercenary.hpp
+    Scene/Bot.hpp
 )
 
 # --- Combine All ---

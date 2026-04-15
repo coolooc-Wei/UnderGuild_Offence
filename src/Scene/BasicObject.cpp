@@ -170,7 +170,7 @@ namespace UGO::Scene {
         if (m_HurtBox) { m_HurtBox->SetPosition(m_Position); }
         if (m_HitBox) { m_HitBox->SetPosition(m_Position); }
 
-        if (abs(intendedOffset.x) > Core::EPSILON) { SetFlip(m_FlipX = !(intendedOffset.x > 0.0f), false); }
+        if (abs(intendedOffset.x) > Core::EPSILON) { SetFlip(!(intendedOffset.x > 0.0f), GetFlipY()); }
     }
 
     void BasicObject::OnDraw() {}
@@ -185,5 +185,8 @@ namespace UGO::Scene {
     }
 
     void BasicObject::SetDead(const bool dead) { m_Dead = dead; }
+
+    bool BasicObject::GetFlipX() const { return m_FlipX; }
+    bool BasicObject::GetFlipY() const { return m_FlipY; }
 
 } // namespace UGO::Scene

@@ -1,5 +1,5 @@
-#ifndef ENEMY_HPP
-#define ENEMY_HPP
+#ifndef MERCENARY_HPP
+#define MERCENARY_HPP
 
 #include "UGO_pch.hpp"
 
@@ -10,12 +10,12 @@ namespace UGO {
 namespace Scene {
 
     class Hero;
-    class Mercenary;
+    class Enemy;
 
-    class Enemy : public Bot {
+    class Mercenary : public Bot {
     public:
-        Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed);
-        ~Enemy();
+        Mercenary(HpValue maxHP, HpValue attackPower, SpeedValue speed);
+        ~Mercenary();
 
         void AIUpdate(const std::vector<Character*>& targets) override;
         void Update() override;
@@ -35,4 +35,4 @@ namespace Scene {
 } // namespace Scene
 } // namespace UGO
 
-#endif // ENEMY_HPP
+#endif // MERCENARY_HPP

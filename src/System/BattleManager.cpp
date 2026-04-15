@@ -17,41 +17,50 @@ namespace {
 namespace UGO::System {
 
     BattleManager::BattleManager(EffectAnimationManager& effectAnimationManager)
-    : m_EffectAnimationManager(effectAnimationManager) {}
+    : m_EffectAnimationManager(effectAnimationManager) {
+        // Reserve memory for the vectors
+        m_AllHeroes.reserve(10);
+        m_AllEnemies.reserve(200);
+        m_AllMercenaries.reserve(150);
+        m_AllHeroesCache.reserve(10);
+        m_AllEnemiesCache.reserve(200);
+        m_AllMercenariesCache.reserve(150);
+        m_AllEnemiesCharacterCache.reserve(200);
+        m_AllCharactersCache.reserve(360);
+        m_AllAlliesCache.reserve(160);
+    }
     BattleManager::~BattleManager() {}
 
-    std::vector<Scene::Hero*> BattleManager::GetAllHeroes() const { 
-        std::vector<Scene::Hero*> heroes;
-        heroes.reserve(m_AllHeroes.size());
-        for (const auto& hero: m_AllHeroes) { heroes.push_back(hero.get()); }
-        return heroes;
-    }
-    std::vector<Scene::Enemy*> BattleManager::GetAllEnemies() const { 
-        std::vector<Scene::Enemy*> enemies;
-        enemies.reserve(m_AllEnemies.size());
-        for (const auto& enemy: m_AllEnemies) { enemies.push_back(enemy.get()); }
-        return enemies;
-    }
-    std::vector<Scene::Character*> BattleManager::GetAllCharacters() const {
-        std::vector<Scene::Character*> characters;
-        characters.reserve(
-            m_AllHeroes.size() +
-            m_AllEnemies.size()
-        );
-        for (const auto& hero: m_AllHeroes) { characters.push_back(hero.get()); }
-        for (const auto& enemy: m_AllEnemies) { characters.push_back(enemy.get()); }
-        return characters;
-    }
-
+    std::vector<Scene::Hero*> BattleManager::GetAllHeroes() const { return m_AllHeroesCache; }
+    std::vector<Scene::Enemy*> BattleManager::GetAllEnemies() const { return m_AllEnemiesCache; }
+    std::vector<Scene::Mercenary*> BattleManager::GetAllMercenaries() const { return m_AllMercenariesCache; }
+    std::vector<Scene::Character*> BattleManager::GetAllCharacters() const { return m_AllCharactersCache; }
+    std::vector<Scene::Character*> BattleManager::GetAllAllies() const { return m_AllAlliesCache; }
 
 
     void BattleManager::AddHero(std::unique_ptr<Scene::Hero> hero, Util::Renderer& renderer) {
+        auto heroPtr = hero.get();
         renderer.AddChild(hero->GetGameObject());
+        m_AllHeroesCache.push_back(heroPtr);
+        m_AllCharactersCache.push_back(heroPtr);
+        m_AllAlliesCache.push_back(heroPtr);
         m_AllHeroes.push_back(std::move(hero));
     }
     void BattleManager::AddEnemy(std::unique_ptr<Scene::Enemy> enemy, Util::Renderer& renderer) {
+        auto enemyPtr = enemy.get();
         renderer.AddChild(enemy->GetGameObject());
+        m_AllEnemiesCache.push_back(enemyPtr);
+        m_AllEnemiesCharacterCache.push_back(enemyPtr);
+        m_AllCharactersCache.push_back(enemyPtr);
         m_AllEnemies.push_back(std::move(enemy));
+    }
+    void BattleManager::AddMercenary(std::unique_ptr<Scene::Mercenary> mercenary, Util::Renderer& renderer) {
+        auto mercenaryPtr = mercenary.get();
+        renderer.AddChild(mercenary->GetGameObject());
+        m_AllMercenariesCache.push_back(mercenaryPtr);
+        m_AllCharactersCache.push_back(mercenaryPtr);
+        m_AllAlliesCache.push_back(mercenaryPtr);
+        m_AllMercenaries.push_back(std::move(mercenary));
     }
 
 
@@ -61,7 +70,10 @@ namespace UGO::System {
             hero->KeyboardUpdate();
         }
         for (auto& enemy: m_AllEnemies) {
-            enemy->AIUpdate(m_AllHeroes);
+            enemy->AIUpdate(m_AllAlliesCache);
+        }
+        for (auto& mercenary: m_AllMercenaries) {
+            mercenary->AIUpdate(m_AllEnemiesCharacterCache);
         }
     }
 
@@ -71,6 +83,9 @@ namespace UGO::System {
         }
         for (auto& enemy: m_AllEnemies) {
             enemy->Update();
+        }
+        for (auto& mercenary: m_AllMercenaries) {
+            mercenary->Update();
         }
     }
 
@@ -97,6 +112,25 @@ namespace UGO::System {
                     LOG_INFO("Enemy hits hero!");
                 }
             }
+
+            for (auto* mercenary: GetAllMercenaries()) {
+                assert(enemy != nullptr && mercenary != nullptr);
+                if (enemy->IsDead() || mercenary->IsDead()) { continue; }
+
+                auto mercenaryHitBox = mercenary->GetHitBox();
+                auto enemyHitBox = enemy->GetHitBox();
+                auto mercenaryHurtBox = mercenary->GetHurtBox();
+                auto enemyHurtBox = enemy->GetHurtBox();
+
+                if (mercenaryHitBox && enemyHurtBox && mercenaryHitBox->IsCollidingWith(*enemyHurtBox)) {
+                    attackEvents.emplace_back(AttackEvent{mercenary, enemy, mercenary->GetAttackPower()});
+                    LOG_INFO("Mervenary hits enemy!");
+                }
+                if (enemyHitBox && mercenaryHurtBox && enemyHitBox->IsCollidingWith(*mercenaryHurtBox)) {
+                    attackEvents.emplace_back(AttackEvent{enemy, mercenary, enemy->GetAttackPower()});
+                    LOG_INFO("Enemy hits mervenary!");
+                }
+            }
         }
 
         std::unordered_set<Scene::Character*> animatedAttackers;
@@ -110,12 +144,11 @@ namespace UGO::System {
             event.Victim->OnDamage(event.Damage);
 
             Core::Velocity attackerToVictim = event.Victim->GetWorldPosition() - event.Attacker->GetWorldPosition();
+            Core::Direction attackerToVictimDirection = Core::Direction(attackerToVictim);
             Core::Angle rotationAngle;
             Scene::Character::EffectAnimationData animationData;
 
-            if (animatedVictims.find(event.Victim) == animatedVictims.end()) {
-                animatedVictims.insert(event.Victim);
-
+            if (animatedVictims.insert(event.Victim).second) {
                 animationData = event.Victim->GetDamageAnimationData();
                 rotationAngle = GetRotateAngle(animationData.offsetAngle, -attackerToVictim);
                 m_EffectAnimationManager.Create(
@@ -123,13 +156,11 @@ namespace UGO::System {
                     rotationAngle, animationData.size
                 );
             }
-            if (animatedAttackers.find(event.Attacker) == animatedAttackers.end()) {
-                animatedAttackers.insert(event.Attacker);
-
+            if (animatedAttackers.insert(event.Attacker).second) {
                 animationData = event.Attacker->GetAttackAnimationData();
                 rotationAngle = GetRotateAngle(animationData.offsetAngle, attackerToVictim);
                 m_EffectAnimationManager.Create(
-                    event.Attacker->GetWorldPosition(), animationData.duration, animationData.ainmation, animationData.isImage,
+                    event.Attacker->GetWorldPosition() + m_offsetDis * attackerToVictimDirection, animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
                 );
             }

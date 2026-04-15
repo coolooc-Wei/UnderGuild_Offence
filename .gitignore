@@ -495,3 +495,7 @@ lib/
 
 # Doxygen generated files
 docs/html/
+
+# Gemini
+GEMINI.md
+.gemini/

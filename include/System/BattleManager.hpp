@@ -5,6 +5,7 @@
 
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
+#include "Scene/Mercenary.hpp"
 #include "System/EffectAnimationManager.hpp"
 
 namespace UGO {
@@ -17,25 +18,34 @@ namespace System {
 
         std::vector<Scene::Hero*> GetAllHeroes() const;
         std::vector<Scene::Enemy*> GetAllEnemies() const;
-        // const std::vector<Scene::Mercenary>& GetAllMercenaries() const;
+        std::vector<Scene::Mercenary*> GetAllMercenaries() const;
         std::vector<Scene::Character*> GetAllCharacters() const;
+        std::vector<Scene::Character*> GetAllAllies() const;
 
 
         void AddHero(std::unique_ptr<Scene::Hero> hero, Util::Renderer& renderer);
         void AddEnemy(std::unique_ptr<Scene::Enemy> enemy, Util::Renderer& renderer);
-        // void AddMercenary(std::unique_ptr<Scene::Mercenary> mercenary, Util::Renderer& renderer);
+        void AddMercenary(std::unique_ptr<Scene::Mercenary> mercenary, Util::Renderer& renderer);
 
         void AIUpdate();
         void UpdateMovement();
         void Attack();
 
-    protected:
     private:
         std::vector<std::unique_ptr<Scene::Hero>> m_AllHeroes; // only one hero (maybe~)
         std::vector<std::unique_ptr<Scene::Enemy>> m_AllEnemies;
-        // std::vector<std::unique_ptr<Scene::Mercenary>> m_AllMercenaries;
+        std::vector<std::unique_ptr<Scene::Mercenary>> m_AllMercenaries;
+
+        std::vector<Scene::Hero*> m_AllHeroesCache;
+        std::vector<Scene::Enemy*> m_AllEnemiesCache;
+        std::vector<Scene::Mercenary*> m_AllMercenariesCache;
+        std::vector<Scene::Character*> m_AllEnemiesCharacterCache;
+        std::vector<Scene::Character*> m_AllCharactersCache;
+        std::vector<Scene::Character*> m_AllAlliesCache;
 
         EffectAnimationManager& m_EffectAnimationManager;
+
+        const Core::Distance m_offsetDis = 32.0f;
 
     };
 

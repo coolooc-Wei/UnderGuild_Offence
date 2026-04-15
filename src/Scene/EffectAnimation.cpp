@@ -1,5 +1,4 @@
 #include "Scene/EffectAnimation.hpp"
-#include "Core/UGO_Math.hpp"
 
 namespace UGO::Scene {
 
@@ -20,10 +19,12 @@ namespace UGO::Scene {
         if (animation == nullptr) { LOG_WARN("From EffectAnimation::Start: animation is nullptr"); return; }
 
         m_Transform.rotation = rotationAngle;
-        // m_Transform.scale 
 
         SetDrawable(animation);
         m_Animation = animation;
+
+        auto originSize = m_Animation->GetSize();
+        m_Transform.scale = {size.x / originSize.x, size.y /originSize.y};
 
         if (isImage) { m_Animation->Play(); }
         else { m_Animation->Pause(); }

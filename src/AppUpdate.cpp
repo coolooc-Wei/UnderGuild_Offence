@@ -142,17 +142,35 @@ void UGO::App::Update() {
       enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
       enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
       enemy->SetSize(32, 32);
-      enemy->SetHitBox(std::make_unique<Core::RectangleBox>(enemy->GetWorldPosition(), 32.0f, 32.0f));
+      enemy->SetHitBox(std::make_unique<Core::RectangleBox>(enemy->GetWorldPosition(), 64.0f, 64.0f));
       enemy->ActivateCollidable(true);
       enemy->ActivateHitBox(true);
       enemy->ActivateHurtBox(true);
       enemy->GetGameObject()->SetVisible(true);
-      enemy->SetAttackCooldownDuration(10000.0f);
+      enemy->SetAttackCooldownDuration(5.0f);
       enemy->SetDamageAnimationData(Scene::Character::EffectAnimationData{
         std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
       });
       enemyAnimation->Play();
       m_BattleManager.AddEnemy(std::move(enemy), m_Root);
+
+      auto mercenary = std::make_unique<Scene::Mercenary>(1000, 5, 1.0f);
+      mercenary->SetWorldPosition({-50.0f, -50.0f});
+      mercenary->SetAnimation(enemyAnimation);
+      mercenary->SetImage("../Resources/Image/character/enemy/Boss_7_1.png");
+      mercenary->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+      mercenary->SetSize(32, 32);
+      mercenary->SetHitBox(std::make_unique<Core::RectangleBox>(mercenary->GetWorldPosition(), 64.0f, 64.0f));
+      mercenary->ActivateCollidable(true);
+      mercenary->ActivateHitBox(true);
+      mercenary->ActivateHurtBox(true);
+      mercenary->GetGameObject()->SetVisible(true);
+      mercenary->SetAttackCooldownDuration(3.0f);
+      mercenary->SetDamageAnimationData(Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      });
+      enemyAnimation->Play();
+      m_BattleManager.AddMercenary(std::move(mercenary), m_Root);
     }
 
     m_BattleManager.AIUpdate();

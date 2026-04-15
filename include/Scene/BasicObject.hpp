@@ -77,6 +77,8 @@ namespace Scene {
     protected:
         Core::WorldPosition OffsetCalculator(const Core::Velocity &offset) const;
         void SetDead(const bool dead);
+        bool GetFlipX() const;
+        bool GetFlipY() const;
 
         private:
         std::shared_ptr<Util::GameObject> m_GameObject = nullptr;
