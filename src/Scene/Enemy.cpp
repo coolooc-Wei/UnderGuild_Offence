@@ -25,4 +25,6 @@ namespace UGO::Scene {
 
   void Enemy::OnDraw() {}
 
+  ExpValue Enemy::GetExpReward() const { return m_ExpReward; }
+
 } // namespace UGO::Scene

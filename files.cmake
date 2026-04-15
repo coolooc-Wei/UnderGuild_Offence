@@ -23,6 +23,16 @@ set(SYSTEM_SRC
     System/EffectAnimationManager.hpp
 )
 
+# --- SYSTEM ---
+set(SYSTEM_SRC
+    System/BattleManager.cpp
+    System/SteeringSystem.cpp
+)
+set(SYSTEM_INC
+    System/BattleManager.hpp
+    System/SteeringSystem.hpp
+)
+
 # --- UI ---
 set(UI_SRC
     UI/Page.cpp
@@ -62,6 +72,7 @@ set(SCENE_SRC
     Scene/Weapon.cpp
     Scene/StatusEffect.cpp
     Scene/Drop.cpp
+    Scene/ExpPack.cpp
     Scene/Interactable.cpp
     Scene/Projectile.cpp
     Scene/Hero.cpp
@@ -77,6 +88,7 @@ set(SCENE_SRC
     Scene/StatusEffect.hpp
     Scene/SceneTypes.hpp
     Scene/Drop.hpp
+    Scene/ExpPack.hpp
     Scene/Interactable.hpp
     Scene/Projectile.hpp
     Scene/Hero.hpp

@@ -3,8 +3,6 @@
 namespace UGO::Core::Time {
 
     static Tick s_CurrentTick = 0; 
-    
-    TimeStep GetDeltaTime() { return FIXED_DELTA_TIME; }
 
     Tick GetCurrentTick() { return s_CurrentTick; }
 

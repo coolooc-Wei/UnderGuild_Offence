@@ -21,13 +21,9 @@ namespace UGO::Scene {
 
     bool BasicObject::IsDead() const { return m_Dead; }
 
-    std::shared_ptr<Util::GameObject> BasicObject::GetGameObject() const {
-        return m_GameObject;
-    }
+    std::shared_ptr<Util::GameObject> BasicObject::GetGameObject() const { return m_GameObject; }
 
-    std::shared_ptr<Util::Animation> BasicObject::GetAnimation() const {
-        return m_Animation;
-    }
+    std::shared_ptr<Util::Animation> BasicObject::GetAnimation() const { return m_Animation; }
 
     glm::vec2 BasicObject::GetSize() const {
         assert(m_CollisionBox != nullptr);
@@ -44,27 +40,17 @@ namespace UGO::Scene {
         if (m_HitBox) { m_HitBox->SetPosition(m_Position); }
     }
 
-    void BasicObject::SetImage(const std::shared_ptr<Util::Image> &image) {
-        m_Image = image;
-    }
-    void BasicObject::SetImage(const std::string &imagePath) {
-        m_Image = std::make_shared<Util::Image>(imagePath);
-    }
+    void BasicObject::SetImage(const std::shared_ptr<Util::Image> &image) { m_Image = image; }
+    void BasicObject::SetImage(const std::string &imagePath) { m_Image = std::make_shared<Util::Image>(imagePath); }
 
-    void BasicObject::SetAnimation(
-        const std::shared_ptr<Util::Animation> &animation
-    ) {
-        m_Animation = animation;
-    }
+    void BasicObject::SetAnimation(const std::shared_ptr<Util::Animation> &animation) { m_Animation = animation; }
     void BasicObject::SetAnimation(
         const std::vector<std::string> &paths,
         bool play,
         std::size_t interval,
         bool looping,
         std::size_t cooldown
-    ) {
-        m_Animation = std::make_shared<Util::Animation>(paths, play, interval, looping, cooldown);
-    }
+    ) { m_Animation = std::make_shared<Util::Animation>(paths, play, interval, looping, cooldown); }
 
     void BasicObject::SetAnimationState(const bool play) {
         assert(m_Animation != nullptr);
@@ -165,10 +151,7 @@ namespace UGO::Scene {
 
     //     m_Position += safeOffset;
     // }
-    void BasicObject::TryMove(
-        const Core::Velocity &intendedOffset,
-        const Core::Velocity &externalOffset
-    ) {
+    void BasicObject::TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset) {
         Core::Velocity safeOffset = OffsetCalculator(intendedOffset + externalOffset);
         m_Position += safeOffset;
 

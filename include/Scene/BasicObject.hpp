@@ -18,11 +18,18 @@ namespace Scene {
         enum class DrawableType { Image, Animation, None };
 
         /* TODO: Remove this if we don't need the default constructor
-        *       after finish constructor of the all subclasses.
+         *       after finish constructor of the all subclasses.
         */
         BasicObject();
         BasicObject(SpeedValue speed);
-    
+        BasicObject(
+            SpeedValue speed,
+            Core::WorldPosition position,
+            DrawableType drawableType,
+            std::shared_ptr<Util::Animation> animation = nullptr,
+            std::shared_ptr<Util::Image> image = nullptr,
+            glm::vec2 scale = {1.0f, 1.0f}
+        );
         virtual ~BasicObject();
 
         // Getters
@@ -74,8 +81,7 @@ namespace Scene {
 
         // void TryMove(const Core::Direction& direction, const Core::Distance
         // moveDis);
-        void TryMove(const Core::Velocity &intendedOffset,
-                    const Core::Velocity &externalOffset);
+        void TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset);
 
     protected:
         Core::WorldPosition OffsetCalculator(const Core::Velocity &offset) const;
@@ -90,7 +96,7 @@ namespace Scene {
         std::shared_ptr<Util::Animation> m_Animation = nullptr;
         std::shared_ptr<Util::Image> m_Image = nullptr;
         DrawableType m_DrawableType = DrawableType::Image;
-        glm::vec2 m_Scale = {1.0f, 1.0f}; // Keep values be positive forever
+        glm::vec2 m_scale = {1.0f, 1.0f};  // Keep values be positive forever
         bool m_FlipX = false, m_FlipY = false;
 
         SpeedValue m_Speed;

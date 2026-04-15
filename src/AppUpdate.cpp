@@ -2,7 +2,10 @@
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 #include "Scene/BasicObject.hpp"
+#include "Scene/ExpPack.hpp"
 #include "UI/Page.hpp"
+#include <memory>
+#include <glm/geometric.hpp>
 
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
@@ -69,9 +72,18 @@ void UGO::App::Update() {
     /* Use P temporarity instead of ESCAPE
      */
     if (Util::Input::IsKeyDown(Util::Keycode::P)) {
-      ChangeGameState(GameState::PAUSE);
-    } else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
-      ChangeGameState(GameState::END);
+        ChangeGameState(GameState::PAUSE);
+    }
+    else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
+
+        // Collect all remaining drops at level end
+        auto heroes = m_battleManager.GetAllHeroes();
+        if (!heroes.empty()) {
+            m_battleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+        }
+
+        m_SettlingTimer = 0.0f;
+        ChangeGameState(GameState::SETTLING);
     }
 
     /* HACK: Remove these lines after testing
@@ -172,6 +184,29 @@ void UGO::App::Update() {
       enemyAnimation->Play();
       m_BattleManager.AddMercenary(std::move(mercenary), m_Root);
     }
+    
+    // Test Spawn ExpPack
+    /* HACK: Remove after testing
+    */
+    if (Util::Input::IsKeyDown(Util::Keycode::X)) {
+        auto expPack = std::make_unique<Scene::ExpPack>(100.0f);
+        expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
+        expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        expPack->SetSize(16, 16);
+        expPack->SetWorldPosition({0.0f, 0.0f});
+        expPack->GetGameObject()->SetVisible(true);
+        m_battleManager.AddDrop(std::move(expPack), m_Root);
+        LOG_INFO("Spawned ExpPack at (0, 0)!");
+    }
+    // END TODO
+
+    // Update Drops (Pickup and Magnetic logic)
+    /* HACK: Remove after testing
+    */
+    auto heroes = m_battleManager.GetAllHeroes();
+    if (!heroes.empty()) {
+        m_battleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+    }
 
     m_BattleManager.AIUpdate();
     m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllEnemies());
@@ -185,6 +220,30 @@ void UGO::App::Update() {
     Core::Time::AdvanceTick();
 
   } break;
+    case GameState::SETTLING: {
+        if (m_CurrentProgressState != App::GameState::SETTLING) {
+            m_CurrentProgressState = App::GameState::SETTLING;
+        }
+
+        m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
+
+        // Keep updating drops so they can fly
+        auto heroes = m_battleManager.GetAllHeroes();
+        if (!heroes.empty()) {
+            m_battleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+        }
+
+        // Keep updating movement (transform sync) but NO AI/Keyboard update
+        m_battleManager.UpdateMovement();
+
+        // Check for completion or timeout
+        if (m_battleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
+            ChangeGameState(GameState::END);
+        }
+
+        Core::Time::AdvanceTick();
+    }
+    break;
   case GameState::END: {
     if (m_CurrentProgressState != App::GameState::END) {
       m_CurrentProgressState = App::GameState::END;
@@ -193,10 +252,15 @@ void UGO::App::Update() {
       }
     }
   } break;
-  default: {
-  } break;
+  default: {} break;
   }
 
+  /* HACK: Remove maybe
+  */
+  if (m_Background) {
+      m_Background->Update();
+  }
+  
   m_Root.Update();
   /*
    * Do not touch the code below as they serve the purpose for
