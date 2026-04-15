@@ -20,8 +20,20 @@ namespace Scene {
         void OnAttack() override;
         void OnDeath() override;
 
+        // EXP System
+        void GainExp(ExpValue amount);
+        virtual void OnLevelUp();
+        LevelValue GetLevel() const;
+        ExpValue GetCurrentExp() const;
+        ExpValue GetMaxExp() const;
+
     protected:
     private:
+        void UpdateMaxExp();
+
+        LevelValue m_Level = 1;
+        ExpValue m_CurrentExp = 0.0f;
+        ExpValue m_MaxExp = 200.0f;
     };
 
 } // namespace Scene

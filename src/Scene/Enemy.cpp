@@ -60,4 +60,8 @@ namespace UGO::Scene {
         }
     }
 
+    ExpValue Enemy::GetExpReward() const {
+        return m_ExpReward;
+    }
+
 }

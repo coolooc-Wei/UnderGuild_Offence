@@ -5,6 +5,8 @@ namespace UGO::Scene {
 
     using HpValue = float;
     using SpeedValue = float;
+    using ExpValue = float;
+    using LevelValue = int;
 
 }
 
