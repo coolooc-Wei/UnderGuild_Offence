@@ -2,8 +2,6 @@
 #define ENEMY_HPP
 
 #include "UGO_pch.hpp"
-#include <vector>
-#include <memory>
 
 #include "Scene/Character.hpp"
 
