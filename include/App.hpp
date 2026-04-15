@@ -59,10 +59,6 @@ private:
     System::SteeringSystem m_steeringSystem;
 
 
-    // Register Systems
-    System::BattleManager m_battleManager;
-    System::SteeringSystem m_steeringSystem;
-
 
 
 
