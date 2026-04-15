@@ -66,6 +66,12 @@ namespace UGO::Scene {
         m_Animation = std::make_shared<Util::Animation>(paths, play, interval, looping, cooldown);
     }
 
+    void BasicObject::SetAnimationState(const bool play) {
+        assert(m_Animation != nullptr);
+        if (play) { m_Animation->Play(); LOG_DEBUG("Animation PLayed."); }
+        else { m_Animation->Pause(); m_Animation->SetCurrentFrame(0); }
+    }
+
     void BasicObject::SetSpeed(const SpeedValue speed) { m_Speed = speed; }
 
     void BasicObject::SetDrawableType(const DrawableType type) {

@@ -41,9 +41,12 @@ namespace Scene {
         void SetImage(const std::shared_ptr<Util::Image> &image);
         void SetImage(const std::string &imagePath);
         void SetAnimation(const std::shared_ptr<Util::Animation> &animation);
-        void SetAnimation(const std::vector<std::string> &paths, bool play,
-                            std::size_t interval, bool looping = true,
-                            std::size_t cooldown = 100);
+        void SetAnimation(
+            const std::vector<std::string> &paths, bool play,
+            std::size_t interval, bool looping = true,
+            std::size_t cooldown = 100
+        );
+        void SetAnimationState(const bool plsy);
         void SetSpeed(const SpeedValue speed);
 
         void SetDrawableType(const DrawableType type);

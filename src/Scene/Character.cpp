@@ -97,9 +97,13 @@ namespace UGO::Scene {
     }
 
     void Character::Update() {
+        if (glm::length(m_IntentedMovement) < Core::EPSILON) { SetAnimationState(false); }
+        else { SetAnimationState(true); }
+
         AcceptIntendedMovement();
         if (m_AttackCooldown.IsTimeUp()) { ActivateHitBox(true); }
         if (m_InvincibleTimer.IsTimeUp()) { ActivateHurtBox(true); }
+
         BasicObject::Update();
     }
     void Character::OnDraw() {}

@@ -28,10 +28,10 @@ namespace UGO::System {
             }
         }
     }
-    template void SteeringSystem::AdjustMovement<Scene::Hero>(const std::vector<Scene::Hero*>& characters);
-    template void SteeringSystem::AdjustMovement<Scene::Enemy>(const std::vector<Scene::Enemy*>& characters);
-    template void SteeringSystem::AdjustMovement<Scene::Mercenary>(const std::vector<Scene::Mercenary*>& characters);
-    template void SteeringSystem::AdjustMovement<Scene::Character>(const std::vector<Scene::Character*>& characters);
+    template void SteeringSystem::AdjustMovement(const std::vector<Scene::Hero*>& characters);
+    template void SteeringSystem::AdjustMovement(const std::vector<Scene::Enemy*>& characters);
+    template void SteeringSystem::AdjustMovement(const std::vector<Scene::Mercenary*>& characters);
+    template void SteeringSystem::AdjustMovement(const std::vector<Scene::Character*>& characters);
 
     bool SteeringSystem::IsTooClose(const Core::WorldPosition& position1, const Core::WorldPosition& position2) {
         return abs(glm::length(position1 - position2)) < m_RepelDistance;

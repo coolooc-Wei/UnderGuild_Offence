@@ -93,6 +93,7 @@ namespace UGO::System {
         std::vector<AttackEvent> attackEvents;
         attackEvents.reserve(GetAllCharacters().size());
 
+        // Pairwise Comparison
         for (auto* enemy : GetAllEnemies()) {
             for (auto* hero : GetAllHeroes()) {
                 assert(enemy != nullptr && hero != nullptr);
@@ -133,6 +134,7 @@ namespace UGO::System {
             }
         }
 
+        // Set the Animations and Apply HP Counting
         std::unordered_set<Scene::Character*> animatedAttackers;
         std::unordered_set<Scene::Character*> animatedVictims;
         animatedAttackers.reserve(attackEvents.size());
@@ -144,7 +146,7 @@ namespace UGO::System {
             event.Victim->OnDamage(event.Damage);
 
             Core::Velocity attackerToVictim = event.Victim->GetWorldPosition() - event.Attacker->GetWorldPosition();
-            Core::Direction attackerToVictimDirection = Core::Direction(attackerToVictim);
+            Core::Direction attackerToVictimDirection = glm::normalize(attackerToVictim);
             Core::Angle rotationAngle;
             Scene::Character::EffectAnimationData animationData;
 
