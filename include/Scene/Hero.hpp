@@ -10,13 +10,16 @@ namespace Scene {
     
     class Hero : public Character {
     public:
-        Hero(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed);
+        Hero(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Hero();
+
+        void KeyboardUpdate();
 
         void Update() override;
         void OnDraw() override;
         void OnAttack() override;
         void OnDeath() override;
+
     protected:
     private:
     };

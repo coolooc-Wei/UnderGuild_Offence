@@ -9,23 +9,21 @@ namespace Core {
     using GridPosition = glm::ivec2;
     using WorldPosition = glm::vec2;
 
-    using Direction = glm::vec2;
+    using Direction = glm::vec2;  // Always normalized
+    using Velocity = glm::vec2;
     using Distance = float;
+    using Size = glm::vec2;
 
-    const int TILE_SIZE = 32;
+    constexpr int TILE_SIZE = 32;
 
-    const int WINDOW_HEIGHT = 720;
-    const int WINDOW_WIDTH = 1280;
+    constexpr int WINDOW_HEIGHT = 720;
+    constexpr int WINDOW_WIDTH = 1280;
 
-    /* URGENT: Change to Top-Left Based
-     */
+    constexpr float EPSILON = 0.0001f;
+
     struct Bounds { 
     float minX, minY;
     float maxX, maxY;
-    /* TODO: Change to
-     > GridPosition topLeft;
-     > GridPosition bottomRight;
-     */
 
     static Bounds FromCenter(float width, float height);
     };
@@ -38,9 +36,9 @@ namespace Core {
     /* Grid:  Top-Left Based, int
      * World: Center Based  , float
      */
-    Core::WorldPosition GridToWorld(const Core::GridPosition& gridPos);
-    Core::GridPosition WorldToGrid(const Core::WorldPosition &worldPos);
-    Core::WorldPosition ClampPosition(const Core::Bounds& bounds, const Core::WorldPosition& pos, Core::Distance halfWidth, Core::Distance halfHeight);
+    WorldPosition GridToWorld(const GridPosition& gridPos);
+    GridPosition WorldToGrid(const WorldPosition &worldPos);
+    WorldPosition ClampPosition(const WorldPosition& pos, Distance halfWidth, Distance halfHeight);
 
 } // namespace Core
 } // namespace UGO

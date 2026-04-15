@@ -4,13 +4,21 @@
 
 namespace UGO::Scene {
 
-    Character::Character(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed)
-        : BasicObject(imagePath, speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
+    Character::Character(HpValue maxHP, HpValue attackPower, SpeedValue speed)
+        : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
     Character::~Character() = default;
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
     HpValue Character::GetAttackPower() const { return m_AttackPower; }
+    Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
+    Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
+
+    void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
+    void Character::SetRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement = repelMovement; }
+
+    void Character::OnAttack() {}
+    void Character::OnDeath() {}
 
     void Character::SetMaxHP(HpValue newMaxHP) {
         /* TODO: Check if maxHP is valid
@@ -48,7 +56,14 @@ namespace UGO::Scene {
         m_AttackPower = attackPower;
     }
 
+    void Character::AcceptIntendedMovement() {
+        TryMove(m_IntentedMovement, m_RepelMovement);
+        m_IntentedMovement = {0.f, 0.f};
+        m_RepelMovement = {0.f, 0.f};
+    }
+
     void Character::Update() {
+        AcceptIntendedMovement();
         BasicObject::Update();
     }
     void Character::OnDraw() {}

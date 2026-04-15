@@ -15,17 +15,23 @@ namespace Scene {
 
     class Character : public BasicObject {
     public:
-        Character(HpValue maxHP, HpValue attackPower, std::string imagePath, SpeedValue speed);
+        Character(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         virtual ~Character();
 
         // Getters
         HpValue GetMaxHP() const;
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
+        Core::Velocity GetIntendedMovement() const;
+        Core::Velocity GetRepelMovement() const;
+
+        // Setters
+        void SetIntendedMovement(const Core::Velocity& intendedMovement);
+        void SetRepelMovement(const Core::Velocity& repelMovement);
 
         // Events
-        virtual void OnAttack() = 0;
-        virtual void OnDeath() = 0;
+        virtual void OnAttack();
+        virtual void OnDeath();
 
         // System methods
         void Update() override;
@@ -38,12 +44,16 @@ namespace Scene {
         void Heal(HpValue amount);
         void SetAttackPower(HpValue attackPower);
 
+        void AcceptIntendedMovement();
+
     private:
         HpValue m_MaxHP;
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
         std::unique_ptr<Weapon> m_Weapon = nullptr;
         std::vector<std::unique_ptr<UGO::Scene::StatusEffect>> m_StatusEffects;
+        Core::Velocity m_IntentedMovement = { 0.0f, 0.0f };
+        Core::Velocity m_RepelMovement = { 0.0f, 0.0f };
 
     };
 

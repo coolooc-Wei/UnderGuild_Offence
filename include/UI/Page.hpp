@@ -7,7 +7,8 @@ namespace UGO {
 namespace UI {
 
     // temp page
-    // TODO: Need to rewrite after.
+    /* TODO: Need to be rewritten in future.
+     */
     class Page : public Util::GameObject {
     public:
         Page(const std::string& text);

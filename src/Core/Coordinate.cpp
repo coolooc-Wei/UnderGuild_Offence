@@ -1,7 +1,5 @@
 #include "Core/Coordinate.hpp"
 
-/* URGENT: Change Grid to TopLeft-Based
-*/
 namespace UGO::Core {
 
     // GLOBAL VARIABLES
@@ -44,10 +42,12 @@ namespace UGO::Core {
         };
     }
 
-    WorldPosition ClampPosition(const Bounds& bounds, const WorldPosition& pos, Distance halfWidth, Distance halfHeight) {
+    /* DEBUG: Here
+    */
+    WorldPosition ClampPosition(const WorldPosition& pos, Distance halfWidth, Distance halfHeight) {
         return {
-            glm::clamp(pos.x, bounds.minX + halfWidth, bounds.maxX - halfWidth),
-            glm::clamp(pos.y, bounds.minY + halfHeight, bounds.maxY - halfHeight)
+            glm::clamp(pos.x, Map::g_WorldBounds.minX + halfWidth,  Map::g_WorldBounds.maxX - halfWidth),
+            glm::clamp(pos.y, Map::g_WorldBounds.minY + halfHeight, Map::g_WorldBounds.maxY - halfHeight)
         };
     }
 

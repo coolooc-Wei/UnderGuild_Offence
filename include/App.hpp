@@ -2,10 +2,13 @@
 #define APP_HPP
 
 #include "UGO_pch.hpp"
+
 #include "UI/Page.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
+#include "System/BattleManager.hpp"
+#include "System/SteeringSystem.hpp"
 
 
 namespace UGO {
@@ -44,14 +47,16 @@ private:
 
     State m_CurrentState = State::START;
     GameState m_CurrentGameState = GameState::START;
+    GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
 
+    // Register Systems
+    System::BattleManager m_battleManager;
+    System::SteeringSystem m_steeringSystem;
 
-    /* HACK[#13]: Need the find the better method to manage the objects
-    */
-    // Object Management
-    std::vector<std::shared_ptr<Scene::BasicObject>> ObjectManagement;
+
+
 
 
     std::unordered_map<GameState, std::shared_ptr<UI::Page>> m_Pages = {
