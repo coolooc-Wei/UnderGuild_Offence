@@ -3,6 +3,7 @@
 */
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
+#include "Scene/Character.hpp"
 
 
 void UGO::App::Start() {
@@ -24,7 +25,7 @@ void UGO::App::Start() {
     // Initialize background
     /* HACK: Remove maybe
     */
-    m_Background = std::make_unique<Scene::BasicObject>();
+    m_Background = std::make_unique<Scene::BasicObject>(0.0f);
     m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
     m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Background->SetSize(1280, 720);

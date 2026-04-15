@@ -16,21 +16,11 @@ set(SYSTEM_SRC
     System/BattleManager.cpp
     System/SteeringSystem.cpp
     System/EffectAnimationManager.cpp
-    )
-    set(SYSTEM_INC
-    System/BattleManager.hpp
-    System/SteeringSystem.hpp
-    System/EffectAnimationManager.hpp
-)
-
-# --- SYSTEM ---
-set(SYSTEM_SRC
-    System/BattleManager.cpp
-    System/SteeringSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
     System/SteeringSystem.hpp
+    System/EffectAnimationManager.hpp
 )
 
 # --- UI ---
@@ -80,8 +70,8 @@ set(SCENE_SRC
     Scene/EffectAnimation.cpp
     Scene/Mercenary.cpp
     Scene/Bot.cpp
-    )
-    set(SCENE_INC
+)
+set(SCENE_INC
     Scene/BasicObject.hpp
     Scene/Character.hpp
     Scene/Weapon.hpp
@@ -93,7 +83,7 @@ set(SCENE_SRC
     Scene/Projectile.hpp
     Scene/Hero.hpp
     Scene/Enemy.hpp
-    Scene/EffectAnimationhcpp
+    Scene/EffectAnimation.hpp
     Scene/Mercenary.hpp
     Scene/Bot.hpp
 )

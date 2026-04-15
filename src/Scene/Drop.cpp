@@ -2,9 +2,7 @@
 
 namespace UGO::Scene {
 
-    Drop::Drop() : m_State(State::IDLE) {
-        SetSpeed(0.0f);
-    }
+    Drop::Drop() : m_State(State::IDLE), BasicObject(0.0f) {}
     Drop::~Drop() = default;
 
     void Drop::Update() {

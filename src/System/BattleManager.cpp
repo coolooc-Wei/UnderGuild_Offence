@@ -1,9 +1,10 @@
 #include "System/BattleManager.hpp"
+
 #include "Scene/BasicObject.hpp"
-#include "Util/Renderer.hpp"
-#include <vector>
-#include <memory>
-  
+#include "Scene/Character.hpp"
+#include "Core/UGO_Math.hpp"
+#include "Core/Coordinate.hpp"
+
 namespace {
     struct AttackEvent {
         UGO::Scene::Character* Attacker;
@@ -81,7 +82,7 @@ namespace UGO::System {
         m_AllDrops.push_back(std::move(drop));
     }
     
-    
+
     /*Hack: Modifications will be made after tje official launch of hero*/
     void BattleManager::GrantExpToHero(Scene::ExpValue amount, Util::Renderer& renderer) {
         for (auto& hero: m_AllHeroes) {
@@ -103,7 +104,7 @@ namespace UGO::System {
     void BattleManager::SpawnLevelUpIcon(Util::Renderer& renderer) {
 
         // 建立一個裝飾性的 BasicObject
-        auto icon = std::make_unique<Scene::BasicObject>();
+        auto icon = std::make_unique<Scene::BasicObject>(0.0f);
         
         // 設定圖片 (暫時示意)
         icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
@@ -234,7 +235,7 @@ namespace UGO::System {
                 );
             }
         }
-    }
+
         for (auto& icon: m_LevelUpIcons) {
             icon->Update();
         }
@@ -242,7 +243,7 @@ namespace UGO::System {
 
     /* HACK: refactor
     */
-    void BattleManager::UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer) {
+    void UGO::System::BattleManager::UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer) {
         for (auto it = m_AllDrops.begin(); it != m_AllDrops.end(); ) {
             auto& drop = *it;
             

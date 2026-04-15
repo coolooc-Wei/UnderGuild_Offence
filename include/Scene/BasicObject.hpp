@@ -74,10 +74,10 @@ namespace Scene {
         virtual void OnDraw();
 
         // Events
-        virtual void OnAttack() = 0;
-        virtual void OnDamage(HpValue amount) = 0;
-        virtual void OnHeal(HpValue amount) = 0;
-        virtual void OnDeath() = 0;
+        virtual void OnAttack();
+        virtual void OnDamage(HpValue amount);
+        virtual void OnHeal(HpValue amount);
+        virtual void OnDeath();
 
         // void TryMove(const Core::Direction& direction, const Core::Distance
         // moveDis);
@@ -96,7 +96,7 @@ namespace Scene {
         std::shared_ptr<Util::Animation> m_Animation = nullptr;
         std::shared_ptr<Util::Image> m_Image = nullptr;
         DrawableType m_DrawableType = DrawableType::Image;
-        glm::vec2 m_scale = {1.0f, 1.0f};  // Keep values be positive forever
+        glm::vec2 m_Scale = {1.0f, 1.0f};  // Keep values be positive forever
         bool m_FlipX = false, m_FlipY = false;
 
         SpeedValue m_Speed;

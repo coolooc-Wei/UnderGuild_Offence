@@ -27,9 +27,10 @@ namespace Scene {
         void OnDamage(HpValue amount) override;
         void OnHeal(HpValue amount) override;
         void OnDeath() override;
+        ExpValue GetExpReward() const;
 
     private:
-
+        ExpValue m_ExpReward = 10.0f;
     };
 
 } // namespace Scene

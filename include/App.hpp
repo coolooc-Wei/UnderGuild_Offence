@@ -32,7 +32,6 @@ public:
     };
     State GetCurrentState() const;
 
-
     // CAMERA
     void SetCameraPos(Core::WorldPosition pos);
     Core::WorldPosition GetCameraPos() const;
@@ -54,11 +53,6 @@ private:
     Graphics::Camera m_Camera;
     std::unique_ptr<Scene::BasicObject> m_Background; //HACK: remove maybe
     float m_SettlingTimer;
-
-    // Register Systems
-    System::BattleManager m_battleManager;
-    System::SteeringSystem m_steeringSystem;
-
 
 
     // Register Systems

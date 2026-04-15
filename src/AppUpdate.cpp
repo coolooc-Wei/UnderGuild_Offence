@@ -77,9 +77,9 @@ void UGO::App::Update() {
     else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
 
         // Collect all remaining drops at level end
-        auto heroes = m_battleManager.GetAllHeroes();
+        auto heroes = m_BattleManager.GetAllHeroes();
         if (!heroes.empty()) {
-            m_battleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+            m_BattleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
         }
 
         m_SettlingTimer = 0.0f;
@@ -195,17 +195,22 @@ void UGO::App::Update() {
         expPack->SetSize(16, 16);
         expPack->SetWorldPosition({0.0f, 0.0f});
         expPack->GetGameObject()->SetVisible(true);
-        m_battleManager.AddDrop(std::move(expPack), m_Root);
+        m_BattleManager.AddDrop(std::move(expPack), m_Root);
         LOG_INFO("Spawned ExpPack at (0, 0)!");
+    }
+
+    if (Util::Input::IsKeyDown(Util::Keycode::E)) { // Press E to grant exp directly
+        m_BattleManager.GrantExpToHero(100.0f, m_Root);
+        LOG_INFO("Granted 250 EXP to Hero via BattleManager!");
     }
     // END TODO
 
     // Update Drops (Pickup and Magnetic logic)
     /* HACK: Remove after testing
     */
-    auto heroes = m_battleManager.GetAllHeroes();
+    auto heroes = m_BattleManager.GetAllHeroes();
     if (!heroes.empty()) {
-        m_battleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+        m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
     }
 
     m_BattleManager.AIUpdate();
@@ -228,16 +233,16 @@ void UGO::App::Update() {
         m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
 
         // Keep updating drops so they can fly
-        auto heroes = m_battleManager.GetAllHeroes();
+        auto heroes = m_BattleManager.GetAllHeroes();
         if (!heroes.empty()) {
-            m_battleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+            m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
         }
 
         // Keep updating movement (transform sync) but NO AI/Keyboard update
-        m_battleManager.UpdateMovement();
+        m_BattleManager.UpdateMovement();
 
         // Check for completion or timeout
-        if (m_battleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
+        if (m_BattleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
             ChangeGameState(GameState::END);
         }
 
@@ -249,6 +254,9 @@ void UGO::App::Update() {
       m_CurrentProgressState = App::GameState::END;
       for (auto chars : m_BattleManager.GetAllCharacters()) {
         chars->GetGameObject()->SetVisible(false);
+      }
+      for (auto drop : m_BattleManager.GetAllDrops()) {
+        drop->GetGameObject()->SetVisible(false);
       }
     }
   } break;

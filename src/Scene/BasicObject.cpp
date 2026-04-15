@@ -54,7 +54,7 @@ namespace UGO::Scene {
 
     void BasicObject::SetAnimationState(const bool play) {
         assert(m_Animation != nullptr);
-        if (play) { m_Animation->Play(); LOG_DEBUG("Animation PLayed."); }
+        if (play) { m_Animation->Play(); }
         else { m_Animation->Pause(); m_Animation->SetCurrentFrame(0); }
     }
 
@@ -163,9 +163,12 @@ namespace UGO::Scene {
     }
 
     void BasicObject::OnDraw() {}
-    void BasicObject::Update() {
-        m_GameObject->m_Transform.translation = {m_Position.x, m_Position.y};
-    }
+    void BasicObject::Update() { m_GameObject->m_Transform.translation = {m_Position.x, m_Position.y}; }
+
+    void BasicObject::OnAttack() {}
+    void BasicObject::OnDamage(HpValue amount) {}
+    void BasicObject::OnHeal(HpValue amount) {}
+    void BasicObject::OnDeath() {}
 
     Core::WorldPosition BasicObject::OffsetCalculator(const Core::Velocity& offset) const {
         Core::WorldPosition target = m_Position + offset;
