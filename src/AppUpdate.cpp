@@ -78,7 +78,15 @@ void UGO::App::Update() {
             ChangeGameState(GameState::PAUSE);
         }
         else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
-            ChangeGameState(GameState::END);
+            
+            // Collect all remaining drops at level end
+            auto heroes = m_battleManager.GetAllHeroes();
+            if (!heroes.empty()) {
+                m_battleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+            }
+
+            m_SettlingTimer = 0.0f;
+            ChangeGameState(GameState::SETTLING);
         }
 
         /* HACK: Remove these lines after testing
@@ -177,9 +185,34 @@ void UGO::App::Update() {
 
     }
     break;
+    case GameState::SETTLING: {
+        if (m_CurrentProgressState != App::GameState::SETTLING) {
+            m_CurrentProgressState = App::GameState::SETTLING;
+        }
+
+        m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
+
+        // Keep updating drops so they can fly
+        auto heroes = m_battleManager.GetAllHeroes();
+        if (!heroes.empty()) {
+            m_battleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+        }
+
+        // Keep updating movement (transform sync) but NO AI/Keyboard update
+        m_battleManager.UpdateMovement();
+
+        // Check for completion or timeout
+        if (m_battleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
+            ChangeGameState(GameState::END);
+        }
+
+        Core::Time::AdvanceTick();
+    }
+    break;
     case GameState::END: {
         if (m_CurrentProgressState != App::GameState::END) {
             m_CurrentProgressState = App::GameState::END;
+
             for (auto chars: m_battleManager.GetAllCharacters()) {
                 chars->GetGameObject()->SetVisible(false);
             }

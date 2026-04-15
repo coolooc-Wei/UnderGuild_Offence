@@ -25,6 +25,7 @@ public:
         WELCOME,
         MENU,
         GAMING,
+        SETTLING,
         PAUSE,
         END,
     };
@@ -51,6 +52,7 @@ private:
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
     std::unique_ptr<Scene::BasicObject> m_Background; //HACK: remove maybe
+    float m_SettlingTimer;
 
     // Register Systems
     System::BattleManager m_battleManager;
@@ -64,6 +66,7 @@ private:
         {GameState::WELCOME, nullptr},
         {GameState::MENU, nullptr},
         {GameState::GAMING, nullptr},
+        {GameState::SETTLING, nullptr},
         {GameState::PAUSE, nullptr},
         {GameState::END, nullptr},
     };

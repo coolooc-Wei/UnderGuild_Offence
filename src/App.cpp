@@ -17,6 +17,7 @@ namespace UGO {
             case GameState::WELCOME: stateName = "WELCOME"; break;
             case GameState::MENU:    stateName = "MENU"; break;
             case GameState::GAMING:  stateName = "GAMING"; break;
+            case GameState::SETTLING: stateName = "SETTLING"; break;
             case GameState::PAUSE:   stateName = "PAUSE"; break;
             case GameState::END:     stateName = "END"; break;
         }
@@ -35,14 +36,14 @@ namespace UGO {
 
         m_CurrentGameState = state;
         if (m_Pages[m_CurrentGameState]) {
-            m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING);
+            m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING && state != GameState::SETTLING);
         }
 
         // Handle background visibility
         /* HACK: Remove maybe
         */
         if (m_Background) {
-            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE);
+            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
         }
 
 

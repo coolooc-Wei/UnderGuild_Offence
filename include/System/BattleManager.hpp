@@ -23,6 +23,7 @@ namespace System {
         std::vector<Scene::Enemy*> GetAllEnemies() const;
         // const std::vector<Scene::Mercenary>& GetAllMercenaries() const;
         std::vector<Scene::Character*> GetAllCharacters() const;
+        std::vector<Scene::Drop*> GetAllDrops() const;
 
 
         void AddHero(std::unique_ptr<Scene::Hero> hero, Util::Renderer& renderer);
@@ -37,6 +38,7 @@ namespace System {
         void AIUpdate();
         void UpdateMovement();
         void UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer);
+        void CollectAllDrops(const Core::WorldPosition& playerPos);
 
     protected:
     private:

@@ -31,6 +31,12 @@ namespace UGO::System {
         for (const auto& enemy: m_AllEnemies) { characters.push_back(enemy.get()); }
         return characters;
     }
+    std::vector<Scene::Drop*> BattleManager::GetAllDrops() const {
+        std::vector<Scene::Drop*> drops;
+        drops.reserve(m_AllDrops.size());
+        for (const auto& drop: m_AllDrops) { drops.push_back(drop.get()); }
+        return drops;
+    }
 
 
 
@@ -151,6 +157,12 @@ namespace UGO::System {
             } else {
                 ++it;
             }
+        }
+    }
+
+    void BattleManager::CollectAllDrops(const Core::WorldPosition& playerPos) {
+        for (auto& drop : m_AllDrops) {
+            drop->MoveTo(playerPos);
         }
     }
 
