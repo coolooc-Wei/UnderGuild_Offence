@@ -100,7 +100,7 @@ void UGO::App::Update() {
       auto heroAnimation = std::make_shared<Util::Animation>(
           heroAnimationPath, false, 150, true, 150
       );
-      auto hero = std::make_unique<Scene::Hero>(100, 10, 3.0f);
+      auto hero = std::make_unique<Scene::Hero>(100000, 10, 3.0f);
       hero->SetWorldPosition({-300.0f, -300.0f});
       hero->SetAnimation(heroAnimation);
       hero->SetImage("../Resources/Image/character/hero/Hero_101_1.png");
@@ -129,7 +129,7 @@ void UGO::App::Update() {
       };
       auto enemyAnimation = std::make_shared<Util::Animation>(
           enemyAnimationPath, false, 150, true, 150);
-      auto enemy = std::make_unique<Scene::Enemy>(1, 10, 3.0f);
+      auto enemy = std::make_unique<Scene::Enemy>(10000, 10, 3.0f);
       enemy->SetWorldPosition({300.0f, 300.0f});
       enemy->SetAnimation(enemyAnimation);
       enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
@@ -149,6 +149,40 @@ void UGO::App::Update() {
       m_BattleManager.AddEnemy(std::move(enemy), m_Root);
 
       enemy = std::make_unique<Scene::Enemy>(10000, 10, 3.0f);
+      enemy->SetWorldPosition({-100.0f, 79.0f});
+      enemy->SetAnimation(enemyAnimation);
+      enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
+      enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
+      enemy->SetSize(32, 32);
+      enemy->SetHitBox(std::make_unique<Core::RectangleBox>(enemy->GetWorldPosition(), 64.0f, 64.0f));
+      enemy->ActivateCollidable(true);
+      enemy->ActivateHitBox(true);
+      enemy->ActivateHurtBox(true);
+      enemy->GetGameObject()->SetVisible(true);
+      enemy->SetAttackCooldownDuration(5.0f);
+      enemy->SetDamageAnimationData(Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      });
+      enemyAnimation->Play();
+      m_BattleManager.AddEnemy(std::move(enemy), m_Root);
+      enemy = std::make_unique<Scene::Enemy>(10000, 10, 3.0f);
+      enemy->SetWorldPosition({200.0f, 0.0f});
+      enemy->SetAnimation(enemyAnimation);
+      enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
+      enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
+      enemy->SetSize(32, 32);
+      enemy->SetHitBox(std::make_unique<Core::RectangleBox>(enemy->GetWorldPosition(), 64.0f, 64.0f));
+      enemy->ActivateCollidable(true);
+      enemy->ActivateHitBox(true);
+      enemy->ActivateHurtBox(true);
+      enemy->GetGameObject()->SetVisible(true);
+      enemy->SetAttackCooldownDuration(5.0f);
+      enemy->SetDamageAnimationData(Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      });
+      enemyAnimation->Play();
+      m_BattleManager.AddEnemy(std::move(enemy), m_Root);
+      enemy = std::make_unique<Scene::Enemy>(10000, 10, 3.0f);
       enemy->SetWorldPosition({-300.0f, 0.0f});
       enemy->SetAnimation(enemyAnimation);
       enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
@@ -166,7 +200,7 @@ void UGO::App::Update() {
       enemyAnimation->Play();
       m_BattleManager.AddEnemy(std::move(enemy), m_Root);
 
-      auto mercenary = std::make_unique<Scene::Mercenary>(1000, 5, 1.0f);
+      auto mercenary = std::make_unique<Scene::Mercenary>(1000, 5, 7.0f);
       mercenary->SetWorldPosition({-50.0f, -50.0f});
       mercenary->SetAnimation(enemyAnimation);
       mercenary->SetImage("../Resources/Image/character/enemy/Boss_7_1.png");

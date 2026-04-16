@@ -3,7 +3,9 @@
 namespace UGO::Scene {
 
   Enemy::Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-      : Bot(maxHP, attackPower, speed) {}
+  : Bot(maxHP, attackPower, speed) {}
+  Enemy::Enemy(CharacterParams params)
+  : Bot(std::move(params)) {}
   Enemy::~Enemy() {}
 
   void Enemy::OnAttack() {

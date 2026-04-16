@@ -14,6 +14,7 @@ namespace Scene {
 
     class Enemy : public Bot {
     public:
+        Enemy(CharacterParams params);
         Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Enemy();
 

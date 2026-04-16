@@ -30,12 +30,12 @@ namespace Scene {
     class StatusEffect {
     public:
         StatusEffect(const StatusEffectData& data);
-        virtual ~StatusEffect();
+        ~StatusEffect();
 
-    protected:
-        virtual void ApplyEffect(Character& target) = 0;
+        private:
+        void ApplyEffect(Character& target);
 
-    private:
+
         StatusEffectData* m_data;
 
     };

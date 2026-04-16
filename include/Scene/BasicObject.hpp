@@ -17,19 +17,24 @@ namespace Scene {
     public:
         enum class DrawableType { Image, Animation, None };
 
-        /* TODO: Remove this if we don't need the default constructor
-         *       after finish constructor of the all subclasses.
-        */
+        struct BasicObjectParams {
+            SpeedValue speed = 10.0f;
+            DrawableType drawableType = DrawableType::None;
+            std::shared_ptr<Util::Animation> animation = nullptr;
+            std::shared_ptr<Util::Image> image = nullptr;
+            Core::Size size = {32.0f, 32.0f};
+
+            std::unique_ptr<Core::Box> hitBox = nullptr;
+            std::unique_ptr<Core::Box> hurtBox = nullptr;
+            bool isCollidable = true;
+            bool isHitBoxActive = false;
+            bool isHurtBoxActive = false;
+            bool isVisible = true;
+        };
+
         BasicObject();
+        BasicObject(BasicObjectParams params);
         BasicObject(SpeedValue speed);
-        BasicObject(
-            SpeedValue speed,
-            Core::WorldPosition position,
-            DrawableType drawableType,
-            std::shared_ptr<Util::Animation> animation = nullptr,
-            std::shared_ptr<Util::Image> image = nullptr,
-            glm::vec2 scale = {1.0f, 1.0f}
-        );
         virtual ~BasicObject();
 
         // Getters

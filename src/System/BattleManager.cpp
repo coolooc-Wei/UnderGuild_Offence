@@ -104,7 +104,7 @@ namespace UGO::System {
     void BattleManager::SpawnLevelUpIcon(Util::Renderer& renderer) {
 
         // 建立一個裝飾性的 BasicObject
-        auto icon = std::make_unique<Scene::BasicObject>(0.0f);
+        auto icon = std::make_unique<Scene::BasicObject>();
         
         // 設定圖片 (暫時示意)
         icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");

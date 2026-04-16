@@ -15,7 +15,7 @@ namespace UGO::Scene {
    static constexpr int LEVELS_PER_STAGE = 5;
 
    Hero::Hero(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-      : Character(maxHP, attackPower, speed) {}
+   : Character(maxHP, attackPower, speed) {}
    Hero::~Hero() = default;
 
    void Hero::KeyboardUpdate() {

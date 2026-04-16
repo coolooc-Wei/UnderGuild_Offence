@@ -10,6 +10,7 @@ namespace Scene {
 
     class Bot : public Character {
     public:
+        Bot(CharacterParams params);
         Bot(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Bot();
 

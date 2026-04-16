@@ -25,10 +25,11 @@ void UGO::App::Start() {
     // Initialize background
     /* HACK: Remove maybe
     */
-    m_Background = std::make_unique<Scene::BasicObject>(0.0f);
+    m_Background = std::make_unique<Scene::BasicObject>();
     m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
     m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Background->SetSize(1280, 720);
+    m_Background->SetSize(864, 480); // 480p(16:9) but 854 is not divisible by 32
+
     m_Background->GetGameObject()->SetZIndex(-10.0f);
     m_Background->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Background->GetGameObject());

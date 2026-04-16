@@ -3,9 +3,37 @@
 
 namespace UGO::Scene {
 
-    BasicObject::BasicObject() {};
-    BasicObject::BasicObject(SpeedValue speed)
-    : m_Speed(speed) {
+    BasicObject::BasicObject() {
+        m_Position = {0.0f, 0.0f};
+        m_GameObject = std::make_shared<Util::GameObject>();
+        m_Dead = false;
+
+        m_CollisionBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
+        m_HurtBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
+    };
+    BasicObject::BasicObject(BasicObjectParams params)
+    : m_DrawableType(params.drawableType), m_Speed(params.speed),
+      m_IsHitBoxActive(params.isHitBoxActive), m_IsHurtBoxActive(params.isHurtBoxActive),
+      m_IsCollidable(params.isCollidable) {
+        m_GameObject = std::make_shared<Util::GameObject>();
+        m_Dead = false;
+
+        m_Animation = params.animation;
+        m_Image = params.image;
+
+        m_CollisionBox = std::make_unique<Core::RectangleBox>(m_Position, params.size.x, params.size.y);
+
+        assert(m_HitBox != nullptr);
+        m_HitBox = std::move(params.hitBox);
+        if (params.hurtBox) { m_HurtBox = std::move(params.hurtBox); }
+        else { m_HurtBox = std::make_unique<Core::RectangleBox>(m_Position, params.size.x, params.size.y); }
+
+        SetDrawableType(m_DrawableType);
+        SetSize(params.size.x, params.size.y);
+        SetWorldPosition(m_Position);
+        m_GameObject->SetVisible(params.isVisible);
+    }
+    BasicObject::BasicObject(SpeedValue speed) : m_Speed(speed) {
         m_Position = {0.0f, 0.0f};
         m_GameObject = std::make_shared<Util::GameObject>();
         m_Dead = false;
@@ -13,6 +41,7 @@ namespace UGO::Scene {
         m_CollisionBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
         m_HurtBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
     }
+
     BasicObject::~BasicObject() = default;
 
     Core::WorldPosition BasicObject::GetWorldPosition() const { return m_Position; }

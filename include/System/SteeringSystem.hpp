@@ -28,8 +28,8 @@ namespace System {
 
         /* TODO: Fine-tune the values
          */
-        Core::Distance m_RepelDistance = 8.0f;
-        float m_Coefficients[2] = {-.25f, 5.f};
+        Core::Distance m_RepelDistance = 24.0f;
+        float m_Coefficients[2] = {1.0f/128.0f, 1.f};
     };
 
 } // namespace System
