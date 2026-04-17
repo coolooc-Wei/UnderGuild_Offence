@@ -258,6 +258,9 @@ void UGO::App::Update() {
       for (auto drop : m_BattleManager.GetAllDrops()) {
         drop->GetGameObject()->SetVisible(false);
       }
+      for (auto icon : m_BattleManager.GetAllIcons()) {
+        icon->GetGameObject()->SetVisible(false);
+      }
     }
   } break;
   default: {} break;

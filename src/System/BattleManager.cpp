@@ -40,6 +40,15 @@ namespace UGO::System {
     std::vector<Scene::Character*> BattleManager::GetAllCharacters() const { return m_AllCharactersCache; }
     std::vector<Scene::Character*> BattleManager::GetAllAllies() const { return m_AllAlliesCache; }
 
+    std::vector<Scene::Icon*> BattleManager::GetAllIcons() const { 
+        std::vector<Scene::Icon*> icons;
+        icons.reserve(m_LevelUpIcons.size());
+        for (const auto& icon: m_LevelUpIcons) {
+            icons.push_back(icon.get());
+        }
+        return icons; 
+    }
+
     std::vector<Scene::Drop*> BattleManager::GetAllDrops() const {
         std::vector<Scene::Drop*> drops;
         drops.reserve(m_AllDrops.size());
@@ -73,9 +82,9 @@ namespace UGO::System {
         m_AllAlliesCache.push_back(mercenaryPtr);
         m_AllMercenaries.push_back(std::move(mercenary));
     }
-    void BattleManager::AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer) {
-        renderer.AddChild(pet->GetGameObject());
-        m_LevelUpIcons.push_back(std::move(pet));
+    void BattleManager::AddIcon(std::unique_ptr<Scene::Icon> icon, Util::Renderer& renderer) {
+        renderer.AddChild(icon->GetGameObject());
+        m_LevelUpIcons.push_back(std::move(icon));
     }
     void BattleManager::AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer) {
         renderer.AddChild(drop->GetGameObject());
@@ -104,7 +113,7 @@ namespace UGO::System {
     void BattleManager::SpawnLevelUpIcon(Util::Renderer& renderer) {
 
         // 建立一個裝飾性的 BasicObject
-        auto icon = std::make_unique<Scene::BasicObject>(0.0f);
+        auto icon = std::make_unique<Scene::Icon>();
         
         // 設定圖片 (暫時示意)
         icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
@@ -127,7 +136,7 @@ namespace UGO::System {
         icon->Update();
 
         // 加入渲染器
-        AddPet(std::move(icon), renderer);
+        AddIcon(std::move(icon), renderer);
         m_LevelUpIconCount++;
         
         LOG_INFO("Spawned level-up icon at position: {}, {}", startX, startY - offsetY);
@@ -234,10 +243,6 @@ namespace UGO::System {
                     rotationAngle, animationData.size
                 );
             }
-        }
-
-        for (auto& icon: m_LevelUpIcons) {
-            icon->Update();
         }
     }
 

@@ -7,6 +7,7 @@
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
 #include "Scene/Drop.hpp"
+#include "Scene/Icon.hpp"
 #include "System/EffectAnimationManager.hpp"
 
 namespace UGO {
@@ -23,12 +24,13 @@ namespace System {
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
         std::vector<Scene::Drop*> GetAllDrops() const;
+        std::vector<Scene::Icon*> GetAllIcons() const;
 
 
         void AddHero(std::unique_ptr<Scene::Hero> hero, Util::Renderer& renderer);
         void AddEnemy(std::unique_ptr<Scene::Enemy> enemy, Util::Renderer& renderer);
         void AddMercenary(std::unique_ptr<Scene::Mercenary> mercenary, Util::Renderer& renderer);
-        void AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer); // TODO: removed after implementing UI system
+        void AddIcon(std::unique_ptr<Scene::Icon> icon, Util::Renderer& renderer); // TODO: removed after implementing UI system
         void AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer);
 
 
@@ -52,8 +54,9 @@ namespace System {
         std::vector<Scene::Character*> m_AllEnemiesCharacterCache;
         std::vector<Scene::Character*> m_AllCharactersCache;
         std::vector<Scene::Character*> m_AllAlliesCache;
+        std::vector<Scene::Icon*> m_AllIconsCache;
 
-        std::vector<std::unique_ptr<Scene::BasicObject>> m_LevelUpIcons;
+        std::vector<std::unique_ptr<Scene::Icon>> m_LevelUpIcons;
         std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
 
         int m_LevelUpIconCount = 0;
