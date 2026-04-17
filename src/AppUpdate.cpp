@@ -67,28 +67,8 @@ void UGO::App::Update() {
       for (auto chars : m_BattleManager.GetAllCharacters()) {
         chars->GetGameObject()->SetVisible(true);
       }
-    }
-
-    /* Use P temporarity instead of ESCAPE
-     */
-    if (Util::Input::IsKeyDown(Util::Keycode::P)) {
-        ChangeGameState(GameState::PAUSE);
-    }
-    else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
-
-        // Collect all remaining drops at level end
-        auto heroes = m_BattleManager.GetAllHeroes();
-        if (!heroes.empty()) {
-            m_BattleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
-        }
-
-        m_SettlingTimer = 0.0f;
-        ChangeGameState(GameState::SETTLING);
-    }
-
-    /* HACK: Remove these lines after testing
-     */
-    if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
+      /* HACK: Remove these lines after testing
+      */
       std::vector<std::string> heroAnimationPath = {
           "../Resources/Image/character/hero/Hero_101_1.png",
           "../Resources/Image/character/hero/Hero_101_2.png",
@@ -218,6 +198,23 @@ void UGO::App::Update() {
       enemyAnimation->Play();
       m_BattleManager.AddMercenary(std::move(mercenary), m_Root);
     }
+
+    /* Use P temporarity instead of ESCAPE
+     */
+    if (Util::Input::IsKeyDown(Util::Keycode::P)) {
+        ChangeGameState(GameState::PAUSE);
+    }
+    else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
+
+        // Collect all remaining drops at level end
+        auto heroes = m_BattleManager.GetAllHeroes();
+        if (!heroes.empty()) {
+            m_BattleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+        }
+
+        m_SettlingTimer = 0.0f;
+        ChangeGameState(GameState::SETTLING);
+    }
     
     // Test Spawn ExpPack
     /* HACK: Remove after testing
@@ -252,6 +249,9 @@ void UGO::App::Update() {
     m_BattleManager.UpdateMovement();
     m_BattleManager.Attack();
     m_EffectAnimationManager.Update();
+    /* HACK: remove after demo */
+    m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
+    /* END HACK */
     
     /* DO NOT DELETE THIS LINE.
      * IT IS USED FOR THE GAME TIMING.

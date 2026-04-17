@@ -34,6 +34,17 @@ void UGO::App::Start() {
     m_Background->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Background->GetGameObject());
 
+    m_ShowHp = std::make_shared<Util::GameObject>();
+    m_HPValueText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 30, "HP: 10000/10000",
+        Util::Color::FromName(Util::Colors::RED)
+    );
+    m_ShowHp->SetDrawable(m_HPValueText);
+    m_ShowHp->m_Transform.translation = {-580.0f, -300.0f};
+    m_ShowHp->SetVisible(true);
+    m_Root.AddChild(m_ShowHp);
+
+
     // Change states
     ChangeGameState(GameState::GAMING);
     m_CurrentState = State::UPDATE;
