@@ -221,14 +221,19 @@ namespace UGO::System {
             if (animatedVictims.insert(event.Victim).second) {
                 animationData = event.Victim->GetDamageAnimationData();
                 rotationAngle = GetRotateAngle(animationData.offsetAngle, -attackerToVictim);
+
+                // Create Animation
                 m_EffectAnimationManager.Create(
                     event.Victim->GetWorldPosition(), animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
                 );
+                m_EffectAnimationManager.CreateDamageText(event.Victim->GetWorldPosition(), event.Damage);
             }
             if (animatedAttackers.insert(event.Attacker).second) {
                 animationData = event.Attacker->GetAttackAnimationData();
                 rotationAngle = GetRotateAngle(animationData.offsetAngle, attackerToVictim);
+
+                // Create Animation
                 m_EffectAnimationManager.Create(
                     event.Attacker->GetWorldPosition() + m_offsetDis * attackerToVictimDirection, animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
