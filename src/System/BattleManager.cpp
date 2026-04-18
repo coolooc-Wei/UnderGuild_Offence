@@ -100,8 +100,6 @@ namespace UGO::System {
                 int oldLevel = hero->GetLevel();
                 hero->GainExp(amount);
                 int newLevel = hero->GetLevel();
-
-                // 偵測是否升級，若有則生成圖示
                 if (newLevel > oldLevel) {
                     for (int i = 0; i < (newLevel - oldLevel); ++i) {
                         SpawnLevelUpIcon(renderer);
@@ -112,31 +110,16 @@ namespace UGO::System {
     }
 
     void BattleManager::SpawnLevelUpIcon(Util::Renderer& renderer) {
-
-        // 建立一個裝飾性的 BasicObject
         auto icon = std::make_unique<Scene::Icon>();
-        
-        // 設定圖片 (暫時示意)
         icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
-        
-        // 重要：必須設定繪製類型為 Image，否則 GameObject 不會載入圖片
         icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        
-        // 設定大小 32x32
         icon->SetSize(32, 32);
-
-        // 計算座標：從右上方 (600, 320) 開始，每個圖示向下偏移 40 單位
         float startX = 600.0f;
         float startY = 320.0f;
         float offsetY = m_LevelUpIconCount * 40.0f;
-        
         icon->SetWorldPosition({startX, startY - offsetY});
         icon->GetGameObject()->SetVisible(true);
-        
-        // 同步座標至底層 GameObject Transform
         icon->Update();
-
-        // 加入渲染器
         AddIcon(std::move(icon), renderer);
         m_LevelUpIconCount++;
         
@@ -252,24 +235,19 @@ namespace UGO::System {
     void UGO::System::BattleManager::UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer) {
         for (auto it = m_AllDrops.begin(); it != m_AllDrops.end(); ) {
             auto& drop = *it;
-            
-            // 掉落物更新 (處理飛行位移)
             drop->Update();
 
             float distance = glm::distance(drop->GetWorldPosition(), playerPos);
-            
-            // 磁吸觸發範圍
             if (distance < 150.0f) { 
                 drop->MoveTo(playerPos);
             }
-
-            // 撿拾觸發範圍 (碰撞接口預留處)
+            // Pickup trigger range (reserved area for collision interface)
             if (distance < 20.0f) {
                 UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
                 if (expAmount > 0.0f) {
                     GrantExpToHero(expAmount, renderer);
                 }
-                drop->OnPickup(); // 觸發子類別(如 ExpPack) 的撿拾邏輯
+                drop->OnPickup(); 
                 renderer.RemoveChild(drop->GetGameObject());
                 it = m_AllDrops.erase(it);
             } else {
@@ -284,26 +262,20 @@ namespace UGO::System {
         }
     }
 
+    /* HACK: refactor
+    */
     void BattleManager::ProcessEnemyDeaths(Util::Renderer& renderer) {
         for (auto* enemy : m_AllEnemiesCache) {
             bool isDeadNow = enemy->IsDead();
             bool wasProcessed = (m_ProcessedDeadEnemies.find(enemy) != m_ProcessedDeadEnemies.end());
-
-            // 比較本幀(死亡)與過往狀態(未結算過) -> 只有在本幀剛死時觸發
+            // Compare the current frame (death) with past states (unresolved) -> Only triggers immediately upon death in the current frame.
             if (isDeadNow && !wasProcessed) {
-                // 1. 發放該敵人的經驗值
                 GrantExpToHero(enemy->GetExpReward(), renderer);
                 LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
-                
-                // 2. 依機率判定生成 ExpPack
                 if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
                     SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue(), renderer);
                 }
-                
-                // 3. 將狀態寫入紀錄，保證下幀不再觸發
                 m_ProcessedDeadEnemies.insert(enemy);
-                
-                // 4. (已由 Enemy::OnDeath 處理隱藏與關閉碰撞，故此處無需額外再設 SetVisible)
             }
         }
     }

@@ -17,6 +17,9 @@ namespace Scene{
         void Update() override;
         void OnDraw() override;
 
+        /*TODO: Remove Icon after implementing UI system
+        */
+
         // Events
 
     protected:
