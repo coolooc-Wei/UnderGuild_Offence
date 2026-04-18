@@ -129,7 +129,7 @@ void UGO::App::Update() {
       };
       auto enemyAnimation = std::make_shared<Util::Animation>(
           enemyAnimationPath, false, 150, true, 150);
-      auto enemy = std::make_unique<Scene::Enemy>(1, 10, 3.0f);
+      auto enemy = std::make_unique<Scene::Enemy>(100, 10, 3.0f);
       enemy->SetWorldPosition({300.0f, 300.0f});
       enemy->SetAnimation(enemyAnimation);
       enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
@@ -148,7 +148,7 @@ void UGO::App::Update() {
       enemyAnimation->Play();
       m_BattleManager.AddEnemy(std::move(enemy), m_Root);
 
-      enemy = std::make_unique<Scene::Enemy>(10000, 10, 3.0f);
+      enemy = std::make_unique<Scene::Enemy>(1000, 10, 3.0f);
       enemy->SetWorldPosition({-300.0f, 0.0f});
       enemy->SetAnimation(enemyAnimation);
       enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
@@ -217,6 +217,7 @@ void UGO::App::Update() {
     m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllEnemies());
     m_BattleManager.UpdateMovement();
     m_BattleManager.Attack();
+    m_BattleManager.ProcessEnemyDeaths(m_Root);
     m_EffectAnimationManager.Update();
     
     /* DO NOT DELETE THIS LINE.

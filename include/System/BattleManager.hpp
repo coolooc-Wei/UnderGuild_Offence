@@ -38,6 +38,9 @@ namespace System {
         void SpawnLevelUpIcon(Util::Renderer& renderer);
         void CollectAllDrops(const Core::WorldPosition& playerPos);
 
+        void ProcessEnemyDeaths(Util::Renderer& renderer);
+        void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer);
+
         void AIUpdate();
         void UpdateMovement();
         void UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer);
@@ -58,6 +61,7 @@ namespace System {
 
         std::vector<std::unique_ptr<Scene::Icon>> m_LevelUpIcons;
         std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
+        std::unordered_set<Scene::Enemy*> m_ProcessedDeadEnemies;
 
         int m_LevelUpIconCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;

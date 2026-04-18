@@ -28,9 +28,13 @@ namespace Scene {
         void OnHeal(HpValue amount) override;
         void OnDeath() override;
         ExpValue GetExpReward() const;
+        float GetDropRate() const;
+        ExpValue GetExpPackValue() const;
 
     private:
-        ExpValue m_ExpReward = 10.0f;
+        ExpValue m_ExpReward = 100.0f;
+        float m_DropRate = 0.5f;          // 50% drop rate
+        ExpValue m_ExpPackValue = 100.0f; // Value of dropped pack
     };
 
 } // namespace Scene

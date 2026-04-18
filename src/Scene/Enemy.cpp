@@ -26,5 +26,7 @@ namespace UGO::Scene {
   void Enemy::OnDraw() {}
 
   ExpValue Enemy::GetExpReward() const { return m_ExpReward; }
+  float Enemy::GetDropRate() const { return m_DropRate; }
+  ExpValue Enemy::GetExpPackValue() const { return m_ExpPackValue; }
 
 } // namespace UGO::Scene

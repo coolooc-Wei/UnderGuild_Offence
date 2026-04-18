@@ -2,6 +2,7 @@
 
 #include "Scene/BasicObject.hpp"
 #include "Scene/Character.hpp"
+#include "Scene/ExpPack.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
 
@@ -281,6 +282,40 @@ namespace UGO::System {
         for (auto& drop : m_AllDrops) {
             drop->MoveTo(playerPos);
         }
+    }
+
+    void BattleManager::ProcessEnemyDeaths(Util::Renderer& renderer) {
+        for (auto* enemy : m_AllEnemiesCache) {
+            bool isDeadNow = enemy->IsDead();
+            bool wasProcessed = (m_ProcessedDeadEnemies.find(enemy) != m_ProcessedDeadEnemies.end());
+
+            // 比較本幀(死亡)與過往狀態(未結算過) -> 只有在本幀剛死時觸發
+            if (isDeadNow && !wasProcessed) {
+                // 1. 發放該敵人的經驗值
+                GrantExpToHero(enemy->GetExpReward(), renderer);
+                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
+                
+                // 2. 依機率判定生成 ExpPack
+                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
+                    SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue(), renderer);
+                }
+                
+                // 3. 將狀態寫入紀錄，保證下幀不再觸發
+                m_ProcessedDeadEnemies.insert(enemy);
+                
+                // 4. (已由 Enemy::OnDeath 處理隱藏與關閉碰撞，故此處無需額外再設 SetVisible)
+            }
+        }
+    }
+
+    void BattleManager::SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer) {
+        auto expPack = std::make_unique<Scene::ExpPack>(value);
+        expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
+        expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        expPack->SetSize(16, 16);
+        expPack->SetWorldPosition(position);
+        expPack->GetGameObject()->SetVisible(true);
+        AddDrop(std::move(expPack), renderer);
     }
 
 }
