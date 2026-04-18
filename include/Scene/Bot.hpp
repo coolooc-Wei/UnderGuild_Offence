@@ -10,9 +10,10 @@ namespace Scene {
 
     class Bot : public Character {
     public:
-        Bot(CharacterParams params);
+        Bot(CharacterParams&& params);
         Bot(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Bot();
+        void Reset(CharacterParams&& params);
 
         virtual void AIUpdate(const std::vector<Character*>& targets);
         void Update() override;

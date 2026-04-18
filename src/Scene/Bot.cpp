@@ -4,9 +4,15 @@ namespace UGO::Scene {
 
     Bot::Bot(HpValue maxHP, HpValue attackPower, SpeedValue speed)
     : Character(maxHP, attackPower, speed) {}
-    Bot::Bot(CharacterParams params)
+    Bot::Bot(CharacterParams&& params)
     : Character(std::move(params)) {}
     Bot::~Bot() {}
+    void Bot::Reset(CharacterParams&& params) {
+        m_Target = nullptr;
+        m_TargetUpdateTimer = 0;
+        Character::Reset(std::move(params));
+    }
+
     void Bot::OnAttack() {
         if (m_Target && m_Target->GetWorldPosition().x > GetWorldPosition().x) { SetFlip(false, GetFlipY()); }
         else { SetFlip(true, GetFlipY()); }

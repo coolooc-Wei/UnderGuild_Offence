@@ -11,7 +11,7 @@ namespace UGO::Scene {
         m_CollisionBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
         m_HurtBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
     };
-    BasicObject::BasicObject(BasicObjectParams params)
+    BasicObject::BasicObject(BasicObjectParams&& params)
     : m_DrawableType(params.drawableType), m_Speed(params.speed),
       m_IsHitBoxActive(params.isHitBoxActive), m_IsHurtBoxActive(params.isHurtBoxActive),
       m_IsCollidable(params.isCollidable) {
@@ -23,10 +23,17 @@ namespace UGO::Scene {
 
         m_CollisionBox = std::make_unique<Core::RectangleBox>(m_Position, params.size.x, params.size.y);
 
-        assert(m_HitBox != nullptr);
-        m_HitBox = std::move(params.hitBox);
+        if (params.hitBox) { m_HitBox = std::move(params.hitBox); }
+        else {
+            LOG_WARN("params.hitBox is nullptr, trying to use default box.");
+            m_HitBox = std::make_unique<Core::RectangleBox>(m_Position, params.size.x, params.size.y);
+        }
+
         if (params.hurtBox) { m_HurtBox = std::move(params.hurtBox); }
-        else { m_HurtBox = std::make_unique<Core::RectangleBox>(m_Position, params.size.x, params.size.y); }
+        else {
+            LOG_WARN("params.hurtBox is nullptr, trying to use default box.");
+            m_HurtBox = std::make_unique<Core::RectangleBox>(m_Position, params.size.x, params.size.y);
+        }
 
         SetDrawableType(m_DrawableType);
         SetSize(params.size.x, params.size.y);
@@ -41,8 +48,21 @@ namespace UGO::Scene {
         m_CollisionBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
         m_HurtBox = std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, 32.0f, 32.0f);
     }
-
     BasicObject::~BasicObject() = default;
+    void BasicObject::Reset(BasicObjectParams&& params) {
+        m_Speed = params.speed;
+        m_Animation = params.animation;
+        m_Image = params.image;
+        SetDrawableType(params.drawableType);
+        SetSize(params.size.x, params.size.y);
+
+        if (params.hitBox) { SetHitBox(std::move(params.hitBox)); }
+        if (params.hurtBox) { SetHurtBox(std::move(params.hurtBox)); }
+        m_IsCollidable = params.isCollidable;
+        m_IsHitBoxActive = params.isHitBoxActive;
+        m_IsHurtBoxActive = params.isHurtBoxActive;
+        m_GameObject->SetVisible(params.isVisible);
+    }
 
     Core::WorldPosition BasicObject::GetWorldPosition() const { return m_Position; }
 
@@ -55,7 +75,7 @@ namespace UGO::Scene {
     std::shared_ptr<Util::Animation> BasicObject::GetAnimation() const { return m_Animation; }
 
     glm::vec2 BasicObject::GetSize() const {
-        assert(m_CollisionBox != nullptr);
+        if (!m_CollisionBox) { LOG_WARN("m_CollisionBox is nullptr."); return {0.0f, 0.0f}; }
         return {m_CollisionBox->GetWidth(), m_CollisionBox->GetHeight()};
     }
 
@@ -82,7 +102,10 @@ namespace UGO::Scene {
     ) { m_Animation = std::make_shared<Util::Animation>(paths, play, interval, looping, cooldown); }
 
     void BasicObject::SetAnimationState(const bool play) {
-        assert(m_Animation != nullptr);
+        if (!m_Animation) {
+            // LOG_WARN("m_Animation is nullptr.");
+            return;
+        }
         if (play) { m_Animation->Play(); }
         else { m_Animation->Pause(); m_Animation->SetCurrentFrame(0); }
     }
@@ -90,18 +113,29 @@ namespace UGO::Scene {
     void BasicObject::SetSpeed(const SpeedValue speed) { m_Speed = speed; }
 
     void BasicObject::SetDrawableType(const DrawableType type) {
-        assert(m_GameObject != nullptr);
+        if (!m_GameObject) {
+            // LOG_WARN("m_GameObject is nullptr.");
+            return;
+        }
+        m_DrawableType = type;
         switch (type) {
         case DrawableType::Image: {
-            m_GameObject->SetDrawable(m_Image);
+            if (m_Image) { m_GameObject->SetDrawable(m_Image); }
+            else {
+                // LOG_WARN("m_Image is nullptr.");
+            }
         }
         break;
         case DrawableType::Animation: {
-            m_GameObject->SetDrawable(m_Animation);
+            if (m_Animation) { m_GameObject->SetDrawable(m_Animation); }
+            else {
+                // LOG_WARN("m_Animation is nullptr.");
+            }
         }
         break;
         case DrawableType::None: {
-            assert(false);
+            m_GameObject->SetDrawable(nullptr);
+            // LOG_WARN("DrawableType is None.");
         }
         break;
         }
@@ -110,10 +144,16 @@ namespace UGO::Scene {
     void BasicObject::SetSize(Core::Distance width, Core::Distance height) {
         assert(width >= 0 && height >= 0);
 
-        m_CollisionBox->SetSize(width, height);
+        if (m_CollisionBox) { m_CollisionBox->SetSize(width, height); }
+        // else { LOG_WARN("m_CollisionBox is nullptr."); }
+
 
         switch (m_DrawableType) {
         case DrawableType::Image: {
+            if (!m_Image) {
+                // LOG_WARN("m_Image is nullptr.");
+                return;
+            }
             auto scale = m_Image->GetSize();
             scale.x = width / scale.x;
             scale.y = height / scale.y;
@@ -121,6 +161,10 @@ namespace UGO::Scene {
         }
         break;
         case DrawableType::Animation: {
+            if (!m_Animation) {
+                // LOG_WARN("m_Animation is nullptr.");
+                return;
+            }
             auto scale = m_Animation->GetSize();
             scale.x = width / scale.x;
             scale.y = height / scale.y;
@@ -128,7 +172,7 @@ namespace UGO::Scene {
         }
         break;
         case DrawableType::None: {
-            assert(false);
+            // LOG_WARN("DrawableType is None.");
         }
         break;
         }
@@ -171,15 +215,7 @@ namespace UGO::Scene {
     void BasicObject::ActivateHurtBox(bool active) { m_IsHurtBoxActive = active; }
     void BasicObject::ActivateCollidable(bool active) { m_IsCollidable = active; }
 
-    // void BasicObject::TryMove(const Core::Direction& direction, const
-    // Core::Distance moveDis) {
-    //     if (moveDis < CORE::EPSILON) { return; }
 
-    //     Core::Velocity expectedOffset = direction * moveDis;
-    //     Core::Velocity safeOffset = OffsetCalculator(expectedOffset);
-
-    //     m_Position += safeOffset;
-    // }
     void BasicObject::TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset) {
         Core::Velocity safeOffset = OffsetCalculator(intendedOffset + externalOffset);
         m_Position += safeOffset;

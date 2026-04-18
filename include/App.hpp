@@ -9,6 +9,7 @@
 #include "Graphics/Camera.hpp"
 #include "System/BattleManager.hpp"
 #include "System/SteeringSystem.hpp"
+#include "System/CharacterFactory.hpp"
 #include "System/EffectAnimationManager.hpp"
 
 
@@ -61,7 +62,8 @@ private:
     // Register Systems
     System::SteeringSystem m_SteeringSystem = System::SteeringSystem();
     System::EffectAnimationManager m_EffectAnimationManager = System::EffectAnimationManager(m_Root);
-    System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager);
+    System::CharacterFactory m_CharacterFactory = System::CharacterFactory(m_Root);
+    System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager, m_CharacterFactory);
 
 
 

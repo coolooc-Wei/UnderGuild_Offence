@@ -33,9 +33,10 @@ namespace Scene {
         };
 
         BasicObject();
-        BasicObject(BasicObjectParams params);
+        BasicObject(BasicObjectParams&& params);
         BasicObject(SpeedValue speed);
         virtual ~BasicObject();
+        void Reset(BasicObjectParams&& params);
 
         // Getters
         Core::WorldPosition GetWorldPosition() const;
@@ -84,8 +85,6 @@ namespace Scene {
         virtual void OnHeal(HpValue amount);
         virtual void OnDeath();
 
-        // void TryMove(const Core::Direction& direction, const Core::Distance
-        // moveDis);
         void TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset);
 
     protected:

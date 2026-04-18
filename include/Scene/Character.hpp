@@ -35,9 +35,10 @@ namespace Scene {
 
 
         Character();
-        Character(CharacterParams params);
+        Character(CharacterParams&& params);
         Character(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         virtual ~Character();
+        void Reset(CharacterParams&& params);
 
         // Getters
         HpValue GetMaxHP() const;

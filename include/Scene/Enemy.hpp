@@ -14,9 +14,10 @@ namespace Scene {
 
     class Enemy : public Bot {
     public:
-        Enemy(CharacterParams params);
+        Enemy(CharacterParams&& params);
         Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Enemy();
+        void Reset(CharacterParams&& params);
 
         void AIUpdate(const std::vector<Character*>& targets) override;
         void Update() override;

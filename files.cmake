@@ -16,11 +16,13 @@ set(SYSTEM_SRC
     System/BattleManager.cpp
     System/SteeringSystem.cpp
     System/EffectAnimationManager.cpp
+    System/CharacterFactory.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
     System/SteeringSystem.hpp
     System/EffectAnimationManager.hpp
+    System/CharacterFactory.hpp
 )
 
 # --- UI ---

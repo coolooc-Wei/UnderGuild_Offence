@@ -4,9 +4,12 @@ namespace UGO::Scene {
 
   Mercenary::Mercenary(HpValue maxHP, HpValue attackPower, SpeedValue speed)
   : Bot(maxHP, attackPower, speed) {}
-  Mercenary::Mercenary(CharacterParams params)
+  Mercenary::Mercenary(CharacterParams&& params)
   : Bot(std::move(params)) {}
   Mercenary::~Mercenary() {}
+  void Mercenary::Reset(CharacterParams&& params) {
+    Bot::Reset(std::move(params));
+  }
 
   void Mercenary::OnAttack() {
     LOG_INFO("Mercenary::OnAttack");

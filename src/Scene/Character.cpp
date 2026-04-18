@@ -7,7 +7,7 @@ namespace UGO::Scene {
     Character::Character() : BasicObject() {}
     Character::Character(HpValue maxHP, HpValue attackPower, SpeedValue speed)
     : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
-    Character::Character(CharacterParams params)
+    Character::Character(CharacterParams&& params)
     : BasicObject(std::move(params)),
       m_MaxHP(params.maxHP),
       m_CurrentHP(params.maxHP),
@@ -20,6 +20,18 @@ namespace UGO::Scene {
       m_DamageAnimationData(params.damageAnimationData
     ) {}
     Character::~Character() = default;
+    void Character::Reset(CharacterParams&& params) {
+        m_MaxHP = params.maxHP;
+        m_CurrentHP = params.maxHP;
+        m_AttackPower = params.attackPower;
+        m_AttackCooldown.SetDuration(params.attackCooldown);
+        m_InvincibleTimer.SetDuration(params.invincibleDuration);
+        m_Weapon = std::move(params.weapon);
+        m_StatusEffects = std::move(params.statusEffects);
+        m_AttackAnimationData = params.attackAnimationData;
+        m_DamageAnimationData = params.damageAnimationData;
+        BasicObject::Reset(std::move(params));
+    }
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
