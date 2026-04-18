@@ -85,8 +85,8 @@ namespace UGO::Scene {
    void Hero::OnLevelUp() {
       LOG_INFO("Hero leveled up to Lv. " + std::to_string(m_Level) + "!");
       // Throw an upgrade event; this can be handled by the Event System or Manager later.
-/     // Confirm that when the upgrade event is triggered (card draw UI starts), system pause logic needs to be implemented.
-/     // For now, log this out. In the future, the UI system will use Hero's LevelUp event listener to open the interface and pause the game.
+      // Confirm that when the upgrade event is triggered (card draw UI starts), system pause logic needs to be implemented.
+      // For now, log this out. In the future, the UI system will use Hero's LevelUp event listener to open the interface and pause the game.
    }
 
 
