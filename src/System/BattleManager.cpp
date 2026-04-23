@@ -40,15 +40,6 @@ namespace UGO::System {
         m_IsCacheDirty = false;
         LOG_INFO("Rebuilding caches");
 
-    std::vector<Scene::Icon*> BattleManager::GetAllIcons() const { 
-        std::vector<Scene::Icon*> icons;
-        icons.reserve(m_LevelUpIcons.size());
-        for (const auto& icon: m_LevelUpIcons) {
-            icons.push_back(icon.get());
-        }
-        return icons; 
-    }
-
         m_AllHeroesCache.clear();
         m_AllEnemiesCache.clear();
         m_AllMercenariesCache.clear();
@@ -99,6 +90,15 @@ namespace UGO::System {
     std::vector<Scene::Character*> BattleManager::GetAllAllies() const {
         if (m_IsCacheDirty) { RebuildCaches(); }
         return m_AllAlliesCache;
+    }
+
+    std::vector<Scene::Icon*> BattleManager::GetAllIcons() const { 
+        std::vector<Scene::Icon*> icons;
+        icons.reserve(m_LevelUpIcons.size());
+        for (const auto& icon: m_LevelUpIcons) {
+            icons.push_back(icon.get());
+        }
+        return icons; 
     }
 
     /* HACK: This function is not efficient, but it is a temporary solution */
