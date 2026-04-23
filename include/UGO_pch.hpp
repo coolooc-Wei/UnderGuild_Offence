@@ -12,6 +12,7 @@
 #include <cassert>
 #include <unordered_set>
 #include <algorithm>
+#include <random>
 
 // PTSD includes
 #include "Util/GameObject.hpp"

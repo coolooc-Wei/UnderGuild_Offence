@@ -2,6 +2,7 @@
 
 #include "Scene/BasicObject.hpp"
 #include "Scene/Character.hpp"
+#include "Scene/ExpPack.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
 
@@ -38,6 +39,15 @@ namespace UGO::System {
         if (!m_IsCacheDirty) { return; }
         m_IsCacheDirty = false;
         LOG_INFO("Rebuilding caches");
+
+    std::vector<Scene::Icon*> BattleManager::GetAllIcons() const { 
+        std::vector<Scene::Icon*> icons;
+        icons.reserve(m_LevelUpIcons.size());
+        for (const auto& icon: m_LevelUpIcons) {
+            icons.push_back(icon.get());
+        }
+        return icons; 
+    }
 
         m_AllHeroesCache.clear();
         m_AllEnemiesCache.clear();
@@ -113,9 +123,9 @@ namespace UGO::System {
         m_IsCacheDirty = true;
         m_MercenaryPool.emplace_back(m_CharacterFactory.CreateMercenary(std::move(params), position));
     }
-    void BattleManager::AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer) {
-        renderer.AddChild(pet->GetGameObject());
-        m_LevelUpIcons.push_back(std::move(pet));
+    void BattleManager::AddIcon(std::unique_ptr<Scene::Icon> icon, Util::Renderer& renderer) {
+        renderer.AddChild(icon->GetGameObject());
+        m_LevelUpIcons.push_back(std::move(icon));
     }
     void BattleManager::AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer) {
         renderer.AddChild(drop->GetGameObject());
@@ -130,8 +140,6 @@ namespace UGO::System {
                 int oldLevel = hero->GetLevel();
                 hero->GainExp(amount);
                 int newLevel = hero->GetLevel();
-
-                // 偵測是否升級，若有則生成圖示
                 if (newLevel > oldLevel) {
                     for (int i = 0; i < (newLevel - oldLevel); ++i) {
                         SpawnLevelUpIcon(renderer);
@@ -142,32 +150,17 @@ namespace UGO::System {
     }
 
     void BattleManager::SpawnLevelUpIcon(Util::Renderer& renderer) {
-
-        // 建立一個裝飾性的 BasicObject
-        auto icon = std::make_unique<Scene::BasicObject>();
-        
-        // 設定圖片 (暫時示意)
+        auto icon = std::make_unique<Scene::Icon>();
         icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
-        
-        // 重要：必須設定繪製類型為 Image，否則 GameObject 不會載入圖片
         icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        
-        // 設定大小 32x32
         icon->SetSize(32, 32);
-
-        // 計算座標：從右上方 (600, 320) 開始，每個圖示向下偏移 40 單位
         float startX = 600.0f;
         float startY = 320.0f;
         float offsetY = m_LevelUpIconCount * 40.0f;
-        
         icon->SetWorldPosition({startX, startY - offsetY});
         icon->GetGameObject()->SetVisible(true);
-        
-        // 同步座標至底層 GameObject Transform
         icon->Update();
-
-        // 加入渲染器
-        AddPet(std::move(icon), renderer);
+        AddIcon(std::move(icon), renderer);
         m_LevelUpIconCount++;
         
         LOG_INFO("Spawned level-up icon at position: {}, {}", startX, startY - offsetY);
@@ -268,10 +261,6 @@ namespace UGO::System {
                 );
             }
         }
-
-        for (auto& icon: m_LevelUpIcons) {
-            icon->Update();
-        }
     }
 
     void BattleManager::Update() {
@@ -293,24 +282,19 @@ namespace UGO::System {
     void UGO::System::BattleManager::UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer) {
         for (auto it = m_AllDrops.begin(); it != m_AllDrops.end(); ) {
             auto& drop = *it;
-            
-            // 掉落物更新 (處理飛行位移)
             drop->Update();
 
             float distance = glm::distance(drop->GetWorldPosition(), playerPos);
-            
-            // 磁吸觸發範圍
             if (distance < 150.0f) { 
                 drop->MoveTo(playerPos);
             }
-
-            // 撿拾觸發範圍 (碰撞接口預留處)
+            // Pickup trigger range (reserved area for collision interface)
             if (distance < 20.0f) {
                 UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
                 if (expAmount > 0.0f) {
                     GrantExpToHero(expAmount, renderer);
                 }
-                drop->OnPickup(); // 觸發子類別(如 ExpPack) 的撿拾邏輯
+                drop->OnPickup(); 
                 renderer.RemoveChild(drop->GetGameObject());
                 it = m_AllDrops.erase(it);
             } else {
@@ -323,6 +307,34 @@ namespace UGO::System {
         for (auto& drop : m_AllDrops) {
             drop->MoveTo(playerPos);
         }
+    }
+
+    /* HACK: refactor
+    */
+    void BattleManager::ProcessEnemyDeaths(Util::Renderer& renderer) {
+        for (auto* enemy : m_AllEnemiesCache) {
+            bool isDeadNow = enemy->IsDead();
+            bool wasProcessed = (m_ProcessedDeadEnemies.find(enemy) != m_ProcessedDeadEnemies.end());
+            // Compare the current frame (death) with past states (unresolved) -> Only triggers immediately upon death in the current frame.
+            if (isDeadNow && !wasProcessed) {
+                GrantExpToHero(enemy->GetExpReward(), renderer);
+                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
+                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
+                    SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue(), renderer);
+                }
+                m_ProcessedDeadEnemies.insert(enemy);
+            }
+        }
+    }
+
+    void BattleManager::SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer) {
+        auto expPack = std::make_unique<Scene::ExpPack>(value);
+        expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
+        expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        expPack->SetSize(16, 16);
+        expPack->SetWorldPosition(position);
+        expPack->GetGameObject()->SetVisible(true);
+        AddDrop(std::move(expPack), renderer);
     }
 
 }

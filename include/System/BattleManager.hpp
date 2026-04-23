@@ -7,6 +7,7 @@
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
 #include "Scene/Drop.hpp"
+#include "Scene/Icon.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/CharacterFactory.hpp"
 
@@ -28,12 +29,14 @@ namespace System {
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
         std::vector<Scene::Drop*> GetAllDrops() const;
+        std::vector<Scene::Icon*> GetAllIcons() const;
 
 
         void AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         void AddEnemy(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         void AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         /* TODO: removed after implementing UI system */
+        void AddIcon(std::unique_ptr<Scene::Icon> icon, Util::Renderer& renderer);
         void AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer);
         void AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer);
 
@@ -41,6 +44,9 @@ namespace System {
         void GrantExpToHero(Scene::ExpValue amount, Util::Renderer& renderer);
         void SpawnLevelUpIcon(Util::Renderer& renderer);
         void CollectAllDrops(const Core::WorldPosition& playerPos);
+
+        void ProcessEnemyDeaths(Util::Renderer& renderer);
+        void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer);
 
         void AIUpdate();
         void UpdateMovement();
@@ -60,9 +66,11 @@ namespace System {
         mutable std::vector<Scene::Character*> m_AllCharactersCache;
         mutable std::vector<Scene::Character*> m_AllAlliesCache;
         mutable bool m_IsCacheDirty = true;
+        std::vector<Scene::Icon*> m_AllIconsCache;
 
-        std::vector<std::unique_ptr<Scene::BasicObject>> m_LevelUpIcons;
+        std::vector<std::unique_ptr<Scene::Icon>> m_LevelUpIcons;
         std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
+        std::unordered_set<Scene::Enemy*> m_ProcessedDeadEnemies;
 
         int m_LevelUpIconCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;

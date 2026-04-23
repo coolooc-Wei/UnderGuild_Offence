@@ -72,6 +72,7 @@ set(SCENE_SRC
     Scene/EffectAnimation.cpp
     Scene/Mercenary.cpp
     Scene/Bot.cpp
+    Scene/Icon.cpp
     Scene/DamageTextAnimation.cpp
 )
 set(SCENE_INC
@@ -89,6 +90,7 @@ set(SCENE_INC
     Scene/EffectAnimation.hpp
     Scene/Mercenary.hpp
     Scene/Bot.hpp
+    Scene/Icon.hpp
     Scene/DamageTextAnimation.hpp
 )
 

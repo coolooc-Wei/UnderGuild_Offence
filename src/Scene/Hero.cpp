@@ -9,9 +9,9 @@
 
 namespace UGO::Scene {
 
-   // 經驗值成長公式常數
+   // EXP growth formula constants
    static constexpr float BASE_MAX_EXP = 200.0f;
-   static constexpr float GROWTH_FACTOR = 1.25f; // 每 5 級成長 1.25 倍
+   static constexpr float GROWTH_FACTOR = 1.25f;
    static constexpr int LEVELS_PER_STAGE = 5;
 
    Hero::Hero(CharacterParams&& params)
@@ -88,17 +88,17 @@ namespace UGO::Scene {
    }
 
    void Hero::OnLevelUp() {
-       LOG_INFO("Hero leveled up to Lv. " + std::to_string(m_Level) + "!");
-       // 拋出升級事件，這裡之後可以改由Event System或Manager來接
-       // 確認在升級事件觸發（抽卡 UI 開啟）時，需串接系統暫停邏輯。
-       // 暫時由這發出Log，將來UI系統藉由監聽Hero的LevelUp事件來打開介面與暫停遊戲
+      LOG_INFO("Hero leveled up to Lv. " + std::to_string(m_Level) + "!");
+      // Throw an upgrade event; this can be handled by the Event System or Manager later.
+      // Confirm that when the upgrade event is triggered (card draw UI starts), system pause logic needs to be implemented.
+      // For now, log this out. In the future, the UI system will use Hero's LevelUp event listener to open the interface and pause the game.
    }
 
 
 
    void Hero::UpdateMaxExp() {
-       // 抽象公式：每 5 級為一個階段，每一階段經驗上限成長 1.25 倍
-       // 例如：Lv 1-5 = 200, Lv 6-10 = 250, Lv 11-15 = 312.5 ...
+       // EXP growth formula: every 5 levels is a stage, and each stage increases the max EXP by 1.25 times
+       // For example: Lv 1-5 = 200, Lv 6-10 = 250, Lv 11-15 = 312.5 ...
        int stage = (m_Level - 1) / LEVELS_PER_STAGE;
        m_MaxExp = BASE_MAX_EXP * std::pow(GROWTH_FACTOR, static_cast<float>(stage));
    }

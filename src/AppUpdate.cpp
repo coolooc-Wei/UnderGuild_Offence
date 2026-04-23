@@ -286,6 +286,7 @@ void UGO::App::Update() {
     m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllEnemies());
     m_BattleManager.UpdateMovement();
     m_BattleManager.Attack();
+    m_BattleManager.ProcessEnemyDeaths(m_Root);
     m_BattleManager.Update();
     m_EffectAnimationManager.Update();
     /* HACK: remove after demo */
@@ -330,6 +331,9 @@ void UGO::App::Update() {
       }
       for (auto drop : m_BattleManager.GetAllDrops()) {
         drop->GetGameObject()->SetVisible(false);
+      }
+      for (auto icon : m_BattleManager.GetAllIcons()) {
+        icon->GetGameObject()->SetVisible(false);
       }
     }
   } break;
