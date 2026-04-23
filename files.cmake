@@ -17,12 +17,14 @@ set(SYSTEM_SRC
     System/SteeringSystem.cpp
     System/EffectAnimationManager.cpp
     System/CharacterFactory.cpp
+    System/EnemiesSpawnerSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
     System/SteeringSystem.hpp
     System/EffectAnimationManager.hpp
     System/CharacterFactory.hpp
+    System/EnemiesSpawnerSystem.hpp
 )
 
 # --- UI ---

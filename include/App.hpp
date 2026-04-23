@@ -11,6 +11,7 @@
 #include "System/SteeringSystem.hpp"
 #include "System/CharacterFactory.hpp"
 #include "System/EffectAnimationManager.hpp"
+#include "System/EnemiesSpawnerSystem.hpp"
 
 
 namespace UGO {
@@ -64,6 +65,7 @@ private:
     System::EffectAnimationManager m_EffectAnimationManager = System::EffectAnimationManager(m_Root);
     System::CharacterFactory m_CharacterFactory = System::CharacterFactory(m_Root);
     System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager, m_CharacterFactory);
+    System::EnemiesSpawnerSystem m_EnemiesSpawnerSystem = System::EnemiesSpawnerSystem(m_BattleManager, m_EffectAnimationManager);
 
 
 

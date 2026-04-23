@@ -1,0 +1,242 @@
+{
+"EXAMPLE": {
+    "speed": {
+        "TYPE": "float",
+        "DEFAULT": 10.0
+    },
+    "drawableType": {
+        "TYPE": "string",
+        "VALUE": ["Animation", "Image", "None"]
+    },
+    "animationPath": {
+        "TYPE": "list<string>"
+    },
+    "imagePath": {
+        "TYPE": "list<string>"
+    },
+    "size": {
+        "width": {
+            "TYPE": "float",
+            "DEFAULT": 32.0
+        },
+        "height": {
+            "TYPE": "float",
+            "DEFAULT": 32.0
+        }
+    },
+    "hitBox": {
+        "type": {
+            "TYPE": "string",
+            "VALUE": ["CIRCLE", "RECTANGLE", "SECTOR"]
+        },
+        "type==CIRCLE": {
+            "radius": {
+                "TYPE": "float",
+                "DEFAULT": 32.0
+            }
+        },
+        "type==RECTANGLE": {
+            "width": {
+                "TYPE": "float",
+                "DEFAULT": 32.0
+            },
+            "height": {
+                "TYPE": "float",
+                "DEFAULT": 32.0
+            }
+        },
+        "type==SECTOR": {
+            "radius": {
+                "TYPE": "float"
+            },
+            "angle": {
+                "TYPE": "float"
+            },
+            "facing": {
+                "x": {
+                    "TYPE": "float"
+                },
+                "y": {
+                    "TYPE": "float"
+                }
+            }
+        }
+    },
+    "isCollidable": {
+        "TYPE": "bool",
+        "DEFAULT": true
+    },
+    "isHitBoxActive": {
+        "TYPE": "bool",
+        "DEFAULT": false
+    },
+    "isHurtBoxActive": {
+        "TYPE": "bool",
+        "DEFAULT": false
+    },
+    "maxHP": {
+        "TYPE": "float",
+        "DEFAULT": 100.0
+    },
+    "attackPower": {
+        "TYPE": "float",
+        "DEFAULT": 10.0
+    },
+    "attackCooldown": {
+        "TYPE": "float",
+        "DEFAULT": 1.0
+    },
+    "invincibleDuration": {
+        "TYPE": "float",
+        "DEFAULT": 0.5
+    },
+    "weapon": {
+        "TYPE": "objectID"
+    },
+    "statusEffects": {
+        "TYPE": "list<objectID>"
+    },
+    "attackAnimationData": {
+        "animationPath": {
+            "TYPE": "list<string>"
+        },
+        "duration": {
+            "TYPE": "float (Second)"
+        },
+        "isImage": {
+            "TYPE": "bool"
+        },
+        "offsetAngle": {
+            "TYPE": "float"
+        },
+        "size": {
+            "width": {
+                "TYPE": "float"
+            },
+            "height": {
+                "TYPE": "float"
+            }
+        }
+    },
+    "damageAnimationData": {
+        "animationPath": {
+            "TYPE": "list<string>"
+        },
+        "duration": {
+            "TYPE": "float (Second)"
+        },
+        "isImage": {
+            "TYPE": "bool"
+        },
+        "offsetAngle": {
+            "TYPE": "float"
+        },
+        "size": {
+            "width": {
+                "TYPE": "float"
+            },
+            "height": {
+                "TYPE": "float"
+            }
+        }
+    }
+},
+
+    "e_001": {
+        "speed": 10.0,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/enemy/Boss_1_1.png",
+            "../Resources/Image/character/enemy/Boss_1_2.png",
+            "../Resources/Image/character/enemy/Boss_1_3.png",
+            "../Resources/Image/character/enemy/Boss_1_4.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 32.0,
+            "height": 32.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 100.0,
+        "attackPower": 10.0,
+        "attackCooldown": 1.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_002": {
+        "speed": 10.0,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/enemy/Boss_7_1.png",
+            "../Resources/Image/character/enemy/Boss_7_2.png",
+            "../Resources/Image/character/enemy/Boss_7_3.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 32.0,
+            "height": 32.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 100.0,
+        "attackPower": 10.0,
+        "attackCooldown": 1.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "AnimationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "AnimationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    }
+}
