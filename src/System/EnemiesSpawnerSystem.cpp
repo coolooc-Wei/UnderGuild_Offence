@@ -5,7 +5,7 @@
 namespace UGO::System {
 
     EnemiesSpawnerSystem::EnemiesSpawnerSystem(BattleManager& battleManager, EffectAnimationManager& effectAnimationManager)
-    : m_BattleManager(battleManager), m_EffectAnimationManager(effectAnimationManager), m_SpawnTimer(Core::Time::CountDownTimer(0.0f)) {
+    : m_BattleManager(battleManager), m_EffectAnimationManager(effectAnimationManager), m_SpawnTimer(Core::Time::CountDownTimer(10.0f)) {
         std::ifstream enemyDatabaseFile("../Resources/json/enemy.json");
         assert(enemyDatabaseFile.is_open());
         enemyDatabaseFile >> m_EnemyDatabase;
@@ -86,9 +86,25 @@ namespace UGO::System {
         auto params = Scene::Character::CharacterParams();
 
         params.speed = jsonParams.at("speed");
-        params.drawableType = jsonParams.at("drawableType");
+        
+        auto drawableTypeStr = jsonParams.at("drawableType").get<std::string>();
+        if (drawableTypeStr == "Animation") {
+            params.drawableType = Scene::BasicObject::DrawableType::Animation;
+        } else if (drawableTypeStr == "Image") {
+            params.drawableType = Scene::BasicObject::DrawableType::Image;
+        } else {
+            params.drawableType = Scene::BasicObject::DrawableType::None;
+        }
+
         params.animation = std::make_shared<Util::Animation>(jsonParams.at("animationPath"), false, 50, true, 50);
-        params.image = std::make_shared<Util::Image>(jsonParams.at("imagePath"));
+        
+        std::string imagePathStr = "";
+        if (jsonParams.at("imagePath").is_array() && !jsonParams.at("imagePath").empty()) {
+            imagePathStr = jsonParams.at("imagePath")[0].get<std::string>();
+        } else if (jsonParams.at("imagePath").is_string()) {
+            imagePathStr = jsonParams.at("imagePath").get<std::string>();
+        }
+        params.image = std::make_shared<Util::Image>(imagePathStr);
         params.size = {jsonParams.at("size").at("width"), jsonParams.at("size").at("height")};
         auto hitBoxType = jsonParams.at("hitBox").at("type").get<std::string>();
         if (hitBoxType == "CIRCLE") {

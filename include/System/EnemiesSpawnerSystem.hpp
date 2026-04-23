@@ -38,16 +38,16 @@ namespace System {
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
         nlohmann::json m_EnemyDatabase;
-        const std::string m_WarningIndicatorPath = "../Resources/Image/weapon/Weapon_021_3_2.png";
+        const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
 
-        Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(0.0f);
+        Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(10.0f);
         Core::Time::Second m_WarningIndicatorDuration = 1.0f;
 
         int m_WaveAmount = 0;
         int m_CurrentSpawnIndex = 0;
 
-        int m_MinSpawnAmount = 1;
-        int m_MaxSpawnAmount = 3;
+        int m_MinSpawnAmount = 5;
+        int m_MaxSpawnAmount = 10;
 
         std::queue<SpawnWaveInfo> m_PaddingWaves;
         std::queue<SpawnInfo> m_PaddingSpawns;

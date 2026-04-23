@@ -151,7 +151,7 @@
             "../Resources/Image/character/enemy/Boss_1_3.png",
             "../Resources/Image/character/enemy/Boss_1_4.png"
         ],
-        "imagePath": [],
+        "imagePath": "",
         "size": {
             "width": 32.0,
             "height": 32.0
@@ -199,7 +199,7 @@
             "../Resources/Image/character/enemy/Boss_7_2.png",
             "../Resources/Image/character/enemy/Boss_7_3.png"
         ],
-        "imagePath": [],
+        "imagePath": "",
         "size": {
             "width": 32.0,
             "height": 32.0
@@ -219,7 +219,7 @@
         "weapon": "",
         "statusEffects": [],
         "attackAnimationData": {
-            "AnimationPath": [],
+            "animationPath": [],
             "duration": 0.0,
             "isImage": true,
             "offsetAngle": 0.0,
@@ -229,7 +229,7 @@
             }
         },
         "damageAnimationData": {
-            "AnimationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
             "duration": 0.1,
             "isImage": true,
             "offsetAngle": 0.0,
