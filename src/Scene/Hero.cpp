@@ -14,9 +14,14 @@ namespace UGO::Scene {
    static constexpr float GROWTH_FACTOR = 1.25f;
    static constexpr int LEVELS_PER_STAGE = 5;
 
+   Hero::Hero(CharacterParams&& params)
+   : Character(std::move(params)) {}
    Hero::Hero(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-      : Character(maxHP, attackPower, speed) {}
+   : Character(maxHP, attackPower, speed) {}
    Hero::~Hero() = default;
+   void Hero::Reset(CharacterParams&& params) {
+    Character::Reset(std::move(params));
+   }
 
    void Hero::KeyboardUpdate() {
       // USER CONTROL MOVEMENT

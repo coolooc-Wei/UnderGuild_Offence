@@ -14,8 +14,10 @@ namespace Scene {
 
     class Mercenary : public Bot {
     public:
+        Mercenary(CharacterParams&& params);
         Mercenary(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Mercenary();
+        void Reset(CharacterParams&& params);
 
         void AIUpdate(const std::vector<Character*>& targets) override;
         void Update() override;

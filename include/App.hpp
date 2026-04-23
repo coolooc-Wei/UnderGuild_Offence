@@ -9,6 +9,7 @@
 #include "Graphics/Camera.hpp"
 #include "System/BattleManager.hpp"
 #include "System/SteeringSystem.hpp"
+#include "System/CharacterFactory.hpp"
 #include "System/EffectAnimationManager.hpp"
 
 
@@ -51,14 +52,18 @@ private:
     GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    std::unique_ptr<Scene::BasicObject> m_Background; //HACK: remove maybe
+    /* HACK: remove maybe */
+    std::unique_ptr<Scene::BasicObject> m_Background;
+    std::shared_ptr<Util::GameObject> m_ShowHp;
+    std::shared_ptr<Util::Text> m_HPValueText;
     float m_SettlingTimer;
 
 
     // Register Systems
     System::SteeringSystem m_SteeringSystem = System::SteeringSystem();
     System::EffectAnimationManager m_EffectAnimationManager = System::EffectAnimationManager(m_Root);
-    System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager);
+    System::CharacterFactory m_CharacterFactory = System::CharacterFactory(m_Root);
+    System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager, m_CharacterFactory);
 
 
 

@@ -67,6 +67,174 @@ void UGO::App::Update() {
       for (auto chars : m_BattleManager.GetAllCharacters()) {
         chars->GetGameObject()->SetVisible(true);
       }
+      /* HACK: Remove these lines after testing
+      */
+      std::vector<std::string> heroAnimationPath = {
+        "../Resources/Image/character/hero/Hero_101_1.png",
+        "../Resources/Image/character/hero/Hero_101_2.png",
+        "../Resources/Image/character/hero/Hero_101_3.png",
+        "../Resources/Image/character/hero/Hero_101_4.png",
+        "../Resources/Image/character/hero/Hero_101_5.png",
+        "../Resources/Image/character/hero/Hero_101_6.png",
+      };
+      auto heroAnimation = std::make_shared<Util::Animation>(
+          heroAnimationPath, false, 150, true, 150
+      );
+
+      Scene::Character::CharacterParams heroParams;
+      heroParams.maxHP = 100000;
+      heroParams.attackPower = 10;
+      heroParams.speed = 3.0f;
+      heroParams.animation = heroAnimation;
+      heroParams.image = std::make_shared<Util::Image>("../Resources/Image/character/hero/Hero_101_1.png");
+      heroParams.drawableType = Scene::BasicObject::DrawableType::Animation;
+      heroParams.size = {32.0f, 32.0f};
+      Core::WorldPosition heroPos = {-300.0f, -300.0f};
+      heroParams.hitBox = std::make_unique<Core::CircleBox>(heroPos, 500.0f);
+      heroParams.isCollidable = true;
+      heroParams.isHitBoxActive = true;
+      heroParams.isHurtBoxActive = false;
+      heroParams.isVisible = true;
+      heroParams.attackCooldown = 1.0f;
+      heroParams.invincibleDuration = 1.0f;
+
+      std::vector<std::string> attackAnimationPath = {"../Resources/Image/weapon/Weapon_021_Ef1.png"};
+      heroParams.attackAnimationData = Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(attackAnimationPath, false, 150, false, 150), 0.1f, true,
+        0.0f, {32.0f, 32.0f}
+      };
+
+      heroAnimation->Play();
+      m_BattleManager.AddHero(std::move(heroParams), heroPos);
+
+      std::vector<std::string> enemyAnimationPath = {
+        "../Resources/Image/character/enemy/Boss_1_1.png",
+        "../Resources/Image/character/enemy/Boss_1_2.png",
+        "../Resources/Image/character/enemy/Boss_1_3.png",
+        "../Resources/Image/character/enemy/Boss_1_4.png",
+      };
+      auto enemyAnimation = std::make_shared<Util::Animation>(
+          enemyAnimationPath, false, 150, true, 150);
+          
+      std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
+      
+      Scene::Character::CharacterParams enemyParams1;
+      enemyParams1.maxHP = 10000;
+      enemyParams1.attackPower = 10;
+      enemyParams1.speed = 3.0f;
+      enemyParams1.animation = enemyAnimation;
+      enemyParams1.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
+      enemyParams1.drawableType = Scene::BasicObject::DrawableType::Animation;
+      enemyParams1.size = {32.0f, 32.0f};
+      Core::WorldPosition enemyPos1 = {300.0f, 300.0f};
+      enemyParams1.hitBox = std::make_unique<Core::RectangleBox>(enemyPos1, 32.0f, 32.0f);
+      enemyParams1.isCollidable = true;
+      enemyParams1.isHitBoxActive = true;
+      enemyParams1.isHurtBoxActive = true;
+      enemyParams1.isVisible = true;
+      enemyParams1.attackCooldown = 1000.0f;
+      enemyParams1.damageAnimationData = Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      };
+
+      enemyAnimation->Play();
+      m_BattleManager.AddEnemy(std::move(enemyParams1), enemyPos1);
+
+      Scene::Character::CharacterParams enemyParams2;
+      enemyParams2.maxHP = 10000;
+      enemyParams2.attackPower = 10;
+      enemyParams2.speed = 3.0f;
+      enemyParams2.animation = enemyAnimation;
+      enemyParams2.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
+      enemyParams2.drawableType = Scene::BasicObject::DrawableType::Animation;
+      enemyParams2.size = {32.0f, 32.0f};
+      Core::WorldPosition enemyPos2 = {-100.0f, 79.0f};
+      enemyParams2.hitBox = std::make_unique<Core::RectangleBox>(enemyPos2, 64.0f, 64.0f);
+      enemyParams2.isCollidable = true;
+      enemyParams2.isHitBoxActive = true;
+      enemyParams2.isHurtBoxActive = true;
+      enemyParams2.isVisible = true;
+      enemyParams2.attackCooldown = 5.0f;
+      enemyParams2.damageAnimationData = Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      };
+      
+      enemyAnimation->Play();
+      m_BattleManager.AddEnemy(std::move(enemyParams2), enemyPos2);
+
+      Scene::Character::CharacterParams enemyParams3;
+      enemyParams3.maxHP = 10000;
+      enemyParams3.attackPower = 10;
+      enemyParams3.speed = 3.0f;
+      enemyParams3.animation = enemyAnimation;
+      enemyParams3.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
+      enemyParams3.drawableType = Scene::BasicObject::DrawableType::Animation;
+      enemyParams3.size = {32.0f, 32.0f};
+      Core::WorldPosition enemyPos3 = {200.0f, 0.0f};
+      enemyParams3.hitBox = std::make_unique<Core::RectangleBox>(enemyPos3, 64.0f, 64.0f);
+      enemyParams3.isCollidable = true;
+      enemyParams3.isHitBoxActive = true;
+      enemyParams3.isHurtBoxActive = true;
+      enemyParams3.isVisible = true;
+      enemyParams3.attackCooldown = 5.0f;
+      enemyParams3.damageAnimationData = Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      };
+      
+      enemyAnimation->Play();
+      m_BattleManager.AddEnemy(std::move(enemyParams3), enemyPos3);
+
+      Scene::Character::CharacterParams enemyParams4;
+      enemyParams4.maxHP = 10000;
+      enemyParams4.attackPower = 10;
+      enemyParams4.speed = 3.0f;
+      enemyParams4.animation = enemyAnimation;
+      enemyParams4.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
+      enemyParams4.drawableType = Scene::BasicObject::DrawableType::Animation;
+      enemyParams4.size = {32.0f, 32.0f};
+      Core::WorldPosition enemyPos4 = {-300.0f, 0.0f};
+      enemyParams4.hitBox = std::make_unique<Core::RectangleBox>(enemyPos4, 64.0f, 64.0f);
+      enemyParams4.isCollidable = true;
+      enemyParams4.isHitBoxActive = true;
+      enemyParams4.isHurtBoxActive = true;
+      enemyParams4.isVisible = true;
+      enemyParams4.attackCooldown = 5.0f;
+      enemyParams4.damageAnimationData = Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      };
+      
+      enemyAnimation->Play();
+      m_BattleManager.AddEnemy(std::move(enemyParams4), enemyPos4);
+
+      std::vector<std::string> mercenaryAnimationPath = {
+        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
+        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_2.png",
+        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_3.png",
+        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_4.png",
+        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_5.png",
+      };
+      auto mercenaryAnimation = std::make_shared<Util::Animation>(
+          mercenaryAnimationPath, false, 150, true, 150);
+      Scene::Character::CharacterParams mercenaryParams;
+      mercenaryParams.maxHP = 1000;
+      mercenaryParams.attackPower = 5;
+      mercenaryParams.speed = 7.0f;
+      mercenaryParams.animation = mercenaryAnimation; 
+      mercenaryParams.drawableType = Scene::BasicObject::DrawableType::Animation;
+      mercenaryParams.size = {32.0f, 32.0f};
+      Core::WorldPosition mercenaryPos = {-50.0f, -50.0f};
+      mercenaryParams.hitBox = std::make_unique<Core::RectangleBox>(mercenaryPos, 64.0f, 64.0f);
+      mercenaryParams.isCollidable = true;
+      mercenaryParams.isHitBoxActive = true;
+      mercenaryParams.isHurtBoxActive = true;
+      mercenaryParams.isVisible = true;
+      mercenaryParams.attackCooldown = 3.0f;
+      mercenaryParams.damageAnimationData = Scene::Character::EffectAnimationData{
+        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+      };
+      
+      enemyAnimation->Play();
+      m_BattleManager.AddMercenary(std::move(mercenaryParams), mercenaryPos);
     }
 
     /* Use P temporarity instead of ESCAPE
@@ -84,105 +252,6 @@ void UGO::App::Update() {
 
         m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
-    }
-
-    /* HACK: Remove these lines after testing
-     */
-    if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
-      std::vector<std::string> heroAnimationPath = {
-          "../Resources/Image/character/hero/Hero_101_1.png",
-          "../Resources/Image/character/hero/Hero_101_2.png",
-          "../Resources/Image/character/hero/Hero_101_3.png",
-          "../Resources/Image/character/hero/Hero_101_4.png",
-          "../Resources/Image/character/hero/Hero_101_5.png",
-          "../Resources/Image/character/hero/Hero_101_6.png",
-      };
-      auto heroAnimation = std::make_shared<Util::Animation>(
-          heroAnimationPath, false, 150, true, 150
-      );
-      auto hero = std::make_unique<Scene::Hero>(100, 10, 3.0f);
-      hero->SetWorldPosition({-300.0f, -300.0f});
-      hero->SetAnimation(heroAnimation);
-      hero->SetImage("../Resources/Image/character/hero/Hero_101_1.png");
-      hero->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
-      hero->SetSize(32, 32);
-      hero->SetHitBox(std::make_unique<Core::CircleBox>(hero->GetWorldPosition(), 500.0f));
-      hero->ActivateCollidable(true);
-      hero->ActivateHitBox(true);
-      hero->ActivateHurtBox(false);
-      hero->SetAttackCooldownDuration(1.0f);
-      hero->SetInvincibleDuration(1.0f);
-      hero->GetGameObject()->SetVisible(true);
-      std::vector<std::string> attackAnimationPath = {"../Resources/Image/weapon/Weapon_021_Ef1.png"};
-      hero->SetAttackAnimationData(Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(attackAnimationPath, false, 150, false, 150), 0.1f, true,
-        0.0f, {32.0f, 32.0f}
-      });
-      heroAnimation->Play();
-      m_BattleManager.AddHero(std::move(hero), m_Root);
-
-      std::vector<std::string> enemyAnimationPath = {
-          "../Resources/Image/character/enemy/Boss_1_1.png",
-          "../Resources/Image/character/enemy/Boss_1_2.png",
-          "../Resources/Image/character/enemy/Boss_1_3.png",
-          "../Resources/Image/character/enemy/Boss_1_4.png",
-      };
-      auto enemyAnimation = std::make_shared<Util::Animation>(
-          enemyAnimationPath, false, 150, true, 150);
-      auto enemy = std::make_unique<Scene::Enemy>(100, 10, 3.0f);
-      enemy->SetWorldPosition({300.0f, 300.0f});
-      enemy->SetAnimation(enemyAnimation);
-      enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
-      enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
-      enemy->SetSize(32, 32);
-      enemy->SetHitBox(std::make_unique<Core::RectangleBox>(enemy->GetWorldPosition(), 32.0f, 32.0f));
-      enemy->ActivateCollidable(true);
-      enemy->ActivateHitBox(true);
-      enemy->ActivateHurtBox(true);
-      enemy->GetGameObject()->SetVisible(true);
-      enemy->SetAttackCooldownDuration(1000.0f);
-      std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
-      enemy->SetDamageAnimationData(Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      });
-      enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemy), m_Root);
-
-      enemy = std::make_unique<Scene::Enemy>(1000, 10, 3.0f);
-      enemy->SetWorldPosition({-300.0f, 0.0f});
-      enemy->SetAnimation(enemyAnimation);
-      enemy->SetImage("../Resources/Image/character/enemy/Boss_1_1.png");
-      enemy->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
-      enemy->SetSize(32, 32);
-      enemy->SetHitBox(std::make_unique<Core::RectangleBox>(enemy->GetWorldPosition(), 64.0f, 64.0f));
-      enemy->ActivateCollidable(true);
-      enemy->ActivateHitBox(true);
-      enemy->ActivateHurtBox(true);
-      enemy->GetGameObject()->SetVisible(true);
-      enemy->SetAttackCooldownDuration(5.0f);
-      enemy->SetDamageAnimationData(Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      });
-      enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemy), m_Root);
-
-      auto mercenary = std::make_unique<Scene::Mercenary>(1000, 5, 1.0f);
-      mercenary->SetWorldPosition({-50.0f, -50.0f});
-      mercenary->SetAnimation(enemyAnimation);
-      mercenary->SetImage("../Resources/Image/character/enemy/Boss_7_1.png");
-      mercenary->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-      mercenary->SetSize(32, 32);
-      mercenary->SetHitBox(std::make_unique<Core::RectangleBox>(mercenary->GetWorldPosition(), 64.0f, 64.0f));
-      mercenary->ActivateCollidable(true);
-      mercenary->ActivateHitBox(true);
-      mercenary->ActivateHurtBox(true);
-      mercenary->GetGameObject()->SetVisible(true);
-      mercenary->SetAttackCooldownDuration(3.0f);
-      mercenary->SetDamageAnimationData(Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      });
-      enemyAnimation->Play();
-      m_BattleManager.AddMercenary(std::move(mercenary), m_Root);
     }
     
     // Test Spawn ExpPack
@@ -218,7 +287,11 @@ void UGO::App::Update() {
     m_BattleManager.UpdateMovement();
     m_BattleManager.Attack();
     m_BattleManager.ProcessEnemyDeaths(m_Root);
+    m_BattleManager.Update();
     m_EffectAnimationManager.Update();
+    /* HACK: remove after demo */
+    m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
+    /* END HACK */
     
     /* DO NOT DELETE THIS LINE.
      * IT IS USED FOR THE GAME TIMING.

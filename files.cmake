@@ -16,11 +16,13 @@ set(SYSTEM_SRC
     System/BattleManager.cpp
     System/SteeringSystem.cpp
     System/EffectAnimationManager.cpp
+    System/CharacterFactory.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
     System/SteeringSystem.hpp
     System/EffectAnimationManager.hpp
+    System/CharacterFactory.hpp
 )
 
 # --- UI ---
@@ -71,6 +73,7 @@ set(SCENE_SRC
     Scene/Mercenary.cpp
     Scene/Bot.cpp
     Scene/Icon.cpp
+    Scene/DamageTextAnimation.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -88,6 +91,7 @@ set(SCENE_INC
     Scene/Mercenary.hpp
     Scene/Bot.hpp
     Scene/Icon.hpp
+    Scene/DamageTextAnimation.hpp
 )
 
 # --- Combine All ---
