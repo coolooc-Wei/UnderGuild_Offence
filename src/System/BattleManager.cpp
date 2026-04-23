@@ -29,6 +29,7 @@ namespace UGO::System {
         m_AllHeroesCache.reserve(10);
         m_AllEnemiesCache.reserve(200);
         m_AllMercenariesCache.reserve(150);
+        m_AllHeroesAsCharacterCache.reserve(10);
         m_AllEnemiesAsCharacterCache.reserve(200);
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
@@ -44,6 +45,7 @@ namespace UGO::System {
         m_AllEnemiesCache.clear();
         m_AllMercenariesCache.clear();
         m_AllEnemiesAsCharacterCache.clear();
+        m_AllHeroesAsCharacterCache.clear();
         m_AllCharactersCache.clear();
         m_AllAlliesCache.clear();
 
@@ -55,6 +57,7 @@ namespace UGO::System {
                 m_AllHeroesCache.push_back(hero.get());
                 m_AllCharactersCache.push_back(hero.get());
                 m_AllAlliesCache.push_back(hero.get());
+                m_AllHeroesAsCharacterCache.push_back(hero.get());
             }
         }
         for (auto& enemy: m_EnemyPool) {
@@ -76,6 +79,10 @@ namespace UGO::System {
     std::vector<Scene::Hero*> BattleManager::GetAllHeroes() const {
         if (m_IsCacheDirty) { RebuildCaches(); }
         return m_AllHeroesCache;
+    }
+    std::vector<Scene::Character*> BattleManager::GetAllHeroesAsCharacters() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllHeroesAsCharacterCache;
     }
     std::vector<Scene::Enemy*> BattleManager::GetAllEnemies() const {
         if (m_IsCacheDirty) { RebuildCaches(); }
@@ -211,7 +218,12 @@ namespace UGO::System {
     void BattleManager::AIUpdate() {
         for (auto* hero: GetAllHeroes()) { hero->KeyboardUpdate(); }
         for (auto* enemy: GetAllEnemies()) { enemy->AIUpdate(GetAllAllies()); }
-        for (auto* mercenary: GetAllMercenaries()) { mercenary->AIUpdate(GetAllEnemiesAsCharacters()); }
+        for (auto* mercenary: GetAllMercenaries()) { 
+            if(!GetAllEnemies().empty())
+            mercenary->AIUpdate(GetAllEnemiesAsCharacters());
+            else
+            mercenary->AIUpdate(GetAllHeroesAsCharacters());
+        }
     }
 
     void BattleManager::UpdateMovement() {

@@ -23,6 +23,7 @@ namespace System {
         void RebuildCaches() const;
 
         std::vector<Scene::Hero*> GetAllHeroes() const;
+        std::vector<Scene::Character*> GetAllHeroesAsCharacters() const;
         std::vector<Scene::Enemy*> GetAllEnemies() const;
         std::vector<Scene::Mercenary*> GetAllMercenaries() const;
         std::vector<Scene::Character*> GetAllEnemiesAsCharacters() const;
@@ -64,6 +65,7 @@ namespace System {
         mutable std::vector<Scene::Hero*> m_AllHeroesCache;
         mutable std::vector<Scene::Enemy*> m_AllEnemiesCache;
         mutable std::vector<Scene::Mercenary*> m_AllMercenariesCache;
+        mutable std::vector<Scene::Character*> m_AllHeroesAsCharacterCache;
         mutable std::vector<Scene::Character*> m_AllEnemiesAsCharacterCache;
         mutable std::vector<Scene::Character*> m_AllCharactersCache;
         mutable std::vector<Scene::Character*> m_AllAlliesCache;
