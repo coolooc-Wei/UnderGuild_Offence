@@ -143,6 +143,42 @@ namespace UGO::System {
                 if (newLevel > oldLevel) {
                     for (int i = 0; i < (newLevel - oldLevel); ++i) {
                         SpawnLevelUpIcon(renderer);
+                        
+                        // 升級時暫時生成一隻傭兵
+                        std::vector<std::string> mercenaryAnimationPath = {
+                            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
+                            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_2.png",
+                            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_3.png",
+                            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_4.png",
+                            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_5.png",
+                        };
+                        auto mercenaryAnimation = std::make_shared<Util::Animation>(
+                            mercenaryAnimationPath, false, 150, true, 150);
+                            
+                        std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
+
+                        Scene::Character::CharacterParams params;
+                        params.maxHP = 1000;
+                        params.attackPower = 5;
+                        params.speed = 7.0f;
+                        params.animation = mercenaryAnimation; 
+                        params.drawableType = Scene::BasicObject::DrawableType::Animation;
+                        params.size = {32.0f, 32.0f};
+
+                        // 設定初始座標為英雄位置加上些微偏移，避免重疊
+                        Core::WorldPosition spawnPos = hero->GetWorldPosition() + Core::Velocity{40.0f, 40.0f}; 
+                        
+                        params.hitBox = std::make_unique<Core::RectangleBox>(spawnPos, 64.0f, 64.0f);
+                        params.isCollidable = true;
+                        params.isHitBoxActive = true;
+                        params.isHurtBoxActive = true;
+                        params.isVisible = true;
+                        params.attackCooldown = 3.0f;
+                        params.damageAnimationData = Scene::Character::EffectAnimationData{
+                            std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
+                        };
+
+                        AddMercenary(std::move(params), spawnPos);
                     }
                 }
             }
@@ -290,6 +326,8 @@ namespace UGO::System {
             }
             // Pickup trigger range (reserved area for collision interface)
             if (distance < 20.0f) {
+                // TODO: 預留接口 - 未來掉落物多型化可新增繼承 Scene::Drop 的類別（例如 MercenaryTokenDrop）
+                // 未來的特殊掉落物應該透過 drop->OnPickup() 裡的委託來呼叫 AddMercenary() 等行為，不再將所有邏輯寫在此處。
                 UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
                 if (expAmount > 0.0f) {
                     GrantExpToHero(expAmount, renderer);

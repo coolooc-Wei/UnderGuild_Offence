@@ -284,6 +284,7 @@ void UGO::App::Update() {
 
     m_BattleManager.AIUpdate();
     m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllEnemies());
+    m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllMercenaries());
     m_BattleManager.UpdateMovement();
     m_BattleManager.Attack();
     m_BattleManager.ProcessEnemyDeaths(m_Root);
