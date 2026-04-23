@@ -40,7 +40,7 @@ namespace System {
         nlohmann::json m_EnemyDatabase;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
 
-        Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(10.0f);
+        Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(8.0f);
         Core::Time::Second m_WarningIndicatorDuration = 1.0f;
 
         int m_WaveAmount = 0;

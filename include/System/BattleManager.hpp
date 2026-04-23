@@ -45,6 +45,7 @@ namespace System {
         void GrantExpToHero(Scene::ExpValue amount, Util::Renderer& renderer);
         void SpawnLevelUpIcon(Util::Renderer& renderer);
         void CollectAllDrops(const Core::WorldPosition& playerPos);
+        void ClearDrops(Util::Renderer& renderer);
 
         void ProcessEnemyDeaths(Util::Renderer& renderer);
         void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer);

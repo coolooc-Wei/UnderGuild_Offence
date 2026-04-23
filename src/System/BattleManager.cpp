@@ -172,8 +172,8 @@ namespace UGO::System {
 
                         Scene::Character::CharacterParams params;
                         params.maxHP = 1000;
-                        params.attackPower = 5;
-                        params.speed = 3.0f;
+                        params.attackPower = 10;
+                        params.speed = 1.5f;
                         params.animation = mercenaryAnimation; 
                         params.drawableType = Scene::BasicObject::DrawableType::Animation;
                         params.size = {32.0f, 32.0f};
@@ -205,7 +205,7 @@ namespace UGO::System {
         icon->SetSize(32, 32);
         float startX = 600.0f;
         float startY = 320.0f;
-        float offsetY = m_LevelUpIconCount * 40.0f;
+        float offsetY = m_LevelUpIconCount * 30.0f;
         icon->SetWorldPosition({startX, startY - offsetY});
         icon->GetGameObject()->SetVisible(true);
         icon->Update();
@@ -318,6 +318,12 @@ namespace UGO::System {
     }
 
     void BattleManager::Update() {
+        auto removeHeroes = std::remove_if(m_AllHeroes.begin(), m_AllHeroes.end(), [](const auto& hero){ return hero->IsDead(); });
+        if (removeHeroes != m_AllHeroes.end()) {
+            m_AllHeroes.erase(removeHeroes, m_AllHeroes.end());
+            m_IsCacheDirty = true;
+        }
+
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
                 m_ProcessedDeadEnemies.erase(enemy.get());
@@ -369,6 +375,13 @@ namespace UGO::System {
         for (auto& drop : m_AllDrops) {
             drop->MoveTo(playerPos);
         }
+    }
+    
+    void BattleManager::ClearDrops(Util::Renderer& renderer) {
+        for (auto& drop : m_AllDrops) {
+            renderer.RemoveChild(drop->GetGameObject());
+        }
+        m_AllDrops.clear();
     }
 
     /* HACK: refactor

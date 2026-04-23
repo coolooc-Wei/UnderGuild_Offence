@@ -34,7 +34,7 @@ namespace Scene {
         ExpValue GetExpPackValue() const;
 
     private:
-        ExpValue m_ExpReward = 100.0f;
+        ExpValue m_ExpReward = 50.0f;
         float m_DropRate = 0.5f;          // 50% drop rate
         ExpValue m_ExpPackValue = 100.0f; // Value of dropped pack
     };

@@ -54,6 +54,25 @@ void UGO::App::Start() {
     m_ShowKillCount->SetVisible(true);
     m_Root.AddChild(m_ShowKillCount);
 
+    m_Win = std::make_shared<Util::GameObject>();
+    m_WinText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 50, "YOU WIN!",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_Win->SetDrawable(m_WinText);
+    m_Win->m_Transform.translation = {0.0f, -100.0f};
+    m_Win->SetVisible(false);
+    m_Root.AddChild(m_Win);
+
+    m_Lose = std::make_shared<Util::GameObject>();
+    m_LoseText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 50, "YOU LOSE!",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_Lose->SetDrawable(m_LoseText);
+    m_Lose->m_Transform.translation = {0.0f, -100.0f};
+    m_Lose->SetVisible(false);
+    m_Root.AddChild(m_Lose);
 
     // Change states
     ChangeGameState(GameState::GAMING);

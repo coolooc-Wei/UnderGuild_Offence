@@ -82,7 +82,7 @@ void UGO::App::Update() {
       );
 
       Scene::Character::CharacterParams heroParams;
-      heroParams.maxHP = 100000;
+      heroParams.maxHP = 3000;
       heroParams.attackPower = 30;
       heroParams.speed = 3.0f;
       heroParams.animation = heroAnimation;
@@ -90,7 +90,7 @@ void UGO::App::Update() {
       heroParams.drawableType = Scene::BasicObject::DrawableType::Animation;
       heroParams.size = {32.0f, 32.0f};
       Core::WorldPosition heroPos = {-300.0f, -300.0f};
-      heroParams.hitBox = std::make_unique<Core::CircleBox>(heroPos, 500.0f);
+      heroParams.hitBox = std::make_unique<Core::CircleBox>(heroPos, 32.0f);
       heroParams.isCollidable = true;
       heroParams.isHitBoxActive = true;
       heroParams.isHurtBoxActive = false;
@@ -106,7 +106,7 @@ void UGO::App::Update() {
 
       heroAnimation->Play();
       m_BattleManager.AddHero(std::move(heroParams), heroPos);
-
+      std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
       /*std::vector<std::string> enemyAnimationPath = {
         "../Resources/Image/character/enemy/Boss_1_1.png",
         "../Resources/Image/character/enemy/Boss_1_2.png",
@@ -116,7 +116,7 @@ void UGO::App::Update() {
       auto enemyAnimation = std::make_shared<Util::Animation>(
           enemyAnimationPath, false, 150, true, 150);
           
-      std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
+      
       
       Scene::Character::CharacterParams enemyParams1;
       enemyParams1.maxHP = 10000;
@@ -204,7 +204,7 @@ void UGO::App::Update() {
       };
       
       enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemyParams4), enemyPos4);
+      m_BattleManager.AddEnemy(std::move(enemyParams4), enemyPos4);*/
 
       std::vector<std::string> mercenaryAnimationPath = {
         "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
@@ -217,8 +217,8 @@ void UGO::App::Update() {
           mercenaryAnimationPath, false, 150, true, 150);
       Scene::Character::CharacterParams mercenaryParams;
       mercenaryParams.maxHP = 1000;
-      mercenaryParams.attackPower = 5;
-      mercenaryParams.speed = 7.0f;
+      mercenaryParams.attackPower = 10;
+      mercenaryParams.speed = 1.5f;
       mercenaryParams.animation = mercenaryAnimation; 
       mercenaryParams.drawableType = Scene::BasicObject::DrawableType::Animation;
       mercenaryParams.size = {32.0f, 32.0f};
@@ -233,8 +233,8 @@ void UGO::App::Update() {
         std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
       };
       
-      enemyAnimation->Play();
-      m_BattleManager.AddMercenary(std::move(mercenaryParams), mercenaryPos);*/
+      mercenaryAnimation->Play();
+      m_BattleManager.AddMercenary(std::move(mercenaryParams), mercenaryPos);
     }
 
     /* Use P temporarity instead of ESCAPE
@@ -281,6 +281,7 @@ void UGO::App::Update() {
     if (!heroes.empty()) {
         m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
     }
+    else { ChangeGameState(GameState::SETTLING);}
 
     m_BattleManager.AIUpdate();
     m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllEnemies());
@@ -292,7 +293,9 @@ void UGO::App::Update() {
     m_EffectAnimationManager.Update();
     m_EnemiesSpawnerSystem.Update();
     /* HACK: remove after demo */
-    m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
+    if (!m_BattleManager.GetAllHeroes().empty()) {
+        m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
+    }
     m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager.GetEnemyKillCount()));
     
     if (m_BattleManager.GetEnemyKillCount() >= 100) {
@@ -313,32 +316,41 @@ void UGO::App::Update() {
     Core::Time::AdvanceTick();
 
   } break;
-    case GameState::SETTLING: {
-        if (m_CurrentProgressState != App::GameState::SETTLING) {
-            m_CurrentProgressState = App::GameState::SETTLING;
-            m_EffectAnimationManager.Reset();
-        }
+  case GameState::SETTLING: {
+      if (m_CurrentProgressState != App::GameState::SETTLING) {
+          m_CurrentProgressState = App::GameState::SETTLING;
+          m_EffectAnimationManager.Reset();
+      }
 
-        m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
+      m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
 
-        // Keep updating drops so they can fly
-        auto heroes = m_BattleManager.GetAllHeroes();
-        if (!heroes.empty()) {
-            m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
-        }
+      // Keep updating drops so they can fly
+      auto heroes = m_BattleManager.GetAllHeroes();
+      if (!heroes.empty()) {
+          m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+      }
+      else{m_BattleManager.ClearDrops(m_Root);
+          m_EffectAnimationManager.Reset();
+          ChangeGameState(GameState::END);}
 
-        // Keep updating movement (transform sync) but NO AI/Keyboard update
-        m_BattleManager.UpdateMovement();
+      // Keep updating movement (transform sync) but NO AI/Keyboard update
+      m_BattleManager.UpdateMovement();
 
-        // Check for completion or timeout
-        if (m_BattleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
-            ChangeGameState(GameState::END);
-        }
+      // Check for completion or timeout
+      if (m_BattleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
+          ChangeGameState(GameState::END);
+      }
 
-        Core::Time::AdvanceTick();
-    }
-    break;
+      Core::Time::AdvanceTick();
+  } break;
   case GameState::END: {
+
+    if(m_BattleManager.GetEnemyKillCount() >= 100 && !m_BattleManager.GetAllHeroes().empty()) {
+        m_Win->SetVisible(true);
+    } else {
+        m_Lose->SetVisible(true);
+    }
+
     if (m_CurrentProgressState != App::GameState::END) {
       m_CurrentProgressState = App::GameState::END;
       for (auto chars : m_BattleManager.GetAllCharacters()) {

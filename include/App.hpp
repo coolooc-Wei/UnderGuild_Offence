@@ -59,6 +59,10 @@ private:
     std::shared_ptr<Util::Text> m_HPValueText;
     std::shared_ptr<Util::GameObject> m_ShowKillCount;
     std::shared_ptr<Util::Text> m_KillCountText;
+    std::shared_ptr<Util::GameObject> m_Win;
+    std::shared_ptr<Util::Text> m_WinText;
+    std::shared_ptr<Util::GameObject> m_Lose;
+    std::shared_ptr<Util::Text> m_LoseText;
     float m_SettlingTimer;
 
 
