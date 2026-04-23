@@ -25,7 +25,14 @@ namespace UGO::Scene {
     void Bot::OnDeath() { Character::OnDeath(); }
 
     void Bot::AIUpdate(const std::vector<Character*> &targets) {
-    // COUNTDOWN
+        // Find new target if current is lost or dead
+        if (m_Target == nullptr || m_Target->IsDead()) {
+            m_Target = nullptr;
+            FindTarget(targets);
+            m_TargetUpdateTimer = m_TARGET_UPDATE_INTERVAL;
+        }
+
+        // Regular periodic update
         if (m_TargetUpdateTimer <= 0) {
             FindTarget(targets);
             m_TargetUpdateTimer = m_TARGET_UPDATE_INTERVAL;
@@ -34,14 +41,10 @@ namespace UGO::Scene {
 
         // MOVING ACTION
         if (m_Target) {
-            if (m_Target->IsDead()) {
-                m_Target = nullptr;
-            } else {
-                Core::Velocity intendedMovement = m_Target->GetWorldPosition() - GetWorldPosition();
-                Core::Distance len = glm::length(intendedMovement);
-                if (len >= m_STOP_PURSUIT_DISTANCE) { SetIntendedMovement(glm::normalize(intendedMovement) * GetSpeed()); }
-                else { SetIntendedMovement({0.0f, 0.0f}); }
-            }
+            Core::Velocity intendedMovement = m_Target->GetWorldPosition() - GetWorldPosition();
+            Core::Distance len = glm::length(intendedMovement);
+            if (len >= m_STOP_PURSUIT_DISTANCE) { SetIntendedMovement(glm::normalize(intendedMovement) * GetSpeed()); }
+            else { SetIntendedMovement({0.0f, 0.0f}); }
         }
     }
 

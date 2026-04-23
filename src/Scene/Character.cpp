@@ -30,6 +30,8 @@ namespace UGO::Scene {
         m_StatusEffects = std::move(params.statusEffects);
         m_AttackAnimationData = params.attackAnimationData;
         m_DamageAnimationData = params.damageAnimationData;
+        m_IntentedMovement = {0.f, 0.f};
+        m_RepelMovement = {0.f, 0.f};
         BasicObject::Reset(std::move(params));
     }
 

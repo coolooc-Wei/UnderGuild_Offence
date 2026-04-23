@@ -61,6 +61,7 @@ namespace UGO::Scene {
         m_IsCollidable = params.isCollidable;
         m_IsHitBoxActive = params.isHitBoxActive;
         m_IsHurtBoxActive = params.isHurtBoxActive;
+        m_Dead = false;
         m_GameObject->SetVisible(params.isVisible);
     }
 

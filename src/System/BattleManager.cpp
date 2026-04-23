@@ -50,19 +50,25 @@ namespace UGO::System {
         m_AllAlliesCache.reserve(m_AllHeroes.size() + m_MercenaryPool.size());
 
         for (auto& hero: m_AllHeroes) {
-            m_AllHeroesCache.push_back(hero.get());
-            m_AllCharactersCache.push_back(hero.get());
-            m_AllAlliesCache.push_back(hero.get());
+            if (hero) {
+                m_AllHeroesCache.push_back(hero.get());
+                m_AllCharactersCache.push_back(hero.get());
+                m_AllAlliesCache.push_back(hero.get());
+            }
         }
         for (auto& enemy: m_EnemyPool) {
-            m_AllEnemiesCache.push_back(enemy.get());
-            m_AllEnemiesAsCharacterCache.push_back(enemy.get());
-            m_AllCharactersCache.push_back(enemy.get());
+            if (enemy) {
+                m_AllEnemiesCache.push_back(enemy.get());
+                m_AllEnemiesAsCharacterCache.push_back(enemy.get());
+                m_AllCharactersCache.push_back(enemy.get());
+            }
         }
         for (auto& mercenary: m_MercenaryPool) {
-            m_AllMercenariesCache.push_back(mercenary.get());
-            m_AllCharactersCache.push_back(mercenary.get());
-            m_AllAlliesCache.push_back(mercenary.get());
+            if (mercenary) {
+                m_AllMercenariesCache.push_back(mercenary.get());
+                m_AllCharactersCache.push_back(mercenary.get());
+                m_AllAlliesCache.push_back(mercenary.get());
+            }
         }
     }
 

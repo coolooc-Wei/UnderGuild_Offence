@@ -63,7 +63,7 @@ namespace UGO::System {
             rawEnemy,
             [this](Scene::Enemy* enemy) {
                 if (enemy) {
-                    if (auto gameObject = enemy->GetGameObject()) { gameObject->SetVisible(true); }
+                    if (auto gameObject = enemy->GetGameObject()) { gameObject->SetVisible(false); }
                     m_Enemies.push_back(std::unique_ptr<Scene::Enemy>(enemy));
                 }
             }
