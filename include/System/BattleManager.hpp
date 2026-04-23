@@ -48,6 +48,8 @@ namespace System {
         void ProcessEnemyDeaths(Util::Renderer& renderer);
         void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer);
 
+        int GetEnemyKillCount() const { return m_EnemyKillCount; }
+
         void AIUpdate();
         void UpdateMovement();
         void UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer);
@@ -73,6 +75,7 @@ namespace System {
         std::unordered_set<Scene::Enemy*> m_ProcessedDeadEnemies;
 
         int m_LevelUpIconCount = 0;
+        int m_EnemyKillCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;
         CharacterFactory& m_CharacterFactory;
         const Core::Distance m_offsetDis = 32.0f;

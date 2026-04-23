@@ -5,7 +5,7 @@
 namespace UGO::System {
 
     EnemiesSpawnerSystem::EnemiesSpawnerSystem(BattleManager& battleManager, EffectAnimationManager& effectAnimationManager)
-    : m_BattleManager(battleManager), m_EffectAnimationManager(effectAnimationManager), m_SpawnTimer(Core::Time::CountDownTimer(10.0f)) {
+    : m_BattleManager(battleManager), m_EffectAnimationManager(effectAnimationManager), m_SpawnTimer(Core::Time::CountDownTimer(5.0f)) {
         std::ifstream enemyDatabaseFile("../Resources/json/enemy.json");
         assert(enemyDatabaseFile.is_open());
         enemyDatabaseFile >> m_EnemyDatabase;

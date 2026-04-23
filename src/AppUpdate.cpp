@@ -83,7 +83,7 @@ void UGO::App::Update() {
 
       Scene::Character::CharacterParams heroParams;
       heroParams.maxHP = 100000;
-      heroParams.attackPower = 10;
+      heroParams.attackPower = 30;
       heroParams.speed = 3.0f;
       heroParams.animation = heroAnimation;
       heroParams.image = std::make_shared<Util::Image>("../Resources/Image/character/hero/Hero_101_1.png");
@@ -107,7 +107,7 @@ void UGO::App::Update() {
       heroAnimation->Play();
       m_BattleManager.AddHero(std::move(heroParams), heroPos);
 
-      std::vector<std::string> enemyAnimationPath = {
+      /*std::vector<std::string> enemyAnimationPath = {
         "../Resources/Image/character/enemy/Boss_1_1.png",
         "../Resources/Image/character/enemy/Boss_1_2.png",
         "../Resources/Image/character/enemy/Boss_1_3.png",
@@ -234,7 +234,7 @@ void UGO::App::Update() {
       };
       
       enemyAnimation->Play();
-      m_BattleManager.AddMercenary(std::move(mercenaryParams), mercenaryPos);
+      m_BattleManager.AddMercenary(std::move(mercenaryParams), mercenaryPos);*/
     }
 
     /* Use P temporarity instead of ESCAPE
@@ -293,6 +293,18 @@ void UGO::App::Update() {
     m_EnemiesSpawnerSystem.Update();
     /* HACK: remove after demo */
     m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
+    m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager.GetEnemyKillCount()));
+    
+    if (m_BattleManager.GetEnemyKillCount() >= 100) {
+        // Collect all remaining drops at level end
+        auto heroes = m_BattleManager.GetAllHeroes();
+        if (!heroes.empty()) {
+            m_BattleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+        }
+
+        m_SettlingTimer = 0.0f;
+        ChangeGameState(GameState::SETTLING);
+    }
     /* END HACK */
     
     /* DO NOT DELETE THIS LINE.

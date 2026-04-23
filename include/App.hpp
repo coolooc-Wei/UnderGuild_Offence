@@ -57,6 +57,8 @@ private:
     std::unique_ptr<Scene::BasicObject> m_Background;
     std::shared_ptr<Util::GameObject> m_ShowHp;
     std::shared_ptr<Util::Text> m_HPValueText;
+    std::shared_ptr<Util::GameObject> m_ShowKillCount;
+    std::shared_ptr<Util::Text> m_KillCountText;
     float m_SettlingTimer;
 
 

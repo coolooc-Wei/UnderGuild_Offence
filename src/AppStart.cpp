@@ -40,9 +40,19 @@ void UGO::App::Start() {
         Util::Color::FromName(Util::Colors::RED)
     );
     m_ShowHp->SetDrawable(m_HPValueText);
-    m_ShowHp->m_Transform.translation = {-580.0f, -300.0f};
+    m_ShowHp->m_Transform.translation = {0.0f, -300.0f};
     m_ShowHp->SetVisible(true);
     m_Root.AddChild(m_ShowHp);
+
+    m_ShowKillCount = std::make_shared<Util::GameObject>();
+    m_KillCountText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 30, "Kills: 0",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_ShowKillCount->SetDrawable(m_KillCountText);
+    m_ShowKillCount->m_Transform.translation = {0.0f, -340.0f};
+    m_ShowKillCount->SetVisible(true);
+    m_Root.AddChild(m_ShowKillCount);
 
 
     // Change states

@@ -166,7 +166,7 @@ namespace UGO::System {
                         Scene::Character::CharacterParams params;
                         params.maxHP = 1000;
                         params.attackPower = 5;
-                        params.speed = 7.0f;
+                        params.speed = 3.0f;
                         params.animation = mercenaryAnimation; 
                         params.drawableType = Scene::BasicObject::DrawableType::Animation;
                         params.size = {32.0f, 32.0f};
@@ -306,7 +306,13 @@ namespace UGO::System {
     }
 
     void BattleManager::Update() {
-        auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [](const auto& enemy){ return enemy->IsDead(); });
+        auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
+            if (enemy->IsDead()) {
+                m_ProcessedDeadEnemies.erase(enemy.get());
+                return true;
+            }
+            return false;
+        });
         if (removeEnemies != m_EnemyPool.end()) {
             m_EnemyPool.erase(removeEnemies, m_EnemyPool.end());
             m_IsCacheDirty = true;
@@ -366,6 +372,7 @@ namespace UGO::System {
                 if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
                     SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue(), renderer);
                 }
+                m_EnemyKillCount++;
                 m_ProcessedDeadEnemies.insert(enemy);
             }
         }
