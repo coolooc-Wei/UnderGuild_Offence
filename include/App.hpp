@@ -59,10 +59,11 @@ private:
     std::shared_ptr<Util::Text> m_HPValueText;
     std::shared_ptr<Util::GameObject> m_ShowKillCount;
     std::shared_ptr<Util::Text> m_KillCountText;
-    std::shared_ptr<Util::GameObject> m_Win;
-    std::shared_ptr<Util::Text> m_WinText;
-    std::shared_ptr<Util::GameObject> m_Lose;
-    std::shared_ptr<Util::Text> m_LoseText;
+    std::shared_ptr<Scene::BasicObject> m_Win;
+    std::shared_ptr<Scene::BasicObject> m_Lose;
+    std::shared_ptr<Scene::BasicObject> m_WinIcon;
+    std::shared_ptr<Scene::BasicObject> m_LoseIcon;
+    std::shared_ptr<Scene::BasicObject> m_WinLoseBackground;
     float m_SettlingTimer;
 
 

@@ -29,7 +29,6 @@ void UGO::App::Start() {
     m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
     m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Background->SetSize(864, 480); // 480p(16:9) but 854 is not divisible by 32
-
     m_Background->GetGameObject()->SetZIndex(-10.0f);
     m_Background->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Background->GetGameObject());
@@ -54,28 +53,51 @@ void UGO::App::Start() {
     m_ShowKillCount->SetVisible(true);
     m_Root.AddChild(m_ShowKillCount);
 
-    m_Win = std::make_shared<Util::GameObject>();
-    m_WinText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 50, "YOU WIN!",
-        Util::Color::FromName(Util::Colors::WHITE)
-    );
-    m_Win->SetDrawable(m_WinText);
-    m_Win->m_Transform.translation = {0.0f, -100.0f};
-    m_Win->SetVisible(false);
-    m_Root.AddChild(m_Win);
+    m_Win = std::make_shared<Scene::BasicObject>();
+    m_Win->SetImage("../Resources/Image/title/Title_Win.png");
+    m_Win->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Win->SetSize(200.0f, 100.0f);
+    m_Win->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
+    m_Win->GetGameObject()->SetVisible(false);
+    m_Root.AddChild(m_Win->GetGameObject());
 
-    m_Lose = std::make_shared<Util::GameObject>();
-    m_LoseText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 50, "YOU LOSE!",
-        Util::Color::FromName(Util::Colors::WHITE)
-    );
-    m_Lose->SetDrawable(m_LoseText);
-    m_Lose->m_Transform.translation = {0.0f, -100.0f};
-    m_Lose->SetVisible(false);
-    m_Root.AddChild(m_Lose);
+    m_Lose = std::make_shared<Scene::BasicObject>();
+    m_Lose->SetImage("../Resources/Image/title/Title_Lose.png");
+    m_Lose->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Lose->SetSize(200.0f, 100.0f);
+    m_Lose->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
+    m_Lose->GetGameObject()->SetVisible(false);
+    m_Root.AddChild(m_Lose->GetGameObject());
+
+    m_WinLoseBackground = std::make_shared<Scene::BasicObject>();
+    m_WinLoseBackground->SetImage("../Resources/Image/background/Long_Bg_1.png");
+    m_WinLoseBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_WinLoseBackground->SetSize(300.0f, 604.5f);
+    m_WinLoseBackground->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
+    m_WinLoseBackground->GetGameObject()->SetZIndex(-5.0f);
+    m_WinLoseBackground->GetGameObject()->SetVisible(false);
+    m_Root.AddChild(m_WinLoseBackground->GetGameObject());
+
+    m_LoseIcon = std::make_shared<Scene::BasicObject>();
+    m_LoseIcon->SetImage("../Resources/Image/buffimage/Image_Defeat.png");
+    m_LoseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_LoseIcon->SetSize(150.0f, 150.0f);
+    m_LoseIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
+    m_LoseIcon->GetGameObject()->SetZIndex(1.0f);
+    m_LoseIcon->GetGameObject()->SetVisible(false);
+    m_Root.AddChild(m_LoseIcon->GetGameObject());
+
+    m_WinIcon = std::make_shared<Scene::BasicObject>();
+    m_WinIcon->SetImage("../Resources/Image/buffimage/Icon_BuffImage_1.png");
+    m_WinIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_WinIcon->SetSize(150.0f, 150.0f);
+    m_WinIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
+    m_WinIcon->GetGameObject()->SetZIndex(1.0f);
+    m_WinIcon->GetGameObject()->SetVisible(false);
+    m_Root.AddChild(m_WinIcon->GetGameObject());
 
     // Change states
-    ChangeGameState(GameState::GAMING);
+    ChangeGameState(GameState::WELCOME);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position

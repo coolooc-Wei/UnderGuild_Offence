@@ -346,9 +346,13 @@ void UGO::App::Update() {
   case GameState::END: {
 
     if(m_BattleManager.GetEnemyKillCount() >= 100 && !m_BattleManager.GetAllHeroes().empty()) {
-        m_Win->SetVisible(true);
+        m_Win->GetGameObject()->SetVisible(true);
+        m_WinIcon->GetGameObject()->SetVisible(true);
+        m_WinLoseBackground->GetGameObject()->SetVisible(true);
     } else {
-        m_Lose->SetVisible(true);
+        m_Lose->GetGameObject()->SetVisible(true);
+        m_LoseIcon->GetGameObject()->SetVisible(true);
+        m_WinLoseBackground->GetGameObject()->SetVisible(true);
     }
 
     if (m_CurrentProgressState != App::GameState::END) {
