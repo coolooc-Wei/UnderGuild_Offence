@@ -6,6 +6,7 @@ namespace UGO::Core {
     /* TODO: Change when map size is determined
     */
     namespace Map {
+        /* HACK: Hardcode map size */
         GridPosition g_MapGridSize = {
             // WINDOW_WIDTH / TILE_SIZE,
             // WINDOW_HEIGHT / TILE_SIZE

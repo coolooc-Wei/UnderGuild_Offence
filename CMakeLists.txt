@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 project(underguild_offense)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES OFF)
 
 cmake_policy(SET CMP0135 NEW)
 
@@ -20,7 +22,13 @@ FetchContent_Declare(
     SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/PTSD
 )
 
-FetchContent_MakeAvailable(ptsd)
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+    URL_HASH SHA256=d6c65aca6b1ed68e7a182f4757257b107ae403032760ed6ef121c9d55e81757d
+)
+
+FetchContent_MakeAvailable(ptsd json)
 
 include(files.cmake)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
@@ -53,8 +61,12 @@ endif()
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${DEPENDENCY_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/PTSD/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${json_SOURCE_DIR}/include)
 
 target_link_libraries(${PROJECT_NAME}
     SDL2::SDL2main
     PTSD
+    nlohmann_json::nlohmann_json
 )
+
+set(FETCHCONTENT_QUIET FALSE)

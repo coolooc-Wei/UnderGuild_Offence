@@ -290,6 +290,7 @@ void UGO::App::Update() {
     m_BattleManager.ProcessEnemyDeaths(m_Root);
     m_BattleManager.Update();
     m_EffectAnimationManager.Update();
+    m_EnemiesSpawnerSystem.Update();
     /* HACK: remove after demo */
     m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
     /* END HACK */

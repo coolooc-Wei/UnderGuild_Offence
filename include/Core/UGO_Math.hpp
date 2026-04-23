@@ -36,6 +36,13 @@ namespace Core {
         return dis(gen);
     }
 
+    inline int RandomInt(int min, int max) {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dis(min, max - 1);
+        return dis(gen);
+    }
+
 } // namespace Core
 } // namespace UGO
 
