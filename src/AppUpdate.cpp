@@ -316,6 +316,7 @@ void UGO::App::Update() {
     case GameState::SETTLING: {
         if (m_CurrentProgressState != App::GameState::SETTLING) {
             m_CurrentProgressState = App::GameState::SETTLING;
+            m_EffectAnimationManager.Reset();
         }
 
         m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;

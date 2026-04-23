@@ -25,6 +25,8 @@ namespace System {
 
         std::shared_ptr<Util::GameObject> CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount);
 
+        void Reset();
+
     private:
         std::vector<std::shared_ptr<Scene::EffectAnimation>> m_pool;
         int m_OnUseAmount = 0;

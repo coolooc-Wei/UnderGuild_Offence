@@ -84,4 +84,16 @@ namespace UGO::System {
         return m_damageTextPool[m_DamageTextOnUseAmount-1];
     }
 
+    void EffectAnimationManager::Reset() {
+        for (int i=0; i < m_OnUseAmount; ++i) {
+            m_pool[i]->End();
+        }
+        m_OnUseAmount = 0;
+
+        for (int i=0; i < m_DamageTextOnUseAmount; ++i) {
+            m_damageTextPool[i]->End();
+        }
+        m_DamageTextOnUseAmount = 0;
+    }
+
 }
