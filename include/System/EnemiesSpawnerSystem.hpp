@@ -22,7 +22,10 @@ namespace System {
         };
 
 
-        EnemiesSpawnerSystem(BattleManager& m_BattleManager, EffectAnimationManager& m_EffectAnimationManager);
+        EnemiesSpawnerSystem(
+            BattleManager& m_BattleManager,
+            EffectAnimationManager& m_EffectAnimationManager
+        );
         ~EnemiesSpawnerSystem();
 
         void Update();
@@ -32,12 +35,9 @@ namespace System {
          */
         void RandomSpawnEnemy(const int minAmount = -1, const int maxAmount = -1);
 
-        Scene::Character::CharacterParams GetEnemyParams(const std::string& enemyID);
-
     private:
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
-        nlohmann::json m_EnemyDatabase;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
 
         Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(8.0f);

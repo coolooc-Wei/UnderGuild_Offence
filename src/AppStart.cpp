@@ -1,13 +1,21 @@
 #include "App.hpp"
-/* TODO: Remove these lines after testing
-*/
-#include "Scene/Hero.hpp"
-#include "Scene/Enemy.hpp"
-#include "Scene/Character.hpp"
+
+#include "System/BattleManager.hpp"
+#include "System/SteeringSystem.hpp"
+#include "System/CharacterFactory.hpp"
+#include "System/EffectAnimationManager.hpp"
+#include "System/EnemiesSpawnerSystem.hpp"
+
 
 
 void UGO::App::Start() {
     LOG_TRACE("Start");
+
+    m_SteeringSystem = std::make_unique<System::SteeringSystem>();
+    m_EffectAnimationManager = std::make_unique<System::EffectAnimationManager>(m_Root);
+    m_CharacterFactory = std::make_unique<System::CharacterFactory>(m_Root);
+    m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, m_Root);
+    m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -97,7 +105,7 @@ void UGO::App::Start() {
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
     // Change states
-    ChangeGameState(GameState::WELCOME);
+    ChangeGameState(GameState::GAMING);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position

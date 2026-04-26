@@ -7,17 +7,22 @@
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
-#include "System/BattleManager.hpp"
-#include "System/SteeringSystem.hpp"
-#include "System/CharacterFactory.hpp"
-#include "System/EffectAnimationManager.hpp"
-#include "System/EnemiesSpawnerSystem.hpp"
 
+namespace UGO::System {
+    class BattleManager;
+    class SteeringSystem;
+    class CharacterFactory;
+    class EffectAnimationManager;
+    class EnemiesSpawnerSystem;
+}
 
 namespace UGO {
 
 class App {
 public:
+    App();
+    ~App();
+
     enum class State {
         START,
         UPDATE,
@@ -68,11 +73,11 @@ private:
 
 
     // Register Systems
-    System::SteeringSystem m_SteeringSystem = System::SteeringSystem();
-    System::EffectAnimationManager m_EffectAnimationManager = System::EffectAnimationManager(m_Root);
-    System::CharacterFactory m_CharacterFactory = System::CharacterFactory(m_Root);
-    System::BattleManager m_BattleManager = System::BattleManager(m_EffectAnimationManager, m_CharacterFactory);
-    System::EnemiesSpawnerSystem m_EnemiesSpawnerSystem = System::EnemiesSpawnerSystem(m_BattleManager, m_EffectAnimationManager);
+    std::unique_ptr<System::SteeringSystem> m_SteeringSystem;
+    std::unique_ptr<System::EffectAnimationManager> m_EffectAnimationManager;
+    std::unique_ptr<System::CharacterFactory> m_CharacterFactory;
+    std::unique_ptr<System::BattleManager> m_BattleManager;
+    std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
 
 
 

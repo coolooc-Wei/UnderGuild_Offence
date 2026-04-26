@@ -1,60 +1,28 @@
 #include "App.hpp"
-#include "Core/Coordinate.hpp"
-#include "Graphics/Camera.hpp"
-#include "Scene/BasicObject.hpp"
+
+#include "System/BattleManager.hpp"
+#include "System/SteeringSystem.hpp"
+#include "System/CharacterFactory.hpp"
+#include "System/EffectAnimationManager.hpp"
+#include "System/EnemiesSpawnerSystem.hpp"
+
 #include "Scene/ExpPack.hpp"
-#include "UI/Page.hpp"
-#include <memory>
-#include <glm/geometric.hpp>
-
-#include "Util/Image.hpp"
-#include "Util/Input.hpp"
-#include "Util/Keycode.hpp"
-#include "Util/Logger.hpp"
-
-/* TODO: Remove this after testing
- */
-class TestObject : public UGO::Scene::BasicObject {
-public:
-  TestObject() = default;
-  ~TestObject() = default;
-
-  // System methods
-  void Update() override {};
-  void OnDraw() override {};
-
-  // Events
-  void OnAttack() {};
-  void OnDeath() {};
-};
 
 void UGO::App::Update() {
   switch (m_CurrentGameState) {
   case GameState::WELCOME: {
-    if (m_CurrentProgressState != App::GameState::WELCOME) {
-      m_CurrentProgressState = App::GameState::WELCOME;
-    }
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
       ChangeGameState(GameState::MENU);
     }
   } break;
   case GameState::MENU: {
-    if (m_CurrentProgressState != App::GameState::MENU) {
-      m_CurrentProgressState = App::GameState::MENU;
-    }
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
       ChangeGameState(GameState::GAMING);
     }
   } break;
   case GameState::PAUSE: {
-    if (m_CurrentProgressState != App::GameState::PAUSE) {
-      m_CurrentProgressState = App::GameState::PAUSE;
-      for (auto chars : m_BattleManager.GetAllCharacters()) {
-        chars->GetGameObject()->SetVisible(false);
-      }
-    }
     // Use P temporarity instead of ESCAPE
     if (Util::Input::IsKeyDown(Util::Keycode::P)) {
       ChangeGameState(GameState::GAMING);
@@ -62,180 +30,6 @@ void UGO::App::Update() {
 
   } break;
   case GameState::GAMING: {
-    if (m_CurrentProgressState != App::GameState::GAMING) {
-      m_CurrentProgressState = App::GameState::GAMING;
-      for (auto chars : m_BattleManager.GetAllCharacters()) {
-        chars->GetGameObject()->SetVisible(true);
-      }
-      /* HACK: Remove these lines after testing
-      */
-      std::vector<std::string> heroAnimationPath = {
-        "../Resources/Image/character/hero/Hero_101_1.png",
-        "../Resources/Image/character/hero/Hero_101_2.png",
-        "../Resources/Image/character/hero/Hero_101_3.png",
-        "../Resources/Image/character/hero/Hero_101_4.png",
-        "../Resources/Image/character/hero/Hero_101_5.png",
-        "../Resources/Image/character/hero/Hero_101_6.png",
-      };
-      auto heroAnimation = std::make_shared<Util::Animation>(
-          heroAnimationPath, false, 150, true, 150
-      );
-
-      Scene::Character::CharacterParams heroParams;
-      heroParams.maxHP = 3000;
-      heroParams.attackPower = 30;
-      heroParams.speed = 3.0f;
-      heroParams.animation = heroAnimation;
-      heroParams.image = std::make_shared<Util::Image>("../Resources/Image/character/hero/Hero_101_1.png");
-      heroParams.drawableType = Scene::BasicObject::DrawableType::Animation;
-      heroParams.size = {32.0f, 32.0f};
-      Core::WorldPosition heroPos = {-300.0f, -300.0f};
-      heroParams.hitBox = std::make_unique<Core::CircleBox>(heroPos, 32.0f);
-      heroParams.isCollidable = true;
-      heroParams.isHitBoxActive = true;
-      heroParams.isHurtBoxActive = false;
-      heroParams.isVisible = true;
-      heroParams.attackCooldown = 1.0f;
-      heroParams.invincibleDuration = 1.0f;
-
-      std::vector<std::string> attackAnimationPath = {"../Resources/Image/weapon/Weapon_021_Ef1.png"};
-      heroParams.attackAnimationData = Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(attackAnimationPath, false, 150, false, 150), 0.1f, true,
-        0.0f, {32.0f, 32.0f}
-      };
-
-      heroAnimation->Play();
-      m_BattleManager.AddHero(std::move(heroParams), heroPos);
-      std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
-      /*std::vector<std::string> enemyAnimationPath = {
-        "../Resources/Image/character/enemy/Boss_1_1.png",
-        "../Resources/Image/character/enemy/Boss_1_2.png",
-        "../Resources/Image/character/enemy/Boss_1_3.png",
-        "../Resources/Image/character/enemy/Boss_1_4.png",
-      };
-      auto enemyAnimation = std::make_shared<Util::Animation>(
-          enemyAnimationPath, false, 150, true, 150);
-          
-      
-      
-      Scene::Character::CharacterParams enemyParams1;
-      enemyParams1.maxHP = 10000;
-      enemyParams1.attackPower = 10;
-      enemyParams1.speed = 3.0f;
-      enemyParams1.animation = enemyAnimation;
-      enemyParams1.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
-      enemyParams1.drawableType = Scene::BasicObject::DrawableType::Animation;
-      enemyParams1.size = {32.0f, 32.0f};
-      Core::WorldPosition enemyPos1 = {300.0f, 300.0f};
-      enemyParams1.hitBox = std::make_unique<Core::RectangleBox>(enemyPos1, 32.0f, 32.0f);
-      enemyParams1.isCollidable = true;
-      enemyParams1.isHitBoxActive = true;
-      enemyParams1.isHurtBoxActive = true;
-      enemyParams1.isVisible = true;
-      enemyParams1.attackCooldown = 1000.0f;
-      enemyParams1.damageAnimationData = Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      };
-
-      enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemyParams1), enemyPos1);
-
-      Scene::Character::CharacterParams enemyParams2;
-      enemyParams2.maxHP = 10000;
-      enemyParams2.attackPower = 10;
-      enemyParams2.speed = 3.0f;
-      enemyParams2.animation = enemyAnimation;
-      enemyParams2.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
-      enemyParams2.drawableType = Scene::BasicObject::DrawableType::Animation;
-      enemyParams2.size = {32.0f, 32.0f};
-      Core::WorldPosition enemyPos2 = {-100.0f, 79.0f};
-      enemyParams2.hitBox = std::make_unique<Core::RectangleBox>(enemyPos2, 64.0f, 64.0f);
-      enemyParams2.isCollidable = true;
-      enemyParams2.isHitBoxActive = true;
-      enemyParams2.isHurtBoxActive = true;
-      enemyParams2.isVisible = true;
-      enemyParams2.attackCooldown = 5.0f;
-      enemyParams2.damageAnimationData = Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      };
-      
-      enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemyParams2), enemyPos2);
-
-      Scene::Character::CharacterParams enemyParams3;
-      enemyParams3.maxHP = 10000;
-      enemyParams3.attackPower = 10;
-      enemyParams3.speed = 3.0f;
-      enemyParams3.animation = enemyAnimation;
-      enemyParams3.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
-      enemyParams3.drawableType = Scene::BasicObject::DrawableType::Animation;
-      enemyParams3.size = {32.0f, 32.0f};
-      Core::WorldPosition enemyPos3 = {200.0f, 0.0f};
-      enemyParams3.hitBox = std::make_unique<Core::RectangleBox>(enemyPos3, 64.0f, 64.0f);
-      enemyParams3.isCollidable = true;
-      enemyParams3.isHitBoxActive = true;
-      enemyParams3.isHurtBoxActive = true;
-      enemyParams3.isVisible = true;
-      enemyParams3.attackCooldown = 5.0f;
-      enemyParams3.damageAnimationData = Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      };
-      
-      enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemyParams3), enemyPos3);
-
-      Scene::Character::CharacterParams enemyParams4;
-      enemyParams4.maxHP = 10000;
-      enemyParams4.attackPower = 10;
-      enemyParams4.speed = 3.0f;
-      enemyParams4.animation = enemyAnimation;
-      enemyParams4.image = std::make_shared<Util::Image>("../Resources/Image/character/enemy/Boss_1_1.png");
-      enemyParams4.drawableType = Scene::BasicObject::DrawableType::Animation;
-      enemyParams4.size = {32.0f, 32.0f};
-      Core::WorldPosition enemyPos4 = {-300.0f, 0.0f};
-      enemyParams4.hitBox = std::make_unique<Core::RectangleBox>(enemyPos4, 64.0f, 64.0f);
-      enemyParams4.isCollidable = true;
-      enemyParams4.isHitBoxActive = true;
-      enemyParams4.isHurtBoxActive = true;
-      enemyParams4.isVisible = true;
-      enemyParams4.attackCooldown = 5.0f;
-      enemyParams4.damageAnimationData = Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      };
-      
-      enemyAnimation->Play();
-      m_BattleManager.AddEnemy(std::move(enemyParams4), enemyPos4);*/
-
-      std::vector<std::string> mercenaryAnimationPath = {
-        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
-        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_2.png",
-        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_3.png",
-        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_4.png",
-        "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_5.png",
-      };
-      auto mercenaryAnimation = std::make_shared<Util::Animation>(
-          mercenaryAnimationPath, false, 150, true, 150);
-      Scene::Character::CharacterParams mercenaryParams;
-      mercenaryParams.maxHP = 1000;
-      mercenaryParams.attackPower = 10;
-      mercenaryParams.speed = 1.5f;
-      mercenaryParams.animation = mercenaryAnimation; 
-      mercenaryParams.drawableType = Scene::BasicObject::DrawableType::Animation;
-      mercenaryParams.size = {32.0f, 32.0f};
-      Core::WorldPosition mercenaryPos = {-50.0f, -50.0f};
-      mercenaryParams.hitBox = std::make_unique<Core::RectangleBox>(mercenaryPos, 64.0f, 64.0f);
-      mercenaryParams.isCollidable = true;
-      mercenaryParams.isHitBoxActive = true;
-      mercenaryParams.isHurtBoxActive = true;
-      mercenaryParams.isVisible = true;
-      mercenaryParams.attackCooldown = 3.0f;
-      mercenaryParams.damageAnimationData = Scene::Character::EffectAnimationData{
-        std::make_shared<Util::Animation>(damageAnimationPath, false, 150, false, 150), 0.05f, true
-      };
-      
-      mercenaryAnimation->Play();
-      m_BattleManager.AddMercenary(std::move(mercenaryParams), mercenaryPos);
-    }
 
     /* Use P temporarity instead of ESCAPE
      */
@@ -245,15 +39,15 @@ void UGO::App::Update() {
     else if (Util::Input::IsKeyDown(Util::Keycode::G)) {
 
         // Collect all remaining drops at level end
-        auto heroes = m_BattleManager.GetAllHeroes();
+        auto heroes = m_BattleManager->GetAllHeroes();
         if (!heroes.empty()) {
-            m_BattleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+            m_BattleManager->CollectAllDrops(heroes[0]->GetWorldPosition());
         }
 
         m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }
-    
+
     // Test Spawn ExpPack
     /* HACK: Remove after testing
     */
@@ -264,12 +58,12 @@ void UGO::App::Update() {
         expPack->SetSize(16, 16);
         expPack->SetWorldPosition({0.0f, 0.0f});
         expPack->GetGameObject()->SetVisible(true);
-        m_BattleManager.AddDrop(std::move(expPack), m_Root);
+        m_BattleManager->AddDrop(std::move(expPack));
         LOG_INFO("Spawned ExpPack at (0, 0)!");
     }
 
     if (Util::Input::IsKeyDown(Util::Keycode::E)) { // Press E to grant exp directly
-        m_BattleManager.GrantExpToHero(100.0f, m_Root);
+        m_BattleManager->GrantExpToHero(100.0f);
         LOG_INFO("Granted 250 EXP to Hero via BattleManager!");
     }
     // END TODO
@@ -277,32 +71,24 @@ void UGO::App::Update() {
     // Update Drops (Pickup and Magnetic logic)
     /* HACK: Remove after testing
     */
-    auto heroes = m_BattleManager.GetAllHeroes();
-    if (!heroes.empty()) {
-        m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
-    }
-    else { ChangeGameState(GameState::SETTLING);}
+    auto heroes = m_BattleManager->GetAllHeroes();
+    if (!heroes.empty()) { m_BattleManager->UpdateDrops(heroes[0]->GetWorldPosition()); }
+    else { ChangeGameState(GameState::SETTLING); }
 
-    m_BattleManager.AIUpdate();
-    m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllEnemies());
-    m_SteeringSystem.AdjustMovement(m_BattleManager.GetAllMercenaries());
-    m_BattleManager.UpdateMovement();
-    m_BattleManager.Attack();
-    m_BattleManager.ProcessEnemyDeaths(m_Root);
-    m_BattleManager.Update();
-    m_EffectAnimationManager.Update();
-    m_EnemiesSpawnerSystem.Update();
+    m_BattleManager->UpdateSystem();
+    m_EffectAnimationManager->Update();
+    m_EnemiesSpawnerSystem->Update();
     /* HACK: remove after demo */
-    if (!m_BattleManager.GetAllHeroes().empty()) {
-        m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager.GetAllHeroes()[0]->GetMaxHP()));
+    if (!m_BattleManager->GetAllHeroes().empty()) {
+        m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetMaxHP()));
     }
-    m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager.GetEnemyKillCount()));
+    m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
     
-    if (m_BattleManager.GetEnemyKillCount() >= 100) {
+    if (m_BattleManager->GetEnemyKillCount() >= 100) {
         // Collect all remaining drops at level end
-        auto heroes = m_BattleManager.GetAllHeroes();
+        auto heroes = m_BattleManager->GetAllHeroes();
         if (!heroes.empty()) {
-            m_BattleManager.CollectAllDrops(heroes[0]->GetWorldPosition());
+            m_BattleManager->CollectAllDrops(heroes[0]->GetWorldPosition());
         }
 
         m_SettlingTimer = 0.0f;
@@ -317,65 +103,35 @@ void UGO::App::Update() {
 
   } break;
   case GameState::SETTLING: {
-      if (m_CurrentProgressState != App::GameState::SETTLING) {
-          m_CurrentProgressState = App::GameState::SETTLING;
-          m_EffectAnimationManager.Reset();
-      }
-
       m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
 
       // Keep updating drops so they can fly
-      auto heroes = m_BattleManager.GetAllHeroes();
+      auto heroes = m_BattleManager->GetAllHeroes();
       if (!heroes.empty()) {
-          m_BattleManager.UpdateDrops(heroes[0]->GetWorldPosition(), m_Root);
+          m_BattleManager->UpdateDrops(heroes[0]->GetWorldPosition());
       }
-      else{m_BattleManager.ClearDrops(m_Root);
-          m_EffectAnimationManager.Reset();
-          ChangeGameState(GameState::END);}
+      else{
+        m_BattleManager->ClearDrops();
+        m_EffectAnimationManager->Reset();
+        ChangeGameState(GameState::END);
+      }
 
       // Keep updating movement (transform sync) but NO AI/Keyboard update
-      m_BattleManager.UpdateMovement();
+      m_BattleManager->UpdateMovement();
 
       // Check for completion or timeout
-      if (m_BattleManager.GetAllDrops().empty() || m_SettlingTimer >= 5.0f) {
-          ChangeGameState(GameState::END);
-      }
+      if (m_BattleManager->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
 
       Core::Time::AdvanceTick();
   } break;
   case GameState::END: {
-
-    if(m_BattleManager.GetEnemyKillCount() >= 100 && !m_BattleManager.GetAllHeroes().empty()) {
-        m_Win->GetGameObject()->SetVisible(true);
-        m_WinIcon->GetGameObject()->SetVisible(true);
-        m_WinLoseBackground->GetGameObject()->SetVisible(true);
-    } else {
-        m_Lose->GetGameObject()->SetVisible(true);
-        m_LoseIcon->GetGameObject()->SetVisible(true);
-        m_WinLoseBackground->GetGameObject()->SetVisible(true);
-    }
-
-    if (m_CurrentProgressState != App::GameState::END) {
-      m_CurrentProgressState = App::GameState::END;
-      for (auto chars : m_BattleManager.GetAllCharacters()) {
-        chars->GetGameObject()->SetVisible(false);
-      }
-      for (auto drop : m_BattleManager.GetAllDrops()) {
-        drop->GetGameObject()->SetVisible(false);
-      }
-      for (auto icon : m_BattleManager.GetAllIcons()) {
-        icon->GetGameObject()->SetVisible(false);
-      }
-    }
   } break;
   default: {} break;
   }
 
   /* HACK: Remove maybe
   */
-  if (m_Background) {
-      m_Background->Update();
-  }
+  if (m_Background) { m_Background->Update(); }
   
   m_Root.Update();
   /*

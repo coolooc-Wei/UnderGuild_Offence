@@ -1,0 +1,144 @@
+{
+    "EXAMPLE": {
+        "speed": {
+            "TYPE": "float",
+            "DEFAULT": 10.0
+        },
+        "drawableType": {
+            "TYPE": "string",
+            "VALUE": ["Animation", "Image", "None"]
+        },
+        "animationPath": {
+            "TYPE": "list<string>"
+        },
+        "imagePath": {
+            "TYPE": "list<string>"
+        },
+        "size": {
+            "width": {
+                "TYPE": "float",
+                "DEFAULT": 32.0
+            },
+            "height": {
+                "TYPE": "float",
+                "DEFAULT": 32.0
+            }
+        },
+        "hitBox": {
+            "type": {
+                "TYPE": "string",
+                "VALUE": ["CIRCLE", "RECTANGLE", "SECTOR"]
+            },
+            "type==CIRCLE": {
+                "radius": {
+                    "TYPE": "float",
+                    "DEFAULT": 32.0
+                }
+            },
+            "type==RECTANGLE": {
+                "width": {
+                    "TYPE": "float",
+                    "DEFAULT": 32.0
+                },
+                "height": {
+                    "TYPE": "float",
+                    "DEFAULT": 32.0
+                }
+            },
+            "type==SECTOR": {
+                "radius": {
+                    "TYPE": "float"
+                },
+                "angle": {
+                    "TYPE": "float"
+                },
+                "facing": {
+                    "x": {
+                        "TYPE": "float"
+                    },
+                    "y": {
+                        "TYPE": "float"
+                    }
+                }
+            }
+        },
+        "isCollidable": {
+            "TYPE": "bool",
+            "DEFAULT": true
+        },
+        "isHitBoxActive": {
+            "TYPE": "bool",
+            "DEFAULT": false
+        },
+        "isHurtBoxActive": {
+            "TYPE": "bool",
+            "DEFAULT": false
+        },
+        "maxHP": {
+            "TYPE": "float",
+            "DEFAULT": 100.0
+        },
+        "attackPower": {
+            "TYPE": "float",
+            "DEFAULT": 10.0
+        },
+        "attackCooldown": {
+            "TYPE": "float",
+            "DEFAULT": 1.0
+        },
+        "invincibleDuration": {
+            "TYPE": "float",
+            "DEFAULT": 0.5
+        },
+        "weapon": {
+            "TYPE": "objectID"
+        },
+        "statusEffects": {
+            "TYPE": "list<objectID>"
+        },
+        "attackAnimationData": {
+            "animationPath": {
+                "TYPE": "list<string>"
+            },
+            "duration": {
+                "TYPE": "float (Second)"
+            },
+            "isImage": {
+                "TYPE": "bool"
+            },
+            "offsetAngle": {
+                "TYPE": "float"
+            },
+            "size": {
+                "width": {
+                    "TYPE": "float"
+                },
+                "height": {
+                    "TYPE": "float"
+                }
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": {
+                "TYPE": "list<string>"
+            },
+            "duration": {
+                "TYPE": "float (Second)"
+            },
+            "isImage": {
+                "TYPE": "bool"
+            },
+            "offsetAngle": {
+                "TYPE": "float"
+            },
+            "size": {
+                "width": {
+                    "TYPE": "float"
+                },
+                "height": {
+                    "TYPE": "float"
+                }
+            }
+        }
+    }
+}

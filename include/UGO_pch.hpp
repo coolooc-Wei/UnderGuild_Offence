@@ -15,6 +15,8 @@
 #include <queue>
 #include <fstream>
 #include <random>
+#include <unordered_map>
+#include <glm/geometric.hpp>
 
 // PTSD includes
 #include "Util/GameObject.hpp"

@@ -10,14 +10,19 @@
 #include "Scene/Icon.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/CharacterFactory.hpp"
+#include "System/SteeringSystem.hpp"
 
 namespace UGO {
 namespace System {
 
     class BattleManager {
     public:
-
-        BattleManager(EffectAnimationManager& effectAnimationManager, CharacterFactory& characterFactor);
+        BattleManager(
+            EffectAnimationManager& effectAnimationManager,
+            CharacterFactory& characterFactor,
+            SteeringSystem& steeringSystem,
+            Util::Renderer& root
+        );
         ~BattleManager();
 
         void RebuildCaches() const;
@@ -34,27 +39,33 @@ namespace System {
 
 
         void AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
+        void AddHeroByID(const std::string& heroID, const Core::WorldPosition& position);
         void AddEnemy(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
+        void AddEnemyByID(const std::string& enemyID, const Core::WorldPosition& position);
         void AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
+        void AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position);
         /* TODO: removed after implementing UI system */
-        void AddIcon(std::unique_ptr<Scene::Icon> icon, Util::Renderer& renderer);
-        void AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer);
-        void AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer);
+        void AddIcon(std::unique_ptr<Scene::Icon> icon);
+        void AddPet(std::unique_ptr<Scene::BasicObject> pet);
+        void AddDrop(std::unique_ptr<Scene::Drop> drop);
 
 
-        void GrantExpToHero(Scene::ExpValue amount, Util::Renderer& renderer);
-        void SpawnLevelUpIcon(Util::Renderer& renderer);
+        void GrantExpToHero(Scene::ExpValue amount);
+        void SpawnLevelUpIcon();
         void CollectAllDrops(const Core::WorldPosition& playerPos);
-        void ClearDrops(Util::Renderer& renderer);
+        void ClearDrops();
 
-        void ProcessEnemyDeaths(Util::Renderer& renderer);
-        void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value, Util::Renderer& renderer);
+        void ProcessEnemyDeaths();
+        void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value);
 
         int GetEnemyKillCount() const { return m_EnemyKillCount; }
 
+        void UpdateSystem();
+        void SetAllObjectsVisible(bool visable);
+
         void AIUpdate();
         void UpdateMovement();
-        void UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer);
+        void UpdateDrops(const Core::WorldPosition& playerPos);
         void Attack();
         void Update();
 
@@ -81,6 +92,9 @@ namespace System {
         int m_EnemyKillCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;
         CharacterFactory& m_CharacterFactory;
+        SteeringSystem& m_SteeringSystem;
+        Util::Renderer& m_Root;
+
         const Core::Distance m_offsetDis = 32.0f;
 
     };
