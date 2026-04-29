@@ -16,8 +16,8 @@ namespace UGO::System {
         assert(heroDatabaseFile.is_open());
         heroDatabaseFile >> m_HeroDatabase;
 
-        const int InitialEnemyCount = 100;
-        const int InitialMercenaryCount = 50;
+        constexpr int InitialEnemyCount = 100;
+        constexpr int InitialMercenaryCount = 50;
 
         m_Enemies.reserve(InitialEnemyCount);
         m_Mercenaries.reserve(InitialMercenaryCount);
@@ -50,6 +50,9 @@ namespace UGO::System {
         return hero;
     }
 
+    /* TODO: Consolidate 'CreateEnemy' and 'CreateMercenary' into a template function if their logic remains identical.
+     *       For now, keep them as two diffirent versions as their requirements may diverge in the future.
+     */
     PooledCharacter<Scene::Enemy> CharacterFactory::CreateEnemy(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         Scene::Enemy* rawEnemy = nullptr;
 

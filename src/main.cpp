@@ -4,6 +4,12 @@
 
 int main(int, char**) {
     auto context = Core::Context::GetInstance();
+
+/* To toggle debug log, run `cmake -DUGO_DISABLE_LOG_DEBUG=ON .` */
+#ifdef UGO_DISABLE_LOG_DEBUG
+    Util::Logger::SetLevel(Util::Logger::Level::INFO);
+#endif
+
     UGO::App app;
 
     while (!context->GetExit()) {

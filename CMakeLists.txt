@@ -51,8 +51,13 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 endif()
 
+option(UGO_DISABLE_LOG_DEBUG "Suppress LOG_DEBUG output at compile time" OFF)
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+    if(UGO_DISABLE_LOG_DEBUG)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE UGO_DISABLE_LOG_DEBUG)
+    endif()
 else()
     message(FATAL_ERROR "relative RESOURCE_DIR is WIP, Please use `-DCMAKE_BUILD_TYPE=Debug` build for now.")
     # target_compile_definitions(${PROJECT_NAME} PRIVATE RESOURCE_DIR="${CMAKE_INSTALL_PREFIX}/Resources")

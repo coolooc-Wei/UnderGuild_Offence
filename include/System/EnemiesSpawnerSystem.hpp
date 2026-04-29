@@ -39,6 +39,7 @@ namespace System {
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
+        std::shared_ptr<Util::Animation> m_WarningIndicatorAnim;
 
         Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(8.0f);
         Core::Time::Second m_WarningIndicatorDuration = 1.0f;

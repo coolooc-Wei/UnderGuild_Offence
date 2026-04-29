@@ -55,7 +55,6 @@ namespace System {
         void CollectAllDrops(const Core::WorldPosition& playerPos);
         void ClearDrops();
 
-        void ProcessEnemyDeaths();
         void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value);
 
         int GetEnemyKillCount() const { return m_EnemyKillCount; }
@@ -70,6 +69,15 @@ namespace System {
         void Update();
 
     private:
+        struct AttackEvent {
+            Scene::Character* Attacker;
+            Scene::Character* Victim;
+            float Damage;
+        };
+
+        std::vector<AttackEvent> DetectCollisions();
+        void ResolveAttacks(const std::vector<AttackEvent>& attackEvents);
+
         std::vector<std::unique_ptr<Scene::Hero>> m_AllHeroes; // only one hero (maybe~)
         std::vector<PooledCharacter<Scene::Enemy>> m_EnemyPool;
         std::vector<PooledCharacter<Scene::Mercenary>> m_MercenaryPool;
@@ -86,7 +94,6 @@ namespace System {
 
         std::vector<std::unique_ptr<Scene::Icon>> m_LevelUpIcons;
         std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
-        std::unordered_set<Scene::Enemy*> m_ProcessedDeadEnemies;
 
         int m_LevelUpIconCount = 0;
         int m_EnemyKillCount = 0;

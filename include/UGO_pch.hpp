@@ -26,6 +26,13 @@
 #include "Util/Renderer.hpp"
 #include "Util/Color.hpp"
 #include "Util/Logger.hpp"
+
+// Define UGO_DISABLE_LOG_DEBUG (e.g. in CMakeLists.txt) to silence LOG_DEBUG.
+#ifdef UGO_DISABLE_LOG_DEBUG
+#undef LOG_DEBUG
+#define LOG_DEBUG(...) (void)0
+#endif
+
 #include "Util/Time.hpp"
 #include "Util/Image.hpp"
 #include "Util/Animation.hpp"

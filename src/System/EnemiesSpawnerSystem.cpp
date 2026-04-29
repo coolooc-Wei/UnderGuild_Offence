@@ -5,7 +5,14 @@
 namespace UGO::System {
 
     EnemiesSpawnerSystem::EnemiesSpawnerSystem(BattleManager& battleManager, EffectAnimationManager& effectAnimationManager)
-    : m_BattleManager(battleManager), m_EffectAnimationManager(effectAnimationManager), m_SpawnTimer(Core::Time::CountDownTimer(8.0f)) {
+    : m_BattleManager(battleManager),
+      m_EffectAnimationManager(effectAnimationManager),
+      m_SpawnTimer(Core::Time::CountDownTimer(8.0f)),
+      /* Since the warning indicators are stateless, pre-load and share the animation */
+      m_WarningIndicatorAnim(std::make_shared<Util::Animation>(
+          std::vector<std::string>{m_WarningIndicatorPath},
+          false, 100, true, 100
+      )) {
     }
     EnemiesSpawnerSystem::~EnemiesSpawnerSystem() = default;
 
@@ -37,7 +44,9 @@ namespace UGO::System {
     void EnemiesSpawnerSystem::RandomSpawnEnemy(const int minAmount, const int maxAmount) {
         int spawnAmount = (minAmount == -1) ? ( Core::RandomInt(m_MinSpawnAmount, m_MaxSpawnAmount) ) : ( Core::RandomInt(minAmount, maxAmount) );
 
-        m_PaddingWaves.push({Core::Time::CountDownTimer(m_WarningIndicatorDuration), spawnAmount});
+        Core::Time::CountDownTimer timer(m_WarningIndicatorDuration);
+        timer.Start();
+        m_PaddingWaves.push({timer, spawnAmount});
         for (int i=0; i<spawnAmount; ++i) {
             // Choose a side
             Side side = static_cast<Side>(Core::RandomInt(0, 4));
@@ -66,14 +75,13 @@ namespace UGO::System {
             }
 
             m_EffectAnimationManager.Create(
-                spawnPosition, 1.0f,
-                std::make_shared<Util::Animation>(
-                    std::vector<std::string>{m_WarningIndicatorPath},
-                    false, 100, true, 100
-                ),
+                spawnPosition, 1.0f, m_WarningIndicatorAnim,
                 true, 0.0f, Core::Size{32.0, 32.0}
             );
 
+            /* HACK: String copy wastes too much CPU time.
+             *       It's better to store the EnemyID as an int or short type.
+             */
             m_PaddingSpawns.push({"e_001", spawnPosition});
         }
     }

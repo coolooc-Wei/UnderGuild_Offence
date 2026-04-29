@@ -7,12 +7,6 @@
 #include "Core/Coordinate.hpp"
 
 namespace {
-    struct AttackEvent {
-        UGO::Scene::Character* Attacker;
-        UGO::Scene::Character* Victim;
-        float Damage;
-    };
-
     inline UGO::Core::Angle GetRotateAngle(UGO::Core::Angle offsetAngle, UGO::Core::Velocity diff) {
         return (offsetAngle + UGO::Core::FastAtan2(diff.y, diff.x)) * 3.1415926535f / 180.0f;
     }
@@ -210,7 +204,6 @@ namespace UGO::System {
         m_SteeringSystem.AdjustMovement(GetAllMercenaries());
         UpdateMovement();
         Attack();
-        ProcessEnemyDeaths();
         Update();
     }
     
@@ -236,7 +229,7 @@ namespace UGO::System {
         for (auto* mercenary: GetAllMercenaries()) { mercenary->Update(); }
     }
 
-    void BattleManager::Attack() {
+    std::vector<BattleManager::AttackEvent> BattleManager::DetectCollisions() {
         std::vector<AttackEvent> attackEvents;
         attackEvents.reserve(GetAllCharacters().size());
 
@@ -281,6 +274,10 @@ namespace UGO::System {
             }
         }
 
+        return attackEvents;
+    }
+
+    void BattleManager::ResolveAttacks(const std::vector<AttackEvent>& attackEvents) {
         // Set the Animations and Apply HP Counting
         std::unordered_set<Scene::Character*> animatedAttackers;
         std::unordered_set<Scene::Character*> animatedVictims;
@@ -321,6 +318,11 @@ namespace UGO::System {
         }
     }
 
+    void BattleManager::Attack() {
+        std::vector<AttackEvent> attackEvents = DetectCollisions();
+        ResolveAttacks(attackEvents);
+    }
+
     void BattleManager::Update() {
         auto removeHeroes = std::remove_if(m_AllHeroes.begin(), m_AllHeroes.end(), [](const auto& hero){ return hero->IsDead(); });
         if (removeHeroes != m_AllHeroes.end()) {
@@ -328,9 +330,15 @@ namespace UGO::System {
             m_IsCacheDirty = true;
         }
 
+        /* HACK: refactoring need */
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
-                m_ProcessedDeadEnemies.erase(enemy.get());
+                this->GrantExpToHero(enemy->GetExpReward());
+                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
+                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
+                    this->SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
+                }
+                m_EnemyKillCount++;
                 return true;
             }
             return false;
@@ -388,23 +396,6 @@ namespace UGO::System {
         m_AllDrops.clear();
     }
 
-    /* HACK: refactor */
-    void BattleManager::ProcessEnemyDeaths() {
-        for (auto* enemy : m_AllEnemiesCache) {
-            bool isDeadNow = enemy->IsDead();
-            bool wasProcessed = (m_ProcessedDeadEnemies.find(enemy) != m_ProcessedDeadEnemies.end());
-            // Compare the current frame (death) with past states (unresolved) -> Only triggers immediately upon death in the current frame.
-            if (isDeadNow && !wasProcessed) {
-                GrantExpToHero(enemy->GetExpReward());
-                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
-                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
-                    SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
-                }
-                m_EnemyKillCount++;
-                m_ProcessedDeadEnemies.insert(enemy);
-            }
-        }
-    }
 
     void BattleManager::SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value) {
         auto expPack = std::make_unique<Scene::ExpPack>(value);

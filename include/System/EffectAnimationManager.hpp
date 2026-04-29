@@ -17,7 +17,6 @@ namespace System {
 
         void Update();
 
-        /* TODO: add the return shared_ptr to m_root in App  ???? */
         std::shared_ptr<Util::GameObject> Create(
             Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
             Core::Angle rotateAngle, Core::Size size
@@ -28,6 +27,18 @@ namespace System {
         void Reset();
 
     private:
+        template <typename T>
+        std::shared_ptr<T> AcquireFromPool(std::vector<std::shared_ptr<T>>& pool, int& onUseAmount, int& totalAmount) {
+            if (onUseAmount >= totalAmount) {
+                pool.reserve(totalAmount + 10);
+                for (int i=0; i<10; ++i) {
+                    pool.emplace_back(std::make_shared<T>());
+                    m_root.AddChild(pool[totalAmount++]);
+                }
+            }
+            return pool[onUseAmount];
+        }
+
         std::vector<std::shared_ptr<Scene::EffectAnimation>> m_pool;
         int m_OnUseAmount = 0;
         int m_TotalAmount = 0;
