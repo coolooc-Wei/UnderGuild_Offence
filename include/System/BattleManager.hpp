@@ -6,11 +6,11 @@
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
-#include "Scene/Drop.hpp"
-#include "Scene/Icon.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/CharacterFactory.hpp"
 #include "System/SteeringSystem.hpp"
+#include "System/DropSystem.hpp"
+#include "System/ExpSystem.hpp"
 
 namespace UGO {
 namespace System {
@@ -21,6 +21,8 @@ namespace System {
             EffectAnimationManager& effectAnimationManager,
             CharacterFactory& characterFactor,
             SteeringSystem& steeringSystem,
+            DropSystem& dropSystem,
+            ExpSystem& expSystem,
             Util::Renderer& root
         );
         ~BattleManager();
@@ -34,8 +36,6 @@ namespace System {
         std::vector<Scene::Character*> GetAllEnemiesAsCharacters() const;
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
-        std::vector<Scene::Drop*> GetAllDrops() const;
-        std::vector<Scene::Icon*> GetAllIcons() const;
 
 
         void AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
@@ -45,17 +45,8 @@ namespace System {
         void AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         void AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position);
         /* TODO: removed after implementing UI system */
-        void AddIcon(std::unique_ptr<Scene::Icon> icon);
         void AddPet(std::unique_ptr<Scene::BasicObject> pet);
-        void AddDrop(std::unique_ptr<Scene::Drop> drop);
 
-
-        void GrantExpToHero(Scene::ExpValue amount);
-        void SpawnLevelUpIcon();
-        void CollectAllDrops(const Core::WorldPosition& playerPos);
-        void ClearDrops();
-
-        void SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value);
 
         int GetEnemyKillCount() const { return m_EnemyKillCount; }
 
@@ -64,7 +55,6 @@ namespace System {
 
         void AIUpdate();
         void UpdateMovement();
-        void UpdateDrops(const Core::WorldPosition& playerPos);
         void Attack();
         void Update();
 
@@ -90,16 +80,13 @@ namespace System {
         mutable std::vector<Scene::Character*> m_AllCharactersCache;
         mutable std::vector<Scene::Character*> m_AllAlliesCache;
         mutable bool m_IsCacheDirty = true;
-        std::vector<Scene::Icon*> m_AllIconsCache;
 
-        std::vector<std::unique_ptr<Scene::Icon>> m_LevelUpIcons;
-        std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
-
-        int m_LevelUpIconCount = 0;
         int m_EnemyKillCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;
         CharacterFactory& m_CharacterFactory;
         SteeringSystem& m_SteeringSystem;
+        DropSystem& m_DropSystem;
+        ExpSystem& m_ExpSystem;
         Util::Renderer& m_Root;
 
         const Core::Distance m_offsetDis = 32.0f;

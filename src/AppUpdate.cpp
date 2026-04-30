@@ -5,6 +5,8 @@
 #include "System/CharacterFactory.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
+#include "System/DropSystem.hpp"
+#include "System/ExpSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 
@@ -41,7 +43,7 @@ void UGO::App::Update() {
         // Collect all remaining drops at level end
         auto heroes = m_BattleManager->GetAllHeroes();
         if (!heroes.empty()) {
-            m_BattleManager->CollectAllDrops(heroes[0]->GetWorldPosition());
+            m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
         }
 
         m_SettlingTimer = 0.0f;
@@ -52,19 +54,14 @@ void UGO::App::Update() {
     /* HACK: Remove after testing
     */
     if (Util::Input::IsKeyDown(Util::Keycode::X)) {
-        auto expPack = std::make_unique<Scene::ExpPack>(100.0f);
-        expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
-        expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        expPack->SetSize(16, 16);
-        expPack->SetWorldPosition({0.0f, 0.0f});
-        expPack->GetGameObject()->SetVisible(true);
-        m_BattleManager->AddDrop(std::move(expPack));
+        m_DropSystem->SpawnExpPack({0.0f, 0.0f}, 100.0f);
         LOG_INFO("Spawned ExpPack at (0, 0)!");
     }
 
     if (Util::Input::IsKeyDown(Util::Keycode::E)) { // Press E to grant exp directly
-        m_BattleManager->GrantExpToHero(100.0f);
-        LOG_INFO("Granted 250 EXP to Hero via BattleManager!");
+        auto heroes = m_BattleManager->GetAllHeroes();
+        m_ExpSystem->GrantExpToHero(heroes.empty() ? nullptr : heroes[0], 100.0f);
+        LOG_INFO("Granted 100 EXP to Hero via ExpSystem!");
     }
     // END TODO
 
@@ -72,7 +69,7 @@ void UGO::App::Update() {
     /* HACK: Remove after testing
     */
     auto heroes = m_BattleManager->GetAllHeroes();
-    if (!heroes.empty()) { m_BattleManager->UpdateDrops(heroes[0]->GetWorldPosition()); }
+    if (!heroes.empty()) { m_DropSystem->UpdateDrops(heroes[0]); }
     else { ChangeGameState(GameState::SETTLING); }
 
     m_BattleManager->UpdateSystem();
@@ -88,7 +85,7 @@ void UGO::App::Update() {
         // Collect all remaining drops at level end
         auto heroes = m_BattleManager->GetAllHeroes();
         if (!heroes.empty()) {
-            m_BattleManager->CollectAllDrops(heroes[0]->GetWorldPosition());
+            m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
         }
 
         m_SettlingTimer = 0.0f;
@@ -108,10 +105,10 @@ void UGO::App::Update() {
       // Keep updating drops so they can fly
       auto heroes = m_BattleManager->GetAllHeroes();
       if (!heroes.empty()) {
-          m_BattleManager->UpdateDrops(heroes[0]->GetWorldPosition());
+          m_DropSystem->UpdateDrops(heroes[0]);
       }
       else{
-        m_BattleManager->ClearDrops();
+        m_DropSystem->ClearDrops();
         m_EffectAnimationManager->Reset();
         ChangeGameState(GameState::END);
       }
@@ -120,7 +117,7 @@ void UGO::App::Update() {
       m_BattleManager->UpdateMovement();
 
       // Check for completion or timeout
-      if (m_BattleManager->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
+      if (m_DropSystem->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
 
       Core::Time::AdvanceTick();
   } break;

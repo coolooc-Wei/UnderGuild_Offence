@@ -1,4 +1,4 @@
-﻿#include "System/CharacterFactory.hpp"
+#include "System/CharacterFactory.hpp"
 
 namespace UGO::System {
 
@@ -70,8 +70,8 @@ namespace UGO::System {
             rawEnemy = enemy.release();
         }
 
-        if (auto gameObject = rawEnemy->GetGameObject()) { gameObject->SetVisible(true); }
         rawEnemy->SetWorldPosition(position);
+        if (auto gameObject = rawEnemy->GetGameObject()) { gameObject->SetVisible(true); }
 
         LOG_INFO("CharacterFactory: a Enemy create, pool left {}/{}", m_Enemies.size(), m_Enemies.capacity());
         return PooledCharacter<Scene::Enemy>(
@@ -101,8 +101,8 @@ namespace UGO::System {
             rawMercenary = mercenary.release();
         }
 
-        if (auto gameObject = rawMercenary->GetGameObject()) { gameObject->SetVisible(true); }
         rawMercenary->SetWorldPosition(position);
+        if (auto gameObject = rawMercenary->GetGameObject()) { gameObject->SetVisible(true); }
 
         LOG_INFO("CharacterFactory: a Mercenary create, pool left {}/{}", m_Mercenaries.size(), m_Mercenaries.capacity());
         return PooledCharacter<Scene::Mercenary>(

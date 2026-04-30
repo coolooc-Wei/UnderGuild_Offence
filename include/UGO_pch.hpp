@@ -17,6 +17,7 @@
 #include <random>
 #include <unordered_map>
 #include <glm/geometric.hpp>
+#include <functional>
 
 // PTSD includes
 #include "Util/GameObject.hpp"

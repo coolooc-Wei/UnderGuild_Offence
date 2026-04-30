@@ -18,6 +18,8 @@ set(SYSTEM_SRC
     System/EffectAnimationManager.cpp
     System/CharacterFactory.cpp
     System/EnemiesSpawnerSystem.cpp
+    System/DropSystem.cpp
+    System/ExpSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -25,6 +27,8 @@ set(SYSTEM_INC
     System/EffectAnimationManager.hpp
     System/CharacterFactory.hpp
     System/EnemiesSpawnerSystem.hpp
+    System/DropSystem.hpp
+    System/ExpSystem.hpp
 )
 
 # --- UI ---

@@ -83,10 +83,10 @@ namespace UGO {
                 for (auto chars : m_BattleManager->GetAllCharacters()) {
                     chars->GetGameObject()->SetVisible(false);
                 }
-                for (auto drop : m_BattleManager->GetAllDrops()) {
+                for (auto drop : m_DropSystem->GetAllDrops()) {
                     drop->GetGameObject()->SetVisible(false);
                 }
-                for (auto icon : m_BattleManager->GetAllIcons()) {
+                for (auto icon : m_ExpSystem->GetAllIcons()) {
                     icon->GetGameObject()->SetVisible(false);
                 }
             } break;

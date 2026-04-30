@@ -14,6 +14,8 @@ namespace UGO::System {
     class CharacterFactory;
     class EffectAnimationManager;
     class EnemiesSpawnerSystem;
+    class DropSystem;
+    class ExpSystem;
 }
 
 namespace UGO {
@@ -76,6 +78,8 @@ private:
     std::unique_ptr<System::SteeringSystem> m_SteeringSystem;
     std::unique_ptr<System::EffectAnimationManager> m_EffectAnimationManager;
     std::unique_ptr<System::CharacterFactory> m_CharacterFactory;
+    std::unique_ptr<System::ExpSystem> m_ExpSystem;
+    std::unique_ptr<System::DropSystem> m_DropSystem;
     std::unique_ptr<System::BattleManager> m_BattleManager;
     std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
 

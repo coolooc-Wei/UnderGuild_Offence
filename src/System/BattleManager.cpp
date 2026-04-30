@@ -2,7 +2,6 @@
 
 #include "Scene/BasicObject.hpp"
 #include "Scene/Character.hpp"
-#include "Scene/ExpPack.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
 
@@ -18,11 +17,15 @@ namespace UGO::System {
         EffectAnimationManager& effectAnimationManager,
         CharacterFactory& characterFactory,
         SteeringSystem& steeringSystem,
+        DropSystem& dropSystem,
+        ExpSystem& expSystem,
         Util::Renderer& root
     )
     : m_EffectAnimationManager(effectAnimationManager),
       m_CharacterFactory(characterFactory),
       m_SteeringSystem(steeringSystem),
+      m_DropSystem(dropSystem),
+      m_ExpSystem(expSystem),
       m_Root(root) {
         // Reserve memory for the vectors
         m_AllHeroes.reserve(10);
@@ -35,6 +38,9 @@ namespace UGO::System {
         m_AllEnemiesAsCharacterCache.reserve(200);
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
+
+        /* HACK: build a function for callback */
+        m_ExpSystem.SetOnLevelUpCallback( [this](const std::string& id, const Core::WorldPosition& pos){ this->AddMercenaryByID(id, pos); } );
     }
     BattleManager::~BattleManager() {}
 
@@ -107,23 +113,6 @@ namespace UGO::System {
         return m_AllAlliesCache;
     }
 
-    std::vector<Scene::Icon*> BattleManager::GetAllIcons() const { 
-        std::vector<Scene::Icon*> icons;
-        icons.reserve(m_LevelUpIcons.size());
-        for (const auto& icon: m_LevelUpIcons) {
-            icons.push_back(icon.get());
-        }
-        return icons; 
-    }
-
-    /* HACK: This function is not efficient, but it is a temporary solution */
-    std::vector<Scene::Drop*> BattleManager::GetAllDrops() const {
-        std::vector<Scene::Drop*> drops;
-        drops.reserve(m_AllDrops.size());
-        for (const auto& drop: m_AllDrops) { drops.push_back(drop.get()); }
-        return drops;
-    }
-
 
 
     void BattleManager::AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
@@ -150,53 +139,8 @@ namespace UGO::System {
         AddMercenary(m_CharacterFactory.GetMercenaryParams(mercenaryID), position);
     }
 
-    void BattleManager::AddIcon(std::unique_ptr<Scene::Icon> icon) {
-        m_Root.AddChild(icon->GetGameObject());
-        m_LevelUpIcons.push_back(std::move(icon));
-    }
-    void BattleManager::AddDrop(std::unique_ptr<Scene::Drop> drop) {
-        m_Root.AddChild(drop->GetGameObject());
-        m_AllDrops.push_back(std::move(drop));
-    }
 
 
-    /* HACK: Modifications will be made after tje official launch of hero */
-    void BattleManager::GrantExpToHero(Scene::ExpValue amount) {
-        for (auto& hero: m_AllHeroes) {
-            if (hero) {
-                int oldLevel = hero->GetLevel();
-                hero->GainExp(amount);
-                int newLevel = hero->GetLevel();
-                if (newLevel > oldLevel) {
-                    for (int i = 0; i < (newLevel - oldLevel); ++i) {
-                        SpawnLevelUpIcon();
-
-                        /* HACK: 升級時暫時生成一隻傭兵 */
-                        /* HACK: 設定初始座標為英雄位置加上些微偏移，避免重疊 */
-                        Core::WorldPosition spawnPos = hero->GetWorldPosition() + Core::Velocity{40.0f, 40.0f};
-                        AddMercenaryByID("m_001", spawnPos);
-                    }
-                }
-            }
-        }
-    }
-
-    void BattleManager::SpawnLevelUpIcon() {
-        auto icon = std::make_unique<Scene::Icon>();
-        icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
-        icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        icon->SetSize(32, 32);
-        float startX = 600.0f;
-        float startY = 320.0f;
-        float offsetY = m_LevelUpIconCount * 30.0f;
-        icon->SetWorldPosition({startX, startY - offsetY});
-        icon->GetGameObject()->SetVisible(true);
-        icon->Update();
-        AddIcon(std::move(icon));
-        m_LevelUpIconCount++;
-        
-        LOG_INFO("Spawned level-up icon at position: {}, {}", startX, startY - offsetY);
-    }
 
     void BattleManager::UpdateSystem() {
         AIUpdate();
@@ -209,7 +153,7 @@ namespace UGO::System {
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
         for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
-        for (auto* icon: GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
+        for (auto* icon: m_ExpSystem.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
     }
 
     void BattleManager::AIUpdate() {
@@ -333,10 +277,10 @@ namespace UGO::System {
         /* HACK: refactoring need */
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
-                this->GrantExpToHero(enemy->GetExpReward());
+                m_ExpSystem.GrantExpToHero(GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0], enemy->GetExpReward());
                 LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
                 if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
-                    this->SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
+                    m_DropSystem.SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
                 }
                 m_EnemyKillCount++;
                 return true;
@@ -353,58 +297,6 @@ namespace UGO::System {
             m_MercenaryPool.erase(removeMercenaries, m_MercenaryPool.end());
             m_IsCacheDirty = true;
         }
-    }
-
-    /* HACK: refactor */
-    void UGO::System::BattleManager::UpdateDrops(const Core::WorldPosition& playerPos) {
-        for (auto it = m_AllDrops.begin(); it != m_AllDrops.end(); ) {
-            auto& drop = *it;
-            drop->Update();
-
-            float distance = glm::distance(drop->GetWorldPosition(), playerPos);
-            if (distance < 150.0f) { 
-                drop->MoveTo(playerPos);
-            }
-            // Pickup trigger range (reserved area for collision interface)
-            if (distance < 20.0f) {
-                /* TODO: 預留接口 - 未來掉落物多型化可新增繼承 Scene::Drop 的類別（例如 MercenaryTokenDrop）
-                 * 未來的特殊掉落物應該透過 drop->OnPickup() 裡的委託來呼叫 AddMercenary() 等行為，不再將所有邏輯寫在此處。
-                 */
-                UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
-                if (expAmount > 0.0f) {
-                    GrantExpToHero(expAmount);
-                }
-                drop->OnPickup(); 
-                m_Root.RemoveChild(drop->GetGameObject());
-                it = m_AllDrops.erase(it);
-            } else {
-                ++it;
-            }
-        }
-    }
-
-    void BattleManager::CollectAllDrops(const Core::WorldPosition& playerPos) {
-        for (auto& drop : m_AllDrops) {
-            drop->MoveTo(playerPos);
-        }
-    }
-    
-    void BattleManager::ClearDrops() {
-        for (auto& drop : m_AllDrops) {
-            m_Root.RemoveChild(drop->GetGameObject());
-        }
-        m_AllDrops.clear();
-    }
-
-
-    void BattleManager::SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value) {
-        auto expPack = std::make_unique<Scene::ExpPack>(value);
-        expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
-        expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        expPack->SetSize(16, 16);
-        expPack->SetWorldPosition(position);
-        expPack->GetGameObject()->SetVisible(true);
-        AddDrop(std::move(expPack));
     }
 
 }
