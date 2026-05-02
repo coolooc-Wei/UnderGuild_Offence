@@ -10,8 +10,10 @@ namespace Scene {
     
     class Hero : public Character {
     public:
+        Hero(CharacterParams&& params);
         Hero(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Hero();
+        void Reset(CharacterParams&& params);
 
         void KeyboardUpdate();
 

@@ -4,9 +4,36 @@
 
 namespace UGO::Scene {
 
+    Character::Character() : BasicObject() {}
     Character::Character(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-        : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
+    : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
+    Character::Character(CharacterParams&& params)
+    : BasicObject(std::move(params)),
+      m_MaxHP(params.maxHP),
+      m_CurrentHP(params.maxHP),
+      m_AttackPower(params.attackPower),
+      m_AttackCooldown(params.attackCooldown),
+      m_InvincibleTimer(params.invincibleDuration),
+      m_Weapon(std::move(params.weapon)),
+      m_StatusEffects(std::move(params.statusEffects)),
+      m_AttackAnimationData(params.attackAnimationData),
+      m_DamageAnimationData(params.damageAnimationData
+    ) {}
     Character::~Character() = default;
+    void Character::Reset(CharacterParams&& params) {
+        m_MaxHP = params.maxHP;
+        m_CurrentHP = params.maxHP;
+        m_AttackPower = params.attackPower;
+        m_AttackCooldown.SetDuration(params.attackCooldown);
+        m_InvincibleTimer.SetDuration(params.invincibleDuration);
+        m_Weapon = std::move(params.weapon);
+        m_StatusEffects = std::move(params.statusEffects);
+        m_AttackAnimationData = params.attackAnimationData;
+        m_DamageAnimationData = params.damageAnimationData;
+        m_IntentedMovement = {0.f, 0.f};
+        m_RepelMovement = {0.f, 0.f};
+        BasicObject::Reset(std::move(params));
+    }
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
@@ -15,7 +42,7 @@ namespace UGO::Scene {
     Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
 
     void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
-    void Character::SetRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement = repelMovement; }
+    void Character::AddRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement += repelMovement; }
 
     void Character::OnAttack() {
         if (m_AttackCooldown.IsTimeUp()) {
@@ -52,8 +79,6 @@ namespace UGO::Scene {
     }
 
     void Character::SetMaxHP(HpValue newMaxHP) {
-        /* TODO: Check if maxHP is valid
-        */
         assert(newMaxHP >= 0);
         m_MaxHP = newMaxHP;
     }
@@ -82,8 +107,7 @@ namespace UGO::Scene {
         }
     }
     void Character::SetAttackPower(HpValue attackPower) {
-        /* TODO: Check if attackPower is valid
-        */
+        assert(attackPower >= 0);
         m_AttackPower = attackPower;
     }
 

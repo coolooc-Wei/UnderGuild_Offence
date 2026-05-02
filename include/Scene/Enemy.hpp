@@ -14,8 +14,10 @@ namespace Scene {
 
     class Enemy : public Bot {
     public:
+        Enemy(CharacterParams&& params);
         Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         ~Enemy();
+        void Reset(CharacterParams&& params);
 
         void AIUpdate(const std::vector<Character*>& targets) override;
         void Update() override;
@@ -28,9 +30,13 @@ namespace Scene {
         void OnHeal(HpValue amount) override;
         void OnDeath() override;
         ExpValue GetExpReward() const;
+        float GetDropRate() const;
+        ExpValue GetExpPackValue() const;
 
     private:
-        ExpValue m_ExpReward = 10.0f;
+        ExpValue m_ExpReward = 50.0f;
+        float m_DropRate = 0.5f;          // 50% drop rate
+        ExpValue m_ExpPackValue = 100.0f; // Value of dropped pack
     };
 
 } // namespace Scene

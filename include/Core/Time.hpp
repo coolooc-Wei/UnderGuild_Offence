@@ -11,7 +11,8 @@ namespace Time {
     using Second   = float;
     using TimeStep = float;
 
-    constexpr TimeStep FIXED_DELTA_TIME = 1.0f / 60.0f;
+    constexpr float FIXED_FPS = 60.0f;
+    constexpr TimeStep FIXED_DELTA_TIME = 1.0f / FIXED_FPS;
     inline constexpr TimeStep GetDeltaTime() { return FIXED_DELTA_TIME; }
 
     Tick GetCurrentTick();

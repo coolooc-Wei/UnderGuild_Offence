@@ -3,8 +3,13 @@
 namespace UGO::Scene {
 
   Enemy::Enemy(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-      : Bot(maxHP, attackPower, speed) {}
+  : Bot(maxHP, attackPower, speed) {}
+  Enemy::Enemy(CharacterParams&& params)
+  : Bot(std::move(params)) {}
   Enemy::~Enemy() {}
+  void Enemy::Reset(CharacterParams&& params) {
+    Bot::Reset(std::move(params));
+  }
 
   void Enemy::OnAttack() {
     LOG_INFO("Enemy::OnAttack");
@@ -26,5 +31,7 @@ namespace UGO::Scene {
   void Enemy::OnDraw() {}
 
   ExpValue Enemy::GetExpReward() const { return m_ExpReward; }
+  float Enemy::GetDropRate() const { return m_DropRate; }
+  ExpValue Enemy::GetExpPackValue() const { return m_ExpPackValue; }
 
 } // namespace UGO::Scene

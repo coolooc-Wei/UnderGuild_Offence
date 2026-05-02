@@ -16,11 +16,19 @@ set(SYSTEM_SRC
     System/BattleManager.cpp
     System/SteeringSystem.cpp
     System/EffectAnimationManager.cpp
+    System/CharacterFactory.cpp
+    System/EnemiesSpawnerSystem.cpp
+    System/DropSystem.cpp
+    System/ExpSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
     System/SteeringSystem.hpp
     System/EffectAnimationManager.hpp
+    System/CharacterFactory.hpp
+    System/EnemiesSpawnerSystem.hpp
+    System/DropSystem.hpp
+    System/ExpSystem.hpp
 )
 
 # --- UI ---
@@ -70,6 +78,8 @@ set(SCENE_SRC
     Scene/EffectAnimation.cpp
     Scene/Mercenary.cpp
     Scene/Bot.cpp
+    Scene/Icon.cpp
+    Scene/DamageTextAnimation.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -86,6 +96,8 @@ set(SCENE_INC
     Scene/EffectAnimation.hpp
     Scene/Mercenary.hpp
     Scene/Bot.hpp
+    Scene/Icon.hpp
+    Scene/DamageTextAnimation.hpp
 )
 
 # --- Combine All ---

@@ -6,12 +6,6 @@
 #include "Core/Coordinate.hpp"
 
 namespace {
-    struct AttackEvent {
-        UGO::Scene::Character* Attacker;
-        UGO::Scene::Character* Victim;
-        float Damage;
-    };
-
     inline UGO::Core::Angle GetRotateAngle(UGO::Core::Angle offsetAngle, UGO::Core::Velocity diff) {
         return (offsetAngle + UGO::Core::FastAtan2(diff.y, diff.x)) * 3.1415926535f / 180.0f;
     }
@@ -19,145 +13,167 @@ namespace {
 
 namespace UGO::System {
 
-    BattleManager::BattleManager(EffectAnimationManager& effectAnimationManager)
-    : m_EffectAnimationManager(effectAnimationManager) {
+    BattleManager::BattleManager(
+        EffectAnimationManager& effectAnimationManager,
+        CharacterFactory& characterFactory,
+        SteeringSystem& steeringSystem,
+        DropSystem& dropSystem,
+        ExpSystem& expSystem,
+        Util::Renderer& root
+    )
+    : m_EffectAnimationManager(effectAnimationManager),
+      m_CharacterFactory(characterFactory),
+      m_SteeringSystem(steeringSystem),
+      m_DropSystem(dropSystem),
+      m_ExpSystem(expSystem),
+      m_Root(root) {
         // Reserve memory for the vectors
         m_AllHeroes.reserve(10);
-        m_AllEnemies.reserve(200);
-        m_AllMercenaries.reserve(150);
+        m_EnemyPool.reserve(200);
+        m_MercenaryPool.reserve(150);
         m_AllHeroesCache.reserve(10);
         m_AllEnemiesCache.reserve(200);
         m_AllMercenariesCache.reserve(150);
-        m_AllEnemiesCharacterCache.reserve(200);
+        m_AllHeroesAsCharacterCache.reserve(10);
+        m_AllEnemiesAsCharacterCache.reserve(200);
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
+
+        /* HACK: build a function for callback */
+        m_ExpSystem.SetOnLevelUpCallback( [this](const std::string& id, const Core::WorldPosition& pos){ this->AddMercenaryByID(id, pos); } );
     }
     BattleManager::~BattleManager() {}
 
-    std::vector<Scene::Hero*> BattleManager::GetAllHeroes() const { return m_AllHeroesCache; }
-    std::vector<Scene::Enemy*> BattleManager::GetAllEnemies() const { return m_AllEnemiesCache; }
-    std::vector<Scene::Mercenary*> BattleManager::GetAllMercenaries() const { return m_AllMercenariesCache; }
-    std::vector<Scene::Character*> BattleManager::GetAllCharacters() const { return m_AllCharactersCache; }
-    std::vector<Scene::Character*> BattleManager::GetAllAllies() const { return m_AllAlliesCache; }
+    void BattleManager::RebuildCaches() const {
+        if (!m_IsCacheDirty) { return; }
+        m_IsCacheDirty = false;
+        LOG_INFO("Rebuilding caches");
 
-    std::vector<Scene::Drop*> BattleManager::GetAllDrops() const {
-        std::vector<Scene::Drop*> drops;
-        drops.reserve(m_AllDrops.size());
-        for (const auto& drop: m_AllDrops) { drops.push_back(drop.get()); }
-        return drops;
-    }
+        m_AllHeroesCache.clear();
+        m_AllEnemiesCache.clear();
+        m_AllMercenariesCache.clear();
+        m_AllEnemiesAsCharacterCache.clear();
+        m_AllHeroesAsCharacterCache.clear();
+        m_AllCharactersCache.clear();
+        m_AllAlliesCache.clear();
 
+        m_AllCharactersCache.reserve(m_AllHeroes.size() + m_EnemyPool.size() + m_MercenaryPool.size());
+        m_AllAlliesCache.reserve(m_AllHeroes.size() + m_MercenaryPool.size());
 
-
-    void BattleManager::AddHero(std::unique_ptr<Scene::Hero> hero, Util::Renderer& renderer) {
-        auto heroPtr = hero.get();
-        renderer.AddChild(hero->GetGameObject());
-        m_AllHeroesCache.push_back(heroPtr);
-        m_AllCharactersCache.push_back(heroPtr);
-        m_AllAlliesCache.push_back(heroPtr);
-        m_AllHeroes.push_back(std::move(hero));
-    }
-    void BattleManager::AddEnemy(std::unique_ptr<Scene::Enemy> enemy, Util::Renderer& renderer) {
-        auto enemyPtr = enemy.get();
-        renderer.AddChild(enemy->GetGameObject());
-        m_AllEnemiesCache.push_back(enemyPtr);
-        m_AllEnemiesCharacterCache.push_back(enemyPtr);
-        m_AllCharactersCache.push_back(enemyPtr);
-        m_AllEnemies.push_back(std::move(enemy));
-    }
-    void BattleManager::AddMercenary(std::unique_ptr<Scene::Mercenary> mercenary, Util::Renderer& renderer) {
-        auto mercenaryPtr = mercenary.get();
-        renderer.AddChild(mercenary->GetGameObject());
-        m_AllMercenariesCache.push_back(mercenaryPtr);
-        m_AllCharactersCache.push_back(mercenaryPtr);
-        m_AllAlliesCache.push_back(mercenaryPtr);
-        m_AllMercenaries.push_back(std::move(mercenary));
-    }
-    void BattleManager::AddPet(std::unique_ptr<Scene::BasicObject> pet, Util::Renderer& renderer) {
-        renderer.AddChild(pet->GetGameObject());
-        m_LevelUpIcons.push_back(std::move(pet));
-    }
-    void BattleManager::AddDrop(std::unique_ptr<Scene::Drop> drop, Util::Renderer& renderer) {
-        renderer.AddChild(drop->GetGameObject());
-        m_AllDrops.push_back(std::move(drop));
-    }
-    
-
-    /*Hack: Modifications will be made after tje official launch of hero*/
-    void BattleManager::GrantExpToHero(Scene::ExpValue amount, Util::Renderer& renderer) {
         for (auto& hero: m_AllHeroes) {
             if (hero) {
-                int oldLevel = hero->GetLevel();
-                hero->GainExp(amount);
-                int newLevel = hero->GetLevel();
-
-                // 偵測是否升級，若有則生成圖示
-                if (newLevel > oldLevel) {
-                    for (int i = 0; i < (newLevel - oldLevel); ++i) {
-                        SpawnLevelUpIcon(renderer);
-                    }
-                }
+                m_AllHeroesCache.push_back(hero.get());
+                m_AllCharactersCache.push_back(hero.get());
+                m_AllAlliesCache.push_back(hero.get());
+                m_AllHeroesAsCharacterCache.push_back(hero.get());
+            }
+        }
+        for (auto& enemy: m_EnemyPool) {
+            if (enemy) {
+                m_AllEnemiesCache.push_back(enemy.get());
+                m_AllEnemiesAsCharacterCache.push_back(enemy.get());
+                m_AllCharactersCache.push_back(enemy.get());
+            }
+        }
+        for (auto& mercenary: m_MercenaryPool) {
+            if (mercenary) {
+                m_AllMercenariesCache.push_back(mercenary.get());
+                m_AllCharactersCache.push_back(mercenary.get());
+                m_AllAlliesCache.push_back(mercenary.get());
             }
         }
     }
 
-    void BattleManager::SpawnLevelUpIcon(Util::Renderer& renderer) {
+    std::vector<Scene::Hero*> BattleManager::GetAllHeroes() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllHeroesCache;
+    }
+    std::vector<Scene::Character*> BattleManager::GetAllHeroesAsCharacters() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllHeroesAsCharacterCache;
+    }
+    std::vector<Scene::Enemy*> BattleManager::GetAllEnemies() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllEnemiesCache;
+    }
+    std::vector<Scene::Mercenary*> BattleManager::GetAllMercenaries() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllMercenariesCache;
+    }
+    std::vector<Scene::Character*> BattleManager::GetAllEnemiesAsCharacters() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllEnemiesAsCharacterCache;
+    }
+    std::vector<Scene::Character*> BattleManager::GetAllCharacters() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllCharactersCache;
+    }
+    std::vector<Scene::Character*> BattleManager::GetAllAllies() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_AllAlliesCache;
+    }
 
-        // 建立一個裝飾性的 BasicObject
-        auto icon = std::make_unique<Scene::BasicObject>(0.0f);
-        
-        // 設定圖片 (暫時示意)
-        icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
-        
-        // 重要：必須設定繪製類型為 Image，否則 GameObject 不會載入圖片
-        icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        
-        // 設定大小 32x32
-        icon->SetSize(32, 32);
 
-        // 計算座標：從右上方 (600, 320) 開始，每個圖示向下偏移 40 單位
-        float startX = 600.0f;
-        float startY = 320.0f;
-        float offsetY = m_LevelUpIconCount * 40.0f;
-        
-        icon->SetWorldPosition({startX, startY - offsetY});
-        icon->GetGameObject()->SetVisible(true);
-        
-        // 同步座標至底層 GameObject Transform
-        icon->Update();
 
-        // 加入渲染器
-        AddPet(std::move(icon), renderer);
-        m_LevelUpIconCount++;
-        
-        LOG_INFO("Spawned level-up icon at position: {}, {}", startX, startY - offsetY);
+    void BattleManager::AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
+        m_IsCacheDirty = true;
+        m_AllHeroes.emplace_back(std::move(m_CharacterFactory.CreateHero(std::move(params), position)));
+    }
+    void BattleManager::AddHeroByID(const std::string& heroID, const Core::WorldPosition& position) {
+        AddHero(m_CharacterFactory.GetHeroParams(heroID), position);
+    }
+
+    void BattleManager::AddEnemy(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
+        m_IsCacheDirty = true;
+        m_EnemyPool.emplace_back(m_CharacterFactory.CreateEnemy(std::move(params), position));
+    }
+    void BattleManager::AddEnemyByID(const std::string& enemyID, const Core::WorldPosition& position) {
+        AddEnemy(m_CharacterFactory.GetEnemyParams(enemyID), position);
+    }
+
+    void BattleManager::AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
+        m_IsCacheDirty = true;
+        m_MercenaryPool.emplace_back(m_CharacterFactory.CreateMercenary(std::move(params), position));
+    }
+    void BattleManager::AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position) {
+        AddMercenary(m_CharacterFactory.GetMercenaryParams(mercenaryID), position);
+    }
+
+
+
+
+    void BattleManager::UpdateSystem() {
+        AIUpdate();
+        m_SteeringSystem.AdjustMovement(GetAllEnemies());
+        m_SteeringSystem.AdjustMovement(GetAllMercenaries());
+        UpdateMovement();
+        Attack();
+        Update();
+    }
+    
+    void BattleManager::SetAllObjectsVisible(bool visable) {
+        for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
+        for (auto* icon: m_ExpSystem.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
     }
 
     void BattleManager::AIUpdate() {
-        for (auto& hero: m_AllHeroes) {
-            hero->KeyboardUpdate();
-        }
-        for (auto& enemy: m_AllEnemies) {
-            enemy->AIUpdate(m_AllAlliesCache);
-        }
-        for (auto& mercenary: m_AllMercenaries) {
-            mercenary->AIUpdate(m_AllEnemiesCharacterCache);
+        for (auto* hero: GetAllHeroes()) { hero->KeyboardUpdate(); }
+        for (auto* enemy: GetAllEnemies()) { enemy->AIUpdate(GetAllAllies()); }
+        for (auto* mercenary: GetAllMercenaries()) { 
+            if(!GetAllEnemies().empty())
+            mercenary->AIUpdate(GetAllEnemiesAsCharacters());
+            else
+            mercenary->AIUpdate(GetAllHeroesAsCharacters());
         }
     }
 
     void BattleManager::UpdateMovement() {
-        for (auto& hero: m_AllHeroes) {
-            hero->Update();
-        }
-        for (auto& enemy: m_AllEnemies) {
-            enemy->Update();
-        }
-        for (auto& mercenary: m_AllMercenaries) {
-            mercenary->Update();
-        }
+        for (auto* hero: GetAllHeroes()) { hero->Update(); }
+        for (auto* enemy: GetAllEnemies()) { enemy->Update(); }
+        for (auto* mercenary: GetAllMercenaries()) { mercenary->Update(); }
     }
 
-    void BattleManager::Attack() {
+    std::vector<BattleManager::AttackEvent> BattleManager::DetectCollisions() {
         std::vector<AttackEvent> attackEvents;
         attackEvents.reserve(GetAllCharacters().size());
 
@@ -202,6 +218,10 @@ namespace UGO::System {
             }
         }
 
+        return attackEvents;
+    }
+
+    void BattleManager::ResolveAttacks(const std::vector<AttackEvent>& attackEvents) {
         // Set the Animations and Apply HP Counting
         std::unordered_set<Scene::Character*> animatedAttackers;
         std::unordered_set<Scene::Character*> animatedVictims;
@@ -221,60 +241,61 @@ namespace UGO::System {
             if (animatedVictims.insert(event.Victim).second) {
                 animationData = event.Victim->GetDamageAnimationData();
                 rotationAngle = GetRotateAngle(animationData.offsetAngle, -attackerToVictim);
+
+                // Create Animation
                 m_EffectAnimationManager.Create(
                     event.Victim->GetWorldPosition(), animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
                 );
+                m_EffectAnimationManager.CreateDamageText(event.Victim->GetWorldPosition(), event.Damage);
             }
             if (animatedAttackers.insert(event.Attacker).second) {
                 animationData = event.Attacker->GetAttackAnimationData();
                 rotationAngle = GetRotateAngle(animationData.offsetAngle, attackerToVictim);
+
+                // Create Animation
                 m_EffectAnimationManager.Create(
                     event.Attacker->GetWorldPosition() + m_offsetDis * attackerToVictimDirection, animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
                 );
             }
         }
-
-        for (auto& icon: m_LevelUpIcons) {
-            icon->Update();
-        }
     }
 
-    /* HACK: refactor
-    */
-    void UGO::System::BattleManager::UpdateDrops(const Core::WorldPosition& playerPos, Util::Renderer& renderer) {
-        for (auto it = m_AllDrops.begin(); it != m_AllDrops.end(); ) {
-            auto& drop = *it;
-            
-            // 掉落物更新 (處理飛行位移)
-            drop->Update();
+    void BattleManager::Attack() {
+        std::vector<AttackEvent> attackEvents = DetectCollisions();
+        ResolveAttacks(attackEvents);
+    }
 
-            float distance = glm::distance(drop->GetWorldPosition(), playerPos);
-            
-            // 磁吸觸發範圍
-            if (distance < 150.0f) { 
-                drop->MoveTo(playerPos);
-            }
+    void BattleManager::Update() {
+        auto removeHeroes = std::remove_if(m_AllHeroes.begin(), m_AllHeroes.end(), [](const auto& hero){ return hero->IsDead(); });
+        if (removeHeroes != m_AllHeroes.end()) {
+            m_AllHeroes.erase(removeHeroes, m_AllHeroes.end());
+            m_IsCacheDirty = true;
+        }
 
-            // 撿拾觸發範圍 (碰撞接口預留處)
-            if (distance < 20.0f) {
-                UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
-                if (expAmount > 0.0f) {
-                    GrantExpToHero(expAmount, renderer);
+        /* HACK: refactoring need */
+        auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
+            if (enemy->IsDead()) {
+                m_ExpSystem.GrantExpToHero(GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0], enemy->GetExpReward());
+                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
+                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
+                    m_DropSystem.SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
                 }
-                drop->OnPickup(); // 觸發子類別(如 ExpPack) 的撿拾邏輯
-                renderer.RemoveChild(drop->GetGameObject());
-                it = m_AllDrops.erase(it);
-            } else {
-                ++it;
+                m_EnemyKillCount++;
+                return true;
             }
+            return false;
+        });
+        if (removeEnemies != m_EnemyPool.end()) {
+            m_EnemyPool.erase(removeEnemies, m_EnemyPool.end());
+            m_IsCacheDirty = true;
         }
-    }
 
-    void BattleManager::CollectAllDrops(const Core::WorldPosition& playerPos) {
-        for (auto& drop : m_AllDrops) {
-            drop->MoveTo(playerPos);
+        auto removeMercenaries = std::remove_if(m_MercenaryPool.begin(), m_MercenaryPool.end(), [](const auto& mercenary){ return mercenary->IsDead(); });
+        if (removeMercenaries != m_MercenaryPool.end()) {
+            m_MercenaryPool.erase(removeMercenaries, m_MercenaryPool.end());
+            m_IsCacheDirty = true;
         }
     }
 

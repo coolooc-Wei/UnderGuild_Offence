@@ -1,6 +1,15 @@
 #include "App.hpp"
 
+#include "System/BattleManager.hpp"
+#include "System/SteeringSystem.hpp"
+#include "System/CharacterFactory.hpp"
+#include "System/EffectAnimationManager.hpp"
+#include "System/EnemiesSpawnerSystem.hpp"
+
 namespace UGO {
+
+    App::App() = default;
+    App::~App() = default;
 
     void App::End() {
         LOG_TRACE("End");
@@ -35,8 +44,53 @@ namespace UGO {
         }
 
         m_CurrentGameState = state;
+        m_CurrentProgressState = state;
         if (m_Pages[m_CurrentGameState]) {
-            m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING && state != GameState::SETTLING);
+            m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING && state != GameState::SETTLING && state != GameState::END);
+        }
+
+        switch (state) {
+            case GameState::WELCOME: {
+                // No special init
+            } break;
+            case GameState::MENU: {
+                // No special init
+            } break;
+            case GameState::PAUSE: {
+                m_BattleManager->SetAllObjectsVisible(false);
+            } break;
+            case GameState::GAMING: {
+                m_BattleManager->SetAllObjectsVisible(true);
+                /* HACK: Remove these lines after testing */
+                Core::WorldPosition heroPos = {-300.0f, -300.0f};
+                m_BattleManager->AddHeroByID("h_001", heroPos);
+                std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
+            } break;
+            case GameState::SETTLING: {
+                m_EffectAnimationManager->Reset();
+            } break;
+            case GameState::END: {
+                if(m_BattleManager->GetEnemyKillCount() >= 100 && !m_BattleManager->GetAllHeroes().empty()) {
+                    m_Win->GetGameObject()->SetVisible(true);
+                    m_WinIcon->GetGameObject()->SetVisible(true);
+                    m_WinLoseBackground->GetGameObject()->SetVisible(true);
+                } else {
+                    m_Lose->GetGameObject()->SetVisible(true);
+                    m_LoseIcon->GetGameObject()->SetVisible(true);
+                    m_WinLoseBackground->GetGameObject()->SetVisible(true);
+                }
+
+                for (auto chars : m_BattleManager->GetAllCharacters()) {
+                    chars->GetGameObject()->SetVisible(false);
+                }
+                for (auto drop : m_DropSystem->GetAllDrops()) {
+                    drop->GetGameObject()->SetVisible(false);
+                }
+                for (auto icon : m_ExpSystem->GetAllIcons()) {
+                    icon->GetGameObject()->SetVisible(false);
+                }
+            } break;
+            default: break;
         }
 
         // Handle background visibility
@@ -45,6 +99,10 @@ namespace UGO {
         if (m_Background) {
             m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
         }
+
+        bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
+        if (m_ShowHp) { m_ShowHp->SetVisible(isInGame); }
+        if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
 
 
         LOG_INFO("Changing GameState to: {}", stateName);

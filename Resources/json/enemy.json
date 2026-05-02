@@ -1,0 +1,99 @@
+{
+    "e_001": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/enemy/Boss_1_1.png",
+            "../Resources/Image/character/enemy/Boss_1_2.png",
+            "../Resources/Image/character/enemy/Boss_1_3.png",
+            "../Resources/Image/character/enemy/Boss_1_4.png"
+        ],
+        "imagePath": "",
+        "size": {
+            "width": 32.0,
+            "height": 32.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 100.0,
+        "attackPower": 20.0,
+        "attackCooldown": 1.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_002": {
+        "speed": 10.0,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/enemy/Boss_7_1.png",
+            "../Resources/Image/character/enemy/Boss_7_2.png",
+            "../Resources/Image/character/enemy/Boss_7_3.png"
+        ],
+        "imagePath": "",
+        "size": {
+            "width": 32.0,
+            "height": 32.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 100.0,
+        "attackPower": 20.0,
+        "attackCooldown": 1.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    }
+}

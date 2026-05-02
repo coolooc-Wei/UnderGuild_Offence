@@ -6,13 +6,11 @@
 #include "Scene/SceneTypes.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Scene/Weapon.hpp"
+#include "Scene/StatusEffect.hpp"
 #include "Core/Time.hpp"
 
 namespace UGO {
 namespace Scene {
-
-    class Weapon;
-    class StatusEffect;
 
     class Character : public BasicObject {
     public:
@@ -23,10 +21,24 @@ namespace Scene {
             Core::Angle offsetAngle = 0.0f;
             Core::Size size = { 32.0f, 32.0f };
         };
+ 
+        struct CharacterParams : public BasicObject::BasicObjectParams {
+            HpValue maxHP = 100.0f;
+            HpValue attackPower = 10.0f;
+            Core::Time::Second attackCooldown = 1.0f;
+            Core::Time::Second invincibleDuration = 0.5f;
+            std::unique_ptr<Weapon> weapon = nullptr;
+            std::vector<std::unique_ptr<StatusEffect>> statusEffects = {};
+            EffectAnimationData attackAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
+            EffectAnimationData damageAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
+        };
 
 
+        Character();
+        Character(CharacterParams&& params);
         Character(HpValue maxHP, HpValue attackPower, SpeedValue speed);
         virtual ~Character();
+        void Reset(CharacterParams&& params);
 
         // Getters
         HpValue GetMaxHP() const;
@@ -39,7 +51,7 @@ namespace Scene {
         EffectAnimationData GetDamageAnimationData() const;
         // Setters
         void SetIntendedMovement(const Core::Velocity& intendedMovement);
-        void SetRepelMovement(const Core::Velocity& repelMovement);
+        void AddRepelMovement(const Core::Velocity& repelMovement);
         void SetAttackAnimationData(const EffectAnimationData& data);
         void SetDamageAnimationData(const EffectAnimationData& data);
         void SetAttackCooldownDuration(Core::Time::Second duration);
