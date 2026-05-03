@@ -7,6 +7,7 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/GameRuleSystem.hpp"
 
 
 
@@ -20,6 +21,7 @@ void UGO::App::Start() {
     m_DropSystem = std::make_unique<System::DropSystem>(m_Root, *m_ExpSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_DropSystem, *m_ExpSystem, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>();
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

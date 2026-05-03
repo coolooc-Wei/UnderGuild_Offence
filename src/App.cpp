@@ -5,6 +5,10 @@
 #include "System/CharacterFactory.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
+#include "System/GameRuleSystem.hpp"
+#include "System/DropSystem.hpp"
+#include "System/ExpSystem.hpp"
+#include "Scene/Drop.hpp"
 
 namespace UGO {
 
@@ -70,7 +74,12 @@ namespace UGO {
                 m_EffectAnimationManager->Reset();
             } break;
             case GameState::END: {
-                if(m_BattleManager->GetEnemyKillCount() >= 100 && !m_BattleManager->GetAllHeroes().empty()) {
+                int enemyCount = m_BattleManager->GetEnemyCount();
+                bool isHeroAlive = m_BattleManager->IsHeroAlive();
+                int killCount = m_BattleManager->GetEnemyKillCount();
+                auto gameResult = m_GameRuleSystem->DetectGameResult(enemyCount, isHeroAlive, killCount);
+
+                if (gameResult == System::GameRuleSystem::GameResult::WIN) {
                     m_Win->GetGameObject()->SetVisible(true);
                     m_WinIcon->GetGameObject()->SetVisible(true);
                     m_WinLoseBackground->GetGameObject()->SetVisible(true);

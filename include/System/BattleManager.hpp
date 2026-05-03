@@ -37,6 +37,8 @@ namespace System {
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
 
+        bool IsHeroAlive() const;
+        int GetEnemyCount() const;
 
         void AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         void AddHeroByID(const std::string& heroID, const Core::WorldPosition& position);

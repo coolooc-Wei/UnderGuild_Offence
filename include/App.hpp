@@ -16,6 +16,7 @@ namespace UGO::System {
     class EnemiesSpawnerSystem;
     class DropSystem;
     class ExpSystem;
+    class GameRuleSystem;
 }
 
 namespace UGO {
@@ -82,6 +83,7 @@ private:
     std::unique_ptr<System::DropSystem> m_DropSystem;
     std::unique_ptr<System::BattleManager> m_BattleManager;
     std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
+    std::unique_ptr<System::GameRuleSystem> m_GameRuleSystem;
 
 
 
