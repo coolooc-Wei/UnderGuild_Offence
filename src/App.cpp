@@ -5,6 +5,7 @@
 #include "System/CharacterFactory.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
+#include "System/DropSystem.hpp"
 
 namespace UGO {
 
@@ -86,7 +87,7 @@ namespace UGO {
                 for (auto drop : m_DropSystem->GetAllDrops()) {
                     drop->GetGameObject()->SetVisible(false);
                 }
-                for (auto icon : m_ExpSystem->GetAllIcons()) {
+                for (auto icon : m_RewardManager->GetAllIcons()) {
                     icon->GetGameObject()->SetVisible(false);
                 }
             } break;

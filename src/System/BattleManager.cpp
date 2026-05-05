@@ -17,15 +17,13 @@ namespace UGO::System {
         EffectAnimationManager& effectAnimationManager,
         CharacterFactory& characterFactory,
         SteeringSystem& steeringSystem,
-        DropSystem& dropSystem,
-        ExpSystem& expSystem,
+        RewardManager& rewardManager,
         Util::Renderer& root
     )
     : m_EffectAnimationManager(effectAnimationManager),
       m_CharacterFactory(characterFactory),
       m_SteeringSystem(steeringSystem),
-      m_DropSystem(dropSystem),
-      m_ExpSystem(expSystem),
+      m_RewardManager(rewardManager),
       m_Root(root) {
         // Reserve memory for the vectors
         m_AllHeroes.reserve(10);
@@ -39,8 +37,6 @@ namespace UGO::System {
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
 
-        /* HACK: build a function for callback */
-        m_ExpSystem.SetOnLevelUpCallback( [this](const std::string& id, const Core::WorldPosition& pos){ this->AddMercenaryByID(id, pos); } );
     }
     BattleManager::~BattleManager() {}
 
@@ -153,7 +149,7 @@ namespace UGO::System {
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
         for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
-        for (auto* icon: m_ExpSystem.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
+        for (auto* icon: m_RewardManager.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
     }
 
     void BattleManager::AIUpdate() {
@@ -277,11 +273,7 @@ namespace UGO::System {
         /* HACK: refactoring need */
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
-                m_ExpSystem.GrantExpToHero(GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0], enemy->GetExpReward());
-                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
-                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
-                    m_DropSystem.SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
-                }
+                m_RewardManager.OnEnemyDeath(enemy.get(), GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0]);
                 m_EnemyKillCount++;
                 return true;
             }

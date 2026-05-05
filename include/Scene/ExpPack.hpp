@@ -17,14 +17,13 @@ namespace Scene {
         void OnDraw() override;
 
         // Events
-        void OnPickup() override;
+        void OnPickup(Hero* hero) override;
 
-        ExpValue GetExpAmount() const override;
         ExpValue GetExpValue() const;
 
     protected:
     private:
-        ExpValue m_ExpValue = 0.0f;
+        ExpValue m_ExpValue = 50.0f;
     };
 
 } // namespace Scene

@@ -20,6 +20,7 @@ set(SYSTEM_SRC
     System/EnemiesSpawnerSystem.cpp
     System/DropSystem.cpp
     System/ExpSystem.cpp
+    System/RewardManager.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -29,6 +30,7 @@ set(SYSTEM_INC
     System/EnemiesSpawnerSystem.hpp
     System/DropSystem.hpp
     System/ExpSystem.hpp
+    System/RewardManager.hpp
 )
 
 # --- UI ---

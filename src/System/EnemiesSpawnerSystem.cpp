@@ -7,12 +7,12 @@ namespace UGO::System {
     EnemiesSpawnerSystem::EnemiesSpawnerSystem(BattleManager& battleManager, EffectAnimationManager& effectAnimationManager)
     : m_BattleManager(battleManager),
       m_EffectAnimationManager(effectAnimationManager),
-      m_SpawnTimer(Core::Time::CountDownTimer(8.0f)),
       /* Since the warning indicators are stateless, pre-load and share the animation */
       m_WarningIndicatorAnim(std::make_shared<Util::Animation>(
           std::vector<std::string>{m_WarningIndicatorPath},
           false, 100, true, 100
-      )) {
+      )) ,
+      m_SpawnTimer(Core::Time::CountDownTimer(8.0f)){
     }
     EnemiesSpawnerSystem::~EnemiesSpawnerSystem() = default;
 

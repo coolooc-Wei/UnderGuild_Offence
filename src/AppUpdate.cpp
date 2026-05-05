@@ -73,6 +73,13 @@ void UGO::App::Update() {
     else { ChangeGameState(GameState::SETTLING); }
 
     m_BattleManager->UpdateSystem();
+
+    if (m_RewardManager->HasPendingMercenaries()) {
+        for (const auto& pending : m_RewardManager->ConsumePendingMercenaries()) {
+            m_BattleManager->AddMercenaryByID(pending.id, pending.pos);
+        }
+    }
+
     m_EffectAnimationManager->Update();
     m_EnemiesSpawnerSystem->Update();
     /* HACK: remove after demo */

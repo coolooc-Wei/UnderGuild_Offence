@@ -7,12 +7,10 @@
 #include "Scene/Hero.hpp"
 
 namespace UGO::System {
-
-    class ExpSystem;
-
+    
     class DropSystem {
     public:
-        DropSystem(Util::Renderer& root, ExpSystem& expSystem);
+        DropSystem(Util::Renderer& root);
         ~DropSystem();
 
         void AddDrop(std::unique_ptr<Scene::Drop> drop);
@@ -26,7 +24,6 @@ namespace UGO::System {
 
     private:
         Util::Renderer& m_Root;
-        ExpSystem& m_ExpSystem;
         std::vector<std::unique_ptr<Scene::Drop>> m_AllDrops;
 
         const float m_MagnetRadius = 150.0f;

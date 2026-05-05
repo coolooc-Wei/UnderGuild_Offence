@@ -9,8 +9,7 @@
 #include "System/EffectAnimationManager.hpp"
 #include "System/CharacterFactory.hpp"
 #include "System/SteeringSystem.hpp"
-#include "System/DropSystem.hpp"
-#include "System/ExpSystem.hpp"
+#include "System/RewardManager.hpp"
 
 namespace UGO {
 namespace System {
@@ -21,8 +20,7 @@ namespace System {
             EffectAnimationManager& effectAnimationManager,
             CharacterFactory& characterFactor,
             SteeringSystem& steeringSystem,
-            DropSystem& dropSystem,
-            ExpSystem& expSystem,
+            RewardManager& rewardManager,
             Util::Renderer& root
         );
         ~BattleManager();
@@ -85,8 +83,7 @@ namespace System {
         EffectAnimationManager& m_EffectAnimationManager;
         CharacterFactory& m_CharacterFactory;
         SteeringSystem& m_SteeringSystem;
-        DropSystem& m_DropSystem;
-        ExpSystem& m_ExpSystem;
+        RewardManager& m_RewardManager;
         Util::Renderer& m_Root;
 
         const Core::Distance m_offsetDis = 32.0f;
