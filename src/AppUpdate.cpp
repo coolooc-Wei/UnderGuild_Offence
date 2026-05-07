@@ -19,6 +19,10 @@ void UGO::App::Update() {
     }
   } break;
   case GameState::MENU: {
+    // TODO: 實作 UIManager 後，將按鈕的 Update() 呼叫轉移至 UIManager 統一管理。
+    if (m_StartGameButton) { m_StartGameButton->Update(); }
+
+    // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
       ChangeGameState(GameState::GAMING);

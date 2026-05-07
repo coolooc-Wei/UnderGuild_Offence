@@ -8,7 +8,7 @@
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
 #include "System/RewardManager.hpp"
-
+#include "UI/Button.hpp"
 
 
 void UGO::App::Start() {
@@ -111,11 +111,27 @@ void UGO::App::Start() {
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
     // Change states
-    ChangeGameState(GameState::GAMING);
+    ChangeGameState(GameState::WELCOME);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position
     m_Camera.SetCameraPos({.0f, .0f});
 
-
+    // --- UI Buttons ---
+    // TODO: 實作 UIManager 後，將按鈕的更新職責轉移至 UIManager。
+    // 「進入遊戲」按鈕，置於畫面中央偏下
+    m_StartGameButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, -120.0f},   // 位置：螢幕中央偏下
+        150.0f, 45.0f,             // 大小
+        "../Resources/Image/button/Bt_02.png",
+        "../Resources/Image/button/Bt_2_1.png",
+        "../Resources/Image/button/Bt_02_1.png"
+    );
+    m_StartGameButton->SetZIndex(10.0f);
+    m_StartGameButton->SetVisible(false); // 初始隱藏，在 MENU 狀態下才顯示
+    m_StartGameButton->SetOnClickCallback([this]() {
+        LOG_INFO("[UI] Start Game button clicked!");
+        ChangeGameState(GameState::GAMING);
+    });
+    m_Root.AddChild(m_StartGameButton);
 }

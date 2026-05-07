@@ -106,6 +106,11 @@ namespace UGO {
         if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
 
 
+        // 控制 UI 按鈕的可見性
+        if (m_StartGameButton) {
+            m_StartGameButton->SetVisible(state == GameState::MENU);
+        }
+
         LOG_INFO("Changing GameState to: {}", stateName);
     }
 

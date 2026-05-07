@@ -4,6 +4,7 @@
 #include "UGO_pch.hpp"
 
 #include "UI/Page.hpp"
+#include "UI/Button.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
@@ -97,6 +98,10 @@ private:
         {GameState::PAUSE, nullptr},
         {GameState::END, nullptr},
     };
+
+    // UI Buttons
+    // TODO: 實作 UIManager 後，將按鈕的更新職責轉移至 UIManager。
+    std::shared_ptr<UI::Button> m_StartGameButton;
 };
 
 } // namespace UGO
