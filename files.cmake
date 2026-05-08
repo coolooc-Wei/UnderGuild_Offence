@@ -38,11 +38,13 @@ set(UI_SRC
     UI/Page.cpp
     UI/Component.cpp
     UI/Button.cpp
+    UI/UIManager.cpp
 )
 set(UI_INC
     UI/Page.hpp
     UI/Component.hpp
     UI/Button.hpp
+    UI/UIManager.hpp
 )
 
 # --- Input ---

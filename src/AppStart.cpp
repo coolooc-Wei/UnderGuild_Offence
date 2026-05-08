@@ -110,19 +110,10 @@ void UGO::App::Start() {
     m_WinIcon->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
-    // Change states
-    ChangeGameState(GameState::WELCOME);
-    m_CurrentState = State::UPDATE;
-
-    // Initialize camera position
-    m_Camera.SetCameraPos({.0f, .0f});
-
-    // --- UI Buttons ---
-    // TODO: 實作 UIManager 後，將按鈕的更新職責轉移至 UIManager。
-    // 「進入遊戲」按鈕，置於畫面中央偏下
+    // 「開始遊戲」按鈕，置於畫面中央
     m_StartGameButton = std::make_shared<UI::Button>(
-        glm::vec2{0.0f, -120.0f},   // 位置：螢幕中央偏下
-        150.0f, 45.0f,             // 大小
+        glm::vec2{1280.0f / 2.0f - 75.0f, 720.0f / 2.0f - 22.5f}, // 畫面中央，考慮按鈕大小(150x45)
+        150.0f, 45.0f,              // 大小
         "../Resources/Image/button/Bt_02.png",
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
@@ -134,4 +125,22 @@ void UGO::App::Start() {
         ChangeGameState(GameState::GAMING);
     });
     m_Root.AddChild(m_StartGameButton);
+    m_UIManager->Register(m_StartGameButton);
+
+    // 「暫停」按鈕，置於畫面右上角
+    m_PauseButton = std::make_shared<UI::Button>(
+        glm::vec2{1280.0f / 2.0f - 50.0f, 720.0f / 2.0f - 50.0f}, // 畫面右上角
+        45.0f, 45.0f,
+        "../Resources/Image/button/Bt_12.png",
+        "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png"
+    );
+    m_PauseButton->SetZIndex(10.0f);
+    m_PauseButton->SetVisible(false); // 初始隱藏，在 GAMING 狀態下才顯示
+    m_PauseButton->SetOnClickCallback([this]() {
+        LOG_INFO("[UI] Pause button clicked!");
+        ChangeGameState(GameState::PAUSE);
+    });
+    m_Root.AddChild(m_PauseButton);
+    m_UIManager->Register(m_PauseButton);
 }

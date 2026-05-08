@@ -5,6 +5,7 @@
 
 #include "UI/Page.hpp"
 #include "UI/Button.hpp"
+#include "UI/UIManager.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
@@ -99,9 +100,11 @@ private:
         {GameState::END, nullptr},
     };
 
+    // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
+    std::unique_ptr<UI::UIManager> m_UIManager;
     // UI Buttons
-    // TODO: 實作 UIManager 後，將按鈕的更新職責轉移至 UIManager。
     std::shared_ptr<UI::Button> m_StartGameButton;
+    std::shared_ptr<UI::Button> m_PauseButton;
 };
 
 } // namespace UGO

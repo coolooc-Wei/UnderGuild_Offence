@@ -54,9 +54,16 @@ public:
      */
     bool IsMouseHovering() const;
 
+    bool GetVisible() const;
+    void SetVisible( const bool visible);
+
 protected:
     Core::RectangleBox m_BoundingBox;
+
+private:
+    bool m_Visible = false;
 };
+
 
 } // namespace UI
 } // namespace UGO

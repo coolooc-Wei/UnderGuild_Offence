@@ -110,6 +110,9 @@ namespace UGO {
         if (m_StartGameButton) {
             m_StartGameButton->SetVisible(state == GameState::MENU);
         }
+        if (m_PauseButton) {
+            m_PauseButton->SetVisible(state == GameState::GAMING);
+        }
 
         LOG_INFO("Changing GameState to: {}", stateName);
     }

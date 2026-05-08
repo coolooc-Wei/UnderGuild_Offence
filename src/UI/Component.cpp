@@ -22,5 +22,14 @@ bool Component::IsMouseHovering() const {
     return m_BoundingBox.IsCollidingWith(cursorBox);
 }
 
+void Component::SetVisible( const bool visible) {
+    Util::GameObject::SetVisible(visible);
+    m_Visible = visible;
+}
+
+bool Component::GetVisible() const {
+    return m_Visible;
+}
+
 } // namespace UI
 } // namespace UGO

@@ -19,9 +19,6 @@ void UGO::App::Update() {
     }
   } break;
   case GameState::MENU: {
-    // TODO: 實作 UIManager 後，將按鈕的 Update() 呼叫轉移至 UIManager 統一管理。
-    if (m_StartGameButton) { m_StartGameButton->Update(); }
-
     // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
@@ -140,7 +137,10 @@ void UGO::App::Update() {
   /* HACK: Remove maybe
   */
   if (m_Background) { m_Background->Update(); }
-  
+
+  // UI 更新統一由 UIManager 處理，不在此處單獨呼叫 m_StartGameButton->Update()
+  if (m_UIManager) { m_UIManager->Update(); }
+
   m_Root.Update();
   /*
    * Do not touch the code below as they serve the purpose for
