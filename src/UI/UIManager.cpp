@@ -3,32 +3,6 @@
 namespace UGO {
 namespace UI {
 
-void UIManager::Register(const std::shared_ptr<Component>& component) {
-    if (!component) { return; }
-
-    // 防止重複註冊
-    for (const auto& weak : m_Components) {
-        if (auto existing = weak.lock()) {
-            if (existing == component) { return; }
-        }
-    }
-
-    m_Components.emplace_back(component);
-}
-
-void UIManager::Unregister(const std::shared_ptr<Component>& component) {
-    if (!component) { return; }
-
-    m_Components.erase(
-        std::remove_if(m_Components.begin(), m_Components.end(),
-            [&component](const std::weak_ptr<Component>& weak) {
-                auto locked = weak.lock();
-                return !locked || locked == component;
-            }),
-        m_Components.end()
-    );
-}
-
 void UIManager::Clear() {
     m_Components.clear();
 }

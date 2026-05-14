@@ -30,6 +30,7 @@ public:
 
     enum class State {
         START,
+        MENU,
         UPDATE,
         END,
     };

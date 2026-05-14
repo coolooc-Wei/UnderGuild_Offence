@@ -18,6 +18,10 @@ int main(int, char**) {
                 app.Start();
                 break;
             }
+            // case UGO::App::State::MENU: {
+            //     app.Menu();
+            //     break;
+            // }
             case UGO::App::State::UPDATE: {
                 app.Update();
                 break;

@@ -2,7 +2,7 @@
 #define UI_COMPONENT_HPP
 
 #include "UGO_pch.hpp"
-
+#include "Util/GameObject.hpp"
 #include "Core/Box.hpp"
 
 namespace UGO {
@@ -55,7 +55,7 @@ public:
     bool IsMouseHovering() const;
 
     bool GetVisible() const;
-    void SetVisible( const bool visible);
+    void SetVisible(const bool visible);
 
 protected:
     Core::RectangleBox m_BoundingBox;

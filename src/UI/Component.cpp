@@ -1,4 +1,5 @@
 #include "UI/Component.hpp"
+#include "Util/GameObject.hpp"
 
 namespace UGO {
 namespace UI {
@@ -22,9 +23,9 @@ bool Component::IsMouseHovering() const {
     return m_BoundingBox.IsCollidingWith(cursorBox);
 }
 
-void Component::SetVisible( const bool visible) {
-    Util::GameObject::SetVisible(visible);
+void Component::SetVisible(const bool visible) {
     m_Visible = visible;
+    Util::GameObject::SetVisible(visible);
 }
 
 bool Component::GetVisible() const {

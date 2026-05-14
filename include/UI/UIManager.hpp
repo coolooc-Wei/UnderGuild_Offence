@@ -41,13 +41,42 @@ public:
      * @brief 將 UI 組件加入管理。
      * @param component 要管理的 UI 組件（shared_ptr）
      */
-    void Register(const std::shared_ptr<Component>& component);
+    template <typename T>
+    void Register(const std::shared_ptr<T>& component) {
+        static_assert(std::is_base_of_v<Component, T>, "T must inherit from UI::Component");
+        if (!component) { return; }
+
+        auto baseComponent = std::static_pointer_cast<Component>(component);
+
+        // 防止重複註冊
+        for (const auto& weak : m_Components) {
+            if (auto existing = weak.lock()) {
+                if (existing == baseComponent) { return; }
+            }
+        }
+        m_Components.emplace_back(baseComponent);
+    }
 
     /**
      * @brief 將 UI 組件從管理中移除。
      * @param component 要移除的 UI 組件
      */
-    void Unregister(const std::shared_ptr<Component>& component);
+    template <typename T>
+    void Unregister(const std::shared_ptr<T>& component) {
+        static_assert(std::is_base_of_v<Component, T>, "T must inherit from UI::Component");
+        if (!component) { return; }
+
+        auto baseComponent = std::static_pointer_cast<Component>(component);
+
+        m_Components.erase(
+            std::remove_if(m_Components.begin(), m_Components.end(),
+                [&baseComponent](const std::weak_ptr<Component>& weak) {
+                    auto locked = weak.lock();
+                    return !locked || locked == baseComponent;
+                }),
+            m_Components.end()
+        );
+    }
 
     /**
      * @brief 移除所有已管理的 UI 組件。

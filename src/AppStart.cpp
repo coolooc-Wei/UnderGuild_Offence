@@ -22,6 +22,7 @@ void UGO::App::Start() {
     m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
+    m_UIManager = std::make_unique<UI::UIManager>();
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -112,8 +113,8 @@ void UGO::App::Start() {
 
     // 「開始遊戲」按鈕，置於畫面中央
     m_StartGameButton = std::make_shared<UI::Button>(
-        glm::vec2{1280.0f / 2.0f - 75.0f, 720.0f / 2.0f - 22.5f}, // 畫面中央，考慮按鈕大小(150x45)
-        150.0f, 45.0f,              // 大小
+        glm::vec2{0.0f, 0.0f - 150.0f}, // 畫面中央 (PTSD 框架原點在中心)
+        300.0f, 90.0f,              // 大小
         "../Resources/Image/button/Bt_02.png",
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
@@ -125,12 +126,16 @@ void UGO::App::Start() {
         ChangeGameState(GameState::GAMING);
     });
     m_Root.AddChild(m_StartGameButton);
+    LOG_INFO("4");
     m_UIManager->Register(m_StartGameButton);
+    LOG_INFO("5");
+
+
 
     // 「暫停」按鈕，置於畫面右上角
     m_PauseButton = std::make_shared<UI::Button>(
-        glm::vec2{1280.0f / 2.0f - 50.0f, 720.0f / 2.0f - 50.0f}, // 畫面右上角
-        45.0f, 45.0f,
+        glm::vec2{1280.0f / 2.0f - 50.0f, (720.0f / 2.0f - 50.0f)}, // 畫面右上角 (Y軸負向為上)
+        50.0f, 50.0f,
         "../Resources/Image/button/Bt_12.png",
         "../Resources/Image/button/Bt_12_1.png",
         "../Resources/Image/button/Bt_12_2.png"
@@ -143,4 +148,13 @@ void UGO::App::Start() {
     });
     m_Root.AddChild(m_PauseButton);
     m_UIManager->Register(m_PauseButton);
+
+
+    // Initialize camera position
+    m_Camera.SetCameraPos({.0f, .0f});
+
+
+    // Change states
+    m_CurrentState = State::UPDATE;
+    ChangeGameState(GameState::WELCOME);
 }
