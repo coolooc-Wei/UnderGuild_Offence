@@ -26,8 +26,8 @@ void UGO::App::Update() {
     }
   } break;
   case GameState::PAUSE: {
-    // Use P temporarity instead of ESCAPE
-    if (Util::Input::IsKeyDown(Util::Keycode::P)) {
+    // 升級暫停期間不允許 P 鍵跳過，必須透過卡片選擇恢復
+    if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
       ChangeGameState(GameState::GAMING);
     }
 

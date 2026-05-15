@@ -6,6 +6,7 @@
 #include "System/EffectAnimationManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
+#include "System/UpgradeManager.hpp"
 
 namespace UGO {
 
@@ -59,9 +60,15 @@ namespace UGO {
             } break;
             case GameState::PAUSE: {
                 m_BattleManager->SetAllObjectsVisible(false);
+                // 升級暫停時，隱藏一般暫停頁面（UpgradePage 會另行顯示）
+                if (m_IsUpgradePause && m_Pages[GameState::PAUSE]) {
+                    m_Pages[GameState::PAUSE]->SetVisible(false);
+                }
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);
+                // 如果是從升級暫停恢復，確保強化頁面已隱藏
+                if (m_UpgradePage) { m_UpgradePage->Hide(); }
                 /* HACK: Remove these lines after testing */
                 Core::WorldPosition heroPos = {-300.0f, -300.0f};
                 m_BattleManager->AddHeroByID("h_001", heroPos);

@@ -124,7 +124,15 @@ namespace UGO::System {
         m_EnemyPool.emplace_back(m_CharacterFactory.CreateEnemy(std::move(params), position));
     }
     void BattleManager::AddEnemyByID(const std::string& enemyID, const Core::WorldPosition& position) {
-        AddEnemy(m_CharacterFactory.GetEnemyParams(enemyID), position);
+        auto params = m_CharacterFactory.GetEnemyParams(enemyID);
+        AddEnemy(std::move(params), position);
+        // 自動套用全局 debuff
+        if (!m_GlobalEnemyDebuffs.empty() && !m_EnemyPool.empty()) {
+            auto* enemy = m_EnemyPool.back().get();
+            for (const auto& debuff : m_GlobalEnemyDebuffs) {
+                enemy->AddStatusEffect(debuff);
+            }
+        }
     }
 
     void BattleManager::AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
@@ -291,4 +299,22 @@ namespace UGO::System {
         }
     }
 
-}
+    void BattleManager::AddGlobalEnemyStatusEffect(const Scene::StatusEffectData& data) {
+        m_GlobalEnemyDebuffs.push_back(data);
+        // 對場上現有的敵人也立即套用
+        for (auto& enemy : m_EnemyPool) {
+            if (enemy && !enemy->IsDead()) {
+                enemy->AddStatusEffect(data);
+            }
+        }
+    }
+
+    void BattleManager::AddStatusEffectToAllMercenaries(const Scene::StatusEffectData& data) {
+        for (auto& mercenary : m_MercenaryPool) {
+            if (mercenary && !mercenary->IsDead()) {
+                mercenary->AddStatusEffect(data);
+            }
+        }
+    }
+
+} // namespace UGO::System

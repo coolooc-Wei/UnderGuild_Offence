@@ -26,7 +26,7 @@
         "isHurtBoxActive": false,
         "isVisible": false,
         "maxHP": 3000.0,
-        "attackPower": 30.0,
+        "attackPower": 40.0,
         "attackCooldown": 1.0,
         "invincibleDuration": 1.0,
         "weapon": "",

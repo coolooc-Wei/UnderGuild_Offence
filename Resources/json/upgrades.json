@@ -1,0 +1,76 @@
+{
+    "upgrades": [
+        {
+            "id": "hero_atk_up_15",
+            "title": "狂暴之力",
+            "description": "英雄攻擊力提升 15%",
+            "action_target": "Hero",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.15 }
+        },
+        {
+            "id": "hero_atk_up_30",
+            "title": "毀滅打擊",
+            "description": "英雄攻擊力提升 30%",
+            "action_target": "Hero",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.30 }
+        },
+        {
+            "id": "hero_heal_30",
+            "title": "神聖治癒",
+            "description": "英雄恢復 30% 最大生命值",
+            "action_target": "Hero",
+            "action_type": "Heal",
+            "effect_params": { "percent": 0.30 }
+        },
+        {
+            "id": "hero_heal_50",
+            "title": "奇蹟復甦",
+            "description": "英雄恢復 50% 最大生命值",
+            "action_target": "Hero",
+            "action_type": "Heal",
+            "effect_params": { "percent": 0.50 }
+        },
+        {
+            "id": "merc_summon_m001",
+            "title": "衛兵支援",
+            "description": "召喚一名傭兵協助作戰",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001" }
+        },
+        {
+            "id": "merc_summon_m001_x2",
+            "title": "雙倍兵力",
+            "description": "同時召喚兩名傭兵",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001", "count": 2 }
+        },
+        {
+            "id": "merc_atk_up_20",
+            "title": "傭兵激勵",
+            "description": "所有傭兵攻擊力提升 20%",
+            "action_target": "Mercenary",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.20 }
+        },
+        {
+            "id": "enemy_spd_down_20",
+            "title": "詛咒枷鎖",
+            "description": "所有敵人移動速度降低 20%",
+            "action_target": "Enemy",
+            "action_type": "AddGlobalStatusEffect",
+            "effect_params": { "type": "SlowDown", "multiplier": 0.80 }
+        },
+        {
+            "id": "enemy_hp_down_15",
+            "title": "靈魂侵蝕",
+            "description": "所有敵人最大生命值降低 15%",
+            "action_target": "Enemy",
+            "action_type": "AddGlobalStatusEffect",
+            "effect_params": { "type": "SlowDown", "multiplier": 1.00 }
+        }
+    ]
+}

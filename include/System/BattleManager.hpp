@@ -6,6 +6,7 @@
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
+#include "Scene/StatusEffect.hpp"
 #include "System/EffectAnimationManager.hpp"
 #include "System/CharacterFactory.hpp"
 #include "System/SteeringSystem.hpp"
@@ -48,6 +49,17 @@ namespace System {
 
         int GetEnemyKillCount() const { return m_EnemyKillCount; }
 
+        /**
+         * @brief 向全局敷人 debuff 池新增一個狀態效果。
+         *        後續透過 AddEnemyByID 生成的敷人都會自動準用。
+         */
+        void AddGlobalEnemyStatusEffect(const Scene::StatusEffectData& data);
+
+        /**
+         * @brief 向所有較兵新增一個狀態效果。
+         */
+        void AddStatusEffectToAllMercenaries(const Scene::StatusEffectData& data);
+
         void UpdateSystem();
         void SetAllObjectsVisible(bool visable);
 
@@ -87,6 +99,7 @@ namespace System {
         Util::Renderer& m_Root;
 
         const Core::Distance m_offsetDis = 32.0f;
+        std::vector<Scene::StatusEffectData> m_GlobalEnemyDebuffs; ///< 套用至所有後續生成敵人
 
     };
 

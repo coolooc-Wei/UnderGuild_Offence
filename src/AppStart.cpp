@@ -8,7 +8,9 @@
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
 #include "System/RewardManager.hpp"
+#include "System/UpgradeManager.hpp"
 #include "UI/Button.hpp"
+#include "UI/UpgradePage.hpp"
 
 
 void UGO::App::Start() {
@@ -23,6 +25,26 @@ void UGO::App::Start() {
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
     m_UIManager = std::make_unique<UI::UIManager>();
+    m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
+    m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
+
+    // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
+    m_UpgradeManager->SetOnReadyCallback([this]() {
+        // 卡片已抽好：暫停遊戲並顯示 UI
+        m_IsUpgradePause = true;
+        ChangeGameState(GameState::PAUSE);
+        m_UpgradePage->Show(m_UpgradeManager->GetCurrentDisplayData());
+    });
+    m_UpgradeManager->SetOnCompletedCallback([this]() {
+        // 選擇完畢：隱藏 UI 並恢復遊戲
+        m_UpgradePage->Hide();
+        m_IsUpgradePause = false;
+        ChangeGameState(GameState::GAMING);
+    });
+    m_UpgradePage->SetOnCardSelectedCallback([this](const std::string& id) {
+        // UI 只回報 ID，邏輯由 UpgradeManager 處理
+        m_UpgradeManager->ApplyUpgrade(id);
+    });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

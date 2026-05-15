@@ -6,6 +6,7 @@
 #include "UI/Page.hpp"
 #include "UI/Button.hpp"
 #include "UI/UIManager.hpp"
+#include "UI/UpgradePage.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
@@ -19,6 +20,7 @@ namespace UGO::System {
     class DropSystem;
     class ExpSystem;
     class RewardManager;
+    class UpgradeManager;
 }
 
 namespace UGO {
@@ -87,6 +89,7 @@ private:
     std::unique_ptr<System::RewardManager> m_RewardManager;
     std::unique_ptr<System::BattleManager> m_BattleManager;
     std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
+    std::unique_ptr<System::UpgradeManager> m_UpgradeManager;
 
 
 
@@ -106,6 +109,9 @@ private:
     // UI Buttons
     std::shared_ptr<UI::Button> m_StartGameButton;
     std::shared_ptr<UI::Button> m_PauseButton;
+    // 升級選擇頁面（不繼承 Page，是獨立的複合 UI 組件）
+    std::unique_ptr<UI::UpgradePage> m_UpgradePage;
+    bool m_IsUpgradePause = false; ///< 是否因升級而暫停（而非手動暫停）
 };
 
 } // namespace UGO

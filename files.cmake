@@ -21,6 +21,7 @@ set(SYSTEM_SRC
     System/DropSystem.cpp
     System/ExpSystem.cpp
     System/RewardManager.cpp
+    System/UpgradeManager.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -31,6 +32,7 @@ set(SYSTEM_INC
     System/DropSystem.hpp
     System/ExpSystem.hpp
     System/RewardManager.hpp
+    System/UpgradeManager.hpp
 )
 
 # --- UI ---
@@ -39,12 +41,14 @@ set(UI_SRC
     UI/Component.cpp
     UI/Button.cpp
     UI/UIManager.cpp
+    UI/UpgradePage.cpp
 )
 set(UI_INC
     UI/Page.hpp
     UI/Component.hpp
     UI/Button.hpp
     UI/UIManager.hpp
+    UI/UpgradePage.hpp
 )
 
 # --- Input ---
