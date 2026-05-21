@@ -70,8 +70,10 @@ namespace UGO {
                 // 如果是從升級暫停恢復，確保強化頁面已隱藏
                 if (m_UpgradePage) { m_UpgradePage->Hide(); }
                 /* HACK: Remove these lines after testing */
-                Core::WorldPosition heroPos = {-300.0f, -300.0f};
-                m_BattleManager->AddHeroByID("h_001", heroPos);
+                if (m_BattleManager->GetAllHeroes().empty()) {
+                    Core::WorldPosition heroPos = {-300.0f, -300.0f};
+                    m_BattleManager->AddHeroByID("h_001", heroPos);
+                }
                 std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
             } break;
             case GameState::SETTLING: {
