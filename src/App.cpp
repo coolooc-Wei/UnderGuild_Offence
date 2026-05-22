@@ -59,10 +59,18 @@ namespace UGO {
                 // No special init
             } break;
             case GameState::PAUSE: {
-                m_BattleManager->SetAllObjectsVisible(false);
-                // 升級暫停時，隱藏一般暫停頁面（UpgradePage 會另行顯示）
-                if (m_IsUpgradePause && m_Pages[GameState::PAUSE]) {
-                    m_Pages[GameState::PAUSE]->SetVisible(false);
+                // 如果是升級暫停，只需隱藏暫停頁面且保持角色可見，以免角色消失
+                if (m_IsUpgradePause) {
+                    m_EffectAnimationManager->Reset();
+                    m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
+                    if (m_Pages[GameState::PAUSE]) {
+                        m_Pages[GameState::PAUSE]->SetVisible(false);
+                    }
+                } else {
+                    m_BattleManager->SetAllObjectsVisible(false);
+                    if (m_Pages[GameState::PAUSE]) {
+                        m_Pages[GameState::PAUSE]->SetVisible(false);
+                    }
                 }
             } break;
             case GameState::GAMING: {

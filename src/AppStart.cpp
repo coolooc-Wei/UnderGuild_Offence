@@ -95,6 +95,7 @@ void UGO::App::Start() {
     m_Win->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Win->SetSize(200.0f, 100.0f);
     m_Win->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
+    m_Win->GetGameObject()->SetZIndex(100.0f);
     m_Win->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Win->GetGameObject());
 
@@ -103,6 +104,7 @@ void UGO::App::Start() {
     m_Lose->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Lose->SetSize(200.0f, 100.0f);
     m_Lose->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
+    m_Lose->GetGameObject()->SetZIndex(100.0f);
     m_Lose->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Lose->GetGameObject());
 
@@ -111,7 +113,7 @@ void UGO::App::Start() {
     m_WinLoseBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WinLoseBackground->SetSize(300.0f, 604.5f);
     m_WinLoseBackground->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_WinLoseBackground->GetGameObject()->SetZIndex(-5.0f);
+    m_WinLoseBackground->GetGameObject()->SetZIndex(60.0f);
     m_WinLoseBackground->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_WinLoseBackground->GetGameObject());
 
@@ -120,7 +122,7 @@ void UGO::App::Start() {
     m_LoseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_LoseIcon->SetSize(150.0f, 150.0f);
     m_LoseIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_LoseIcon->GetGameObject()->SetZIndex(1.0f);
+    m_LoseIcon->GetGameObject()->SetZIndex(100.0f);
     m_LoseIcon->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_LoseIcon->GetGameObject());
 
@@ -129,7 +131,7 @@ void UGO::App::Start() {
     m_WinIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WinIcon->SetSize(150.0f, 150.0f);
     m_WinIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_WinIcon->GetGameObject()->SetZIndex(1.0f);
+    m_WinIcon->GetGameObject()->SetZIndex(100.0f);
     m_WinIcon->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
