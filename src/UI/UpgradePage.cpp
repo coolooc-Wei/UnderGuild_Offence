@@ -51,26 +51,25 @@ namespace UGO::UI {
                 }
             });
 
-            // 標題文字
-            m_TitleTexts[i] = std::make_shared<Util::Text>(
-                fontPath, 18, "Title",
-                Util::Color::FromName(Util::Colors::WHITE)
-            );
-            m_TitleObjs[i] = std::make_shared<Util::GameObject>();
-            m_TitleObjs[i]->SetDrawable(m_TitleTexts[i]);
-            m_TitleObjs[i]->m_Transform.translation = {cx, cy + 80.0f};
-            m_TitleObjs[i]->SetZIndex(52.0f);
-            m_TitleObjs[i]->SetVisible(false);
-            m_Root.AddChild(m_TitleObjs[i]);
+            // 標題圖片
+            //TODO: size of picture
+            m_TitlePictures[i] = std::make_shared<Scene::BasicObject>();
+            m_TitlePictures[i]->SetImage("../Resources/Image/card/Bg_Card_GradeEdge.png");
+            m_TitlePictures[i]->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+            m_TitlePictures[i]->SetSize(180.0f, 270.0f);
+            m_TitlePictures[i]->GetGameObject()->m_Transform.translation = {cx, cy + 50.0f};
+            m_TitlePictures[i]->GetGameObject()->SetZIndex(52.0f);
+            m_TitlePictures[i]->GetGameObject()->SetVisible(false);
+            m_Root.AddChild(m_TitlePictures[i]->GetGameObject());
 
             // 描述文字
             m_DescTexts[i] = std::make_shared<Util::Text>(
-                fontPath, 13, "Description",
+                fontPath, 14, "Description",
                 Util::Color::FromName(Util::Colors::WHITE)
             );
             m_DescObjs[i] = std::make_shared<Util::GameObject>();
             m_DescObjs[i]->SetDrawable(m_DescTexts[i]);
-            m_DescObjs[i]->m_Transform.translation = {cx, cy + 20.0f};
+            m_DescObjs[i]->m_Transform.translation = {cx + 10.0f, cy - 30.0f};
             m_DescObjs[i]->SetZIndex(52.0f);
             m_DescObjs[i]->SetVisible(false);
             m_Root.AddChild(m_DescObjs[i]);
@@ -86,11 +85,12 @@ namespace UGO::UI {
             m_CardIds[i] = cards[i].id;
 
             // 更新文字內容
-            m_TitleTexts[i]->SetText(cards[i].title);
+            m_TitlePictures[i]->SetImage(cards[i].title);
+            m_TitlePictures[i]->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             m_DescTexts[i]->SetText(cards[i].description);
 
             m_CardButtons[i]->SetVisible(true);
-            m_TitleObjs[i]->SetVisible(true);
+            m_TitlePictures[i]->GetGameObject()->SetVisible(true);
             m_DescObjs[i]->SetVisible(true);
         }
     }
@@ -100,7 +100,7 @@ namespace UGO::UI {
         m_Overlay->SetVisible(false);
         for (int i = 0; i < CARD_COUNT; ++i) {
             m_CardButtons[i]->SetVisible(false);
-            m_TitleObjs[i]->SetVisible(false);
+            m_TitlePictures[i]->GetGameObject()->SetVisible(false);
             m_DescObjs[i]->SetVisible(false);
         }
     }

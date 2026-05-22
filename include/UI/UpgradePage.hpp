@@ -4,6 +4,7 @@
 #include "UGO_pch.hpp"
 #include "UI/Button.hpp"
 #include "UI/UIManager.hpp"
+#include "Scene/BasicObject.hpp"
 
 namespace UGO::UI {
 
@@ -56,7 +57,7 @@ private:
     static float CardX(int i);
 
     Util::Renderer& m_Root;
-    UIManager&      m_UIManager;
+    UIManager& m_UIManager;
 
     // 半透明背景遮罩
     std::shared_ptr<Util::GameObject> m_Overlay;
@@ -64,9 +65,8 @@ private:
     // 3 張卡片按鈕
     std::array<std::shared_ptr<Button>, CARD_COUNT>              m_CardButtons;
 
-    // 標題文字 (GameObject + Text)
-    std::array<std::shared_ptr<Util::GameObject>, CARD_COUNT>    m_TitleObjs;
-    std::array<std::shared_ptr<Util::Text>,       CARD_COUNT>    m_TitleTexts;
+    // 標題圖片 (GameObject + Picture)
+    std::array<std::shared_ptr<Scene::BasicObject>, CARD_COUNT>  m_TitlePictures;
 
     // 描述文字 (GameObject + Text)
     std::array<std::shared_ptr<Util::GameObject>, CARD_COUNT>    m_DescObjs;

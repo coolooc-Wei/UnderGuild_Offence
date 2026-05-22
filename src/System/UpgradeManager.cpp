@@ -145,7 +145,7 @@ namespace UGO::System {
     void UpgradeManager::DrawCards() {
         if (m_CardPool.empty()) {
             // Fallback：填入空白卡
-            for (auto& c : m_CurrentCards) { c = {"", "（空）", "卡池為空"}; }
+            for (auto& c : m_CurrentCards) { c = {"", "（empty）", "isempty"}; }
             return;
         }
 
