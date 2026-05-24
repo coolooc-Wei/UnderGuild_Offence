@@ -11,6 +11,7 @@
 #include "System/UpgradeManager.hpp"
 #include "UI/Button.hpp"
 #include "UI/UpgradePage.hpp"
+#include "UI/ExperienceBar.hpp"
 
 
 void UGO::App::Start() {
@@ -27,6 +28,10 @@ void UGO::App::Start() {
     m_UIManager = std::make_unique<UI::UIManager>();
     m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
     m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
+
+    // 經驗條 UI：固定於畫面最上方，由 GAMING 狀態控制顯示/隱藏
+    m_ExperienceBar = std::make_unique<UI::ExperienceBar>(m_Root);
+    m_ExperienceBar->Hide(); // 初始隱藏，進入 GAMING 後才顯示
 
     // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
     m_UpgradeManager->SetOnReadyCallback([this]() {

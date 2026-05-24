@@ -122,6 +122,15 @@ namespace UGO {
         if (m_ShowHp) { m_ShowHp->SetVisible(isInGame); }
         if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
 
+        // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
+        if (m_ExperienceBar) {
+            if (state == GameState::GAMING || state == GameState::PAUSE) {
+                m_ExperienceBar->Show();
+            } else {
+                m_ExperienceBar->Hide();
+            }
+        }
+
 
         // 控制 UI 按鈕的可見性
         if (m_StartGameButton) {

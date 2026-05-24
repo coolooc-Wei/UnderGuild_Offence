@@ -85,7 +85,13 @@ void UGO::App::Update() {
     m_EnemiesSpawnerSystem->Update();
     /* HACK: remove after demo */
     if (!m_BattleManager->GetAllHeroes().empty()) {
-        m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetMaxHP()));
+        auto* hero = m_BattleManager->GetAllHeroes()[0];
+        m_HPValueText->SetText("HP: " + std::to_string((int)hero->GetCurrentHP()) + "/" + std::to_string((int)hero->GetMaxHP()));
+
+        // 經驗條同步：每幀將 Hero 的 exp 資料推送給 ExperienceBar
+        if (m_ExperienceBar) {
+            m_ExperienceBar->SetProgress(hero->GetCurrentExp(), hero->GetMaxExp());
+        }
     }
     m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
     

@@ -42,6 +42,7 @@ set(UI_SRC
     UI/Button.cpp
     UI/UIManager.cpp
     UI/UpgradePage.cpp
+    UI/ExperienceBar.cpp
 )
 set(UI_INC
     UI/Page.hpp
@@ -49,6 +50,7 @@ set(UI_INC
     UI/Button.hpp
     UI/UIManager.hpp
     UI/UpgradePage.hpp
+    UI/ExperienceBar.hpp
 )
 
 # --- Input ---
