@@ -7,6 +7,8 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/UpgradeManager.hpp"
+#include "UI/GameDisplay.hpp"
+#include "UI/GameButtons.hpp"
 
 namespace UGO {
 
@@ -88,14 +90,9 @@ namespace UGO {
                 m_EffectAnimationManager->Reset();
             } break;
             case GameState::END: {
-                if(m_BattleManager->GetEnemyKillCount() >= 100 && !m_BattleManager->GetAllHeroes().empty()) {
-                    m_Win->GetGameObject()->SetVisible(true);
-                    m_WinIcon->GetGameObject()->SetVisible(true);
-                    m_WinLoseBackground->GetGameObject()->SetVisible(true);
-                } else {
-                    m_Lose->GetGameObject()->SetVisible(true);
-                    m_LoseIcon->GetGameObject()->SetVisible(true);
-                    m_WinLoseBackground->GetGameObject()->SetVisible(true);
+                if (m_GameDisplay) {
+                    bool isWin = (m_BattleManager->GetEnemyKillCount() >= 100 && !m_BattleManager->GetAllHeroes().empty());
+                    m_GameDisplay->ShowResult(isWin);
                 }
 
                 for (auto chars : m_BattleManager->GetAllCharacters()) {
@@ -111,16 +108,11 @@ namespace UGO {
             default: break;
         }
 
-        // Handle background visibility
-        /* HACK: Remove maybe
-        */
-        if (m_Background) {
-            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
-        }
-
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
-        if (m_ShowHp) { m_ShowHp->SetVisible(isInGame); }
-        if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
+        if (m_GameDisplay) {
+            m_GameDisplay->SetBackgroundVisible(isInGame);
+            m_GameDisplay->SetHUDVisible(isInGame);
+        }
 
         // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
         if (m_ExperienceBar) {
@@ -142,11 +134,9 @@ namespace UGO {
 
 
         // 控制 UI 按鈕的可見性
-        if (m_StartGameButton) {
-            m_StartGameButton->SetVisible(state == GameState::MENU);
-        }
-        if (m_PauseButton) {
-            m_PauseButton->SetVisible(state == GameState::GAMING);
+        if (m_GameButtons) {
+            m_GameButtons->SetStartButtonVisible(state == GameState::MENU);
+            m_GameButtons->SetPauseButtonVisible(state == GameState::GAMING);
         }
 
         LOG_INFO("Changing GameState to: {}", stateName);

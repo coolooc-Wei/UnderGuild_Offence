@@ -7,8 +7,9 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
-
 #include "Scene/ExpPack.hpp"
+#include "UI/GameDisplay.hpp"
+#include "UI/GameButtons.hpp"
 
 void UGO::App::Update() {
   switch (m_CurrentGameState) {
@@ -86,7 +87,9 @@ void UGO::App::Update() {
     /* HACK: remove after demo */
     if (!m_BattleManager->GetAllHeroes().empty()) {
         auto* hero = m_BattleManager->GetAllHeroes()[0];
-        m_HPValueText->SetText("HP: " + std::to_string((int)hero->GetCurrentHP()) + "/" + std::to_string((int)hero->GetMaxHP()));
+        if (m_GameDisplay) {
+            m_GameDisplay->UpdateHUD(hero->GetCurrentHP(), hero->GetMaxHP(), m_BattleManager->GetEnemyKillCount());
+        }
 
         // 經驗條同步：每幀將 Hero 的 exp 資料推送給 ExperienceBar
         if (m_ExperienceBar) {
@@ -102,7 +105,7 @@ void UGO::App::Update() {
         );
     }
 
-    m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
+
 
     
     if (m_BattleManager->GetEnemyKillCount() >= 100) {
@@ -152,7 +155,7 @@ void UGO::App::Update() {
 
   /* HACK: Remove maybe
   */
-  if (m_Background) { m_Background->Update(); }
+  if (m_GameDisplay) { m_GameDisplay->Update(); }
 
   // UI 更新統一由 UIManager 處理，不在此處單獨呼叫 m_StartGameButton->Update()
   if (m_UIManager) { m_UIManager->Update(); }
