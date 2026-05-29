@@ -1,0 +1,10 @@
+{
+    "0": {
+        "isWalkable": true,
+        "imagePath": ""
+    },
+    "1": {
+        "isWalkable": false,
+        "imagePath": "../Resources/Image/wall/Wall_1_8.png"
+    }
+}

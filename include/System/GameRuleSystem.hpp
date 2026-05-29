@@ -7,6 +7,10 @@
 
 namespace UGO::System {
 
+    class LevelSystem;
+    class BattleManager;
+    class EnemiesSpawnerSystem;
+
     class GameRuleSystem {
     public:
         enum class GameResult {
@@ -19,21 +23,29 @@ namespace UGO::System {
              */
         };
 
-        GameRuleSystem();
+        GameRuleSystem(
+            LevelSystem& levelSystem,
+            BattleManager& battleManager,
+            EnemiesSpawnerSystem& spawnerSystem
+        );
         ~GameRuleSystem();
 
+        void Update();
+
         GameResult DetectGameResult(
-            int enemyCount,
+            bool isLevelCompleted,
             bool isHeroAlive,
-            int killCount
+            int  enemyCount
         );
 
         /* TODO: Add Setter(Level) function */
 
     private:
+        LevelSystem& m_LevelSystem;
+        BattleManager& m_BattleManager;
+        EnemiesSpawnerSystem& m_EnemiesSpawnerSystem;
+
         const int m_MaxEnemyCap = 100;
-        /* HACK: Change the logic */
-        int m_TargetKillCount = 100;
     };
 
 } // namespace UGO::System

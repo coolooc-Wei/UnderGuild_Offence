@@ -23,15 +23,17 @@ namespace Core {
     constexpr float EPSILON = 0.0001f;
 
     struct Bounds { 
-    float minX, minY;
-    float maxX, maxY;
+        float minX, minY;
+        float maxX, maxY;
 
-    static Bounds FromCenter(float width, float height);
+        static Bounds FromCenter(Distance width, Distance height);
     };
 
     namespace Map {
         extern GridPosition g_MapGridSize;
         extern Bounds g_WorldBounds;
+
+        void ChangeMapSize(Distance gridWidth, Distance gridHeight);
     }
 
     /* Grid:  Top-Left Based, int

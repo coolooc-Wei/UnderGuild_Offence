@@ -1,0 +1,49 @@
+{
+    "EXAMPLE": {
+        "layout": {
+            "normalRoomCount": {
+                "TYPE": "int",
+                "DEFAULT": 5
+            },
+            "specialRoomCount": {
+                "TYPE": "int",
+                "DEFAULT": 1
+            },
+            "bossRoomCount": {
+                "TYPE": "int",
+                "DEFAULT": 1
+            }
+        },
+        "spawnConfig": {
+            "periodicPool": {
+                "TYPE": "list<CharacterID>"
+            },
+            "extraPool": {
+                "TYPE": "list<CharacterID>"
+            },
+            "bossID": {
+                "TYPE": "CharacterID"
+            }
+        },
+        "difficulty": {
+            "enemiesCountPerWave": {
+                "min": {
+                    "TYPE": "int",
+                    "DEFAULT": 20
+                },
+                "max": {
+                    "TYPE": "int",
+                    "DEFAULT": 25
+                }
+            },
+            "spawnInterval": {
+                "TYPE": "float",
+                "DEFAULT": 5.0
+            },
+            "roomClearDuration": {
+                "TYPE": "float",
+                "DEFAULT": 30.0
+            }
+        }
+    }
+}

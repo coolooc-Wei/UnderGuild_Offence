@@ -8,6 +8,8 @@
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
+#include "System/MapSystem.hpp"
+#include "System/LevelSystem.hpp"
 
 
 
@@ -21,7 +23,9 @@ void UGO::App::Start() {
     m_DropSystem = std::make_unique<System::DropSystem>(m_Root, *m_ExpSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_DropSystem, *m_ExpSystem, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
-    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>();
+    m_MapSystem   = std::make_unique<System::MapSystem>();
+    m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem);
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -111,7 +115,7 @@ void UGO::App::Start() {
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
     // Change states
-    ChangeGameState(GameState::GAMING);
+    ChangeGameState(GameState::MENU);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position

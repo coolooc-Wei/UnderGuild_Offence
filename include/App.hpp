@@ -17,6 +17,8 @@ namespace UGO::System {
     class DropSystem;
     class ExpSystem;
     class GameRuleSystem;
+    class MapSystem;
+    class LevelSystem;
 }
 
 namespace UGO {
@@ -35,6 +37,7 @@ public:
         START,
         WELCOME,
         MENU,
+        LEVEL_INIT,
         GAMING,
         SETTLING,
         PAUSE,
@@ -84,6 +87,8 @@ private:
     std::unique_ptr<System::BattleManager> m_BattleManager;
     std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
     std::unique_ptr<System::GameRuleSystem> m_GameRuleSystem;
+    std::unique_ptr<System::MapSystem>   m_MapSystem;
+    std::unique_ptr<System::LevelSystem> m_LevelSystem;
 
 
 
