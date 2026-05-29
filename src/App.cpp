@@ -122,6 +122,10 @@ namespace UGO {
             default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;
         }
 
+        if (m_Background) {
+            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
+        }
+
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
         if (m_ShowHp) { m_ShowHp->SetVisible(isInGame); }
         if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
