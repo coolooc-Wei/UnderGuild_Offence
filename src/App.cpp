@@ -131,6 +131,15 @@ namespace UGO {
             }
         }
 
+        // 血條系統：GAMING 與 PAUSE 狀態皆顯示，其他狀態隱藏
+        if (m_HealthBarSystem) {
+            if (state == GameState::GAMING || state == GameState::PAUSE) {
+                m_HealthBarSystem->Show();
+            } else {
+                m_HealthBarSystem->Hide();
+            }
+        }
+
 
         // 控制 UI 按鈕的可見性
         if (m_StartGameButton) {

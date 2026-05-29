@@ -12,6 +12,7 @@
 #include "UI/Button.hpp"
 #include "UI/UpgradePage.hpp"
 #include "UI/ExperienceBar.hpp"
+#include "UI/HealthBarSystem.hpp"
 
 
 void UGO::App::Start() {
@@ -31,7 +32,11 @@ void UGO::App::Start() {
 
     // 經驗條 UI：固定於畫面最上方，由 GAMING 狀態控制顯示/隱藏
     m_ExperienceBar = std::make_unique<UI::ExperienceBar>(m_Root);
-    m_ExperienceBar->Hide(); // 初始隱藏，進入 GAMING 後才顯示
+    m_ExperienceBar->Hide();
+
+    // 血條系統：管理所有角色頭頂血條，初始隱藏
+    m_HealthBarSystem = std::make_unique<UI::HealthBarSystem>(m_Root);
+    m_HealthBarSystem->Hide();
 
     // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
     m_UpgradeManager->SetOnReadyCallback([this]() {

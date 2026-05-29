@@ -8,6 +8,7 @@
 #include "UI/UIManager.hpp"
 #include "UI/UpgradePage.hpp"
 #include "UI/ExperienceBar.hpp"
+#include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
@@ -114,7 +115,9 @@ private:
     std::unique_ptr<UI::UpgradePage> m_UpgradePage;
     bool m_IsUpgradePause = false; ///< 是否因升級而暫停（而非手動暫停）
     // Hero 經驗條 UI（畫面最上方橫條，無文字）
-    std::unique_ptr<UI::ExperienceBar> m_ExperienceBar;
+    std::unique_ptr<UI::ExperienceBar>    m_ExperienceBar;
+    // 全角色血條系統（角色頭頂，盟友綠/敵人紅）
+    std::unique_ptr<UI::HealthBarSystem>  m_HealthBarSystem;
 };
 
 } // namespace UGO

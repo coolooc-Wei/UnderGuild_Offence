@@ -93,7 +93,17 @@ void UGO::App::Update() {
             m_ExperienceBar->SetProgress(hero->GetCurrentExp(), hero->GetMaxExp());
         }
     }
+
+    // 血條同步：每幀更新所有存活角色的血條位置與血量
+    if (m_HealthBarSystem) {
+        m_HealthBarSystem->Update(
+            m_BattleManager->GetAllAllies(),
+            m_BattleManager->GetAllEnemiesAsCharacters()
+        );
+    }
+
     m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
+
     
     if (m_BattleManager->GetEnemyKillCount() >= 100) {
         // Collect all remaining drops at level end
