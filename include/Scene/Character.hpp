@@ -63,6 +63,9 @@ namespace Scene {
         void OnHeal(HpValue amount) override;
         void OnDeath() override;
 
+        // Upgrade
+        void AddStatusEffect(const StatusEffectData& data);
+
         // System methods
         void Update() override;
         void OnDraw() override;

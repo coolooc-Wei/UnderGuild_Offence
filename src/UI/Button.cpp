@@ -20,6 +20,12 @@ Button::Button(
     SetSize(width, height);
     SetDrawable(m_IdleImage);
     m_State = ButtonState::IDLE;
+
+    // 根據傳入的目標大小與圖片原始大小，計算並設定視覺縮放比例 (Scale)
+    glm::vec2 imageSize = m_IdleImage->GetSize();
+    if (imageSize.x > 0 && imageSize.y > 0) {
+        m_Transform.scale = {width / imageSize.x, height / imageSize.y};
+    }
 }
 
 void Button::Update() {

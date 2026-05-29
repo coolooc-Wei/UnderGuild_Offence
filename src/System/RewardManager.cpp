@@ -34,16 +34,7 @@ namespace UGO::System {
         if (!hero) return;
 
         SpawnLevelUpIcon();
-
-        /* HACK: 升級時暫時生成一隻傭兵 */
-        float offsetX, offsetY;
-        do {
-            offsetX = Core::RandomFloat(-40.0f, 40.0f);
-            offsetY = Core::RandomFloat(-40.0f, 40.0f);
-        } while (std::abs(offsetX) < 20.0f && std::abs(offsetY) < 20.0f);
-
-        Core::WorldPosition spawnPos = hero->GetWorldPosition() + Core::WorldPosition(offsetX, offsetY);
-        m_PendingMercenaries.push_back({"m_001", spawnPos});
+        // 傭兵召喚已移至 UpgradeManager 的卡片選擇機制處理
     }
 
     void RewardManager::SpawnLevelUpIcon() {

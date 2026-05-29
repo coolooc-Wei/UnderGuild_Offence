@@ -5,6 +5,10 @@
 
 #include "UI/Page.hpp"
 #include "UI/Button.hpp"
+#include "UI/UIManager.hpp"
+#include "UI/UpgradePage.hpp"
+#include "UI/ExperienceBar.hpp"
+#include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
@@ -18,6 +22,7 @@ namespace UGO::System {
     class DropSystem;
     class ExpSystem;
     class RewardManager;
+    class UpgradeManager;
 }
 
 namespace UGO {
@@ -29,6 +34,7 @@ public:
 
     enum class State {
         START,
+        MENU,
         UPDATE,
         END,
     };
@@ -85,6 +91,7 @@ private:
     std::unique_ptr<System::RewardManager> m_RewardManager;
     std::unique_ptr<System::BattleManager> m_BattleManager;
     std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
+    std::unique_ptr<System::UpgradeManager> m_UpgradeManager;
 
 
 
@@ -99,9 +106,18 @@ private:
         {GameState::END, nullptr},
     };
 
+    // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
+    std::unique_ptr<UI::UIManager> m_UIManager;
     // UI Buttons
-    // TODO: 實作 UIManager 後，將按鈕的更新職責轉移至 UIManager。
     std::shared_ptr<UI::Button> m_StartGameButton;
+    std::shared_ptr<UI::Button> m_PauseButton;
+    // 升級選擇頁面（不繼承 Page，是獨立的複合 UI 組件）
+    std::unique_ptr<UI::UpgradePage> m_UpgradePage;
+    bool m_IsUpgradePause = false; ///< 是否因升級而暫停（而非手動暫停）
+    // Hero 經驗條 UI（畫面最上方橫條，無文字）
+    std::unique_ptr<UI::ExperienceBar>    m_ExperienceBar;
+    // 全角色血條系統（角色頭頂，盟友綠/敵人紅）
+    std::unique_ptr<UI::HealthBarSystem>  m_HealthBarSystem;
 };
 
 } // namespace UGO

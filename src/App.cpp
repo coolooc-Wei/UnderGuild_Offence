@@ -6,6 +6,7 @@
 #include "System/EffectAnimationManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
+#include "System/UpgradeManager.hpp"
 
 namespace UGO {
 
@@ -58,13 +59,29 @@ namespace UGO {
                 // No special init
             } break;
             case GameState::PAUSE: {
-                m_BattleManager->SetAllObjectsVisible(false);
+                // 如果是升級暫停，只需隱藏暫停頁面且保持角色可見，以免角色消失
+                if (m_IsUpgradePause) {
+                    m_EffectAnimationManager->Reset();
+                    m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
+                    if (m_Pages[GameState::PAUSE]) {
+                        m_Pages[GameState::PAUSE]->SetVisible(false);
+                    }
+                } else {
+                    m_BattleManager->SetAllObjectsVisible(false);
+                    if (m_Pages[GameState::PAUSE]) {
+                        m_Pages[GameState::PAUSE]->SetVisible(false);
+                    }
+                }
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);
+                // 如果是從升級暫停恢復，確保強化頁面已隱藏
+                if (m_UpgradePage) { m_UpgradePage->Hide(); }
                 /* HACK: Remove these lines after testing */
-                Core::WorldPosition heroPos = {-300.0f, -300.0f};
-                m_BattleManager->AddHeroByID("h_001", heroPos);
+                if (m_BattleManager->GetAllHeroes().empty()) {
+                    Core::WorldPosition heroPos = {-300.0f, -300.0f};
+                    m_BattleManager->AddHeroByID("h_001", heroPos);
+                }
                 std::vector<std::string> damageAnimationPath = {"../Resources/Image/weapon/Weapon_031_2 #91622.png"};
             } break;
             case GameState::SETTLING: {
@@ -105,10 +122,31 @@ namespace UGO {
         if (m_ShowHp) { m_ShowHp->SetVisible(isInGame); }
         if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
 
+        // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
+        if (m_ExperienceBar) {
+            if (state == GameState::GAMING || state == GameState::PAUSE) {
+                m_ExperienceBar->Show();
+            } else {
+                m_ExperienceBar->Hide();
+            }
+        }
+
+        // 血條系統：GAMING 與 PAUSE 狀態皆顯示，其他狀態隱藏
+        if (m_HealthBarSystem) {
+            if (state == GameState::GAMING || state == GameState::PAUSE) {
+                m_HealthBarSystem->Show();
+            } else {
+                m_HealthBarSystem->Hide();
+            }
+        }
+
 
         // 控制 UI 按鈕的可見性
         if (m_StartGameButton) {
             m_StartGameButton->SetVisible(state == GameState::MENU);
+        }
+        if (m_PauseButton) {
+            m_PauseButton->SetVisible(state == GameState::GAMING);
         }
 
         LOG_INFO("Changing GameState to: {}", stateName);
