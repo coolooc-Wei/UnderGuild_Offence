@@ -7,6 +7,7 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/GameRuleSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 
@@ -84,7 +85,7 @@ void UGO::App::Update() {
     m_EffectAnimationManager->Update();
     m_EnemiesSpawnerSystem->Update();
     /* HACK: remove after demo */
-    if (!m_BattleManager->GetAllHeroes().empty()) {
+    if (m_BattleManager->IsHeroAlive()) {
         auto* hero = m_BattleManager->GetAllHeroes()[0];
         m_HPValueText->SetText("HP: " + std::to_string((int)hero->GetCurrentHP()) + "/" + std::to_string((int)hero->GetMaxHP()));
 
@@ -105,11 +106,19 @@ void UGO::App::Update() {
     m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
 
     
-    if (m_BattleManager->GetEnemyKillCount() >= 100) {
-        // Collect all remaining drops at level end
-        auto heroes = m_BattleManager->GetAllHeroes();
-        if (!heroes.empty()) {
-            m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
+    int enemyCount = m_BattleManager->GetEnemyCount();
+    bool isHeroAlive = m_BattleManager->IsHeroAlive();
+    int killCount = m_BattleManager->GetEnemyKillCount();
+
+    auto gameResult = m_GameRuleSystem->DetectGameResult(enemyCount, isHeroAlive, killCount);
+
+    if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
+        if (gameResult == System::GameRuleSystem::GameResult::WIN) {
+            // Collect all remaining drops at level end
+            auto heroes = m_BattleManager->GetAllHeroes();
+            if (!heroes.empty()) {
+                m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
+            }
         }
 
         m_SettlingTimer = 0.0f;

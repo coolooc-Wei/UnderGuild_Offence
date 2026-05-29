@@ -7,6 +7,8 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/GameRuleSystem.hpp"
+
 #include "System/RewardManager.hpp"
 #include "System/UpgradeManager.hpp"
 #include "UI/Button.hpp"
@@ -26,6 +28,7 @@ void UGO::App::Start() {
     m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>();
     m_UIManager = std::make_unique<UI::UIManager>();
     m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
     m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
