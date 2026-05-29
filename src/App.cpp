@@ -8,6 +8,8 @@
 #include "System/GameRuleSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/MapSystem.hpp"
+#include "System/LevelSystem.hpp"
 #include "Scene/Drop.hpp"
 #include "System/UpgradeManager.hpp"
 
@@ -27,13 +29,14 @@ namespace UGO {
 
         std::string stateName;
         switch (state) {
-            case GameState::START:   stateName = "START"; break;
-            case GameState::WELCOME: stateName = "WELCOME"; break;
-            case GameState::MENU:    stateName = "MENU"; break;
-            case GameState::GAMING:  stateName = "GAMING"; break;
-            case GameState::SETTLING: stateName = "SETTLING"; break;
-            case GameState::PAUSE:   stateName = "PAUSE"; break;
-            case GameState::END:     stateName = "END"; break;
+            case GameState::START:      stateName = "START"; break;
+            case GameState::WELCOME:    stateName = "WELCOME"; break;
+            case GameState::LEVEL_INIT: stateName = "LEVEL_INIT"; break;
+            case GameState::MENU:       stateName = "MENU"; break;
+            case GameState::GAMING:     stateName = "GAMING"; break;
+            case GameState::SETTLING:   stateName = "SETTLING"; break;
+            case GameState::PAUSE:      stateName = "PAUSE"; break;
+            case GameState::END:        stateName = "END"; break;
         }
 
         if (!m_Pages.count(state)) {
@@ -116,14 +119,7 @@ namespace UGO {
                     icon->GetGameObject()->SetVisible(false);
                 }
             } break;
-            default: break;
-        }
-
-        // Handle background visibility
-        /* HACK: Remove maybe
-        */
-        if (m_Background) {
-            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
+            default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;
         }
 
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);

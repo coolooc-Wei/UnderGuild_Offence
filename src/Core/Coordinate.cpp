@@ -8,11 +8,19 @@ namespace UGO::Core {
     namespace Map {
         /* HACK: Hardcode map size */
         GridPosition g_MapGridSize = {
-            // WINDOW_WIDTH / TILE_SIZE,
-            // WINDOW_HEIGHT / TILE_SIZE
-            864 / 32,
-            480 / 32
+            WINDOW_WIDTH / TILE_SIZE,
+            WINDOW_HEIGHT / TILE_SIZE
         };
+
+        void ChangeMapSize(Distance gridWidth, Distance gridHeight) {
+            g_MapGridSize.x = gridWidth;
+            g_MapGridSize.y = gridHeight;
+            g_WorldBounds = Bounds::FromCenter(
+                static_cast<float>(g_MapGridSize.x * TILE_SIZE),
+                static_cast<float>(g_MapGridSize.y * TILE_SIZE)
+            );
+        }
+
         Bounds g_WorldBounds = Bounds::FromCenter(
             static_cast<float>(g_MapGridSize.x * TILE_SIZE),
             static_cast<float>(g_MapGridSize.y * TILE_SIZE)

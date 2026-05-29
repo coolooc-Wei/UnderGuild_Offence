@@ -9,6 +9,8 @@ set(CORE_INC
     Core/Time.hpp
     Core/Box.hpp
     Core/UGO_Math.hpp
+    Core/MapData.hpp
+    Core/Hash.hpp
 )
 
 # --- SYSTEM ---
@@ -23,6 +25,8 @@ set(SYSTEM_SRC
     System/GameRuleSystem.cpp
     System/RewardManager.cpp
     System/UpgradeManager.cpp
+    System/MapSystem.cpp
+    System/LevelSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -32,9 +36,11 @@ set(SYSTEM_INC
     System/EnemiesSpawnerSystem.hpp
     System/DropSystem.hpp
     System/ExpSystem.hpp
-    System/GameRuleSystem.cpp
     System/RewardManager.hpp
     System/UpgradeManager.hpp
+    System/GameRuleSystem.hpp
+    System/MapSystem.hpp
+    System/LevelSystem.hpp
 )
 
 # --- UI ---

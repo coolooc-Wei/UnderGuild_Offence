@@ -6,6 +6,7 @@
 #include "Core/Time.hpp"
 #include "Core/Coordinate.hpp"
 #include "System/BattleManager.hpp"
+#include "Core/LevelData.hpp"
 
 namespace UGO {
 namespace System {
@@ -29,26 +30,33 @@ namespace System {
         ~EnemiesSpawnerSystem();
 
         void Update();
-        void SetSpawnTimer(const Core::Time::Second spawnInterval);
         /* TODO: Store waves data in a json file.
          *       Spawner will ramdomly choose a enemy type to spawn.
          */
-        void RandomSpawnEnemy(const int minAmount = -1, const int maxAmount = -1);
+        void RandomSpawnEnemy(const std::vector<std::string>& enemyPool, const int minAmount = -1, const int maxAmount = -1);
+        /* Resets the spawner state for a new room.
+         * Adjusts spawn amounts based on difficulty and spawns extra enemies for Special/Boss rooms.
+         */
+        void StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::Difficulty& difficulty, int extraDifficulty);
+        void PauseBattleRoom();
 
     private:
+        void GenerateNextWave();
+        void ExecutePendingSpawns();
+
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
         std::shared_ptr<Util::Animation> m_WarningIndicatorAnim;
 
-        Core::Time::CountDownTimer m_SpawnTimer = Core::Time::CountDownTimer(8.0f);
-        Core::Time::Second m_WarningIndicatorDuration = 1.0f;
+        Core::Time::CountDownTimer m_SpawnTimer{0.0f};
+        const Core::Time::Second m_WarningIndicatorDuration = 1.0f;
 
-        int m_WaveAmount = 0;
-        int m_CurrentSpawnIndex = 0;
+        bool isSpawnActive = false;
 
-        int m_MinSpawnAmount = 5;
-        int m_MaxSpawnAmount = 10;
+        Core::Level::SpawnConfig m_SpawnConfig;
+
+        Core::Level::EnemiesCountPerWave m_SpawnCount;
 
         std::queue<SpawnWaveInfo> m_PaddingWaves;
         std::queue<SpawnInfo> m_PaddingSpawns;

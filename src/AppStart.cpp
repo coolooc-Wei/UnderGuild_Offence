@@ -8,6 +8,8 @@
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
+#include "System/MapSystem.hpp"
+#include "System/LevelSystem.hpp"
 
 #include "System/RewardManager.hpp"
 #include "System/UpgradeManager.hpp"
@@ -28,7 +30,6 @@ void UGO::App::Start() {
     m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
-    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>();
     m_UIManager = std::make_unique<UI::UIManager>();
     m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
     m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
@@ -58,6 +59,9 @@ void UGO::App::Start() {
         // UI 只回報 ID，邏輯由 UpgradeManager 處理
         m_UpgradeManager->ApplyUpgrade(id);
     });
+    m_MapSystem   = std::make_unique<System::MapSystem>();
+    m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem);
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

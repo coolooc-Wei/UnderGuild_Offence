@@ -4,15 +4,15 @@ namespace UGO::System {
 
     CharacterFactory::CharacterFactory(Util::Renderer& renderer)
     : m_Root(renderer) {
-        std::ifstream enemyDatabaseFile("../Resources/json/enemy.json");
+        std::ifstream enemyDatabaseFile(m_EnemyDatabasePath);
         assert(enemyDatabaseFile.is_open());
         enemyDatabaseFile >> m_EnemyDatabase;
 
-        std::ifstream mercenaryDatabaseFile("../Resources/json/mercenary.json");
+        std::ifstream mercenaryDatabaseFile(m_MercenaryDatabasePath);
         assert(mercenaryDatabaseFile.is_open());
         mercenaryDatabaseFile >> m_MercenaryDatabase;
 
-        std::ifstream heroDatabaseFile("../Resources/json/hero.json");
+        std::ifstream heroDatabaseFile(m_HeroDatabasePath);
         assert(heroDatabaseFile.is_open());
         heroDatabaseFile >> m_HeroDatabase;
 

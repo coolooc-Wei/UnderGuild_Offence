@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    # Project include directories (for header-only files not in compile_commands.json)
+    - -IE:/__MINE/Coding_folder/C++/oop_practice/underguild_offence/include
+    - -IE:/__MINE/Coding_folder/C++/oop_practice/underguild_offence/PTSD/include
+    - -IE:/__MINE/Coding_folder/C++/oop_practice/underguild_offence/build/_deps/json-src/include
+    - -std=gnu++17

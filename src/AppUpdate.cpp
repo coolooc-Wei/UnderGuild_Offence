@@ -8,6 +8,7 @@
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
+#include "System/LevelSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 
@@ -23,8 +24,19 @@ void UGO::App::Update() {
     // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
-      ChangeGameState(GameState::GAMING);
+      ChangeGameState(GameState::LEVEL_INIT);
     }
+  } break;
+  case GameState::LEVEL_INIT: {
+    /* TODO: Hardcode of GenerateLevel for now */
+    m_LevelSystem->GenerateLevel("level_01");
+    m_EnemiesSpawnerSystem->StartBattleRoom(
+        m_LevelSystem->GetCurrentRoomSpawnConfig(),
+        m_LevelSystem->GetCurrentLevelData().difficulty,
+        m_LevelSystem->GetDifficultyLevel()
+    );
+
+    ChangeGameState(GameState::GAMING);
   } break;
   case GameState::PAUSE: {
     // 升級暫停期間不允許 P 鍵跳過，必須透過卡片選擇恢復
@@ -108,10 +120,14 @@ void UGO::App::Update() {
     
     int enemyCount = m_BattleManager->GetEnemyCount();
     bool isHeroAlive = m_BattleManager->IsHeroAlive();
-    int killCount = m_BattleManager->GetEnemyKillCount();
 
-    auto gameResult = m_GameRuleSystem->DetectGameResult(enemyCount, isHeroAlive, killCount);
+    auto gameResult = m_GameRuleSystem->DetectGameResult(
+        m_LevelSystem->IsLevelCompleted(),
+        isHeroAlive,
+        enemyCount
+    );
 
+    // When Game over (Win or Lose)
     if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
         if (gameResult == System::GameRuleSystem::GameResult::WIN) {
             // Collect all remaining drops at level end
@@ -124,8 +140,10 @@ void UGO::App::Update() {
         m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }
+
+    m_GameRuleSystem->Update();
     /* END HACK */
-    
+
     /* DO NOT DELETE THIS LINE.
      * IT IS USED FOR THE GAME TIMING.
      */

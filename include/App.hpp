@@ -24,6 +24,8 @@ namespace UGO::System {
     class GameRuleSystem;
     class RewardManager;
     class UpgradeManager;
+    class MapSystem;
+    class LevelSystem;
 }
 
 namespace UGO {
@@ -43,6 +45,7 @@ public:
         START,
         WELCOME,
         MENU,
+        LEVEL_INIT,
         GAMING,
         SETTLING,
         PAUSE,
@@ -94,6 +97,8 @@ private:
     std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
     std::unique_ptr<System::GameRuleSystem> m_GameRuleSystem;
     std::unique_ptr<System::UpgradeManager> m_UpgradeManager;
+    std::unique_ptr<System::MapSystem>   m_MapSystem;
+    std::unique_ptr<System::LevelSystem> m_LevelSystem;
 
 
 

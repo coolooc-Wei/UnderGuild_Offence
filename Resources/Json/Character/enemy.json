@@ -95,5 +95,58 @@
                 "height": 16.0
             }
         }
+    },
+
+
+    "e_b01": {
+        "speed": 5.0,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/enemy/Boss_5_1.png",
+            "../Resources/Image/character/enemy/Boss_5_2.png",
+            "../Resources/Image/character/enemy/Boss_5_3.png",
+            "../Resources/Image/character/enemy/Boss_5_4.png"
+        ],
+        "imagePath": "",
+        "size": {
+            "width": 64.0,
+            "height": 64.0
+        },
+        "hitBox": {
+            "type": "SECTOR",
+            "radius": 128.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 300.0,
+        "attackPower": 29.0,
+        "attackCooldown": 2.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/EF_MonPosition2.png"
+            ],
+            "duration": 0.5,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 64.0,
+                "height": 64.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
     }
 }

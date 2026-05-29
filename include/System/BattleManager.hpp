@@ -64,6 +64,10 @@ namespace System {
 
         void UpdateSystem();
         void SetAllObjectsVisible(bool visable);
+        /* Destroys all active enemies, returning them to the factory pool.
+         * Each PooledCharacter deleter handles SetVisible(false) and recycling automatically.
+         */
+        void ClearAllEnemies();
 
         void AIUpdate();
         void UpdateMovement();
