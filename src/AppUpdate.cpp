@@ -24,20 +24,20 @@ void UGO::App::Update() {
     // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
-      ChangeGameState(GameState::LEVEL_INIT);
+      ChangeGameState(GameState::GAMING);
     }
   } break;
-  case GameState::LEVEL_INIT: {
-    /* TODO: Hardcode of GenerateLevel for now */
-    m_LevelSystem->GenerateLevel("level_01");
-    m_EnemiesSpawnerSystem->StartBattleRoom(
-        m_LevelSystem->GetCurrentRoomSpawnConfig(),
-        m_LevelSystem->GetCurrentLevelData().difficulty,
-        m_LevelSystem->GetDifficultyLevel()
-    );
+//   case GameState::LEVEL_INIT: {
+//     /* TODO: Hardcode of GenerateLevel for now */
+//     m_LevelSystem->GenerateLevel("level_01");
+//     m_EnemiesSpawnerSystem->StartBattleRoom(
+//         m_LevelSystem->GetCurrentRoomSpawnConfig(),
+//         m_LevelSystem->GetCurrentLevelData().difficulty,
+//         m_LevelSystem->GetDifficultyLevel()
+//     );
 
-    ChangeGameState(GameState::GAMING);
-  } break;
+//     ChangeGameState(GameState::GAMING);
+//   } break;
   case GameState::PAUSE: {
     // 升級暫停期間不允許 P 鍵跳過，必須透過卡片選擇恢復
     if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
