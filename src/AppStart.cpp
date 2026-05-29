@@ -9,6 +9,12 @@
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
 
+#include "System/RewardManager.hpp"
+#include "System/UpgradeManager.hpp"
+#include "UI/Button.hpp"
+#include "UI/UpgradePage.hpp"
+#include "UI/ExperienceBar.hpp"
+#include "UI/HealthBarSystem.hpp"
 
 
 void UGO::App::Start() {
@@ -17,11 +23,41 @@ void UGO::App::Start() {
     m_SteeringSystem = std::make_unique<System::SteeringSystem>();
     m_EffectAnimationManager = std::make_unique<System::EffectAnimationManager>(m_Root);
     m_CharacterFactory = std::make_unique<System::CharacterFactory>(m_Root);
-    m_ExpSystem = std::make_unique<System::ExpSystem>(m_Root, *m_CharacterFactory);
-    m_DropSystem = std::make_unique<System::DropSystem>(m_Root, *m_ExpSystem);
-    m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_DropSystem, *m_ExpSystem, m_Root);
+    m_ExpSystem = std::make_unique<System::ExpSystem>();
+    m_DropSystem = std::make_unique<System::DropSystem>(m_Root);
+    m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
+    m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
     m_GameRuleSystem = std::make_unique<System::GameRuleSystem>();
+    m_UIManager = std::make_unique<UI::UIManager>();
+    m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
+    m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
+
+    // 經驗條 UI：固定於畫面最上方，由 GAMING 狀態控制顯示/隱藏
+    m_ExperienceBar = std::make_unique<UI::ExperienceBar>(m_Root);
+    m_ExperienceBar->Hide();
+
+    // 血條系統：管理所有角色頭頂血條，初始隱藏
+    m_HealthBarSystem = std::make_unique<UI::HealthBarSystem>(m_Root);
+    m_HealthBarSystem->Hide();
+
+    // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
+    m_UpgradeManager->SetOnReadyCallback([this]() {
+        // 卡片已抽好：暫停遊戲並顯示 UI
+        m_IsUpgradePause = true;
+        ChangeGameState(GameState::PAUSE);
+        m_UpgradePage->Show(m_UpgradeManager->GetCurrentDisplayData());
+    });
+    m_UpgradeManager->SetOnCompletedCallback([this]() {
+        // 選擇完畢：隱藏 UI 並恢復遊戲
+        m_UpgradePage->Hide();
+        m_IsUpgradePause = false;
+        ChangeGameState(GameState::GAMING);
+    });
+    m_UpgradePage->SetOnCardSelectedCallback([this](const std::string& id) {
+        // UI 只回報 ID，邏輯由 UpgradeManager 處理
+        m_UpgradeManager->ApplyUpgrade(id);
+    });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -72,6 +108,7 @@ void UGO::App::Start() {
     m_Win->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Win->SetSize(200.0f, 100.0f);
     m_Win->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
+    m_Win->GetGameObject()->SetZIndex(100.0f);
     m_Win->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Win->GetGameObject());
 
@@ -80,6 +117,7 @@ void UGO::App::Start() {
     m_Lose->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Lose->SetSize(200.0f, 100.0f);
     m_Lose->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
+    m_Lose->GetGameObject()->SetZIndex(100.0f);
     m_Lose->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Lose->GetGameObject());
 
@@ -88,7 +126,7 @@ void UGO::App::Start() {
     m_WinLoseBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WinLoseBackground->SetSize(300.0f, 604.5f);
     m_WinLoseBackground->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_WinLoseBackground->GetGameObject()->SetZIndex(-5.0f);
+    m_WinLoseBackground->GetGameObject()->SetZIndex(60.0f);
     m_WinLoseBackground->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_WinLoseBackground->GetGameObject());
 
@@ -97,7 +135,7 @@ void UGO::App::Start() {
     m_LoseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_LoseIcon->SetSize(150.0f, 150.0f);
     m_LoseIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_LoseIcon->GetGameObject()->SetZIndex(1.0f);
+    m_LoseIcon->GetGameObject()->SetZIndex(100.0f);
     m_LoseIcon->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_LoseIcon->GetGameObject());
 
@@ -106,16 +144,54 @@ void UGO::App::Start() {
     m_WinIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WinIcon->SetSize(150.0f, 150.0f);
     m_WinIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_WinIcon->GetGameObject()->SetZIndex(1.0f);
+    m_WinIcon->GetGameObject()->SetZIndex(100.0f);
     m_WinIcon->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
-    // Change states
-    ChangeGameState(GameState::GAMING);
-    m_CurrentState = State::UPDATE;
+    // 「開始遊戲」按鈕，置於畫面中央
+    m_StartGameButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, 0.0f - 150.0f}, // 畫面中央 (PTSD 框架原點在中心)
+        300.0f, 90.0f,              // 大小
+        "../Resources/Image/button/Bt_02.png",
+        "../Resources/Image/button/Bt_2_1.png",
+        "../Resources/Image/button/Bt_02_1.png"
+    );
+    m_StartGameButton->SetZIndex(10.0f);
+    m_StartGameButton->SetVisible(false); // 初始隱藏，在 MENU 狀態下才顯示
+    m_StartGameButton->SetOnClickCallback([this]() {
+        LOG_INFO("[UI] Start Game button clicked!");
+        ChangeGameState(GameState::GAMING);
+    });
+    m_Root.AddChild(m_StartGameButton);
+    LOG_INFO("4");
+    m_UIManager->Register(m_StartGameButton);
+    LOG_INFO("5");
+
+
+
+    // 「暫停」按鈕，置於畫面右上角
+    m_PauseButton = std::make_shared<UI::Button>(
+        glm::vec2{1280.0f / 2.0f - 50.0f, (720.0f / 2.0f - 50.0f)}, // 畫面右上角 (Y軸負向為上)
+        50.0f, 50.0f,
+        "../Resources/Image/button/Bt_12.png",
+        "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png"
+    );
+    m_PauseButton->SetZIndex(10.0f);
+    m_PauseButton->SetVisible(false); // 初始隱藏，在 GAMING 狀態下才顯示
+    m_PauseButton->SetOnClickCallback([this]() {
+        LOG_INFO("[UI] Pause button clicked!");
+        ChangeGameState(GameState::PAUSE);
+    });
+    m_Root.AddChild(m_PauseButton);
+    m_UIManager->Register(m_PauseButton);
+
 
     // Initialize camera position
     m_Camera.SetCameraPos({.0f, .0f});
 
 
+    // Change states
+    m_CurrentState = State::UPDATE;
+    ChangeGameState(GameState::WELCOME);
 }
