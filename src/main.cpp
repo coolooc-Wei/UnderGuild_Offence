@@ -1,9 +1,15 @@
 #include "App.hpp"
 
 #include "Core/Context.hpp"
+#include <filesystem>
+#include <spdlog/sinks/basic_file_sink.h>
 
 int main(int, char**) {
     auto context = Core::Context::GetInstance();
+    std::filesystem::create_directories(LOG_DIR);
+    spdlog::default_logger()->sinks().push_back(
+        std::make_shared<spdlog::sinks::basic_file_sink_mt>(LOG_DIR "/game.log", true)
+    );
 
 /* To toggle debug log, run `cmake -DUGO_DISABLE_LOG_DEBUG=ON .` */
 #ifdef UGO_DISABLE_LOG_DEBUG

@@ -116,7 +116,10 @@ namespace UGO::System {
 
     bool BattleManager::IsHeroAlive() const { return !m_AllHeroes.empty(); }
     int BattleManager::GetEnemyCount() const { return static_cast<int>(m_EnemyPool.size()); }
-
+    void BattleManager::ClearAllEnemies() {
+        m_EnemyPool.clear();
+        m_IsCacheDirty = true;
+    }
 
     void BattleManager::AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;

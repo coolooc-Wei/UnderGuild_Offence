@@ -1,0 +1,22 @@
+{
+    "test": {
+        "layout": {
+            "normalRoomCount": 2,
+            "specialRoomCount": 1,
+            "bossRoomCount": 1
+        },
+        "spawnConfig": {
+            "periodicPool": ["e_001"],
+            "extraPool": ["e_002"],
+            "bossID": "e_b01"
+        },
+        "difficulty": {
+            "enemiesCountPerWave": {
+                "min": 5,
+                "max": 10
+            },
+            "spawnInterval": 3.0,
+            "roomClearDuration": 15.0
+        }
+    }
+}

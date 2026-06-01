@@ -31,16 +31,31 @@ namespace UGO::Scene {
       // Method 1: keyboard input
       /* TODO: Add acceleration-based movement mechanic
        */
-         if (Util::Input::IsKeyPressed(Util::Keycode::A) || Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
+         /* TEMPORARY: disabled WASD movement to avoid conflict with the temporary WASD portal trigger feature.
+          > if (Util::Input::IsKeyPressed(Util::Keycode::A) || Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
+          >    vel.x -= 1;
+          > }
+          > if (Util::Input::IsKeyPressed(Util::Keycode::D) || Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
+          >    vel.x += 1;
+          > }
+          > if (Util::Input::IsKeyPressed(Util::Keycode::W) || Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+          >    vel.y += 1;
+          > }
+          > if (Util::Input::IsKeyPressed(Util::Keycode::S) || Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
+          >    vel.y -= 1;
+          > }
+          */
+
+         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
             vel.x -= 1;
          }
-         if (Util::Input::IsKeyPressed(Util::Keycode::D) || Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
+         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
             vel.x += 1;
          }
-         if (Util::Input::IsKeyPressed(Util::Keycode::W) || Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+         if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
             vel.y += 1;
          }
-         if (Util::Input::IsKeyPressed(Util::Keycode::S) || Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
+         if (Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
             vel.y -= 1;
          }
 

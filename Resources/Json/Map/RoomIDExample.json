@@ -1,0 +1,16 @@
+{
+    "EXAMPLE": {
+        "width": {
+            "TYPE": "int"
+        },
+        "height": {
+            "TYPE": "int"
+        },
+        "backgroundPath": {
+            "TYPE": "FilePath"
+        },
+        "tiles": {
+            "TYPE": "list<TileID>"
+        }
+    }
+}

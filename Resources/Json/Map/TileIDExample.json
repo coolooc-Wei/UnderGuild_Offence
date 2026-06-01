@@ -1,0 +1,12 @@
+{
+    "EXAMPLE": {
+        "isWalkable": {
+            "TYPE": "bool",
+            "DEFAULT": true
+        },
+        "imagePath": {
+            "TYPE": "FilePath",
+            "DEFUALT": ""
+        }
+    }
+}

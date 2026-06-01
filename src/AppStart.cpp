@@ -8,6 +8,8 @@
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
+#include "System/MapSystem.hpp"
+#include "System/LevelSystem.hpp"
 
 
 
@@ -21,7 +23,9 @@ void UGO::App::Start() {
     m_DropSystem = std::make_unique<System::DropSystem>(m_Root, *m_ExpSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_DropSystem, *m_ExpSystem, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
-    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>();
+    m_MapSystem   = std::make_unique<System::MapSystem>(m_Root);
+    m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem);
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -35,17 +39,6 @@ void UGO::App::Start() {
         m_Root.AddChild(page.second);
         page.second->SetVisible(false);
     }
-
-    // Initialize background
-    /* HACK: Remove maybe
-    */
-    m_Background = std::make_unique<Scene::BasicObject>();
-    m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
-    m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Background->SetSize(864, 480); // 480p(16:9) but 854 is not divisible by 32
-    m_Background->GetGameObject()->SetZIndex(-10.0f);
-    m_Background->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_Background->GetGameObject());
 
     m_ShowHp = std::make_shared<Util::GameObject>();
     m_HPValueText = std::make_shared<Util::Text>(
@@ -111,7 +104,7 @@ void UGO::App::Start() {
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
     // Change states
-    ChangeGameState(GameState::GAMING);
+    ChangeGameState(GameState::MENU);
     m_CurrentState = State::UPDATE;
 
     // Initialize camera position
