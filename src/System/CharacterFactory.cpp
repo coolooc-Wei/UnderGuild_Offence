@@ -223,7 +223,10 @@ namespace UGO::System {
         else if (jsonParams.at("imagePath").is_string()) {
             imagePathStr = jsonParams.at("imagePath").get<std::string>();
         }
-        cached.image = std::make_shared<Util::Image>(imagePathStr);
+        if (imagePathStr.empty()) {
+            if (cached.drawableType != Scene::BasicObject::DrawableType::Animation) { LOG_ERROR("From CharacterFactory::ParseCharacterParams: imagePath is empty but drawableType is not Animation for ID: {}", cacheKey); }
+        }
+        else { cached.image = std::make_shared<Util::Image>(imagePathStr); }
 
         cached.size = {jsonParams.at("size").at("width"), jsonParams.at("size").at("height")};
 

@@ -9,6 +9,7 @@
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
 #include "System/LevelSystem.hpp"
+#include "System/MapSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 
@@ -148,7 +149,7 @@ void UGO::App::Update() {
       // Check for completion or timeout
       if (m_DropSystem->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
 
-      Core::Time::AdvanceTick();
+      m_MapSystem->ClearRoom();
   } break;
   case GameState::END: {
   } break;
