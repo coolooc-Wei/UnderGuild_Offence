@@ -28,7 +28,23 @@ namespace Map {
 
         bool IsWalkable(const MapCoord& gridPos) const {
             if (gridPos.x < 0 || gridPos.x >= width ||
-                gridPos.y < 0 || gridPos.y >= height) { return false; }
+                gridPos.y < 0 || gridPos.y >= height
+            ) {
+                MapCoord clampedPos = gridPos;
+                LOG_WARN("From MapData::RoomData::IsWalkable: gridPos out of range, clamped it into map area.");
+                // Clamp x
+                if (gridPos.x < 0) { clampedPos.x = 0; }
+                else if (gridPos.x >= width) { clampedPos.x = width - 1; }
+                // Clamp y
+                if (gridPos.y < 0) { clampedPos.y = 0; }
+                else if (gridPos.y >= height) { clampedPos.y = height - 1; }
+
+                return tilesWalkable[clampedPos.y * width + clampedPos.x];
+                /* Method 2: default to true.
+                 > LOG_WARN("From MapData::RoomData::IsWalkable: gridPos out of range, defaul to return true");
+                 > return true;
+                 */
+                }
             return tilesWalkable[gridPos.y * width + gridPos.x];
         }
     };

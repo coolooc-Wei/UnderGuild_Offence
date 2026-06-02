@@ -45,6 +45,7 @@ namespace UGO::System {
         auto hero = std::make_unique<Scene::Hero>(std::move(params));
         hero->SetWorldPosition(position);
         hero->GetGameObject()->SetVisible(true);
+        hero->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
         m_Root.AddChild(hero->GetGameObject());
         LOG_INFO("CharacterFactory: a Hero created");
         return hero;
@@ -72,6 +73,8 @@ namespace UGO::System {
 
         rawEnemy->SetWorldPosition(position);
         if (auto gameObject = rawEnemy->GetGameObject()) { gameObject->SetVisible(true); }
+
+        rawEnemy->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 
         LOG_INFO("CharacterFactory: a Enemy create, pool left {}/{}", m_Enemies.size(), m_Enemies.capacity());
         return PooledCharacter<Scene::Enemy>(
@@ -103,6 +106,8 @@ namespace UGO::System {
 
         rawMercenary->SetWorldPosition(position);
         if (auto gameObject = rawMercenary->GetGameObject()) { gameObject->SetVisible(true); }
+
+        rawMercenary->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 
         LOG_INFO("CharacterFactory: a Mercenary create, pool left {}/{}", m_Mercenaries.size(), m_Mercenaries.capacity());
         return PooledCharacter<Scene::Mercenary>(
@@ -283,5 +288,7 @@ namespace UGO::System {
         auto [iter, inserted] = m_ParamsCache.emplace(cacheKey, std::move(cached));
         return iter->second;
     }
+
+    void CharacterFactory::SetIsGridWalkableCallback(IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = callback; }
 
 }

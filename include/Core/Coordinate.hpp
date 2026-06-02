@@ -21,6 +21,7 @@ namespace Core {
     constexpr int WINDOW_WIDTH = 1280;
 
     constexpr float EPSILON = 0.0001f;
+    constexpr Core::Distance MAX_STEP_DISTANCE = 16.0f;
 
     struct Bounds { 
         float minX, minY;

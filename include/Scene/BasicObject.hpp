@@ -75,6 +75,9 @@ namespace Scene {
         void ActivateHurtBox(bool active);
         void ActivateCollidable(bool active);
 
+        using IsGridWalkableCallback = std::function<bool(Core::GridPosition)>;
+        void SetIsGridWalkableCallback(IsGridWalkableCallback callback);
+
         // System methods
         virtual void Update();
         virtual void OnDraw();
@@ -88,7 +91,7 @@ namespace Scene {
         void TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset);
 
     protected:
-        Core::WorldPosition OffsetCalculator(const Core::Velocity &offset) const;
+        Core::WorldPosition OffsetCalculator(const Core::Velocity &offset, bool considerWall = true) const;
         void SetDead(const bool dead);
         bool GetFlipX() const;
         bool GetFlipY() const;
@@ -113,6 +116,7 @@ namespace Scene {
         bool m_IsHitBoxActive = false;
         bool m_IsHurtBoxActive = false;
         bool m_IsCollidable = true;
+        IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
     };
 
 } // namespace Scene

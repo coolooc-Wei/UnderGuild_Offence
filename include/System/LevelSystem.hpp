@@ -34,6 +34,7 @@ namespace UGO::System {
         const Core::Map::RoomNode& GetCurrentRoom() const;
         const Core::Map::RoomData& GetCurrentRoomData() const;
         bool IsWalkable(const Core::WorldPosition& worldPos) const;
+        bool IsWalkable(const Core::GridPosition& gridPos) const;
 
         void OnRoomCleared();
         bool IsRoomCleared() const;

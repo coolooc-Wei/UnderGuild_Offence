@@ -16,6 +16,7 @@
 void UGO::App::Start() {
     LOG_TRACE("Start");
 
+    // Register systems
     m_SteeringSystem = std::make_unique<System::SteeringSystem>();
     m_EffectAnimationManager = std::make_unique<System::EffectAnimationManager>(m_Root);
     m_CharacterFactory = std::make_unique<System::CharacterFactory>(m_Root);
@@ -25,6 +26,7 @@ void UGO::App::Start() {
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
     m_MapSystem   = std::make_unique<System::MapSystem>(m_Root);
     m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem);
+    m_CharacterFactory->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
     m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem);
 
     // Add pages

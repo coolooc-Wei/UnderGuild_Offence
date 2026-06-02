@@ -103,9 +103,8 @@ namespace UGO::System {
         return *m_CurrentRoom;
     }
     const Core::Map::RoomData&  LevelSystem::GetCurrentRoomData() const { return m_MapSystem.GetRoomData(GetCurrentRoom().mapDataID); }
-    bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const {
-        return GetCurrentRoomData().IsWalkable(Core::WorldToGrid(worldPos));
-    }
+    bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const { return GetCurrentRoomData().IsWalkable(Core::WorldToGrid(worldPos)); }
+    bool LevelSystem::IsWalkable(const Core::GridPosition& gridPos) const { return GetCurrentRoomData().IsWalkable(gridPos); }
 
     void LevelSystem::OnRoomCleared() {
         if (!m_CurrentRoom) {
