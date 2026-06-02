@@ -109,7 +109,8 @@ namespace UGO::System {
         m_SpawnCount.min = difficulty.enemiesCountPerWave.min + extraDifficulty;
         m_SpawnCount.max = difficulty.enemiesCountPerWave.max + extraDifficulty;
 
-        if (!m_SpawnConfig.bossID.empty()) { m_BattleManager.AddEnemyByID(m_SpawnConfig.bossID, {0.0f, 0.0f}); }
+        /* URGENT: check is it logical correct to the code putting here */
+        if (!m_SpawnConfig.bossID.empty()) { m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f}); }
 
         // Start first wave
         GenerateNextWave();

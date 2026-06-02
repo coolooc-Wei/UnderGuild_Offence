@@ -66,6 +66,9 @@ namespace UGO::System {
         /* there should be a room at the target coord. */
         bool TryMoveToRoom(Core::Map::MapCoord coord);
 
+        using IsBossAliveCallback = std::function<bool()>;
+        void SetIsBossAliveCallBack(IsBossAliveCallback callback);
+
     private:
         void ParseLevelJSON(const std::string& filename);
         void BuildLayout(const Core::Level::LayoutConfig& layout);
@@ -73,6 +76,8 @@ namespace UGO::System {
         static constexpr float PORTAL_THICKNESS = 48.0f;
         static constexpr float PORTAL_BREADTH   = 96.0f;
         MapSystem& m_MapSystem;
+
+        IsBossAliveCallback mf_IsBossAlive = nullptr;
 
         // Cache from Json file
         std::unordered_map<std::string, Core::Level::LevelData> m_Levels;

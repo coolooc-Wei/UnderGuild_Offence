@@ -118,7 +118,7 @@ namespace UGO::System {
     }
     bool LevelSystem::IsRoomCleared() const {
         if (!m_CurrentRoom) { return false; }
-        /* TODO: If room type is Boss, check if the boss is defeated. */
+        if (m_CurrentRoom->roomType == Core::Map::RoomType::Boss) { return !mf_IsBossAlive(); }
         return m_CurrentRoom->isCleared || m_RoomClearTimer.IsTimeUp();
     }
 
@@ -353,4 +353,5 @@ namespace UGO::System {
         LOG_INFO("LevelSystem: Room Grid (NS:Start, Bo:Boss, Sp:Special, No:Normal):{}", gridLog);
     }
 
+    void LevelSystem::SetIsBossAliveCallBack(IsBossAliveCallback callback) { mf_IsBossAlive = callback; }
 }
