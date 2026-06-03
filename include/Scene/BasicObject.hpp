@@ -75,8 +75,7 @@ namespace Scene {
         void ActivateHurtBox(bool active);
         void ActivateCollidable(bool active);
 
-        using IsGridWalkableCallback = std::function<bool(Core::GridPosition)>;
-        void SetIsGridWalkableCallback(IsGridWalkableCallback callback);
+        void SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback);
 
         // System methods
         virtual void Update();
@@ -116,7 +115,7 @@ namespace Scene {
         bool m_IsHitBoxActive = false;
         bool m_IsHurtBoxActive = false;
         bool m_IsCollidable = true;
-        IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
+        Core::IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
     };
 
 } // namespace Scene

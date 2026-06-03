@@ -40,6 +40,11 @@ namespace System {
         void StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::Difficulty& difficulty, int extraDifficulty);
         void PauseBattleRoom();
 
+        void SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback);
+
+        using GetEnemySizeCallback = std::function<Core::Size(const std::string&)>;
+        void SetGetEnemySizeCallback(GetEnemySizeCallback callback);
+
     private:
         void GenerateNextWave();
         void ExecutePendingSpawns();
@@ -51,10 +56,14 @@ namespace System {
 
         Core::Time::CountDownTimer m_SpawnTimer{0.0f};
         const Core::Time::Second m_WarningIndicatorDuration = 1.0f;
+        const Core::Distance m_StepNudgeDistance = 3.0 * (float)Core::TILE_SIZE / 5.0;
 
         bool isSpawnActive = false;
 
         Core::Level::SpawnConfig m_SpawnConfig;
+
+        Core::IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
+        GetEnemySizeCallback mf_GetEnemySizeCallback = nullptr;
 
         Core::Level::EnemiesCountPerWave m_SpawnCount;
 

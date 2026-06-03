@@ -15,6 +15,8 @@ namespace Core {
     using Angle = float;
     using Size = glm::vec2;
 
+    using IsGridWalkableCallback = std::function<bool(const GridPosition&)>;
+
     constexpr int TILE_SIZE = 32;
 
     constexpr int WINDOW_HEIGHT = 720;
@@ -43,6 +45,7 @@ namespace Core {
     WorldPosition GridToWorld(const GridPosition& gridPos);
     GridPosition WorldToGrid(const WorldPosition &worldPos);
     WorldPosition ClampPosition(const WorldPosition& pos, Distance halfWidth, Distance halfHeight);
+    bool IsAreaWalkable(const WorldPosition& center, Distance halfWidth, Distance halfHeight, const IsGridWalkableCallback& isWalkable);
 
 } // namespace Core
 } // namespace UGO

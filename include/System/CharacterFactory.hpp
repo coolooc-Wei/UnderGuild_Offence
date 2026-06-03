@@ -28,17 +28,16 @@ namespace System {
         Scene::Character::CharacterParams GetEnemyParams(const std::string& enemyID);
         Scene::Character::CharacterParams GetMercenaryParams(const std::string& mercenaryID);
         Scene::Character::CharacterParams GetHeroParams(const std::string& heroID);
+        Core::Size GetEnemySize(const std::string& enemyID);
 
-        using IsGridWalkableCallback = Scene::BasicObject::IsGridWalkableCallback;
-        void SetIsGridWalkableCallback(IsGridWalkableCallback callback);
+        void SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback);
 
     private:
         const std::string m_EnemyDatabasePath = "../Resources/Json/Character/enemy.json";
         const std::string m_MercenaryDatabasePath = "../Resources/Json/Character/mercenary.json";
         const std::string m_HeroDatabasePath = "../Resources/Json/Character/hero.json";
-
         
-        IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
+        Core::IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
 
         /* Stores all values parsed from JSON in copyable form.
          * Avoids re-parsing JSON on repeated GetXxxParams() calls for the same ID.

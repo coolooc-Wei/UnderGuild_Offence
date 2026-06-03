@@ -137,6 +137,17 @@ namespace UGO::System {
         return BuildFromCache(ParseCharacterParams(heroID, m_HeroDatabase.at(heroID)));
     }
 
+    Core::Size CharacterFactory::GetEnemySize(const std::string& enemyID) {
+        auto it = m_ParamsCache.find(enemyID);
+        if (it != m_ParamsCache.end()) { return it->second.size; }
+
+        if (!m_EnemyDatabase.contains(enemyID)) {
+            LOG_ERROR("From CharacterFactory::GetEnemySize: EnemyID '{}' not found in database. Defaulting to {{32.0f, 32.0f}}.", enemyID);
+            return Core::Size{32.0f, 32.0f};
+        }
+        return ParseCharacterParams(enemyID, m_EnemyDatabase.at(enemyID)).size;
+    }
+
     Scene::Character::CharacterParams CharacterFactory::BuildFromCache(const CachedCharacterData& cached) const {
         auto newParams = Scene::Character::CharacterParams();
 
@@ -292,6 +303,6 @@ namespace UGO::System {
         return iter->second;
     }
 
-    void CharacterFactory::SetIsGridWalkableCallback(IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = callback; }
+    void CharacterFactory::SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = callback; }
 
 }

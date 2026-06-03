@@ -1,4 +1,4 @@
-#include "App.hpp"
+    #include "App.hpp"
 
 #include "System/BattleManager.hpp"
 #include "System/SteeringSystem.hpp"
@@ -31,6 +31,8 @@ void UGO::App::Start() {
     // Set Callback functions
     m_CharacterFactory->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
     m_LevelSystem->SetIsBossAliveCallBack([this](){ return this->m_BattleManager->IsBossAlive(); });
+    m_EnemiesSpawnerSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_EnemiesSpawnerSystem->SetGetEnemySizeCallback([this](const std::string& id){ return this->m_CharacterFactory->GetEnemySize(id); });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

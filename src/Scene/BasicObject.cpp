@@ -216,7 +216,7 @@ namespace UGO::Scene {
     void BasicObject::ActivateHurtBox(bool active) { m_IsHurtBoxActive = active; }
     void BasicObject::ActivateCollidable(bool active) { m_IsCollidable = active; }
 
-    void BasicObject::SetIsGridWalkableCallback(IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = std::move(callback); }
+    void BasicObject::SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = std::move(callback); }
 
     void BasicObject::TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset) {
         Core::Velocity safeOffset = OffsetCalculator(intendedOffset + externalOffset);
@@ -269,18 +269,7 @@ namespace UGO::Scene {
             Core::Distance halfHeight = m_CollisionBox->GetHeight() / 2.0f - Core::EPSILON;
             Core::Distance halfWidth = m_CollisionBox->GetWidth() / 2.0f - Core::EPSILON;
 
-            Core::GridPosition maxGridPos = Core::WorldToGrid( {currentPos.x + halfWidth, currentPos.y + halfHeight} );
-            Core::GridPosition minGridPos = Core::WorldToGrid( {currentPos.x - halfWidth, currentPos.y - halfHeight} );
-            int maxX = maxGridPos.x;
-            int maxY = maxGridPos.y;
-            int minX = minGridPos.x;
-            int minY = minGridPos.y;
-
-            if (!mf_IsGridWalkableCallback) { return false; }
-            for (int x = minX; x <= maxX; ++x)    { if (!mf_IsGridWalkableCallback({x,minY}) || !mf_IsGridWalkableCallback({x,maxY})) { return true; } }
-            for (int y = minY + 1; y < maxY; ++y) { if (!mf_IsGridWalkableCallback({minX,y}) || !mf_IsGridWalkableCallback({maxX,y})) { return true; } }
-
-            return false;
+            return !Core::IsAreaWalkable(currentPos, halfWidth, halfHeight, mf_IsGridWalkableCallback);
         };
 
         Core::Velocity saveOffset = {0.0f,0.0f};
