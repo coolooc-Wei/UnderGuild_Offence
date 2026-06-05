@@ -24,7 +24,7 @@ void UGO::App::Start() {
     m_EffectAnimationManager = std::make_unique<System::EffectAnimationManager>(m_Root);
     m_CharacterFactory = std::make_unique<System::CharacterFactory>(m_Root);
     m_ExpSystem = std::make_unique<System::ExpSystem>();
-    m_DropSystem = std::make_unique<System::DropSystem>(m_Root);
+    m_DropSystem = std::make_unique<System::DropSystem>(m_Root, *m_ExpSystem);
     m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);

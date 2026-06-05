@@ -32,6 +32,15 @@ namespace UGO::UI {
         m_Overlay->SetVisible(false);
         m_Root.AddChild(m_Overlay);
 
+        m_SelectIcon = std::make_shared<Scene::BasicObject>();
+        m_SelectIcon->SetImage("../Resources/Image/title/Title_Select.png");
+        m_SelectIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        m_SelectIcon->SetSize(150, 60);
+        m_SelectIcon->GetGameObject()->SetZIndex(54.0f);
+        m_SelectIcon->GetGameObject()->m_Transform.translation = {0.0f, 170.0f};
+        m_SelectIcon->GetGameObject()->SetVisible(false);
+        m_Root.AddChild(m_SelectIcon->GetGameObject());
+
         // ── 3 張卡 ────────────────────────────────────────────
         for (int i = 0; i < CARD_COUNT; ++i) {
             const float cx = CardX(i);
@@ -146,6 +155,7 @@ namespace UGO::UI {
     void UpgradePage::Show(const std::array<CardDisplayData, 3>& cards) {
         m_IsVisible = true;
         m_Overlay->SetVisible(true);
+        m_SelectIcon->GetGameObject()->SetVisible(true);
 
         for (int i = 0; i < CARD_COUNT; ++i) {
             m_CardIds[i]        = cards[i].id;
@@ -174,6 +184,7 @@ namespace UGO::UI {
     void UpgradePage::Hide() {
         m_IsVisible = false;
         m_Overlay->SetVisible(false);
+        m_SelectIcon->GetGameObject()->SetVisible(false);
         for (int i = 0; i < CARD_COUNT; ++i) {
             m_CardButtons[i]->SetVisible(false);
             m_TitlePictures[i]->GetGameObject()->SetVisible(false);

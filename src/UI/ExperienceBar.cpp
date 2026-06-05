@@ -55,7 +55,13 @@ void ExperienceBar::Hide() {
 
 // ── 私有實作 ────────────────────────────────────────────────────────────
 void ExperienceBar::UpdateFillGeometry() {
-    const float ratio     = std::clamp(m_CurrentExp / m_MaxExp, 0.0f, 1.0f);
+    float ratio = std::clamp(m_CurrentExp / m_MaxExp, 0.0f, 1.0f);
+    
+    // 如果經驗值尚未達到升級標準，視覺上限制比例最大為 99.5%，留下一點視覺空隙，避免看起來像全滿
+    if (m_CurrentExp < m_MaxExp && ratio > 0.995f) {
+        ratio = 0.995f;
+    }
+
     const float fillWidth = BAR_FULL_WIDTH * ratio;
 
     if (fillWidth < 1.0f) {

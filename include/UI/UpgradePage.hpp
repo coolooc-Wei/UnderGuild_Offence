@@ -98,6 +98,8 @@ private:
     std::function<void(const std::string&)> m_OnCardSelectedCallback;
     std::function<void(int)> m_OnCardRefreshedCallback;
 
+    std::shared_ptr<Scene::BasicObject> m_SelectIcon;
+
     bool m_IsVisible = false;
 };
 
