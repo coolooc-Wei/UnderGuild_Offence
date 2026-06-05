@@ -12,15 +12,17 @@ namespace UI {
 
 class GameButtons {
 public:
-    GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause);
+    GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue);
     ~GameButtons() = default;
 
     void SetStartButtonVisible(bool visible);
     void SetPauseButtonVisible(bool visible);
+    void SetContinueButtonVisible(bool visible);
 
 private:
     std::shared_ptr<UI::Button> m_StartGameButton;
     std::shared_ptr<UI::Button> m_PauseButton;
+    std::shared_ptr<UI::Button> m_ContinueButton;
 };
 
 } // namespace UI

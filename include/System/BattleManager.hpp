@@ -47,7 +47,8 @@ namespace System {
         void AddPet(std::unique_ptr<Scene::BasicObject> pet);
 
 
-        int GetEnemyKillCount() const { return m_EnemyKillCount; }
+        int GetEnemyKillCount() const;
+        int GetEnemyCount() const;
 
         /**
          * @brief 向全局敷人 debuff 池新增一個狀態效果。

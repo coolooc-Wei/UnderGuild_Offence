@@ -88,7 +88,7 @@ void UGO::App::Update() {
     if (!m_BattleManager->GetAllHeroes().empty()) {
         auto* hero = m_BattleManager->GetAllHeroes()[0];
         if (m_GameDisplay) {
-            m_GameDisplay->UpdateHUD(hero->GetCurrentHP(), hero->GetMaxHP(), m_BattleManager->GetEnemyKillCount());
+            m_GameDisplay->UpdateHUD(hero->GetCurrentHP(), hero->GetMaxHP(), m_BattleManager->GetEnemyKillCount(), m_BattleManager->GetEnemyCount());
         }
 
         // 經驗條同步：每幀將 Hero 的 exp 資料推送給 ExperienceBar

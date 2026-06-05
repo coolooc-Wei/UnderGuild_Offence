@@ -15,11 +15,13 @@ public:
     GameDisplay(Util::Renderer& root);
     ~GameDisplay() = default;
 
-    void UpdateHUD(float currentHp, float maxHp, int killCount);
+    void UpdateHUD(float currentHp, float maxHp, int killCount, int monCount);
     void ShowResult(bool isWin);
     void SetHUDVisible(bool visible);
     void SetBackgroundVisible(bool visible);
     void SetStateVisible(bool visible);
+    void SetPauseVisible(bool visible);
+    void SetContinueVisible(bool visible);
     void HideAllResults();
     void Update();
 
@@ -38,9 +40,13 @@ private:
     std::shared_ptr<Scene::BasicObject> m_LoseIcon;
     std::shared_ptr<Scene::BasicObject> m_WinLoseBackground;
 
+    std::shared_ptr<Scene::BasicObject> m_PauseIcon;
+    std::shared_ptr<Scene::BasicObject> m_ContinueIcon;
     std::shared_ptr<Scene::BasicObject> m_Wave;
     std::shared_ptr<Scene::BasicObject> m_TimeBG;
     std::shared_ptr<Scene::BasicObject> m_EnemyIcon;
+    std::shared_ptr<Util::GameObject> m_ShowMonCount;
+    std::shared_ptr<Util::Text> m_MonCountText;
 };
 
 } // namespace UI

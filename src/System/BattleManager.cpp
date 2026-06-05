@@ -317,4 +317,18 @@ namespace UGO::System {
         }
     }
 
+    int BattleManager::GetEnemyKillCount() const {
+        return m_EnemyKillCount;
+    }
+
+    int BattleManager::GetEnemyCount() const {
+        int count = 0;
+        for (const auto& enemy : m_EnemyPool) {
+            if (enemy && !enemy->IsDead()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
 } // namespace UGO::System

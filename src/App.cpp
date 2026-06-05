@@ -61,19 +61,11 @@ namespace UGO {
                 // No special init
             } break;
             case GameState::PAUSE: {
-                // 如果是升級暫停，只需隱藏暫停頁面且保持角色可見，以免角色消失
-                if (m_IsUpgradePause) {
-                    m_EffectAnimationManager->Reset();
-                    m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
-                    if (m_Pages[GameState::PAUSE]) {
-                        m_Pages[GameState::PAUSE]->SetVisible(false);
-                    }
-                } else {
-                    m_BattleManager->SetAllObjectsVisible(false);
-                    if (m_Pages[GameState::PAUSE]) {
-                        m_Pages[GameState::PAUSE]->SetVisible(false);
-                    }
-                }
+                m_EffectAnimationManager->Reset();
+                m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
+                if (m_Pages[GameState::PAUSE]) {
+                    m_Pages[GameState::PAUSE]->SetVisible(false);
+                } 
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);
@@ -113,6 +105,8 @@ namespace UGO {
             m_GameDisplay->SetBackgroundVisible(isInGame);
             m_GameDisplay->SetHUDVisible(isInGame);
             m_GameDisplay->SetStateVisible(isInGame);
+            m_GameDisplay->SetPauseVisible(state == GameState::GAMING);
+            m_GameDisplay->SetContinueVisible(state == GameState::PAUSE && !m_IsUpgradePause);
         }
 
         // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
@@ -138,6 +132,7 @@ namespace UGO {
         if (m_GameButtons) {
             m_GameButtons->SetStartButtonVisible(state == GameState::MENU);
             m_GameButtons->SetPauseButtonVisible(state == GameState::GAMING);
+            m_GameButtons->SetContinueButtonVisible(state == GameState::PAUSE && !m_IsUpgradePause);
         }
 
         LOG_INFO("Changing GameState to: {}", stateName);

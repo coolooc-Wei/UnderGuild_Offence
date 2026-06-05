@@ -3,7 +3,7 @@
 namespace UGO {
 namespace UI {
 
-GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause) {
+GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue) {
     // 「開始遊戲」按鈕，置於畫面中央
     m_StartGameButton = std::make_shared<UI::Button>(
         glm::vec2{0.0f, 0.0f - 150.0f}, // 畫面中央 (PTSD 框架原點在中心)
@@ -32,6 +32,20 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     root.AddChild(m_PauseButton);
     uiManager.Register(m_PauseButton);
 
+    // 「繼續」按鈕，置於畫面右上角
+    m_ContinueButton = std::make_shared<UI::Button>(
+        glm::vec2{1280.0f / 2.0f - 50.0f, (720.0f / 2.0f - 50.0f)}, // 畫面右上角 (Y軸負向為上)
+        50.0f, 50.0f,
+        "../Resources/Image/button/Bt_12.png",
+        "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png"
+    );
+    m_ContinueButton->SetZIndex(10.0f);
+    m_ContinueButton->SetVisible(false);
+    m_ContinueButton->SetOnClickCallback(onContinue);
+    root.AddChild(m_ContinueButton);
+    uiManager.Register(m_ContinueButton);
+
 }
 
 void GameButtons::SetStartButtonVisible(bool visible) {
@@ -43,6 +57,12 @@ void GameButtons::SetStartButtonVisible(bool visible) {
 void GameButtons::SetPauseButtonVisible(bool visible) {
     if (m_PauseButton) {
         m_PauseButton->SetVisible(visible);
+    }
+}
+
+void GameButtons::SetContinueButtonVisible(bool visible) {
+    if (m_ContinueButton) {
+        m_ContinueButton->SetVisible(visible);
     }
 }
 

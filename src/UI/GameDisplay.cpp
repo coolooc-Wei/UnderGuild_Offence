@@ -96,15 +96,54 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_TimeBG->GetGameObject()->SetVisible(false);
     root.AddChild(m_TimeBG->GetGameObject());
 
+    m_PauseIcon = std::make_shared<Scene::BasicObject>();
+    m_PauseIcon->SetImage("../Resources/Image/Button/pause.png");
+    m_PauseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_PauseIcon->SetSize(40.0f, 40.0f);
+    m_PauseIcon->GetGameObject()->m_Transform.translation = {591.0f, 312.0f};
+    m_PauseIcon->GetGameObject()->SetZIndex(100.0f);
+    m_PauseIcon->GetGameObject()->SetVisible(false);
+    root.AddChild(m_PauseIcon->GetGameObject());
     
+    m_ContinueIcon = std::make_shared<Scene::BasicObject>();
+    m_ContinueIcon->SetImage("../Resources/Image/Button/Route2.png");
+    m_ContinueIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_ContinueIcon->SetSize(30.0f, 30.0f);
+    m_ContinueIcon->GetGameObject()->m_Transform.translation = {592.0f, 312.0f};
+    m_ContinueIcon->GetGameObject()->SetZIndex(100.0f);
+    m_ContinueIcon->GetGameObject()->SetVisible(false);
+    root.AddChild(m_ContinueIcon->GetGameObject());
+
+    m_EnemyIcon = std::make_shared<Scene::BasicObject>();
+    m_EnemyIcon->SetImage("../Resources/Image/Title/Icon_Mon.png");
+    m_EnemyIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_EnemyIcon->SetSize(30.0f, 30.0f);
+    m_EnemyIcon->GetGameObject()->m_Transform.translation = {-620.0f, 190.0f};
+    m_EnemyIcon->GetGameObject()->SetZIndex(100.0f);
+    m_EnemyIcon->GetGameObject()->SetVisible(false);
+    root.AddChild(m_EnemyIcon->GetGameObject());
+
+    m_ShowMonCount = std::make_shared<Util::GameObject>();
+    m_MonCountText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 15, "100/100",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_ShowMonCount->SetDrawable(m_MonCountText);
+    m_ShowMonCount->m_Transform.translation = {-565.0f, 190.0f};
+    m_ShowMonCount->SetVisible(false); // Default hidden
+    m_ShowMonCount->AddChild(m_ShowKillCount); // 怪物數量顯示在擊殺數量旁
+    root.AddChild(m_ShowMonCount);
 }
 
-void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount) {
+void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int monCount) {
     if (m_HPValueText) {
         m_HPValueText->SetText("HP: " + std::to_string((int)currentHp) + "/" + std::to_string((int)maxHp));
     }
     if (m_KillCountText) {
         m_KillCountText->SetText("Kills: " + std::to_string(killCount));
+    }
+    if (m_MonCountText) {
+        m_MonCountText->SetText(std::to_string(monCount) + " / 100");
     }
 }
 
@@ -134,6 +173,7 @@ void GameDisplay::ShowResult(bool isWin) {
 void GameDisplay::SetHUDVisible(bool visible) {
     if (m_ShowHp) m_ShowHp->SetVisible(visible);
     if (m_ShowKillCount) m_ShowKillCount->SetVisible(visible);
+    if (m_ShowMonCount) m_ShowMonCount->SetVisible(visible);
 }
 
 void GameDisplay::SetBackgroundVisible(bool visible) {
@@ -143,6 +183,15 @@ void GameDisplay::SetBackgroundVisible(bool visible) {
 void GameDisplay::SetStateVisible(bool visible) {
     if (m_Wave) m_Wave->GetGameObject()->SetVisible(visible);
     if (m_TimeBG) m_TimeBG->GetGameObject()->SetVisible(visible);
+    if (m_EnemyIcon) m_EnemyIcon->GetGameObject()->SetVisible(visible);
+}
+
+void GameDisplay::SetPauseVisible(bool visible) {
+    if (m_PauseIcon) m_PauseIcon->GetGameObject()->SetVisible(visible);
+}
+
+void GameDisplay::SetContinueVisible(bool visible) {
+    if (m_ContinueIcon) m_ContinueIcon->GetGameObject()->SetVisible(visible);
 }
 
 void GameDisplay::Update() {

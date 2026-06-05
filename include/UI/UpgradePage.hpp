@@ -96,7 +96,7 @@ private:
     std::array<std::string, CARD_COUNT> m_CardIds;
 
     std::function<void(const std::string&)> m_OnCardSelectedCallback;
-    std::function<void(int)>                 m_OnCardRefreshedCallback;
+    std::function<void(int)> m_OnCardRefreshedCallback;
 
     bool m_IsVisible = false;
 };

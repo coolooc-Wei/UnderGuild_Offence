@@ -91,7 +91,11 @@ void UGO::App::Start() {
         [this]() {
             LOG_INFO("[UI] Pause button clicked!");
             ChangeGameState(GameState::PAUSE);
-        }
+        },
+        [this]() {
+            LOG_INFO("[UI] Continue button clicked!");
+            ChangeGameState(GameState::GAMING);
+         }
     );
 
     // Initialize camera position
