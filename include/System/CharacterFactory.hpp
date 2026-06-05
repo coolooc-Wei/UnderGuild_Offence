@@ -29,6 +29,10 @@ namespace System {
         Scene::Character::CharacterParams GetHeroParams(const std::string& heroID);
 
     private:
+        const std::string m_EnemyDatabasePath = "../Resources/Json/Character/enemy.json";
+        const std::string m_MercenaryDatabasePath = "../Resources/Json/Character/mercenary.json";
+        const std::string m_HeroDatabasePath = "../Resources/Json/Character/hero.json";
+
         /* Stores all values parsed from JSON in copyable form.
          * Avoids re-parsing JSON on repeated GetXxxParams() calls for the same ID.
          */

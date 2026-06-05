@@ -17,15 +17,13 @@ namespace UGO::System {
         EffectAnimationManager& effectAnimationManager,
         CharacterFactory& characterFactory,
         SteeringSystem& steeringSystem,
-        DropSystem& dropSystem,
-        ExpSystem& expSystem,
+        RewardManager& rewardManager,
         Util::Renderer& root
     )
     : m_EffectAnimationManager(effectAnimationManager),
       m_CharacterFactory(characterFactory),
       m_SteeringSystem(steeringSystem),
-      m_DropSystem(dropSystem),
-      m_ExpSystem(expSystem),
+      m_RewardManager(rewardManager),
       m_Root(root) {
         // Reserve memory for the vectors
         m_AllHeroes.reserve(10);
@@ -39,8 +37,6 @@ namespace UGO::System {
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
 
-        /* HACK: build a function for callback */
-        m_ExpSystem.SetOnLevelUpCallback( [this](const std::string& id, const Core::WorldPosition& pos){ this->AddMercenaryByID(id, pos); } );
     }
     BattleManager::~BattleManager() {}
 
@@ -114,6 +110,12 @@ namespace UGO::System {
     }
 
 
+    bool BattleManager::IsHeroAlive() const { return !m_AllHeroes.empty(); }
+    int BattleManager::GetEnemyCount() const { return static_cast<int>(m_EnemyPool.size()); }
+    void BattleManager::ClearAllEnemies() {
+        m_EnemyPool.clear();
+        m_IsCacheDirty = true;
+    }
 
     void BattleManager::AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;
@@ -128,7 +130,15 @@ namespace UGO::System {
         m_EnemyPool.emplace_back(m_CharacterFactory.CreateEnemy(std::move(params), position));
     }
     void BattleManager::AddEnemyByID(const std::string& enemyID, const Core::WorldPosition& position) {
-        AddEnemy(m_CharacterFactory.GetEnemyParams(enemyID), position);
+        auto params = m_CharacterFactory.GetEnemyParams(enemyID);
+        AddEnemy(std::move(params), position);
+        // 自動套用全局 debuff
+        if (!m_GlobalEnemyDebuffs.empty() && !m_EnemyPool.empty()) {
+            auto* enemy = m_EnemyPool.back().get();
+            for (const auto& debuff : m_GlobalEnemyDebuffs) {
+                enemy->AddStatusEffect(debuff);
+            }
+        }
     }
 
     void BattleManager::AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
@@ -153,7 +163,7 @@ namespace UGO::System {
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
         for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
-        for (auto* icon: m_ExpSystem.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
+        for (auto* icon: m_RewardManager.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
     }
 
     void BattleManager::AIUpdate() {
@@ -277,11 +287,7 @@ namespace UGO::System {
         /* HACK: refactoring need */
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
-                m_ExpSystem.GrantExpToHero(GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0], enemy->GetExpReward());
-                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
-                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
-                    m_DropSystem.SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
-                }
+                m_RewardManager.OnEnemyDeath(enemy.get(), GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0]);
                 m_EnemyKillCount++;
                 return true;
             }
@@ -299,4 +305,22 @@ namespace UGO::System {
         }
     }
 
-}
+    void BattleManager::AddGlobalEnemyStatusEffect(const Scene::StatusEffectData& data) {
+        m_GlobalEnemyDebuffs.push_back(data);
+        // 對場上現有的敵人也立即套用
+        for (auto& enemy : m_EnemyPool) {
+            if (enemy && !enemy->IsDead()) {
+                enemy->AddStatusEffect(data);
+            }
+        }
+    }
+
+    void BattleManager::AddStatusEffectToAllMercenaries(const Scene::StatusEffectData& data) {
+        for (auto& mercenary : m_MercenaryPool) {
+            if (mercenary && !mercenary->IsDead()) {
+                mercenary->AddStatusEffect(data);
+            }
+        }
+    }
+
+} // namespace UGO::System

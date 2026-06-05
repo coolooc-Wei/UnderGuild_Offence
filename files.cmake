@@ -9,6 +9,8 @@ set(CORE_INC
     Core/Time.hpp
     Core/Box.hpp
     Core/UGO_Math.hpp
+    Core/MapData.hpp
+    Core/Hash.hpp
 )
 
 # --- SYSTEM ---
@@ -20,6 +22,11 @@ set(SYSTEM_SRC
     System/EnemiesSpawnerSystem.cpp
     System/DropSystem.cpp
     System/ExpSystem.cpp
+    System/GameRuleSystem.cpp
+    System/RewardManager.cpp
+    System/UpgradeManager.cpp
+    System/MapSystem.cpp
+    System/LevelSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -29,14 +36,33 @@ set(SYSTEM_INC
     System/EnemiesSpawnerSystem.hpp
     System/DropSystem.hpp
     System/ExpSystem.hpp
+    System/RewardManager.hpp
+    System/UpgradeManager.hpp
+    System/GameRuleSystem.hpp
+    System/MapSystem.hpp
+    System/LevelSystem.hpp
 )
 
 # --- UI ---
 set(UI_SRC
     UI/Page.cpp
+    UI/Component.cpp
+    UI/Button.cpp
+    UI/UIManager.cpp
+    UI/UpgradePage.cpp
+    UI/ExperienceBar.cpp
+    UI/HealthBar.cpp
+    UI/HealthBarSystem.cpp
 )
 set(UI_INC
     UI/Page.hpp
+    UI/Component.hpp
+    UI/Button.hpp
+    UI/UIManager.hpp
+    UI/UpgradePage.hpp
+    UI/ExperienceBar.hpp
+    UI/HealthBar.hpp
+    UI/HealthBarSystem.hpp
 )
 
 # --- Input ---

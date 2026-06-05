@@ -7,6 +7,8 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/GameRuleSystem.hpp"
+#include "System/LevelSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 
@@ -19,14 +21,26 @@ void UGO::App::Update() {
     }
   } break;
   case GameState::MENU: {
+    // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
       ChangeGameState(GameState::GAMING);
     }
   } break;
+//   case GameState::LEVEL_INIT: {
+//     /* TODO: Hardcode of GenerateLevel for now */
+//     m_LevelSystem->GenerateLevel("level_01");
+//     m_EnemiesSpawnerSystem->StartBattleRoom(
+//         m_LevelSystem->GetCurrentRoomSpawnConfig(),
+//         m_LevelSystem->GetCurrentLevelData().difficulty,
+//         m_LevelSystem->GetDifficultyLevel()
+//     );
+
+//     ChangeGameState(GameState::GAMING);
+//   } break;
   case GameState::PAUSE: {
-    // Use P temporarity instead of ESCAPE
-    if (Util::Input::IsKeyDown(Util::Keycode::P)) {
+    // 升級暫停期間不允許 P 鍵跳過，必須透過卡片選擇恢復
+    if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
       ChangeGameState(GameState::GAMING);
     }
 
@@ -73,26 +87,63 @@ void UGO::App::Update() {
     else { ChangeGameState(GameState::SETTLING); }
 
     m_BattleManager->UpdateSystem();
+
+    if (m_RewardManager->HasPendingMercenaries()) {
+        for (const auto& pending : m_RewardManager->ConsumePendingMercenaries()) {
+            m_BattleManager->AddMercenaryByID(pending.id, pending.pos);
+        }
+    }
+
     m_EffectAnimationManager->Update();
     m_EnemiesSpawnerSystem->Update();
     /* HACK: remove after demo */
-    if (!m_BattleManager->GetAllHeroes().empty()) {
-        m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetMaxHP()));
+    if (m_BattleManager->IsHeroAlive()) {
+        auto* hero = m_BattleManager->GetAllHeroes()[0];
+        m_HPValueText->SetText("HP: " + std::to_string((int)hero->GetCurrentHP()) + "/" + std::to_string((int)hero->GetMaxHP()));
+
+        // 經驗條同步：每幀將 Hero 的 exp 資料推送給 ExperienceBar
+        if (m_ExperienceBar) {
+            m_ExperienceBar->SetProgress(hero->GetCurrentExp(), hero->GetMaxExp());
+        }
     }
+
+    // 血條同步：每幀更新所有存活角色的血條位置與血量
+    if (m_HealthBarSystem) {
+        m_HealthBarSystem->Update(
+            m_BattleManager->GetAllAllies(),
+            m_BattleManager->GetAllEnemiesAsCharacters()
+        );
+    }
+
     m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
+
     
-    if (m_BattleManager->GetEnemyKillCount() >= 100) {
-        // Collect all remaining drops at level end
-        auto heroes = m_BattleManager->GetAllHeroes();
-        if (!heroes.empty()) {
-            m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
+    int enemyCount = m_BattleManager->GetEnemyCount();
+    bool isHeroAlive = m_BattleManager->IsHeroAlive();
+
+    auto gameResult = m_GameRuleSystem->DetectGameResult(
+        m_LevelSystem->IsLevelCompleted(),
+        isHeroAlive,
+        enemyCount
+    );
+
+    // When Game over (Win or Lose)
+    if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
+        if (gameResult == System::GameRuleSystem::GameResult::WIN) {
+            // Collect all remaining drops at level end
+            auto heroes = m_BattleManager->GetAllHeroes();
+            if (!heroes.empty()) {
+                m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
+            }
         }
 
         m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }
+
+    m_GameRuleSystem->Update();
     /* END HACK */
-    
+
     /* DO NOT DELETE THIS LINE.
      * IT IS USED FOR THE GAME TIMING.
      */
@@ -129,7 +180,10 @@ void UGO::App::Update() {
   /* HACK: Remove maybe
   */
   if (m_Background) { m_Background->Update(); }
-  
+
+  // UI 更新統一由 UIManager 處理，不在此處單獨呼叫 m_StartGameButton->Update()
+  if (m_UIManager) { m_UIManager->Update(); }
+
   m_Root.Update();
   /*
    * Do not touch the code below as they serve the purpose for

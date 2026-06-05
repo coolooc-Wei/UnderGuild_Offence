@@ -37,9 +37,22 @@ namespace UGO::Scene {
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
-    HpValue Character::GetAttackPower() const { return m_AttackPower; }
+
+    HpValue Character::GetAttackPower() const {
+        float multiplier = 1.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect->GetType() == StatusEffectType::AttackUp) {
+                multiplier += (effect->GetMultiplier() - 1.0f);
+            }
+        }
+        return m_AttackPower * multiplier;
+    }
     Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
     Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
+
+    void Character::AddStatusEffect(const StatusEffectData& data) {
+        m_StatusEffects.push_back(std::make_unique<StatusEffect>(data));
+    }
 
     void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
     void Character::AddRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement += repelMovement; }
@@ -70,7 +83,12 @@ namespace UGO::Scene {
 
     void Character::OnHeal(HpValue amount) {
         assert(amount >= 0);
-        m_CurrentHP += amount;
+        if(m_CurrentHP + amount <= m_MaxHP) {
+            m_CurrentHP += amount;
+        }
+        else {
+            m_CurrentHP = m_MaxHP;
+        }
     }
 
     void Character::OnDeath() {

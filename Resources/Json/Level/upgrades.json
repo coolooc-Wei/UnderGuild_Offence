@@ -1,0 +1,76 @@
+{
+    "upgrades": [
+        {
+            "id": "hero_atk_up_15",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_1.png",
+            "description": "Hero attack up 15%",
+            "action_target": "Hero",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.15 }
+        },
+        {
+            "id": "hero_atk_up_30",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_1.png",
+            "description": "Hero attack up 30%",
+            "action_target": "Hero",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.30 }
+        },
+        {
+            "id": "hero_heal_30",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_UnitHPrecovery.png",
+            "description": "HP Recovery 30%",
+            "action_target": "Hero",
+            "action_type": "Heal",
+            "effect_params": { "percent": 0.30 }
+        },
+        {
+            "id": "hero_heal_50",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_3.png",
+            "description": "HP Recovery 50%",
+            "action_target": "Hero",
+            "action_type": "Heal",
+            "effect_params": { "percent": 0.50 }
+        },
+        {
+            "id": "merc_summon_m001",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001" }
+        },
+        {
+            "id": "merc_summon_m001_x2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
+            "description": "summon two \nmercenaries",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001", "count": 2 }
+        },
+        {
+            "id": "merc_atk_up_20",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_Unit3.png",
+            "description": "all mercenaries \nattack power \nup 20%",
+            "action_target": "Mercenary",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.20 }
+        },
+        {
+            "id": "enemy_spd_down_20",
+            "title": "../Resources/Image/Buffimage/Icon_Growth_MonAtk.png",
+            "description": "all enemies move \nspeed down 20%",
+            "action_target": "Enemy",
+            "action_type": "AddGlobalStatusEffect",
+            "effect_params": { "type": "SlowDown", "multiplier": 0.80 }
+        },
+        {
+            "id": "enemy_hp_down_15",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_BossHpDown.png",
+            "description": "all enemies max \nhealth down 15%",
+            "action_target": "Enemy",
+            "action_type": "AddGlobalStatusEffect",
+            "effect_params": { "type": "SlowDown", "multiplier": 1.00 }
+        }
+    ]
+}
