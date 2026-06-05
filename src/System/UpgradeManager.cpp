@@ -142,6 +142,38 @@ namespace UGO::System {
         }
     }
 
+    void UpgradeManager::RerollCard(int slotIndex) {
+        if (slotIndex < 0 || slotIndex >= 3) { return; }
+        if (m_CardPool.empty()) { return; }
+
+        const std::string currentId = m_CurrentCards[slotIndex].id;
+        std::mt19937 rng(std::random_device{}());
+
+        if (m_CardPool.size() == 1) {
+            // 卡池只有一張，無法避免重複，直接使用
+            m_CurrentCards[slotIndex] = m_CardPool[0];
+        } else {
+            // 過濾掉當前同 ID 的卡牌，從剩餘卡牌中隨機選取
+            std::vector<const UpgradeCardData*> candidates;
+            candidates.reserve(m_CardPool.size());
+            for (const auto& c : m_CardPool) {
+                if (c.id != currentId) {
+                    candidates.push_back(&c);
+                }
+            }
+            // 若過濾後仍有候選，從中隨機選取；否則直接全池隨機（理論上不會發生）
+            if (!candidates.empty()) {
+                std::uniform_int_distribution<size_t> dist(0, candidates.size() - 1);
+                m_CurrentCards[slotIndex] = *candidates[dist(rng)];
+            } else {
+                std::uniform_int_distribution<size_t> dist(0, m_CardPool.size() - 1);
+                m_CurrentCards[slotIndex] = m_CardPool[dist(rng)];
+            }
+        }
+
+        LOG_INFO("[UpgradeManager] Rerolled slot {} -> {}", slotIndex, m_CurrentCards[slotIndex].id);
+    }
+
     void UpgradeManager::DrawCards() {
         if (m_CardPool.empty()) {
             // Fallback：填入空白卡

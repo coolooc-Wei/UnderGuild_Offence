@@ -112,6 +112,7 @@ namespace UGO {
         if (m_GameDisplay) {
             m_GameDisplay->SetBackgroundVisible(isInGame);
             m_GameDisplay->SetHUDVisible(isInGame);
+            m_GameDisplay->SetStateVisible(isInGame);
         }
 
         // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）

@@ -57,6 +57,13 @@ void UGO::App::Start() {
         // UI 只回報 ID，邏輯由 UpgradeManager 處理
         m_UpgradeManager->ApplyUpgrade(id);
     });
+    m_UpgradePage->SetOnCardRefreshedCallback([this](int slotIndex) {
+        // UI 回報刷新的插槽索引，UpgradeManager 重新抽取該位置的卡牌
+        m_UpgradeManager->RerollCard(slotIndex);
+        // 將新卡牌資料回傳給 UI，更新顯示
+        auto cards = m_UpgradeManager->GetCurrentDisplayData();
+        m_UpgradePage->UpdateCard(slotIndex, cards[slotIndex]);
+    });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

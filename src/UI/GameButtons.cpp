@@ -31,6 +31,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_PauseButton->SetOnClickCallback(onPause);
     root.AddChild(m_PauseButton);
     uiManager.Register(m_PauseButton);
+
 }
 
 void GameButtons::SetStartButtonVisible(bool visible) {

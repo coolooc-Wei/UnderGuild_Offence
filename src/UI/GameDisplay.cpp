@@ -77,6 +77,26 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WinIcon->GetGameObject()->SetZIndex(100.0f);
     m_WinIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_WinIcon->GetGameObject());
+
+    m_Wave = std::make_shared<Scene::BasicObject>();
+    m_Wave->SetImage("../Resources/Image/Title/Title_Wave.png");
+    m_Wave->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Wave->SetSize(75.0f, 25.0f);
+    m_Wave->GetGameObject()->m_Transform.translation = {-600.0f, 320.0f};
+    m_Wave->GetGameObject()->SetZIndex(100.0f);
+    m_Wave->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Wave->GetGameObject());
+
+    m_TimeBG = std::make_shared<Scene::BasicObject>();
+    m_TimeBG->SetImage("../Resources/Image/Title/1105438.png");
+    m_TimeBG->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_TimeBG->SetSize(100.0f, 35.0f);
+    m_TimeBG->GetGameObject()->m_Transform.translation = {-590.0f, 230.0f};
+    m_TimeBG->GetGameObject()->SetZIndex(100.0f);
+    m_TimeBG->GetGameObject()->SetVisible(false);
+    root.AddChild(m_TimeBG->GetGameObject());
+
+    
 }
 
 void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount) {
@@ -118,6 +138,11 @@ void GameDisplay::SetHUDVisible(bool visible) {
 
 void GameDisplay::SetBackgroundVisible(bool visible) {
     if (m_Background) m_Background->GetGameObject()->SetVisible(visible);
+}
+
+void GameDisplay::SetStateVisible(bool visible) {
+    if (m_Wave) m_Wave->GetGameObject()->SetVisible(visible);
+    if (m_TimeBG) m_TimeBG->GetGameObject()->SetVisible(visible);
 }
 
 void GameDisplay::Update() {

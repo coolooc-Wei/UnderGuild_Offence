@@ -19,6 +19,7 @@ public:
     void ShowResult(bool isWin);
     void SetHUDVisible(bool visible);
     void SetBackgroundVisible(bool visible);
+    void SetStateVisible(bool visible);
     void HideAllResults();
     void Update();
 
@@ -36,6 +37,10 @@ private:
     std::shared_ptr<Scene::BasicObject> m_WinIcon;
     std::shared_ptr<Scene::BasicObject> m_LoseIcon;
     std::shared_ptr<Scene::BasicObject> m_WinLoseBackground;
+
+    std::shared_ptr<Scene::BasicObject> m_Wave;
+    std::shared_ptr<Scene::BasicObject> m_TimeBG;
+    std::shared_ptr<Scene::BasicObject> m_EnemyIcon;
 };
 
 } // namespace UI
