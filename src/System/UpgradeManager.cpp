@@ -16,7 +16,7 @@ namespace UGO::System {
       m_BattleManager(battleManager),
       m_CharacterFactory(characterFactory)
     {
-        LoadPool("../Resources/json/Level/upgrades.json");
+        LoadPool("../Resources/Json/Level/upgrades.json");
 
         // 訂閱升級事件（低耦合：ExpSystem 不知道 UpgradeManager 的存在）
         m_ExpSystem.AddLevelUpListener([this](Scene::Hero* hero) {
@@ -138,6 +138,38 @@ namespace UGO::System {
             DrawCards();
             if (m_OnReadyCallback) { m_OnReadyCallback(); }
         }
+    }
+
+    void UpgradeManager::RerollCard(int slotIndex) {
+        if (slotIndex < 0 || slotIndex >= 3) { return; }
+        if (m_CardPool.empty()) { return; }
+
+        const std::string currentId = m_CurrentCards[slotIndex].id;
+        std::mt19937 rng(std::random_device{}());
+
+        if (m_CardPool.size() == 1) {
+            // 卡池只有一張，無法避免重複，直接使用
+            m_CurrentCards[slotIndex] = m_CardPool[0];
+        } else {
+            // 過濾掉當前同 ID 的卡牌，從剩餘卡牌中隨機選取
+            std::vector<const UpgradeCardData*> candidates;
+            candidates.reserve(m_CardPool.size());
+            for (const auto& c : m_CardPool) {
+                if (c.id != currentId) {
+                    candidates.push_back(&c);
+                }
+            }
+            // 若過濾後仍有候選，從中隨機選取；否則直接全池隨機（理論上不會發生）
+            if (!candidates.empty()) {
+                std::uniform_int_distribution<size_t> dist(0, candidates.size() - 1);
+                m_CurrentCards[slotIndex] = *candidates[dist(rng)];
+            } else {
+                std::uniform_int_distribution<size_t> dist(0, m_CardPool.size() - 1);
+                m_CurrentCards[slotIndex] = m_CardPool[dist(rng)];
+            }
+        }
+
+        LOG_INFO("[UpgradeManager] Rerolled slot {} -> {}", slotIndex, m_CurrentCards[slotIndex].id);
     }
 
     void UpgradeManager::DrawCards() {

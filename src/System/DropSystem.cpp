@@ -1,10 +1,11 @@
 #include "System/DropSystem.hpp"
 #include "Scene/ExpPack.hpp"
+#include "System/ExpSystem.hpp"
 
 namespace UGO::System {
 
-    DropSystem::DropSystem(Util::Renderer& root)
-    : m_Root(root) {}
+    DropSystem::DropSystem(Util::Renderer& root, ExpSystem& expSystem)
+    : m_Root(root), m_ExpSystem(expSystem) {}
 
     DropSystem::~DropSystem() = default;
 
@@ -32,7 +33,12 @@ namespace UGO::System {
             }
 
             if (distance < m_PickupRadius) {
-                drop->OnPickup(hero);
+                auto* expPack = dynamic_cast<Scene::ExpPack*>(drop.get());
+                if (expPack) {
+                    m_ExpSystem.GrantExpToHero(hero, expPack->GetExpValue());
+                } else {
+                    drop->OnPickup(hero);
+                }
                 m_Root.RemoveChild(drop->GetGameObject());
                 it = m_AllDrops.erase(it);
             }

@@ -46,6 +46,12 @@ public:
      */
     void ApplyUpgrade(const std::string& id);
 
+    /**
+     * @brief 重新抽取指定插槽的卡片（Reroll），避免與當前相同的卡牌。
+     * @param slotIndex 要刷新的卡片插槽索引（0, 1, 2）
+     */
+    void RerollCard(int slotIndex);
+
 private:
     struct UpgradeCardData {
         std::string id;

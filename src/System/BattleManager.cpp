@@ -333,4 +333,6 @@ namespace UGO::System {
         }
     }
 
+    int BattleManager::GetEnemyKillCount() const { return m_EnemyKillCount; }
+
 } // namespace UGO::System

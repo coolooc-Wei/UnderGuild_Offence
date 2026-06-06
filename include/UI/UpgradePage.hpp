@@ -47,11 +47,23 @@ public:
     /** @brief 設定玩家點擊後的回調，參數為被選中的卡片 ID */
     void SetOnCardSelectedCallback(std::function<void(const std::string& id)> callback);
 
+    /** @brief 設定刷新按鈕點擊後的回調，參數為被刷新的卡片插槽索引 (0, 1, 2) */
+    void SetOnCardRefreshedCallback(std::function<void(int)> callback);
+
+    /**
+     * @brief 更新指定插槽的卡片顯示內容（刷新後呼叫）。
+     * @param slotIndex 卡片插槽索引 (0, 1, 2)
+     * @param card      新的卡片顯示資料
+     */
+    void UpdateCard(int slotIndex, const CardDisplayData& card);
+
 private:
-    static constexpr int   CARD_COUNT  = 3;
-    static constexpr float CARD_WIDTH  = 160.0f;
-    static constexpr float CARD_HEIGHT = 240.0f;
-    static constexpr float CARD_GAP    = 24.0f;
+    static constexpr int   CARD_COUNT         = 3;
+    static constexpr float CARD_WIDTH         = 160.0f;
+    static constexpr float CARD_HEIGHT        = 240.0f;
+    static constexpr float CARD_GAP           = 24.0f;
+    static constexpr float REFRESH_BTN_WIDTH  = 50.0f;
+    static constexpr float REFRESH_BTN_HEIGHT = 50.0f;
 
     /** 計算第 i 張卡片的螢幕中心 X 座標 */
     static float CardX(int i);
@@ -63,18 +75,30 @@ private:
     std::shared_ptr<Util::GameObject> m_Overlay;
 
     // 3 張卡片按鈕
-    std::array<std::shared_ptr<Button>, CARD_COUNT>              m_CardButtons;
+    std::array<std::shared_ptr<Button>, CARD_COUNT> m_CardButtons;
+
+    // 刷新按鈕（背景三態 Bt_12）
+    std::array<std::shared_ptr<Button>, CARD_COUNT> m_Refresh;
+    // 刷新按鈕上方疊加的 Reroll 圖示
+    std::array<std::shared_ptr<Util::GameObject>, CARD_COUNT> m_RefreshIcons;
+    // 已使用刷新時疊加的半透明灰色遮罩
+    std::array<std::shared_ptr<Util::GameObject>, CARD_COUNT> m_RefreshOverlays;
+    // 記錄每張卡片是否已被刷新過（每次 Show 重設）
+    std::array<bool, CARD_COUNT> m_CardRefreshed = {false, false, false};
 
     // 標題圖片 (GameObject + Picture)
-    std::array<std::shared_ptr<Scene::BasicObject>, CARD_COUNT>  m_TitlePictures;
+    std::array<std::shared_ptr<Scene::BasicObject>, CARD_COUNT> m_TitlePictures;
 
     // 描述文字 (GameObject + Text)
-    std::array<std::shared_ptr<Util::GameObject>, CARD_COUNT>    m_DescObjs;
-    std::array<std::shared_ptr<Util::Text>,       CARD_COUNT>    m_DescTexts;
+    std::array<std::shared_ptr<Util::GameObject>, CARD_COUNT> m_DescObjs;
+    std::array<std::shared_ptr<Util::Text>, CARD_COUNT> m_DescTexts;
 
     std::array<std::string, CARD_COUNT> m_CardIds;
 
     std::function<void(const std::string&)> m_OnCardSelectedCallback;
+    std::function<void(int)> m_OnCardRefreshedCallback;
+
+    std::shared_ptr<Scene::BasicObject> m_SelectIcon;
 
     bool m_IsVisible = false;
 };

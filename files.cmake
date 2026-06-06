@@ -55,6 +55,8 @@ set(UI_SRC
     UI/ExperienceBar.cpp
     UI/HealthBar.cpp
     UI/HealthBarSystem.cpp
+    UI/GameButtons.cpp
+    UI/GameDisplay.cpp
 )
 set(UI_INC
     UI/Page.hpp
@@ -65,6 +67,8 @@ set(UI_INC
     UI/ExperienceBar.hpp
     UI/HealthBar.hpp
     UI/HealthBarSystem.hpp
+    UI/GameButtons.hpp
+    UI/GameDisplay.hpp
 )
 
 # --- Input ---

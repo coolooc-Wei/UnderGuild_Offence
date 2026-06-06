@@ -12,6 +12,8 @@
 #include "System/LevelSystem.hpp"
 #include "Scene/Drop.hpp"
 #include "System/UpgradeManager.hpp"
+#include "UI/GameDisplay.hpp"
+#include "UI/GameButtons.hpp"
 
 namespace UGO {
 
@@ -68,19 +70,11 @@ namespace UGO {
                 // No special init
             } break;
             case GameState::PAUSE: {
-                // 如果是升級暫停，只需隱藏暫停頁面且保持角色可見，以免角色消失
-                if (m_IsUpgradePause) {
-                    m_EffectAnimationManager->Reset();
-                    m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
-                    if (m_Pages[GameState::PAUSE]) {
-                        m_Pages[GameState::PAUSE]->SetVisible(false);
-                    }
-                } else {
-                    m_BattleManager->SetAllObjectsVisible(false);
-                    if (m_Pages[GameState::PAUSE]) {
-                        m_Pages[GameState::PAUSE]->SetVisible(false);
-                    }
-                }
+                m_EffectAnimationManager->Reset();
+                m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
+                if (m_Pages[GameState::PAUSE]) {
+                    m_Pages[GameState::PAUSE]->SetVisible(false);
+                } 
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);
@@ -97,22 +91,17 @@ namespace UGO {
                 m_EffectAnimationManager->Reset();
             } break;
             case GameState::END: {
-                int enemyCount = m_BattleManager->GetEnemyCount();
-                bool isHeroAlive = m_BattleManager->IsHeroAlive();
-                auto gameResult = m_GameRuleSystem->DetectGameResult(
-                    m_LevelSystem->IsLevelCompleted(), 
-                    isHeroAlive, 
-                    enemyCount
-                );
-
-                if (gameResult == System::GameRuleSystem::GameResult::WIN) {
-                    m_Win->GetGameObject()->SetVisible(true);
-                    m_WinIcon->GetGameObject()->SetVisible(true);
-                    m_WinLoseBackground->GetGameObject()->SetVisible(true);
-                } else {
-                    m_Lose->GetGameObject()->SetVisible(true);
-                    m_LoseIcon->GetGameObject()->SetVisible(true);
-                    m_WinLoseBackground->GetGameObject()->SetVisible(true);
+                if (m_GameDisplay) {
+                    /* URGENT: the logic need to be check */
+                    int enemyCount = m_BattleManager->GetEnemyCount();
+                    bool isHeroAlive = m_BattleManager->IsHeroAlive();
+                    auto gameResult = m_GameRuleSystem->DetectGameResult(
+                        m_LevelSystem->IsLevelCompleted(), 
+                        isHeroAlive, 
+                        enemyCount
+                    );
+                    if (gameResult == System::GameRuleSystem::GameResult::IN_PROGRESS) { LOG_ERROR("From App::ChangeGameState(END): game over but GameResult == IN_PROGRESS."); }
+                    m_GameDisplay->ShowResult(gameResult == System::GameRuleSystem::GameResult::WIN);
                 }
 
                 for (auto chars : m_BattleManager->GetAllCharacters()) {
@@ -130,8 +119,13 @@ namespace UGO {
         }
 
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
-        if (m_ShowHp) { m_ShowHp->SetVisible(isInGame); }
-        if (m_ShowKillCount) { m_ShowKillCount->SetVisible(isInGame); }
+        if (m_GameDisplay) {
+            m_GameDisplay->SetBackgroundVisible(isInGame);
+            m_GameDisplay->SetHUDVisible(isInGame);
+            m_GameDisplay->SetStateVisible(isInGame);
+            m_GameDisplay->SetPauseVisible(state == GameState::GAMING);
+            m_GameDisplay->SetContinueVisible(state == GameState::PAUSE && !m_IsUpgradePause);
+        }
 
         // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
         if (m_ExperienceBar) {
@@ -153,11 +147,10 @@ namespace UGO {
 
 
         // 控制 UI 按鈕的可見性
-        if (m_StartGameButton) {
-            m_StartGameButton->SetVisible(state == GameState::MENU);
-        }
-        if (m_PauseButton) {
-            m_PauseButton->SetVisible(state == GameState::GAMING);
+        if (m_GameButtons) {
+            m_GameButtons->SetStartButtonVisible(state == GameState::MENU);
+            m_GameButtons->SetPauseButtonVisible(state == GameState::GAMING);
+            m_GameButtons->SetContinueButtonVisible(state == GameState::PAUSE && !m_IsUpgradePause);
         }
 
         LOG_INFO("Changing GameState to: {}", stateName);

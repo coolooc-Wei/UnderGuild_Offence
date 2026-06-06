@@ -4,7 +4,6 @@
 #include "UGO_pch.hpp"
 
 #include "UI/Page.hpp"
-#include "UI/Button.hpp"
 #include "UI/UIManager.hpp"
 #include "UI/UpgradePage.hpp"
 #include "UI/ExperienceBar.hpp"
@@ -29,6 +28,11 @@ namespace UGO::System {
 }
 
 namespace UGO {
+
+namespace UI {
+    class GameButtons;
+    class GameDisplay;
+}
 
 class App {
 public:
@@ -72,15 +76,9 @@ private:
     GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    std::shared_ptr<Util::GameObject> m_ShowHp;
-    std::shared_ptr<Util::Text> m_HPValueText;
-    std::shared_ptr<Util::GameObject> m_ShowKillCount;
-    std::shared_ptr<Util::Text> m_KillCountText;
-    std::shared_ptr<Scene::BasicObject> m_Win;
-    std::shared_ptr<Scene::BasicObject> m_Lose;
-    std::shared_ptr<Scene::BasicObject> m_WinIcon;
-    std::shared_ptr<Scene::BasicObject> m_LoseIcon;
-    std::shared_ptr<Scene::BasicObject> m_WinLoseBackground;
+    
+    std::unique_ptr<UI::GameDisplay> m_GameDisplay;
+    std::unique_ptr<UI::GameButtons> m_GameButtons;
     float m_SettlingTimer;
 
 
@@ -113,9 +111,7 @@ private:
 
     // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
     std::unique_ptr<UI::UIManager> m_UIManager;
-    // UI Buttons
-    std::shared_ptr<UI::Button> m_StartGameButton;
-    std::shared_ptr<UI::Button> m_PauseButton;
+    
     // 升級選擇頁面（不繼承 Page，是獨立的複合 UI 組件）
     std::unique_ptr<UI::UpgradePage> m_UpgradePage;
     bool m_IsUpgradePause = false; ///< 是否因升級而暫停（而非手動暫停）
