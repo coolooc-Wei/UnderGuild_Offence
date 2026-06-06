@@ -9,6 +9,7 @@
 #include "System/UpgradeManager.hpp"
 #include "UI/GameDisplay.hpp"
 #include "UI/GameButtons.hpp"
+#include "UI/MercenaryCountPanel.hpp"
 
 namespace UGO {
 
@@ -127,6 +128,14 @@ namespace UGO {
             }
         }
 
+        // 傭兵計數面板：GAMING 與 PAUSE 狀態顯示，其他狀態隱藏
+        if (m_MercenaryCountPanel) {
+            if (state == GameState::GAMING || state == GameState::PAUSE) {
+                m_MercenaryCountPanel->Show();
+            } else {
+                m_MercenaryCountPanel->Hide();
+            }
+        }
 
         // 控制 UI 按鈕的可見性
         if (m_GameButtons) {

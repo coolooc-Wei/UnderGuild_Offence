@@ -27,6 +27,7 @@ namespace UGO::System {
 namespace UGO::UI {
     class GameButtons;
     class GameDisplay;
+    class MercenaryCountPanel;
 }
 
 namespace UGO {
@@ -112,6 +113,8 @@ private:
     std::unique_ptr<UI::ExperienceBar>    m_ExperienceBar;
     // 全角色血條系統（角色頭頂，盟友綠/敵人紅）
     std::unique_ptr<UI::HealthBarSystem>  m_HealthBarSystem;
+    // 傭兵種類計數面板（左下角卡牌顯示）
+    std::unique_ptr<UI::MercenaryCountPanel> m_MercenaryCountPanel;
 };
 
 } // namespace UGO

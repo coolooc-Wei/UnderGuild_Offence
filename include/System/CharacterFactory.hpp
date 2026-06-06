@@ -28,6 +28,8 @@ namespace System {
         Scene::Character::CharacterParams GetMercenaryParams(const std::string& mercenaryID);
         Scene::Character::CharacterParams GetHeroParams(const std::string& heroID);
 
+        std::pair<std::string, glm::vec2> GetMercenaryIconInfo(const std::string& mercenaryID);
+
     private:
         /* Stores all values parsed from JSON in copyable form.
          * Avoids re-parsing JSON on repeated GetXxxParams() calls for the same ID.

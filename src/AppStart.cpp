@@ -15,6 +15,7 @@
 #include "UI/UpgradePage.hpp"
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
+#include "UI/MercenaryCountPanel.hpp"
 
 
 void UGO::App::Start() {
@@ -39,6 +40,9 @@ void UGO::App::Start() {
     // 血條系統：管理所有角色頭頂血條，初始隱藏
     m_HealthBarSystem = std::make_unique<UI::HealthBarSystem>(m_Root);
     m_HealthBarSystem->Hide();
+
+    // 傭兵計數面板：左下角卡牌顯示，初始隱藏
+    m_MercenaryCountPanel = std::make_unique<UI::MercenaryCountPanel>(m_Root, *m_CharacterFactory);
 
     // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
     m_UpgradeManager->SetOnReadyCallback([this]() {

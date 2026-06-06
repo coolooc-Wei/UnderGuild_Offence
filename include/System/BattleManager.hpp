@@ -51,6 +51,25 @@ namespace System {
         int GetEnemyCount() const;
 
         /**
+         * @brief 取得場上各種類傭兵的存活數量 Map。
+         *        Key 為 mercenaryID（e.g. "m_001"），Value 為該種類存活數量。
+         *        由快取機制機制驅動，與 RebuildCaches 同步更新。
+         */
+        std::unordered_map<std::string, int> GetMercenaryCounts() const;
+
+        /**
+         * @brief [Synthesis Interface] 根據種類 ID 取得場上存活傭兵的原始指標。
+         *        供未來合成系統查詢详細傭兵實體（位置等）。
+         */
+        std::vector<Scene::Mercenary*> GetMercenariesByType(const std::string& typeID) const;
+
+        /**
+         * @brief [Synthesis Interface] 安全回收指定的傭兵實體（供合成系統消耗傭兵）。
+         *        將個別傭兵標記為死亡，統一由 BattleManager::Update 自動回收到物件池。
+         */
+        void RemoveMercenaries(const std::vector<Scene::Mercenary*>& mercenaries);
+
+        /**
          * @brief 向全局敷人 debuff 池新增一個狀態效果。
          *        後續透過 AddEnemyByID 生成的敷人都會自動準用。
          */
@@ -91,6 +110,7 @@ namespace System {
         mutable std::vector<Scene::Character*> m_AllCharactersCache;
         mutable std::vector<Scene::Character*> m_AllAlliesCache;
         mutable bool m_IsCacheDirty = true;
+        mutable std::unordered_map<std::string, int> m_MercenaryCountsCache; ///< 各傭兵種類存活數量快取
 
         int m_EnemyKillCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;

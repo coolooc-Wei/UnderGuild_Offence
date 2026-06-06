@@ -52,6 +52,7 @@ namespace UGO::System {
         m_AllHeroesAsCharacterCache.clear();
         m_AllCharactersCache.clear();
         m_AllAlliesCache.clear();
+        m_MercenaryCountsCache.clear();
 
         m_AllCharactersCache.reserve(m_AllHeroes.size() + m_EnemyPool.size() + m_MercenaryPool.size());
         m_AllAlliesCache.reserve(m_AllHeroes.size() + m_MercenaryPool.size());
@@ -76,6 +77,9 @@ namespace UGO::System {
                 m_AllMercenariesCache.push_back(mercenary.get());
                 m_AllCharactersCache.push_back(mercenary.get());
                 m_AllAlliesCache.push_back(mercenary.get());
+                if (!mercenary->IsDead()) {
+                    m_MercenaryCountsCache[mercenary->GetTypeID()]++;
+                }
             }
         }
     }
@@ -329,6 +333,30 @@ namespace UGO::System {
             }
         }
         return count;
+    }
+
+    std::unordered_map<std::string, int> BattleManager::GetMercenaryCounts() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_MercenaryCountsCache;
+    }
+
+    std::vector<Scene::Mercenary*> BattleManager::GetMercenariesByType(const std::string& typeID) const {
+        std::vector<Scene::Mercenary*> result;
+        for (const auto& mercenary : m_MercenaryPool) {
+            if (mercenary && !mercenary->IsDead() && mercenary->GetTypeID() == typeID) {
+                result.push_back(mercenary.get());
+            }
+        }
+        return result;
+    }
+
+    void BattleManager::RemoveMercenaries(const std::vector<Scene::Mercenary*>& mercenaries) {
+        for (auto* mercenary : mercenaries) {
+            if (mercenary && !mercenary->IsDead()) {
+                mercenary->OnDeath(); // 標記死亡並觸發 visible=false，由 Update() 自動回收
+            }
+        }
+        m_IsCacheDirty = true;
     }
 
 } // namespace UGO::System

@@ -14,6 +14,7 @@ namespace UGO::Scene {
       m_AttackPower(params.attackPower),
       m_AttackCooldown(params.attackCooldown),
       m_InvincibleTimer(params.invincibleDuration),
+      m_TypeID(params.typeID),
       m_Weapon(std::move(params.weapon)),
       m_StatusEffects(std::move(params.statusEffects)),
       m_AttackAnimationData(params.attackAnimationData),
@@ -24,6 +25,7 @@ namespace UGO::Scene {
         m_MaxHP = params.maxHP;
         m_CurrentHP = params.maxHP;
         m_AttackPower = params.attackPower;
+        m_TypeID = params.typeID;
         m_AttackCooldown.SetDuration(params.attackCooldown);
         m_InvincibleTimer.SetDuration(params.invincibleDuration);
         m_Weapon = std::move(params.weapon);
@@ -37,6 +39,7 @@ namespace UGO::Scene {
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
+    const std::string& Character::GetTypeID() const { return m_TypeID; }
 
     HpValue Character::GetAttackPower() const {
         float multiplier = 1.0f;

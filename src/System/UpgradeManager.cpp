@@ -18,7 +18,7 @@ namespace UGO::System {
       m_BattleManager(battleManager),
       m_CharacterFactory(characterFactory)
     {
-        LoadPool("../Resources/json/upgrades.json");
+        LoadPool("../Resources/json/Level/upgrades.json");
 
         // 訂閱升級事件（低耦合：ExpSystem 不知道 UpgradeManager 的存在）
         m_ExpSystem.AddLevelUpListener([this](Scene::Hero* hero) {

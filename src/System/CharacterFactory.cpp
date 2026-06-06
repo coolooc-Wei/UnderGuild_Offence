@@ -4,15 +4,15 @@ namespace UGO::System {
 
     CharacterFactory::CharacterFactory(Util::Renderer& renderer)
     : m_Root(renderer) {
-        std::ifstream enemyDatabaseFile("../Resources/json/enemy.json");
+        std::ifstream enemyDatabaseFile("../Resources/json/Character/enemy.json");
         assert(enemyDatabaseFile.is_open());
         enemyDatabaseFile >> m_EnemyDatabase;
 
-        std::ifstream mercenaryDatabaseFile("../Resources/json/mercenary.json");
+        std::ifstream mercenaryDatabaseFile("../Resources/json/Character/mercenary.json");
         assert(mercenaryDatabaseFile.is_open());
         mercenaryDatabaseFile >> m_MercenaryDatabase;
 
-        std::ifstream heroDatabaseFile("../Resources/json/hero.json");
+        std::ifstream heroDatabaseFile("../Resources/json/Character/hero.json");
         assert(heroDatabaseFile.is_open());
         heroDatabaseFile >> m_HeroDatabase;
 
@@ -123,13 +123,31 @@ namespace UGO::System {
     }
     Scene::Character::CharacterParams CharacterFactory::GetMercenaryParams(const std::string& mercenaryID) {
         auto it = m_ParamsCache.find(mercenaryID);
-        if (it != m_ParamsCache.end()) { return BuildFromCache(it->second); }
-        return BuildFromCache(ParseCharacterParams(mercenaryID, m_MercenaryDatabase.at(mercenaryID)));
+        auto params = (it != m_ParamsCache.end())
+            ? BuildFromCache(it->second)
+            : BuildFromCache(ParseCharacterParams(mercenaryID, m_MercenaryDatabase.at(mercenaryID)));
+        params.typeID = mercenaryID; // 傭兵種類 ID，供計數與合成系統識別
+        return params;
     }
     Scene::Character::CharacterParams CharacterFactory::GetHeroParams(const std::string& heroID) {
         auto it = m_ParamsCache.find(heroID);
         if (it != m_ParamsCache.end()) { return BuildFromCache(it->second); }
         return BuildFromCache(ParseCharacterParams(heroID, m_HeroDatabase.at(heroID)));
+    }
+
+    std::pair<std::string, glm::vec2> CharacterFactory::GetMercenaryIconInfo(const std::string& mercenaryID) {
+        // 確保快取存在
+        auto it = m_ParamsCache.find(mercenaryID);
+        if (it == m_ParamsCache.end()) {
+            ParseCharacterParams(mercenaryID, m_MercenaryDatabase.at(mercenaryID));
+            it = m_ParamsCache.find(mercenaryID);
+        }
+        const auto& cached = it->second;
+        // 優先使用第一張動畫幀作為靜態圖標
+        std::string iconPath = (!cached.animationPaths.empty())
+            ? cached.animationPaths[0]
+            : "";
+        return { iconPath, cached.size };
     }
 
     Scene::Character::CharacterParams CharacterFactory::BuildFromCache(const CachedCharacterData& cached) const {
