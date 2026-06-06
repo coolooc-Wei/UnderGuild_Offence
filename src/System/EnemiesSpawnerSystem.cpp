@@ -13,8 +13,10 @@ namespace UGO::System {
           std::vector<std::string>{m_WarningIndicatorPath},
           false, 100, true, 100
       )) {}
-      //m_SpawnTimer(Core::Time::CountDownTimer(8.0f)){}
     EnemiesSpawnerSystem::~EnemiesSpawnerSystem() = default;
+
+    void EnemiesSpawnerSystem::SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = std::move(callback); }
+    void EnemiesSpawnerSystem::SetGetEnemySizeCallback(GetEnemySizeCallback callback) { mf_GetEnemySizeCallback = std::move(callback); }
 
     void EnemiesSpawnerSystem::Update() {
         if (isSpawnActive && m_SpawnTimer.IsTimeUp()) {
@@ -56,45 +58,67 @@ namespace UGO::System {
         if (enemyPool.empty()) { return; }
         int spawnAmount = (minAmount == -1) ? ( Core::RandomInt(m_SpawnCount.min, m_SpawnCount.max) ) : ( Core::RandomInt(minAmount, maxAmount) );
 
+        std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
+
         Core::Time::CountDownTimer timer(m_WarningIndicatorDuration);
         timer.Start();
         m_PaddingWaves.push({timer, spawnAmount});
         for (int i=0; i<spawnAmount; ++i) {
             // Choose a side
-            Side side = static_cast<Side>(Core::RandomInt(0, 4));
-            float positionScale = Core::RandomFloat(-1.0f, 1.0f);
+            Side side;
+            float positionScale;
             Core::WorldPosition spawnPosition;
             auto range = Core::Map::g_WorldBounds;
+            const Core::Distance HALF_TILE_SIZE = (float)Core::TILE_SIZE / 2.0;
 
-            switch (side) {
-            case EnemiesSpawnerSystem::Side::TOP: {
-                spawnPosition.x = positionScale * range.maxX;
-                spawnPosition.y = range.maxY;
-            } break;
-            case EnemiesSpawnerSystem::Side::RIGHT: {
-                spawnPosition.x = range.maxX;
-                spawnPosition.y = positionScale * range.maxY;
-            } break;
-            case EnemiesSpawnerSystem::Side::BOTTOM: {
-                spawnPosition.x = positionScale * range.maxX;
-                spawnPosition.y = range.minY;
-            } break;
-            case EnemiesSpawnerSystem::Side::LEFT: {
-                spawnPosition.x = range.minX;
-                spawnPosition.y = positionScale * range.maxY;
-            } break;
-            default: {} break;
+            // Choose legal spawn position
+            int rechooseTime = 0;
+            while (true) {
+                side = static_cast<Side>(Core::RandomInt(0, 4));
+                positionScale = Core::RandomFloat(-1.0f, 1.0f);
+
+                switch (side) {
+                case EnemiesSpawnerSystem::Side::TOP: {
+                    spawnPosition.x = positionScale * range.maxX;
+                    spawnPosition.y = range.maxY - HALF_TILE_SIZE;
+                } break;
+                case EnemiesSpawnerSystem::Side::RIGHT: {
+                    spawnPosition.x = range.maxX - HALF_TILE_SIZE;
+                    spawnPosition.y = positionScale * range.maxY;
+                } break;
+                case EnemiesSpawnerSystem::Side::BOTTOM: {
+                    spawnPosition.x = positionScale * range.maxX;
+                    spawnPosition.y = range.minY + HALF_TILE_SIZE;
+                } break;
+                case EnemiesSpawnerSystem::Side::LEFT: {
+                    spawnPosition.x = range.minX + HALF_TILE_SIZE;
+                    spawnPosition.y = positionScale * range.maxY;
+                } break;
+                default: {} break;
+                }
+                if (!mf_GetEnemySizeCallback) { LOG_ERROR("From EnemiesSpawnerSystem::RandomSpawnEnemy: mf_GetEnemySizeCallback is null. Defaulting to accept spawn position"); break; }
+                else if (mf_IsGridWalkableCallback(Core::WorldToGrid(spawnPosition))) { break; }
+                ++rechooseTime;
             }
+            LOG_INFO("Rechoose an enemy spawn position {} time(s).", rechooseTime);
+
+            // Get the size of enemy
+            Core::Size size = {32.0f, 32.0f};
+            if (!mf_GetEnemySizeCallback) { LOG_ERROR("From EnemiesSpawnerSystem::RandomSpawnEnemy: mf_GetEnemySizeCallback is null. Defaulting to {32, 32}."); }
+            else { size = mf_GetEnemySizeCallback(selectedEnemyID); }
+
+            Core::Distance halfWidth = size.x / 2.0f;
+            Core::Distance halfHeigh = size.y / 2.0f;
+
+            // Nudge enemy into map area.
+            Core::Velocity nudgeOffset = glm::normalize(-spawnPosition) * m_StepNudgeDistance; /* point to the mid-point */
+            while (!Core::IsAreaWalkable(spawnPosition, halfWidth, halfHeigh, mf_IsGridWalkableCallback)) { spawnPosition += nudgeOffset; }
 
             m_EffectAnimationManager.Create(
                 spawnPosition, 1.0f, m_WarningIndicatorAnim,
                 true, 0.0f, Core::Size{32.0, 32.0}
             );
 
-            /* HACK: String copy wastes too much CPU time.
-             *       It's better to store the EnemyID as an int or short type.
-             */
-            std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
             m_PaddingSpawns.push({selectedEnemyID, spawnPosition});
         }
     }
@@ -110,7 +134,10 @@ namespace UGO::System {
         m_SpawnCount.min = difficulty.enemiesCountPerWave.min + extraDifficulty;
         m_SpawnCount.max = difficulty.enemiesCountPerWave.max + extraDifficulty;
 
-        if (!m_SpawnConfig.bossID.empty()) { m_BattleManager.AddEnemyByID(m_SpawnConfig.bossID, {0.0f, 0.0f}); }
+        if (!m_SpawnConfig.bossID.empty()) { m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f}); }
+
+        // Start first wave
+        GenerateNextWave();
     }
 
     void EnemiesSpawnerSystem::PauseBattleRoom() {

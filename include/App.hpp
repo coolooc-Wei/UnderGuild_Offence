@@ -72,8 +72,6 @@ private:
     GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    /* HACK: remove maybe */
-    std::unique_ptr<Scene::BasicObject> m_Background;
     std::shared_ptr<Util::GameObject> m_ShowHp;
     std::shared_ptr<Util::Text> m_HPValueText;
     std::shared_ptr<Util::GameObject> m_ShowKillCount;

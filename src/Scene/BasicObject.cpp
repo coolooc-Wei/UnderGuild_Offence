@@ -216,6 +216,7 @@ namespace UGO::Scene {
     void BasicObject::ActivateHurtBox(bool active) { m_IsHurtBoxActive = active; }
     void BasicObject::ActivateCollidable(bool active) { m_IsCollidable = active; }
 
+    void BasicObject::SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = std::move(callback); }
 
     void BasicObject::TryMove(const Core::Velocity &intendedOffset, const Core::Velocity &externalOffset) {
         Core::Velocity safeOffset = OffsetCalculator(intendedOffset + externalOffset);
@@ -236,10 +237,67 @@ namespace UGO::Scene {
     void BasicObject::OnHeal(HpValue amount) {}
     void BasicObject::OnDeath() {}
 
-    Core::WorldPosition BasicObject::OffsetCalculator(const Core::Velocity& offset) const {
-        Core::WorldPosition target = m_Position + offset;
-        Core::WorldPosition clamped = Core::ClampPosition(target, abs(GetSize().x) / 2.0f, abs(GetSize().y) / 2.0f);
-        return {clamped.x - m_Position.x, clamped.y - m_Position.y};
+    Core::Velocity BasicObject::OffsetCalculator(const Core::Velocity& offset, bool considerWall) const {
+        Core::WorldPosition originalTarget = m_Position + offset;
+        Core::WorldPosition clampedTarget = Core::ClampPosition(originalTarget, abs(GetSize().x) / 2.0f, abs(GetSize().y) / 2.0f);
+
+        Core::Velocity clampedOffset = clampedTarget - m_Position;
+        if (!considerWall) { return clampedOffset; }
+        /* if offset is too small, then maintain the position. */
+        if (glm::dot(clampedOffset,clampedOffset) <= Core::EPSILON*Core::EPSILON) { return {0.0f,0.0f}; }
+
+        // Continuous Collision Detection
+        /* step:
+         *  1. every step, forward MAX_STEP_DISTANCE (update stepDis, stepOffset, etc.).
+         *  2. move parallel to the x-axis and check vertices collision.
+         *     if no collision occurs, update saveOffset.x . otherwise, jump to next step without updating.
+         *  3. move parallel to the y-axis and check vertices collision.
+         *     if no collision occurs, update saveOffset.y . otherwise, jump to next step without updating.
+         *  4. repeat until stepOffset reach(or over than) clampedTarget.
+         */
+        Core::Distance offsetDis = glm::length(clampedOffset);
+        Core::Direction offsetDir = clampedOffset / offsetDis;
+        auto checkVerticesCollision = [&](const Core::Velocity& off) -> bool{
+            /* step:
+             *  1. find the four vertices.
+             *  2. get the vertices' gridPosition.
+             *  3. check the collisions of all grid around the CollisionBox.
+             *  4. return true if Collision with any obstacle, otherwise return false.
+             */
+
+            Core::WorldPosition currentPos = m_Position + off;
+            Core::Distance halfHeight = m_CollisionBox->GetHeight() / 2.0f - Core::EPSILON;
+            Core::Distance halfWidth = m_CollisionBox->GetWidth() / 2.0f - Core::EPSILON;
+
+            return !Core::IsAreaWalkable(currentPos, halfWidth, halfHeight, mf_IsGridWalkableCallback);
+        };
+
+        Core::Velocity saveOffset = {0.0f,0.0f};
+        bool isCollisionX = false;
+        bool isCollisionY = false;
+        int step = 1;
+        Core::Distance stepDis = Core::MAX_STEP_DISTANCE;
+        while (stepDis < offsetDis) {
+            Core::Velocity stepOffset = offsetDir * stepDis;
+            // update X
+            if (!isCollisionX) {
+                if (!checkVerticesCollision( {stepOffset.x, saveOffset.y} )) { saveOffset.x = stepOffset.x; }
+                else { isCollisionX = true; }
+            }
+            // update Y
+            if (!isCollisionY) {
+                if (!checkVerticesCollision( {saveOffset.x, stepOffset.y} )) { saveOffset.y = stepOffset.y; }
+                else { isCollisionY = true; }
+            }
+
+            if (isCollisionX && isCollisionY) { break; }
+            ++step;
+            stepDis = step*Core::MAX_STEP_DISTANCE;
+        }
+        if (!isCollisionX && !checkVerticesCollision( {clampedOffset.x, saveOffset.y} )) { saveOffset.x = clampedOffset.x; }
+        if (!isCollisionY && !checkVerticesCollision( {saveOffset.x, clampedOffset.y} )) { saveOffset.y = clampedOffset.y; }
+
+        return saveOffset;
     }
 
     void BasicObject::SetDead(const bool dead) { m_Dead = dead; }

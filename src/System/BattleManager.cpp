@@ -114,6 +114,7 @@ namespace UGO::System {
     int BattleManager::GetEnemyCount() const { return static_cast<int>(m_EnemyPool.size()); }
     void BattleManager::ClearAllEnemies() {
         m_EnemyPool.clear();
+        m_CurrentBoss = nullptr;
         m_IsCacheDirty = true;
     }
 
@@ -140,6 +141,13 @@ namespace UGO::System {
             }
         }
     }
+
+    void BattleManager::AddBossByID(const std::string& enemyID, const Core::WorldPosition& position) {
+        AddEnemyByID(enemyID, position);
+        if (!m_EnemyPool.empty()) { m_CurrentBoss = m_EnemyPool.back().get(); }
+    }
+
+    bool BattleManager::IsBossAlive() const { return m_CurrentBoss != nullptr; }
 
     void BattleManager::AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;
@@ -287,7 +295,9 @@ namespace UGO::System {
         /* HACK: refactoring need */
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
+                if (enemy.get() == m_CurrentBoss) { m_CurrentBoss = nullptr; }
                 m_RewardManager.OnEnemyDeath(enemy.get(), GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0]);
+
                 m_EnemyKillCount++;
                 return true;
             }

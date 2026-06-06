@@ -60,4 +60,26 @@ namespace UGO::Core {
         };
     }
 
+    bool IsAreaWalkable(
+        const WorldPosition& center, Distance halfWidth, Distance halfHeight,
+        const IsGridWalkableCallback& isWalkable
+    ) {
+        if (!isWalkable) {
+            LOG_ERROR("From Core::IsAreaWalkable: isWalkable callback is null. Defaulting to return true.");
+            return true;
+        }
+
+        GridPosition maxGridPos = WorldToGrid({center.x + halfWidth, center.y + halfHeight});
+        GridPosition minGridPos = WorldToGrid({center.x - halfWidth, center.y - halfHeight});
+        int maxX = maxGridPos.x;
+        int maxY = maxGridPos.y;
+        int minX = minGridPos.x;
+        int minY = minGridPos.y;
+
+        for (int x = minX; x <= maxX; ++x)    { if (!isWalkable({x,minY}) || !isWalkable({x,maxY})) { return false; } }
+        for (int y = minY + 1; y < maxY; ++y) { if (!isWalkable({minX,y}) || !isWalkable({maxX,y})) { return false; } }
+
+        return true;
+    }
+
 }

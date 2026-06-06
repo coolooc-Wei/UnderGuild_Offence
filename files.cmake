@@ -11,6 +11,8 @@ set(CORE_INC
     Core/UGO_Math.hpp
     Core/MapData.hpp
     Core/Hash.hpp
+    Core/MapData.hpp
+    Core/Hash.hpp
 )
 
 # --- SYSTEM ---

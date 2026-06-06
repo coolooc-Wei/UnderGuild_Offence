@@ -1,4 +1,4 @@
-#include "App.hpp"
+    #include "App.hpp"
 
 #include "System/BattleManager.hpp"
 #include "System/SteeringSystem.hpp"
@@ -22,6 +22,7 @@
 void UGO::App::Start() {
     LOG_TRACE("Start");
 
+    // Register systems
     m_SteeringSystem = std::make_unique<System::SteeringSystem>();
     m_EffectAnimationManager = std::make_unique<System::EffectAnimationManager>(m_Root);
     m_CharacterFactory = std::make_unique<System::CharacterFactory>(m_Root);
@@ -30,38 +31,15 @@ void UGO::App::Start() {
     m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
-    m_UIManager = std::make_unique<UI::UIManager>();
-    m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
-    m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
-
-    // 經驗條 UI：固定於畫面最上方，由 GAMING 狀態控制顯示/隱藏
-    m_ExperienceBar = std::make_unique<UI::ExperienceBar>(m_Root);
-    m_ExperienceBar->Hide();
-
-    // 血條系統：管理所有角色頭頂血條，初始隱藏
-    m_HealthBarSystem = std::make_unique<UI::HealthBarSystem>(m_Root);
-    m_HealthBarSystem->Hide();
-
-    // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
-    m_UpgradeManager->SetOnReadyCallback([this]() {
-        // 卡片已抽好：暫停遊戲並顯示 UI
-        m_IsUpgradePause = true;
-        ChangeGameState(GameState::PAUSE);
-        m_UpgradePage->Show(m_UpgradeManager->GetCurrentDisplayData());
-    });
-    m_UpgradeManager->SetOnCompletedCallback([this]() {
-        // 選擇完畢：隱藏 UI 並恢復遊戲
-        m_UpgradePage->Hide();
-        m_IsUpgradePause = false;
-        ChangeGameState(GameState::GAMING);
-    });
-    m_UpgradePage->SetOnCardSelectedCallback([this](const std::string& id) {
-        // UI 只回報 ID，邏輯由 UpgradeManager 處理
-        m_UpgradeManager->ApplyUpgrade(id);
-    });
-    m_MapSystem   = std::make_unique<System::MapSystem>();
+    m_MapSystem   = std::make_unique<System::MapSystem>(m_Root);
     m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem);
     m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem);
+
+    // Set Callback functions
+    m_CharacterFactory->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_LevelSystem->SetIsBossAliveCallBack([this](){ return this->m_BattleManager->IsBossAlive(); });
+    m_EnemiesSpawnerSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_EnemiesSpawnerSystem->SetGetEnemySizeCallback([this](const std::string& id){ return this->m_CharacterFactory->GetEnemySize(id); });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -75,17 +53,6 @@ void UGO::App::Start() {
         m_Root.AddChild(page.second);
         page.second->SetVisible(false);
     }
-
-    // Initialize background
-    /* HACK: Remove maybe
-    */
-    m_Background = std::make_unique<Scene::BasicObject>();
-    m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
-    m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Background->SetSize(864, 480); // 480p(16:9) but 854 is not divisible by 32
-    m_Background->GetGameObject()->SetZIndex(-10.0f);
-    m_Background->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_Background->GetGameObject());
 
     m_ShowHp = std::make_shared<Util::GameObject>();
     m_HPValueText = std::make_shared<Util::Text>(
@@ -152,6 +119,37 @@ void UGO::App::Start() {
     m_WinIcon->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_WinIcon->GetGameObject());
 
+    // ── UI 系統初始化 ─────────────────────────────────────────────────────────
+    m_UIManager = std::make_unique<UI::UIManager>();
+    m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
+    m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
+
+    // 經驗條 UI：固定於畫面最上方，由 GAMING 狀態控制顯示/隱藏
+    m_ExperienceBar = std::make_unique<UI::ExperienceBar>(m_Root);
+    m_ExperienceBar->Hide();
+
+    // 血條系統：管理所有角色頭頂血條，初始隱藏
+    m_HealthBarSystem = std::make_unique<UI::HealthBarSystem>(m_Root);
+    m_HealthBarSystem->Hide();
+
+    // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
+    m_UpgradeManager->SetOnReadyCallback([this]() {
+        // 卡片已抽好：暫停遊戲並顯示 UI
+        m_IsUpgradePause = true;
+        ChangeGameState(GameState::PAUSE);
+        m_UpgradePage->Show(m_UpgradeManager->GetCurrentDisplayData());
+    });
+    m_UpgradeManager->SetOnCompletedCallback([this]() {
+        // 選擇完畢：隱藏 UI 並恢復遊戲
+        m_UpgradePage->Hide();
+        m_IsUpgradePause = false;
+        ChangeGameState(GameState::GAMING);
+    });
+    m_UpgradePage->SetOnCardSelectedCallback([this](const std::string& id) {
+        // UI 只回報 ID，邏輯由 UpgradeManager 處理
+        m_UpgradeManager->ApplyUpgrade(id);
+    });
+
     // 「開始遊戲」按鈕，置於畫面中央
     m_StartGameButton = std::make_shared<UI::Button>(
         glm::vec2{0.0f, 0.0f - 150.0f}, // 畫面中央 (PTSD 框架原點在中心)
@@ -164,7 +162,7 @@ void UGO::App::Start() {
     m_StartGameButton->SetVisible(false); // 初始隱藏，在 MENU 狀態下才顯示
     m_StartGameButton->SetOnClickCallback([this]() {
         LOG_INFO("[UI] Start Game button clicked!");
-        ChangeGameState(GameState::GAMING);
+        ChangeGameState(GameState::LEVEL_INIT);
     });
     m_Root.AddChild(m_StartGameButton);
     LOG_INFO("4");

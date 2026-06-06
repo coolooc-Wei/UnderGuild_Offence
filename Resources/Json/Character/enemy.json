@@ -49,7 +49,7 @@
         }
     },
     "e_002": {
-        "speed": 10.0,
+        "speed": 1.0,
         "drawableType": "Animation",
         "animationPath": [
             "../Resources/Image/character/enemy/Boss_7_1.png",
@@ -113,7 +113,7 @@
             "height": 64.0
         },
         "hitBox": {
-            "type": "SECTOR",
+            "type": "CIRCLE",
             "radius": 128.0
         },
         "isCollidable": true,

@@ -4,11 +4,76 @@
 
 namespace UGO::System {
 
-    MapSystem::MapSystem() {
+    MapSystem::MapSystem(Util::Renderer& root) : m_Root(root) {
         ParseTileJSON(TILE_JSON_FILE_PATH);
         ParseJSON(JSON_TILE_PATH);
+
+        m_Background = std::make_unique<Scene::BasicObject>();
+        m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        m_Background->GetGameObject()->SetVisible(false);
+        m_Root.AddChild(m_Background->GetGameObject());
     }
     MapSystem::~MapSystem() = default;
+
+    void MapSystem::LoadRoom(const Core::Map::RoomData& roomData) {
+        ClearRoom();
+
+        Core::Map::ChangeMapSize(roomData.width, roomData.height);
+
+        // Set background
+        m_Background->SetImage(roomData.backgroundPath);
+        m_Background->SetSize(roomData.width * Core::TILE_SIZE, roomData.height * Core::TILE_SIZE);
+        m_Background->SetWorldPosition({0.0f, 0.0f});
+        m_Background->GetGameObject()->SetZIndex(-10.0f);
+        m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        m_Background->GetGameObject()->SetVisible(true);
+
+        for (int x = 0; x < roomData.width; ++x) {
+            for (int y = 0; y < roomData.height; ++y) {
+                Core::Map::TileID tileID = roomData.tiles[y * roomData.width + x];
+                AddTileObject(tileID, {x, y});
+            }
+        }
+        LOG_INFO("MapSystem: Loaded room size {}x{}, background: '{}'", roomData.width, roomData.height, roomData.backgroundPath);
+    }
+
+    void MapSystem::AddTileObject(const Core::Map::TileID& tileID, const Core::GridPosition& gridPos) {
+        auto it = m_Tiles.find(tileID);
+        if (it == m_Tiles.end()) {
+            LOG_ERROR("From MapSystem::AddTileObject: tile not found.");
+            return;
+        }
+        if (!it->second.imagePath.empty()) {
+            auto tileObj = std::make_unique<Scene::BasicObject>();
+            auto imgIt = m_TileImageCache.find(tileID);
+            if (imgIt != m_TileImageCache.end()) { tileObj->SetImage(imgIt->second); }
+            else { tileObj->SetImage(it->second.imagePath); }
+            tileObj->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+            tileObj->SetSize(Core::TILE_SIZE, Core::TILE_SIZE);
+            tileObj->SetWorldPosition(Core::GridToWorld(gridPos));
+            tileObj->GetGameObject()->SetZIndex(-5.0f);
+            tileObj->GetGameObject()->SetVisible(true);
+            tileObj->Update();
+            // regist into systems
+            m_Root.AddChild(tileObj->GetGameObject());
+            m_TileObjects.push_back(std::move(tileObj));
+        }
+    }
+
+    void MapSystem::ClearRoom() {
+        if (m_Background && m_Background->GetGameObject()) { m_Background->GetGameObject()->SetVisible(false); }
+        ClearTileObjects();
+    }
+
+    void MapSystem::ClearTileObjects() {
+        for (auto& tile : m_TileObjects) {
+            if (tile && tile->GetGameObject()) {
+                tile->GetGameObject()->SetVisible(false);
+                m_Root.RemoveChild(tile->GetGameObject());
+            }
+        }
+        m_TileObjects.clear();
+    }
 
     const Core::Map::RoomData& MapSystem::GetRoomData(const Core::Map::RoomID& roomID) const {
         auto it = m_Rooms.find(roomID);
@@ -64,6 +129,7 @@ namespace UGO::System {
             m_Rooms[roomID] = roomData;
             m_RoomIDs.push_back(roomID);
         }
+        LOG_INFO("MapSystem: Successfully parsed room JSON '{}', loaded {} rooms", filename, m_RoomIDs.size());
     }
 
     void MapSystem::ParseTileJSON(const std::string& filename) {
@@ -93,13 +159,15 @@ namespace UGO::System {
                 *       This should be handled by MapSystem when a room is loaded.
                 */
                 if (tileData.imagePath.empty()) {
-                    LOG_INFO("From MapSystem::ParseTileJSON: TileID '{}' has imagePath '{}' (rendering deferred).", tileID, tileData.imagePath);
+                    LOG_INFO("MapSystem: TileID '{}' has imagePath '{}' (rendering deferred).", tileID, tileData.imagePath);
                 }
+                else { m_TileImageCache[tileID] = std::make_shared<Util::Image>(tileData.imagePath); }
             }
             else { LOG_WARN("From MapSystem::ParseTileJSON: missing \"imagePath\" for TileID '{}', defaulting to empty string.", tileID); }
 
             m_Tiles[tileID] = tileData;
         }
+        LOG_INFO("MapSystem: Successfully parsed tile JSON '{}', loaded {} tiles", filename, m_Tiles.size());
     }
 
     bool MapSystem::GetWalkableByID(const Core::Map::TileID& tileID) const {

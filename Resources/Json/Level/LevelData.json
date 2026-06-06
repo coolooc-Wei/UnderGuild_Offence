@@ -1,7 +1,7 @@
 {
     "test": {
         "layout": {
-            "normalRoomCount": 3,
+            "normalRoomCount": 2,
             "specialRoomCount": 1,
             "bossRoomCount": 1
         },
@@ -12,11 +12,11 @@
         },
         "difficulty": {
             "enemiesCountPerWave": {
-                "min": 20,
-                "max": 25
+                "min": 5,
+                "max": 10
             },
-            "spawnInterval": 15.0,
-            "roomClearDuration": 45.0
+            "spawnInterval": 3.0,
+            "roomClearDuration": 15.0
         }
     }
 }

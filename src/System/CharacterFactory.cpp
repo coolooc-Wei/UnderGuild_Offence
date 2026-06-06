@@ -45,6 +45,7 @@ namespace UGO::System {
         auto hero = std::make_unique<Scene::Hero>(std::move(params));
         hero->SetWorldPosition(position);
         hero->GetGameObject()->SetVisible(true);
+        hero->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
         m_Root.AddChild(hero->GetGameObject());
         LOG_INFO("CharacterFactory: a Hero created");
         return hero;
@@ -72,6 +73,8 @@ namespace UGO::System {
 
         rawEnemy->SetWorldPosition(position);
         if (auto gameObject = rawEnemy->GetGameObject()) { gameObject->SetVisible(true); }
+
+        rawEnemy->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 
         LOG_INFO("CharacterFactory: a Enemy create, pool left {}/{}", m_Enemies.size(), m_Enemies.capacity());
         return PooledCharacter<Scene::Enemy>(
@@ -104,6 +107,8 @@ namespace UGO::System {
         rawMercenary->SetWorldPosition(position);
         if (auto gameObject = rawMercenary->GetGameObject()) { gameObject->SetVisible(true); }
 
+        rawMercenary->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
+
         LOG_INFO("CharacterFactory: a Mercenary create, pool left {}/{}", m_Mercenaries.size(), m_Mercenaries.capacity());
         return PooledCharacter<Scene::Mercenary>(
             rawMercenary,
@@ -130,6 +135,17 @@ namespace UGO::System {
         auto it = m_ParamsCache.find(heroID);
         if (it != m_ParamsCache.end()) { return BuildFromCache(it->second); }
         return BuildFromCache(ParseCharacterParams(heroID, m_HeroDatabase.at(heroID)));
+    }
+
+    Core::Size CharacterFactory::GetEnemySize(const std::string& enemyID) {
+        auto it = m_ParamsCache.find(enemyID);
+        if (it != m_ParamsCache.end()) { return it->second.size; }
+
+        if (!m_EnemyDatabase.contains(enemyID)) {
+            LOG_ERROR("From CharacterFactory::GetEnemySize: EnemyID '{}' not found in database. Defaulting to {{32.0f, 32.0f}}.", enemyID);
+            return Core::Size{32.0f, 32.0f};
+        }
+        return ParseCharacterParams(enemyID, m_EnemyDatabase.at(enemyID)).size;
     }
 
     Scene::Character::CharacterParams CharacterFactory::BuildFromCache(const CachedCharacterData& cached) const {
@@ -218,7 +234,10 @@ namespace UGO::System {
         else if (jsonParams.at("imagePath").is_string()) {
             imagePathStr = jsonParams.at("imagePath").get<std::string>();
         }
-        cached.image = std::make_shared<Util::Image>(imagePathStr);
+        if (imagePathStr.empty()) {
+            if (cached.drawableType != Scene::BasicObject::DrawableType::Animation) { LOG_ERROR("From CharacterFactory::ParseCharacterParams: imagePath is empty but drawableType is not Animation for ID: {}", cacheKey); }
+        }
+        else { cached.image = std::make_shared<Util::Image>(imagePathStr); }
 
         cached.size = {jsonParams.at("size").at("width"), jsonParams.at("size").at("height")};
 
@@ -283,5 +302,7 @@ namespace UGO::System {
         auto [iter, inserted] = m_ParamsCache.emplace(cacheKey, std::move(cached));
         return iter->second;
     }
+
+    void CharacterFactory::SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = callback; }
 
 }

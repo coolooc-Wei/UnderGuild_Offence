@@ -9,6 +9,7 @@
 #include "System/ExpSystem.hpp"
 #include "System/GameRuleSystem.hpp"
 #include "System/LevelSystem.hpp"
+#include "System/MapSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 
@@ -24,20 +25,22 @@ void UGO::App::Update() {
     // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
-      ChangeGameState(GameState::GAMING);
+      ChangeGameState(GameState::LEVEL_INIT);
     }
   } break;
-//   case GameState::LEVEL_INIT: {
-//     /* TODO: Hardcode of GenerateLevel for now */
-//     m_LevelSystem->GenerateLevel("level_01");
-//     m_EnemiesSpawnerSystem->StartBattleRoom(
-//         m_LevelSystem->GetCurrentRoomSpawnConfig(),
-//         m_LevelSystem->GetCurrentLevelData().difficulty,
-//         m_LevelSystem->GetDifficultyLevel()
-//     );
+  case GameState::LEVEL_INIT: {
+    /* TODO: Hardcode of GenerateLevel for now */
+    m_BattleManager->AddHeroByID("h_001", {0.0f, 0.0f});
+    m_LevelSystem->GenerateLevel("test");
+    m_LevelSystem->EnterStartRoom();
+    m_EnemiesSpawnerSystem->StartBattleRoom(
+      m_LevelSystem->GetCurrentRoomSpawnConfig(),
+      m_LevelSystem->GetCurrentLevelData().difficulty,
+      m_LevelSystem->GetDifficultyLevel()
+    );
 
-//     ChangeGameState(GameState::GAMING);
-//   } break;
+    ChangeGameState(GameState::GAMING);
+  } break;
   case GameState::PAUSE: {
     // 升級暫停期間不允許 P 鍵跳過，必須透過卡片選擇恢復
     if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
@@ -170,16 +173,12 @@ void UGO::App::Update() {
       // Check for completion or timeout
       if (m_DropSystem->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
 
-      Core::Time::AdvanceTick();
+      m_MapSystem->ClearRoom();
   } break;
   case GameState::END: {
   } break;
   default: {} break;
   }
-
-  /* HACK: Remove maybe
-  */
-  if (m_Background) { m_Background->Update(); }
 
   // UI 更新統一由 UIManager 處理，不在此處單獨呼叫 m_StartGameButton->Update()
   if (m_UIManager) { m_UIManager->Update(); }

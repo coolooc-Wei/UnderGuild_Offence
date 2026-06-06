@@ -55,6 +55,7 @@ option(UGO_DISABLE_LOG_DEBUG "Suppress LOG_DEBUG output at compile time" OFF)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+    target_compile_definitions(${PROJECT_NAME} PRIVATE LOG_DIR="${CMAKE_CURRENT_SOURCE_DIR}/logs")
     if(UGO_DISABLE_LOG_DEBUG)
         target_compile_definitions(${PROJECT_NAME} PRIVATE UGO_DISABLE_LOG_DEBUG)
     endif()

@@ -64,6 +64,9 @@ namespace UGO {
             case GameState::MENU: {
                 // No special init
             } break;
+            case GameState::LEVEL_INIT: {
+                // No special init
+            } break;
             case GameState::PAUSE: {
                 // 如果是升級暫停，只需隱藏暫停頁面且保持角色可見，以免角色消失
                 if (m_IsUpgradePause) {
@@ -96,8 +99,11 @@ namespace UGO {
             case GameState::END: {
                 int enemyCount = m_BattleManager->GetEnemyCount();
                 bool isHeroAlive = m_BattleManager->IsHeroAlive();
-                int killCount = m_BattleManager->GetEnemyKillCount();
-                auto gameResult = m_GameRuleSystem->DetectGameResult(enemyCount, isHeroAlive, killCount);
+                auto gameResult = m_GameRuleSystem->DetectGameResult(
+                    m_LevelSystem->IsLevelCompleted(), 
+                    isHeroAlive, 
+                    enemyCount
+                );
 
                 if (gameResult == System::GameRuleSystem::GameResult::WIN) {
                     m_Win->GetGameObject()->SetVisible(true);
@@ -119,11 +125,8 @@ namespace UGO {
                     icon->GetGameObject()->SetVisible(false);
                 }
             } break;
-            default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;
-        }
 
-        if (m_Background) {
-            m_Background->GetGameObject()->SetVisible(state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
+            default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;
         }
 
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);

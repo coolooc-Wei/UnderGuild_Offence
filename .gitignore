@@ -496,6 +496,9 @@ lib/
 # Doxygen generated files
 docs/html/
 
+# CMake log output
+logs/
+
 # Gemini
 GEMINI.md
 .gemini/

@@ -43,6 +43,9 @@ namespace System {
         void AddHeroByID(const std::string& heroID, const Core::WorldPosition& position);
         void AddEnemy(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         void AddEnemyByID(const std::string& enemyID, const Core::WorldPosition& position);
+        void AddBossByID(const std::string& enemyID, const Core::WorldPosition& position);
+        bool IsBossAlive() const;
+
         void AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position);
         void AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position);
         /* TODO: removed after implementing UI system */
@@ -96,6 +99,8 @@ namespace System {
         mutable std::vector<Scene::Character*> m_AllCharactersCache;
         mutable std::vector<Scene::Character*> m_AllAlliesCache;
         mutable bool m_IsCacheDirty = true;
+
+        Scene::Enemy* m_CurrentBoss = nullptr;
 
         int m_EnemyKillCount = 0;
         EffectAnimationManager& m_EffectAnimationManager;

@@ -24,6 +24,8 @@ namespace UGO::System {
     void LevelSystem::GenerateLevel(const std::string& levelID) {
         m_CurrentLevelData = GetLevelData(levelID);
         BuildLayout(m_CurrentLevelData.layoutConfig);
+        m_MapSystem.LoadRoom(GetCurrentRoomData());
+        LOG_INFO("LevelSystem: Generated level '{}'", levelID);
     }
 
     void LevelSystem::ParseLevelJSON(const std::string& filename) {
@@ -101,9 +103,8 @@ namespace UGO::System {
         return *m_CurrentRoom;
     }
     const Core::Map::RoomData&  LevelSystem::GetCurrentRoomData() const { return m_MapSystem.GetRoomData(GetCurrentRoom().mapDataID); }
-    bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const {
-        return GetCurrentRoomData().IsWalkable(Core::WorldToGrid(worldPos));
-    }
+    bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const { return GetCurrentRoomData().IsWalkable(Core::WorldToGrid(worldPos)); }
+    bool LevelSystem::IsWalkable(const Core::GridPosition& gridPos) const { return GetCurrentRoomData().IsWalkable(gridPos); }
 
     void LevelSystem::OnRoomCleared() {
         if (!m_CurrentRoom) {
@@ -113,10 +114,11 @@ namespace UGO::System {
         else if (m_CurrentRoom->isCleared) { return; }
         m_CurrentRoom->isCleared = true;
         m_DifficultyLevel++;
+        LOG_INFO("LevelSystem: Room at ({}, {}) cleared. Difficulty increased to {}", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y, m_DifficultyLevel);
     }
     bool LevelSystem::IsRoomCleared() const {
         if (!m_CurrentRoom) { return false; }
-        /* TODO: If room type is Boss, check if the boss is defeated. */
+        if (m_CurrentRoom->roomType == Core::Map::RoomType::Boss) { return !mf_IsBossAlive(); }
         return m_CurrentRoom->isCleared || m_RoomClearTimer.IsTimeUp();
     }
 
@@ -145,12 +147,15 @@ namespace UGO::System {
     int LevelSystem::GetDifficultyLevel() const { return m_DifficultyLevel; }
 
     void LevelSystem::EnterStartRoom() {
-
+        m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration);
+        if (m_CurrentRoom) { LOG_INFO("LevelSystem: Entered start room at ({}, {})", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y); }
     }
 
     void LevelSystem::EnterRoom(Core::Map::MapCoord coord) {
         if (!TryMoveToRoom(coord)) { return; }
-        m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration);
+        m_MapSystem.LoadRoom(GetCurrentRoomData());
+        if (!m_CurrentRoom->isCleared) { m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration); }
+        LOG_INFO("LevelSystem: Entered room at ({}, {})", coord.x, coord.y);
     }
 
     std::vector<Core::Map::MapCoord> LevelSystem::GetOpenDirections() const {
@@ -206,13 +211,11 @@ namespace UGO::System {
     const Core::Level::LevelData& LevelSystem::GetCurrentLevelData() const { return m_CurrentLevelData; }
 
     bool LevelSystem::TryMoveToRoom(Core::Map::MapCoord coord) {
-        if (!GetCurrentRoom().isCleared) {
+        if (!IsRoomCleared()) {
             LOG_INFO("From LevelSystem::TryMoveToRoom: Current room is not cleared.");
             return false;
         }
         m_CurrentRoom = GetRoomByCoord(coord);
-        const auto& currentRoomData = GetCurrentRoomData();
-        Core::Map::ChangeMapSize( currentRoomData.width, currentRoomData.height);
 
         return true;
     }
@@ -316,6 +319,39 @@ namespace UGO::System {
         for (auto& room : m_Layout) { m_LayoutMap[room.mapPos] = &room; }
 
         m_CurrentRoom = GetRoomByCoord(startCoord);
+        LOG_INFO("LevelSystem: Built layout with {} normal, {} special, {} boss rooms. Start room at ({}, {})", layoutConfig.normalRoomCount, layoutConfig.specialRoomCount, layoutConfig.bossRoomCount, startCoord.x, startCoord.y );
+
+        // Log room layout as ASCII grid
+        int minX = 0, maxX = 0, minY = 0, maxY = 0;
+        if (!m_Layout.empty()) {
+            minX = maxX = m_Layout[0].mapPos.x;
+            minY = maxY = m_Layout[0].mapPos.y;
+            for (const auto& room : m_Layout) {
+                if (room.mapPos.x < minX) minX = room.mapPos.x;
+                if (room.mapPos.x > maxX) maxX = room.mapPos.x;
+                if (room.mapPos.y < minY) minY = room.mapPos.y;
+                if (room.mapPos.y > maxY) maxY = room.mapPos.y;
+            }
+        }
+
+        std::string gridLog = "\n";
+        for (int y = maxY; y >= minY; --y) {
+            gridLog += "  ";
+            for (int x = minX; x <= maxX; ++x) {
+                if (auto it = m_LayoutMap.find({x, y}); it != m_LayoutMap.end()) {
+                    if (it->second->isStart) gridLog += "[NS]";
+                    else if (it->second->roomType == Core::Map::RoomType::Boss) gridLog += "[Bo]";
+                    else if (it->second->roomType == Core::Map::RoomType::Special) gridLog += "[Sp]";
+                    else gridLog += "[No]";
+                }
+                else {
+                    gridLog += "    ";
+                }
+            }
+            gridLog += "\n";
+        }
+        LOG_INFO("LevelSystem: Room Grid (NS:Start, Bo:Boss, Sp:Special, No:Normal):{}", gridLog);
     }
-                      
+
+    void LevelSystem::SetIsBossAliveCallBack(IsBossAliveCallback callback) { mf_IsBossAlive = callback; }
 }
