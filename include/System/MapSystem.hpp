@@ -13,7 +13,6 @@ namespace UGO {
 
 namespace System {
 
-
     class MapSystem {
     public:
         MapSystem(Util::Renderer& root);
