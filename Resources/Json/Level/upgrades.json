@@ -71,6 +71,22 @@
             "action_target": "Enemy",
             "action_type": "AddGlobalStatusEffect",
             "effect_params": { "type": "SlowDown", "multiplier": 1.00 }
+        },
+        {
+            "id": "merc_summon_m001_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001_1" }
+        },
+        {
+            "id": "merc_summon_m001_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001_2" }
         }
     ]
 }

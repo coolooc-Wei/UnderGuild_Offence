@@ -31,6 +31,8 @@ namespace Scene {
             std::vector<std::unique_ptr<StatusEffect>> statusEffects = {};
             EffectAnimationData attackAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
             EffectAnimationData damageAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
+            /// @brief 角色種類識別 ID（傭兵計數與合成系統用），其他角色預設為空字串
+            std::string typeID = "";
         };
 
 
@@ -44,6 +46,7 @@ namespace Scene {
         HpValue GetMaxHP() const;
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
+        const std::string& GetTypeID() const;
         Core::Velocity GetIntendedMovement() const;
         Core::Velocity GetRepelMovement() const;
 
@@ -83,6 +86,7 @@ namespace Scene {
         HpValue m_MaxHP;
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
+        std::string m_TypeID = ""; ///< 角色種類識別 ID，傭兵使用，其他角色為空字串
         Core::Time::CountDownTimer m_AttackCooldown = Core::Time::CountDownTimer(0.0f);
         Core::Time::CountDownTimer m_InvincibleTimer = Core::Time::CountDownTimer(0.0f);
         std::unique_ptr<Weapon> m_Weapon = nullptr;

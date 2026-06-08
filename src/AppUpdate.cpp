@@ -14,6 +14,7 @@
 #include "Scene/ExpPack.hpp"
 #include "UI/GameDisplay.hpp"
 #include "UI/GameButtons.hpp"
+#include "UI/MercenaryCountPanel.hpp"
 
 void UGO::App::Update() {
   switch (m_CurrentGameState) {
@@ -122,6 +123,11 @@ void UGO::App::Update() {
         );
     }
 
+    // 傭兵計數面板同步：每幀將計數資料傳遞給 UI
+    if (m_MercenaryCountPanel && m_BattleManager) {
+        m_MercenaryCountPanel->UpdateCounts(m_BattleManager->GetMercenaryCounts());
+        m_MercenaryCountPanel->Update();
+    }
 
 
     

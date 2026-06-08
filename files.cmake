@@ -57,6 +57,8 @@ set(UI_SRC
     UI/HealthBarSystem.cpp
     UI/GameButtons.cpp
     UI/GameDisplay.cpp
+    UI/MercenaryDisplayCard.cpp
+    UI/MercenaryCountPanel.cpp
 )
 set(UI_INC
     UI/Page.hpp
@@ -69,6 +71,8 @@ set(UI_INC
     UI/HealthBarSystem.hpp
     UI/GameButtons.hpp
     UI/GameDisplay.hpp
+    UI/MercenaryDisplayCard.hpp
+    UI/MercenaryCountPanel.hpp
 )
 
 # --- Input ---
