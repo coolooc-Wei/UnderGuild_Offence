@@ -42,9 +42,9 @@ MercenaryDisplayCard::MercenaryDisplayCard(
     root.AddChild(m_TextObj);
 }
 
-void MercenaryDisplayCard::SetCount(int count) {
+void MercenaryDisplayCard::SetCount(int aliveCount, int totalCount) {
     if (m_CountText) {
-        m_CountText->SetText(std::to_string(count));
+        m_CountText->SetText(std::to_string(aliveCount) + "/" + std::to_string(totalCount));
     }
 }
 

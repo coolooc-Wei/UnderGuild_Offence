@@ -77,8 +77,11 @@ namespace UGO::System {
                 m_AllMercenariesCache.push_back(mercenary.get());
                 m_AllCharactersCache.push_back(mercenary.get());
                 m_AllAlliesCache.push_back(mercenary.get());
-                if (!mercenary->IsDead()) {
-                    m_MercenaryCountsCache[mercenary->GetTypeID()]++;
+                
+                auto& countInfo = m_MercenaryCountsCache[mercenary->GetTypeID()];
+                countInfo.totalCount++;
+                if (!mercenary->IsDead() && !mercenary->IsRespawning()) {
+                    countInfo.aliveCount++;
                 }
             }
         }
@@ -312,10 +315,26 @@ namespace UGO::System {
             m_IsCacheDirty = true;
         }
 
-        auto removeMercenaries = std::remove_if(m_MercenaryPool.begin(), m_MercenaryPool.end(), [](const auto& mercenary){ return mercenary->IsDead(); });
+        auto removeMercenaries = std::remove_if(m_MercenaryPool.begin(), m_MercenaryPool.end(), [](const auto& mercenary){ 
+            return mercenary->IsTrulyDead(); 
+        });
         if (removeMercenaries != m_MercenaryPool.end()) {
             m_MercenaryPool.erase(removeMercenaries, m_MercenaryPool.end());
             m_IsCacheDirty = true;
+        }
+
+        // Drive respawns from the top down for normally dead mercenaries
+        for (auto& mercenary : m_MercenaryPool) {
+            if (mercenary && mercenary->CanRespawn()) {
+                Core::WorldPosition spawnPos = {0.0f, 0.0f};
+                if (!m_AllHeroes.empty()) {
+                    spawnPos = m_AllHeroes[0]->GetWorldPosition();
+                    spawnPos.x += (rand() % 40 - 20); // Small offset
+                    spawnPos.y += (rand() % 40 - 20);
+                }
+                mercenary->Respawn(spawnPos);
+                m_IsCacheDirty = true;
+            }
         }
     }
 
@@ -339,7 +358,7 @@ namespace UGO::System {
 
     int BattleManager::GetEnemyKillCount() const { return m_EnemyKillCount; }
 
-    std::unordered_map<std::string, int> BattleManager::GetMercenaryCounts() const {
+    std::unordered_map<std::string, BattleManager::MercenaryCount> BattleManager::GetMercenaryCounts() const {
         if (m_IsCacheDirty) { RebuildCaches(); }
         return m_MercenaryCountsCache;
     }
@@ -357,6 +376,7 @@ namespace UGO::System {
     void BattleManager::RemoveMercenaries(const std::vector<Scene::Mercenary*>& mercenaries) {
         for (auto* mercenary : mercenaries) {
             if (mercenary && !mercenary->IsDead()) {
+                mercenary->SetTrulyDead();
                 mercenary->OnDeath(); // 標記死亡並觸發 visible=false，由 Update() 自動回收
             }
         }

@@ -5,12 +5,12 @@ namespace UGO::UI {
 MercenaryCountPanel::MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory)
     : m_Root(root), m_Factory(factory) {}
 
-void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, int>& currentCounts) {
+void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, System::BattleManager::MercenaryCount>& currentCounts) {
     bool layoutDirty = false;
 
     // ── Step 1：更新或新增卡牌 ────────────────────────────────────────────
-    for (const auto& [typeID, count] : currentCounts) {
-        if (count <= 0) { continue; } // 忽略數量為 0 的種類
+    for (const auto& [typeID, counts] : currentCounts) {
+        if (counts.totalCount <= 0) { continue; } // 忽略總數為 0 的種類
 
         // 若為新種類，建立卡牌並加入排版
         if (m_Cards.find(typeID) == m_Cards.end()) {
@@ -22,9 +22,12 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, int
 
         // 偵測數量變動
         auto prevIt = m_PreviousCounts.find(typeID);
-        const int prevCount = (prevIt != m_PreviousCounts.end()) ? prevIt->second : 0;
-        if (count != prevCount) {
-            card->SetCount(count);
+        const bool hasPrev = (prevIt != m_PreviousCounts.end());
+        const bool countChanged = !hasPrev || 
+                                  (prevIt->second.aliveCount != counts.aliveCount) || 
+                                  (prevIt->second.totalCount != counts.totalCount);
+        if (countChanged) {
+            card->SetCount(counts.aliveCount, counts.totalCount);
             card->SetVisible(true);
 
             // 將此 typeID 移至 m_DisplayOrder 最前端
@@ -42,7 +45,7 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, int
     // ── Step 2：隱藏數量歸零的種類卡牌 ───────────────────────────────────
     for (const auto& [typeID, card] : m_Cards) {
         auto it = currentCounts.find(typeID);
-        const bool active = (it != currentCounts.end() && it->second > 0);
+        const bool active = (it != currentCounts.end() && it->second.totalCount > 0);
         if (!active) {
             card->SetVisible(false);
             // 從排版中移除
@@ -71,9 +74,9 @@ void MercenaryCountPanel::Update() {
 void MercenaryCountPanel::Show() {
     m_IsVisible = true;
     for (auto& [typeID, card] : m_Cards) {
-        // 只顯示計數 > 0 的卡牌
+        // 只顯示總計數 > 0 的卡牌
         auto it = m_PreviousCounts.find(typeID);
-        if (it != m_PreviousCounts.end() && it->second > 0) {
+        if (it != m_PreviousCounts.end() && it->second.totalCount > 0) {
             card->SetVisible(true);
         }
     }

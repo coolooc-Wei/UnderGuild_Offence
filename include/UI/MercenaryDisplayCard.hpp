@@ -50,9 +50,10 @@ public:
 
     /**
      * @brief 更新卡牌顯示的數量文字。
-     * @param count 當前存活數量
+     * @param aliveCount 當前存活數量
+     * @param totalCount 總數量
      */
-    void SetCount(int count);
+    void SetCount(int aliveCount, int totalCount);
 
     /**
      * @brief 設定卡牌的目標位置（螢幕座標），Update() 會進行 Lerp 平滑移動。

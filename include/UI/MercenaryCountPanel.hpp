@@ -4,6 +4,7 @@
 #include "UGO_pch.hpp"
 #include "UI/MercenaryDisplayCard.hpp"
 #include "System/CharacterFactory.hpp"
+#include "System/BattleManager.hpp"
 
 namespace UGO::UI {
 
@@ -44,7 +45,7 @@ public:
      *        應在 GAMING 狀態下每幀呼叫。
      * @param currentCounts BattleManager::GetMercenaryCounts() 的回傳值
      */
-    void UpdateCounts(const std::unordered_map<std::string, int>& currentCounts);
+    void UpdateCounts(const std::unordered_map<std::string, System::BattleManager::MercenaryCount>& currentCounts);
 
     /**
      * @brief 每幀更新所有卡牌的 Lerp 移動動畫。
@@ -87,7 +88,7 @@ private:
     std::vector<std::string> m_DisplayOrder;
 
     // 上一幀的計數快照，用於偵測變動
-    std::unordered_map<std::string, int> m_PreviousCounts;
+    std::unordered_map<std::string, System::BattleManager::MercenaryCount> m_PreviousCounts;
 
     bool m_IsVisible = false;
 };
