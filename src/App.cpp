@@ -111,9 +111,6 @@ namespace UGO {
                 for (auto drop : m_DropSystem->GetAllDrops()) {
                     drop->GetGameObject()->SetVisible(false);
                 }
-                for (auto icon : m_RewardManager->GetAllIcons()) {
-                    icon->GetGameObject()->SetVisible(false);
-                }
             } break;
 
             default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;

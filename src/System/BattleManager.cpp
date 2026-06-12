@@ -178,7 +178,6 @@ namespace UGO::System {
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
         for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
-        for (auto* icon: m_RewardManager.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
     }
 
     void BattleManager::AIUpdate() {

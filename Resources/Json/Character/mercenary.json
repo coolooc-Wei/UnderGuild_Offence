@@ -465,5 +465,109 @@
                 "height": 32.0
             }
         }
+    },
+
+    "s_023": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/mercenaries/SUnit/SUnit_23_1.png",
+            "../Resources/Image/character/mercenaries/SUnit/SUnit_23_2.png",
+            "../Resources/Image/character/mercenaries/SUnit/SUnit_23_3.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 42.0,
+            "height": 38.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 2000.0,
+        "attackPower": 40.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+
+    "s_025": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/mercenaries/SUnit/SUnit_25_1.png",
+            "../Resources/Image/character/mercenaries/SUnit/SUnit_25_2.png",
+            "../Resources/Image/character/mercenaries/SUnit/SUnit_25_3.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 42.0,
+            "height": 38.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 2000.0,
+        "attackPower": 40.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
     }
 }
