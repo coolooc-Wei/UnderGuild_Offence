@@ -106,7 +106,7 @@ void UGO::App::Start() {
             m_Root, *m_UIManager,
             [this]() {
                 LOG_INFO("[UI] Start Game button clicked!");
-                ChangeGameState(GameState::GAMING);
+                ChangeGameState(GameState::LEVEL_INIT);
             },
             [this]() {
                 LOG_INFO("[UI] Pause button clicked!");

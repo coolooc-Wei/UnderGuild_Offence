@@ -87,6 +87,30 @@
             "action_target": "CharacterFactory",
             "action_type": "SummonMercenary",
             "effect_params": { "entity_id": "m_001_2" }
+        },
+        {
+            "id": "merc_summon_m002",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_02.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_002" }
+        },
+        {
+            "id": "merc_summon_m002_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_002_1" }
+        },
+        {
+            "id": "merc_summon_m002_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_022.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_002_2" }
         }
     ]
 }
