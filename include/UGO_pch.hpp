@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <glm/geometric.hpp>
 #include <functional>
+#include <optional>
 
 // PTSD includes
 #include "Util/GameObject.hpp"

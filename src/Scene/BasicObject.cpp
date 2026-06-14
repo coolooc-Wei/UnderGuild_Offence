@@ -85,6 +85,7 @@ namespace UGO::Scene {
         /* TODO: Check if the position is valid
         */
         m_Position = pos;
+        GetGameObject()->m_Transform.translation = pos;
         if (m_CollisionBox) { m_CollisionBox->SetPosition(m_Position); }
         if (m_HurtBox) { m_HurtBox->SetPosition(m_Position); }
         if (m_HitBox) { m_HitBox->SetPosition(m_Position); }
@@ -202,8 +203,9 @@ namespace UGO::Scene {
     }
 
 
-    Core::Box *BasicObject::GetHitBox() const { return m_IsHitBoxActive ? m_HitBox.get() : nullptr; }
-    Core::Box *BasicObject::GetHurtBox() const { return m_IsHurtBoxActive ? m_HurtBox.get() : nullptr; }
+    Core::Box* BasicObject::GetHitBox() const { return m_IsHitBoxActive ? m_HitBox.get() : nullptr; }
+    Core::Box* BasicObject::GetHurtBox() const { return m_IsHurtBoxActive ? m_HurtBox.get() : nullptr; }
+    Core::Box* BasicObject::GetCollisionBox() const { return m_CollisionBox.get(); }
 
 
     void BasicObject::SetHitBox(std::unique_ptr<Core::Box> hitBox) {

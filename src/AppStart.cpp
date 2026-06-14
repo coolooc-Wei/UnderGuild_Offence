@@ -34,8 +34,8 @@ void UGO::App::Start() {
     m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
     m_MapSystem   = std::make_unique<System::MapSystem>(m_Root);
-    m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem);
-    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem);
+    m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem, m_Root);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem, *m_DropSystem);
 
     // Set Callback functions
     m_CharacterFactory->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });

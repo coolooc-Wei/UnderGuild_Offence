@@ -113,6 +113,7 @@ namespace UGO {
                 for (auto icon : m_RewardManager->GetAllIcons()) {
                     icon->GetGameObject()->SetVisible(false);
                 }
+                m_LevelSystem->UpdatePortalVisuals(true);
             } break;
 
             default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;

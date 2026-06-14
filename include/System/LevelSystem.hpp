@@ -11,7 +11,11 @@
 
 const std::string LEVEL_JSON_FILE_PATH = "../Resources/Json/Level/levelData.json";
 
-namespace UGO::System {
+namespace UGO {
+namespace Scene {
+    class BasicObject;
+} // namespace UGO::Scene
+namespace System {
 
     class MapSystem;
 
@@ -23,7 +27,7 @@ namespace UGO::System {
             Core::RectangleBox  triggerBox;
         };
 
-        LevelSystem(MapSystem& mapSystem);
+        LevelSystem(MapSystem& mapSystem, Util::Renderer& renderer);
         ~LevelSystem();
 
         const Core::Level::LevelData& GetLevelData(const Core::Level::LevelID& levelID);
@@ -35,7 +39,19 @@ namespace UGO::System {
         bool IsWalkable(const Core::WorldPosition& worldPos) const;
         bool IsWalkable(const Core::GridPosition& gridPos) const;
 
-        void OnRoomCleared();
+        enum class RoomState {
+            Setting,
+            Battling,
+            Cleared
+        };
+        RoomState GetRoomState() const;
+        void ChangeRoomState(RoomState targetState);
+        bool ShouldClearRoom() const;
+
+        bool IsRoomPreviouslyCleared() const;
+        std::optional<Core::Map::MapCoord> CheckPortalCollision(const Core::Box& heroBox) const;
+
+
         bool IsRoomCleared() const;
 
         int  GetDifficultyLevel() const;
@@ -57,6 +73,7 @@ namespace UGO::System {
          * Only meaningful after IsRoomCleared() returns true.
          */
         std::vector<Portal> GetActivePortals() const;
+        void UpdatePortalVisuals(bool forceHide = false);
 
         const Core::Level::LevelData& GetCurrentLevelData() const;
 
@@ -71,10 +88,12 @@ namespace UGO::System {
     private:
         void ParseLevelJSON(const std::string& filename);
         void BuildLayout(const Core::Level::LayoutConfig& layout);
+        void InitPortals();
         
         static constexpr float PORTAL_THICKNESS = 48.0f;
         static constexpr float PORTAL_BREADTH   = 96.0f;
         MapSystem& m_MapSystem;
+        Util::Renderer& m_Renderer;
 
         IsBossAliveCallback mf_IsBossAlive = nullptr;
 
@@ -89,6 +108,7 @@ namespace UGO::System {
         // Current data
         Core::Level::LevelData m_CurrentLevelData;
         Core::Map::RoomNode* m_CurrentRoom = nullptr;
+        RoomState m_CurrentRoomState = RoomState::Setting;
 
         Core::Time::CountDownTimer m_RoomClearTimer{0.0f};
 
@@ -96,13 +116,11 @@ namespace UGO::System {
         unsigned int m_GlobalWaveIndex = 0; /* unused for now. Reserved for future wave difficulty */
         int m_DifficultyLevel = 0;
 
-        /* TODO: Portal icons
-         * LevelSystem will receive a Util::Renderer& and manage icon BasicObjects.
-         * Signature: LevelSystem(MapSystem& mapSystem, Util::Renderer& renderer);
-         */
+        // Portal icons pool (4 directions)
+        std::vector<std::shared_ptr<Scene::BasicObject>> m_Portals;
     };
 
-
-} // namespace UGO::System
+} // namespace System
+} // namespace UGO
 
 #endif // LEVEL_SYSTEM_HPP

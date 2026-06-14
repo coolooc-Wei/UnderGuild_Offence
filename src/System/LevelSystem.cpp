@@ -1,14 +1,17 @@
 #include "System/LevelSystem.hpp"
 
 #include "System/MapSystem.hpp"
+#include "Scene/BasicObject.hpp"
 #include "Core/Hash.hpp"
 #include "Core/UGO_Math.hpp"
 
 namespace UGO::System {
 
-    LevelSystem::LevelSystem(MapSystem& mapSystem)
-    : m_MapSystem(mapSystem) {
+    LevelSystem::LevelSystem(MapSystem& mapSystem, Util::Renderer& renderer)
+    : m_MapSystem(mapSystem),
+      m_Renderer(renderer) {
         ParseLevelJSON(LEVEL_JSON_FILE_PATH);
+        InitPortals();
     }
     LevelSystem::~LevelSystem() = default;
 
@@ -95,7 +98,11 @@ namespace UGO::System {
 
     bool LevelSystem::IsLevelCompleted() const {
         if (!m_CurrentRoom) { return false; }
-        return m_CurrentRoom->roomType == Core::Map::RoomType::Boss && IsRoomCleared();
+        if ( IsRoomCleared() && m_CurrentRoom->roomType == Core::Map::RoomType::Boss ) {
+            LOG_INFO("Level cleared.");
+            return true;
+        }
+        return false;
     }
 
     const Core::Map::RoomNode& LevelSystem::GetCurrentRoom() const {
@@ -106,20 +113,78 @@ namespace UGO::System {
     bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const { return GetCurrentRoomData().IsWalkable(Core::WorldToGrid(worldPos)); }
     bool LevelSystem::IsWalkable(const Core::GridPosition& gridPos) const { return GetCurrentRoomData().IsWalkable(gridPos); }
 
-    void LevelSystem::OnRoomCleared() {
+    LevelSystem::RoomState LevelSystem::GetRoomState() const { return m_CurrentRoomState; }
+
+    bool LevelSystem::IsRoomPreviouslyCleared() const {
         if (!m_CurrentRoom) {
             LOG_ERROR("From LevelSystem::OnRoomCleared: m_currentRoom is NULL");
-            return;
+            return false;
         }
-        else if (m_CurrentRoom->isCleared) { return; }
-        m_CurrentRoom->isCleared = true;
-        m_DifficultyLevel++;
-        LOG_INFO("LevelSystem: Room at ({}, {}) cleared. Difficulty increased to {}", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y, m_DifficultyLevel);
+        return m_CurrentRoom->isCleared;
     }
-    bool LevelSystem::IsRoomCleared() const {
+
+    bool LevelSystem::ShouldClearRoom() const {
         if (!m_CurrentRoom) { return false; }
         if (m_CurrentRoom->roomType == Core::Map::RoomType::Boss) { return !mf_IsBossAlive(); }
-        return m_CurrentRoom->isCleared || m_RoomClearTimer.IsTimeUp();
+        return m_RoomClearTimer.IsTimeUp();
+    }
+
+    std::optional<Core::Map::MapCoord> LevelSystem::CheckPortalCollision(const Core::Box& heroBox) const {
+        for (const auto& portal : GetActivePortals()) {
+            if (heroBox.IsCollidingWith(portal.triggerBox)) {
+                LOG_INFO("Hero collisions with portals");
+                return portal.targetCoord;
+            }
+        }
+        return std::nullopt;
+    }
+
+    void LevelSystem::ChangeRoomState(RoomState targetState) {
+        switch (targetState) {
+        case RoomState::Setting: {
+            LOG_INFO("Changing the room state to Setting.");
+            m_CurrentRoomState = RoomState::Setting;
+
+            UpdatePortalVisuals();
+        } break;
+        case RoomState::Battling: {
+            if (m_CurrentRoomState != RoomState::Setting) {
+                LOG_ERROR("From LevelSystem::ChangeRoomState: To Battling from Setting only.");
+                return;
+            }
+            LOG_INFO("Changing the room state to Battling.");
+            m_CurrentRoomState = RoomState::Battling;
+
+            m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration);
+        } break;
+        case RoomState::Cleared: {
+            if (m_CurrentRoomState != RoomState::Setting && m_CurrentRoomState != RoomState::Battling) {
+                LOG_ERROR("LevelSystem::ChangeRoomState: To Cleared from Setting or Battling only.");
+                return;
+            }
+            else if (!m_CurrentRoom) {
+                LOG_ERROR("From LevelSystem::ChangeRoomState: m_currentRoom is NULL");
+                return;
+            }
+            LOG_INFO("Changing the room state to Cleared.");
+            m_CurrentRoomState = RoomState::Cleared;
+
+            if (!m_CurrentRoom->isCleared) {
+                m_CurrentRoom->isCleared = true;
+                m_DifficultyLevel++;
+                LOG_INFO("From LevelSystem::ChangeRoomState: Room at ({}, {}) cleared. Difficulty increased to {}", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y, m_DifficultyLevel);
+            }
+            UpdatePortalVisuals();
+        } break;
+        default: {
+            LOG_ERROR("From LevelSystem::ChangeRoomState: some state are not handled");
+            return;
+        }
+        }
+    }
+
+    bool LevelSystem::IsRoomCleared() const {
+        return m_CurrentRoomState == RoomState::Cleared;
     }
 
     Core::Level::SpawnConfig LevelSystem::GetCurrentRoomSpawnConfig() const {
@@ -147,14 +212,11 @@ namespace UGO::System {
     int LevelSystem::GetDifficultyLevel() const { return m_DifficultyLevel; }
 
     void LevelSystem::EnterStartRoom() {
-        m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration);
         if (m_CurrentRoom) { LOG_INFO("LevelSystem: Entered start room at ({}, {})", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y); }
     }
-
     void LevelSystem::EnterRoom(Core::Map::MapCoord coord) {
         if (!TryMoveToRoom(coord)) { return; }
         m_MapSystem.LoadRoom(GetCurrentRoomData());
-        if (!m_CurrentRoom->isCleared) { m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration); }
         LOG_INFO("LevelSystem: Entered room at ({}, {})", coord.x, coord.y);
     }
 
@@ -354,4 +416,80 @@ namespace UGO::System {
     }
 
     void LevelSystem::SetIsBossAliveCallBack(IsBossAliveCallback callback) { mf_IsBossAlive = callback; }
+
+    void LevelSystem::InitPortals() {
+        for (int i = 0; i < 4; ++i) {
+            m_Portals.push_back(std::make_shared<Scene::BasicObject>());
+            m_Portals[i]->GetGameObject()->SetVisible(false);
+            m_Renderer.AddChild(m_Portals[i]->GetGameObject());
+        }
+
+        // Set images
+        m_Portals[0]->SetImage("../Resources/Image/wall/portal_up.png");
+        m_Portals[1]->SetImage("../Resources/Image/wall/portal_down.png");
+        m_Portals[2]->SetImage("../Resources/Image/wall/portal_side.png");
+        m_Portals[3]->SetImage("../Resources/Image/wall/portal_side.png");
+
+        // Set drawable type
+        for (int i = 0; i < 4; ++i) { m_Portals[i]->SetDrawableType(Scene::BasicObject::DrawableType::Image); }
+
+        // Initialize fixed sizes
+        m_Portals[0]->SetSize(PORTAL_BREADTH, PORTAL_THICKNESS); // Up
+        m_Portals[1]->SetSize(PORTAL_BREADTH, PORTAL_THICKNESS); // Down
+        m_Portals[2]->SetSize(PORTAL_THICKNESS, PORTAL_BREADTH); // Left
+        m_Portals[3]->SetSize(PORTAL_THICKNESS, PORTAL_BREADTH); // Right
+
+        // Set HurtBox
+        m_Portals[0]->SetHurtBox(std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, PORTAL_BREADTH, PORTAL_THICKNESS));
+        m_Portals[1]->SetHurtBox(std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, PORTAL_BREADTH, PORTAL_THICKNESS));
+        m_Portals[2]->SetHurtBox(std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, PORTAL_THICKNESS, PORTAL_BREADTH));
+        m_Portals[3]->SetHurtBox(std::make_unique<Core::RectangleBox>(Core::WorldPosition{0.0f, 0.0f}, PORTAL_THICKNESS, PORTAL_BREADTH));
+        for (int i = 0; i < 4; ++i) { m_Portals[i]->ActivateHurtBox(true); }
+        m_Portals[2]->SetFlip(false, true);
+    }
+
+    void LevelSystem::UpdatePortalVisuals(bool forceHide) {
+        LOG_INFO("Inside UpdateProtalVisuals.");
+        for (auto& portal : m_Portals) { portal->GetGameObject()->SetVisible(false); }
+
+        if ( !IsRoomCleared() ) {
+            LOG_INFO("Detected the room is not cleared, hide all protals.");
+            return;
+        }
+        else if (forceHide) {
+            LOG_WARN("Forcibly hide all portal images.");
+            return;
+        }
+
+        const Core::Map::RoomData& roomData = GetCurrentRoomData();
+        const float halfRoomWidth = (roomData.width * Core::TILE_SIZE) * 0.5f;
+        const float halfRoomHeight = (roomData.height * Core::TILE_SIZE) * 0.5f;
+
+        const Core::Map::MapCoord currentPos = m_CurrentRoom->mapPos;
+
+        // Up
+        if (m_LayoutMap.count(currentPos + Core::Map::MapCoord{0, 1})) {
+            m_Portals[0]->SetWorldPosition({0.0f, halfRoomHeight});
+            m_Portals[0]->GetGameObject()->SetVisible(true);
+            LOG_INFO("Show up protal at ({}, {})", 0.0f, halfRoomHeight);
+        }
+        // Down
+        if (m_LayoutMap.count(currentPos + Core::Map::MapCoord{0, -1})) {
+            m_Portals[1]->SetWorldPosition({0.0f, -halfRoomHeight});
+            m_Portals[1]->GetGameObject()->SetVisible(true);
+            LOG_INFO("Show down protal at ({}, {})", 0.0f, -halfRoomHeight);
+        }
+        // Left
+        if (m_LayoutMap.count(currentPos + Core::Map::MapCoord{-1, 0})) {
+            m_Portals[2]->SetWorldPosition({-halfRoomWidth, 0.0f});
+            m_Portals[2]->GetGameObject()->SetVisible(true);
+            LOG_INFO("Show left protal at ({}, {})", -halfRoomWidth, 0.0f);
+        }
+        // Right
+        if (m_LayoutMap.count(currentPos + Core::Map::MapCoord{1, 0})) {
+            m_Portals[3]->SetWorldPosition({halfRoomWidth, 0.0f});
+            m_Portals[3]->GetGameObject()->SetVisible(true);
+            LOG_INFO("Show right protal at ({}, {})", halfRoomWidth, 0.0f);
+        }
+    }
 }

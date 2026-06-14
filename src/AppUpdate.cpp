@@ -35,11 +35,6 @@ void UGO::App::Update() {
     m_BattleManager->AddHeroByID("h_001", {0.0f, 0.0f});
     m_LevelSystem->GenerateLevel("test");
     m_LevelSystem->EnterStartRoom();
-    m_EnemiesSpawnerSystem->StartBattleRoom(
-      m_LevelSystem->GetCurrentRoomSpawnConfig(),
-      m_LevelSystem->GetCurrentLevelData().difficulty,
-      m_LevelSystem->GetDifficultyLevel()
-    );
 
     ChangeGameState(GameState::GAMING);
   } break;

@@ -134,7 +134,10 @@ namespace UGO::System {
         m_SpawnCount.min = difficulty.enemiesCountPerWave.min + extraDifficulty;
         m_SpawnCount.max = difficulty.enemiesCountPerWave.max + extraDifficulty;
 
-        if (!m_SpawnConfig.bossID.empty()) { m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f}); }
+        if (!m_SpawnConfig.bossID.empty()) {
+            LOG_INFO("Detected get into a boss room, spawning the boss.");
+            m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f});
+        }
 
         // Start first wave
         GenerateNextWave();
@@ -144,6 +147,10 @@ namespace UGO::System {
         m_SpawnConfig.periodicPool.clear();
         m_SpawnConfig.extraPool.clear();
         isSpawnActive = false;
+
+        // clear padding
+        m_PaddingWaves = {};
+        m_PaddingSpawns = {};
     }
 
 }

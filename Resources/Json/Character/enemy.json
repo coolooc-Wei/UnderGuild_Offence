@@ -99,7 +99,7 @@
 
 
     "e_b01": {
-        "speed": 5.0,
+        "speed": 0.2,
         "drawableType": "Animation",
         "animationPath": [
             "../Resources/Image/character/enemy/Boss_5_1.png",
