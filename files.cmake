@@ -29,6 +29,7 @@ set(SYSTEM_SRC
     System/UpgradeManager.cpp
     System/MapSystem.cpp
     System/LevelSystem.cpp
+    System/MercenaryConditionSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -43,6 +44,7 @@ set(SYSTEM_INC
     System/GameRuleSystem.hpp
     System/MapSystem.hpp
     System/LevelSystem.hpp
+    System/MercenaryConditionSystem.hpp
 )
 
 # --- UI ---

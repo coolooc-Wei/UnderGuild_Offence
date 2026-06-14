@@ -1,0 +1,35 @@
+[
+    {
+        "bondID": "example_bond_special_combo",
+        "name": "特殊協同",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "m_001,s_025",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 1,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.1,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.3,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    }
+]

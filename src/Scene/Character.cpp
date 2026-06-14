@@ -57,6 +57,17 @@ namespace UGO::Scene {
         m_StatusEffects.push_back(std::make_unique<StatusEffect>(data));
     }
 
+    void Character::RemoveStatusEffectBySource(const std::string& sourceID) {
+        if (sourceID.empty()) { return; } // 保護：不允許移除無來源的基礎效果（如卡牌增益）
+        auto it = std::remove_if(
+            m_StatusEffects.begin(), m_StatusEffects.end(),
+            [&sourceID](const std::unique_ptr<StatusEffect>& effect) {
+                return effect && effect->GetSourceID() == sourceID;
+            }
+        );
+        m_StatusEffects.erase(it, m_StatusEffects.end());
+    }
+
     void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
     void Character::AddRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement += repelMovement; }
 

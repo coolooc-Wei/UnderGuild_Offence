@@ -62,7 +62,7 @@
         "imagePath": [],
         "size": {
             "width": 44.0,
-            "height": 32.0
+            "height": 48.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -114,7 +114,7 @@
         "imagePath": [],
         "size": {
             "width": 42.0,
-            "height": 38.0
+            "height": 40.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -165,8 +165,8 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 24.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -217,8 +217,8 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 28.0,
+            "height": 24.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -269,7 +269,163 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
+            "width": 36.0,
+            "height": 30.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+
+    "m_004": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_04.png",
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_2.png",
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_3.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 20.0,
+            "height": 18.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 32.0,
+            "height": 32.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+
+    "m_004_1": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_2.png",
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_3.png",
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_4.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 24.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 32.0,
+            "height": 32.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+
+    "m_004_2": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "animationPath": [
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_2.png",
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_3.png",
+            "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_4.png"
+        ],
+        "imagePath": [],
+        "size": {
+            "width": 36.0,
             "height": 38.0
         },
         "hitBox": {
@@ -321,8 +477,8 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 38.0,
+            "height": 34.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -425,8 +581,8 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 46.0,
+            "height": 42.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -477,8 +633,8 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 56.0,
+            "height": 50.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -529,8 +685,8 @@
         ],
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 56.0,
+            "height": 48.0
         },
         "hitBox": {
             "type": "RECTANGLE",

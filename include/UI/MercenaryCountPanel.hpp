@@ -3,8 +3,10 @@
 
 #include "UGO_pch.hpp"
 #include "UI/MercenaryDisplayCard.hpp"
+#include "UI/Button.hpp"
 #include "System/CharacterFactory.hpp"
 #include "System/BattleManager.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 
 namespace UGO::UI {
 
@@ -36,6 +38,13 @@ public:
      */
     MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory);
     ~MercenaryCountPanel() = default;
+
+    /**
+     * @brief 連結合成條件系統，供面板查詢是否可合成並執行合成。
+     *        在 LEVEL_INIT 初始化完成後呼叫一次即可。
+     * @param conditionSystem 不擁有其生命週期，僅作為觀察者使用
+     */
+    void SetConditionSystem(System::MercenaryConditionSystem* conditionSystem);
 
     MercenaryCountPanel(const MercenaryCountPanel&) = delete;
     MercenaryCountPanel& operator=(const MercenaryCountPanel&) = delete;
@@ -91,6 +100,20 @@ private:
     std::unordered_map<std::string, System::BattleManager::MercenaryCount> m_PreviousCounts;
 
     bool m_IsVisible = false;
+
+    // ── Compose 按鈕 ──────────────────────────────────────────────────────
+    /// 合成條件系統（不擁有生命週期，由外部 SetConditionSystem 注入）
+    System::MercenaryConditionSystem* m_ConditionSystem = nullptr;
+
+    /// Compose 按鈕（條件滿足時顯示，點擊觸發合成）
+    std::shared_ptr<UI::Button> m_ComposeButton;
+
+    /// 跳動動畫計時器（秒）
+    float m_PulseTimer = 0.0f;
+
+    /// Compose 按鈕的預設尺寸
+    static constexpr float COMPOSE_BTN_W = 80.0f;
+    static constexpr float COMPOSE_BTN_H = 32.0f;
 };
 
 } // namespace UGO::UI

@@ -1,0 +1,46 @@
+[
+    {
+        "recipeID": "m001_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_001_1"
+    },
+    {
+        "recipeID": "legendary_synthesis_example",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_004_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_023"
+    }
+]

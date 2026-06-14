@@ -69,6 +69,14 @@ namespace Scene {
         // Upgrade
         void AddStatusEffect(const StatusEffectData& data);
 
+        /**
+         * @brief 移除所有 sourceID 完全吻合的狀態效果。
+         *        供羈絆系統在失效時安全清除所施加的 Buff，
+         *        不影響 sourceID 為空（如卡牌增益）或不同來源的效果。
+         * @param sourceID 要移除的效果來源識別碼，不可為空字串
+         */
+        void RemoveStatusEffectBySource(const std::string& sourceID);
+
         // System methods
         void Update() override;
         void OnDraw() override;

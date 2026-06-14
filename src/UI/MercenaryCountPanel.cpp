@@ -1,9 +1,20 @@
 #include "UI/MercenaryCountPanel.hpp"
+#include "Util/Time.hpp"
 
 namespace UGO::UI {
 
 MercenaryCountPanel::MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory)
-    : m_Root(root), m_Factory(factory) {}
+    : m_Root(root), m_Factory(factory) {
+    // Compose 按鈕：位於左下角卡牌區左上方
+    const glm::vec2 btnPos = { START_X - COMPOSE_BTN_W * 0.5f, PANEL_Y + COMPOSE_BTN_H + 6.0f };
+    m_ComposeButton = std::make_shared<UI::Button>(
+        btnPos,
+        COMPOSE_BTN_W, COMPOSE_BTN_H,
+        ""  // 尚未有專用圖片，待日後替換
+    );
+    m_ComposeButton->SetVisible(false);
+    m_Root.AddChild(m_ComposeButton);
+}
 
 void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, System::BattleManager::MercenaryCount>& currentCounts) {
     bool layoutDirty = false;
@@ -62,12 +73,27 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, Sys
         RearrangeCards();
     }
 
+    // ── 更新 Compose 按鈕狀態 ──────────────────────────────
+    if (m_ComposeButton && m_ConditionSystem) {
+        const bool canCompose = m_ConditionSystem->HasAnyAvailableRecipe();
+        m_ComposeButton->SetVisible(canCompose);
+    }
+
     m_PreviousCounts = currentCounts;
 }
 
 void MercenaryCountPanel::Update() {
     for (auto& [typeID, card] : m_Cards) {
         card->Update();
+    }
+
+    // ── Compose 按鈕跳動動畫 ────────────────────────────────
+    if (m_ComposeButton && m_ComposeButton->GetVisible()) {
+        m_PulseTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
+        // 8% 的縮放幅度，頻率 5 rad/s
+        const float scale = 1.0f + 0.08f * std::sin(m_PulseTimer * 5.0f);
+        m_ComposeButton->SetSize(COMPOSE_BTN_W * scale, COMPOSE_BTN_H * scale);
+        m_ComposeButton->Update();
     }
 }
 
@@ -106,6 +132,23 @@ void MercenaryCountPanel::CreateCard(const std::string& typeID) {
     auto card = std::make_unique<MercenaryDisplayCard>(m_Root, typeID, iconPath, iconSize);
     card->SetVisible(false);
     m_Cards.emplace(typeID, std::move(card));
+}
+
+void MercenaryCountPanel::SetConditionSystem(System::MercenaryConditionSystem* conditionSystem) {
+    m_ConditionSystem = conditionSystem;
+
+    // 綁定點擊回調：取得當前第一個可用配方並執行合成
+    if (m_ComposeButton && m_ConditionSystem) {
+        m_ComposeButton->SetOnClickCallback([this]() {
+            if (!m_ConditionSystem) { return; }
+            const std::string recipeID = m_ConditionSystem->GetFirstAvailableRecipe();
+            if (!recipeID.empty()) {
+                m_ConditionSystem->ExecuteSynthesis(recipeID);
+                // 重置跳動動畫計時器，讓動畫從頭開始
+                m_PulseTimer = 0.0f;
+            }
+        });
+    }
 }
 
 } // namespace UGO::UI

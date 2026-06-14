@@ -13,6 +13,7 @@
 
 #include "System/RewardManager.hpp"
 #include "System/UpgradeManager.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 #include "UI/Button.hpp"
 #include "UI/GameButtons.hpp"
 #include "UI/GameDisplay.hpp"
@@ -72,6 +73,14 @@ void UGO::App::Start() {
 
         // 傭兵計數面板：左下角卡牌顯示，初始隱藏
         m_MercenaryCountPanel = std::make_unique<UI::MercenaryCountPanel>(m_Root, *m_CharacterFactory);
+
+        // 傭兵合成條件系統：資源路徑使用相對路徑（執行檔在 build/ 子目錄中）
+        m_MercenaryConditionSystem = std::make_unique<System::MercenaryConditionSystem>(*m_BattleManager);
+        m_MercenaryConditionSystem->LoadRecipes("../Resources/Json/Character/synthesis.json");
+        m_MercenaryConditionSystem->LoadBonds("../Resources/Json/Character/bonds.json");
+
+        // 將合成系統注入面板，面板內部會綁定按鈕點擊回調
+        m_MercenaryCountPanel->SetConditionSystem(m_MercenaryConditionSystem.get());
 
         // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
         m_UpgradeManager->SetOnReadyCallback([this]() {
