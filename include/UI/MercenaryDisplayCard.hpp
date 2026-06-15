@@ -89,6 +89,11 @@ public:
     void SetComposeButtonVisible(bool visible);
 
     /**
+     * @brief 設定合成按鈕的啟用/停用。
+     */
+    void SetComposeButtonEnabled(bool enabled);
+
+    /**
      * @brief 每幀更新：執行 Lerp 平滑移動，並同步合成按鈕位置與脈衝動畫。
      *        應由 MercenaryCountPanel::Update() 統一呼叫。
      */

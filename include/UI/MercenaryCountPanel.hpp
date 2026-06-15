@@ -71,6 +71,9 @@ public:
     /** @brief 隱藏面板上所有卡牌。 */
     void Hide();
 
+    /** @brief 設定面板上所有合成按鈕的啟用/停用狀態。 */
+    void SetInteractionEnabled(bool enabled);
+
 private:
     /**
      * @brief 依 m_DisplayOrder 重新計算每張卡牌的目標 X 座標，寫入 SetTargetPosition。
@@ -104,6 +107,7 @@ private:
     std::unordered_map<std::string, System::BattleManager::MercenaryCount> m_PreviousCounts;
 
     bool m_IsVisible = false;
+    bool m_InteractionEnabled = true;
 
     // ── MercenaryConditionSystem（不擁有生命週期，由外部 SetConditionSystem 注入）────
     /// 供 UpdateCounts 為各卡牌查詢配方可用性、InitComposeButton 綁定回調使用

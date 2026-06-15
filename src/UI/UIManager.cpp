@@ -20,13 +20,13 @@ void UIManager::Update() {
         }
     );
 
-    // 依序更新組件
-    // NOTE: 目前 Update() 回傳 void，遮擋邏輯待 Update() 簽章改為 bool 後啟用。
-    // 屆時：若 component->Update() 回傳 true（已消耗事件），則 break 不再派發給下層。
+    // 依序更新組件，若上層組件已消耗事件（回傳 true），則中斷更新下層組件
     for (auto& weak : m_Components) {
         if (auto component = weak.lock()) {
-            if (component->GetVisible()) {
-                component->Update();
+            if (component->GetVisible() && component->GetEnabled()) {
+                if (component->Update()) {
+                    break;
+                }
             }
         }
     }

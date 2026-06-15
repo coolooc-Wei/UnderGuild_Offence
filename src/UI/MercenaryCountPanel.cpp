@@ -116,6 +116,15 @@ void MercenaryCountPanel::Hide() {
     }
 }
 
+void MercenaryCountPanel::SetInteractionEnabled(bool enabled) {
+    m_InteractionEnabled = enabled;
+    for (auto& [typeID, card] : m_Cards) {
+        if (card) {
+            card->SetComposeButtonEnabled(enabled);
+        }
+    }
+}
+
 void MercenaryCountPanel::RearrangeCards() {
     int visibleIndex = 0;
     for (const auto& typeID : m_DisplayOrder) {
@@ -144,6 +153,7 @@ void MercenaryCountPanel::CreateCard(const std::string& typeID) {
                     m_ConditionSystem->ExecuteSynthesis(recipeID);
                 }
             });
+            card->SetComposeButtonEnabled(m_InteractionEnabled);
         }
     }
 
@@ -165,6 +175,7 @@ void MercenaryCountPanel::SetConditionSystem(System::MercenaryConditionSystem* c
                     m_ConditionSystem->ExecuteSynthesis(recipeID);
                 }
             });
+            card->SetComposeButtonEnabled(m_InteractionEnabled);
         }
     }
 }

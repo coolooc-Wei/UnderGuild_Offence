@@ -26,10 +26,9 @@ public:
 
     /**
      * @brief 每幀更新，由子類實作。
-     * @note 未來此方法將由 UIManager 呼叫，而非直接在 App::Update 中呼叫。
-     *       TODO: 實作 UIManager 後，將此職責轉移至 UIManager。
+     * @return true 代表該事件已被此組件消耗，阻斷後續下層組件更新；false 則不阻斷。
      */
-    virtual void Update() = 0;
+    virtual bool Update() = 0;
 
     /**
      * @brief 設置組件的螢幕位置（世界坐標）。
@@ -57,11 +56,15 @@ public:
     bool GetVisible() const;
     void SetVisible(const bool visible);
 
+    bool GetEnabled() const;
+    void SetEnabled(const bool enabled);
+
 protected:
     Core::RectangleBox m_BoundingBox;
 
 private:
     bool m_Visible = false;
+    bool m_Enabled = true;
 };
 
 

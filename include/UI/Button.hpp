@@ -53,8 +53,9 @@ public:
      * 依據滑鼠位置與按鍵狀態切換 ButtonState，
      * 在狀態改變時才切換 Drawable，以避免不必要的資源更新。
      * 點擊完成（PRESSED -> 釋放）時觸發 m_OnClickCallback。
+     * @return true 若滑鼠懸停於此按鈕上（消耗滑鼠事件），否則為 false。
      */
-    void Update() override;
+    bool Update() override;
 
     /**
      * @brief 綁定點擊回調函數。

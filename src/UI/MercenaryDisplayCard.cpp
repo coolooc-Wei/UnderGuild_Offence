@@ -126,4 +126,10 @@ void MercenaryDisplayCard::SetComposeButtonVisible(bool visible) {
     }
 }
 
+void MercenaryDisplayCard::SetComposeButtonEnabled(bool enabled) {
+    if (m_ComposeButton) {
+        m_ComposeButton->SetEnabled(enabled);
+    }
+}
+
 } // namespace UGO::UI

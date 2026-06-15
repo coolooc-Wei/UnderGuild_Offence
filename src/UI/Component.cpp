@@ -32,5 +32,13 @@ bool Component::GetVisible() const {
     return m_Visible;
 }
 
+void Component::SetEnabled(const bool enabled) {
+    m_Enabled = enabled;
+}
+
+bool Component::GetEnabled() const {
+    return m_Enabled;
+}
+
 } // namespace UI
 } // namespace UGO
