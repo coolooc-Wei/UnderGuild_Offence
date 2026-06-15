@@ -50,5 +50,11 @@ void UIManager::PurgeExpired() {
     }
 }
 
+void UIManager::SetComponentZIndex(const std::shared_ptr<Component>& component, float index) {
+    if (!component) { return; }
+    component->SetZIndex(index);
+    m_SortDirty = true;
+}
+
 } // namespace UI
 } // namespace UGO

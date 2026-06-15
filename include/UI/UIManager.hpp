@@ -99,6 +99,13 @@ public:
      */
     void Update();
 
+    /**
+     * @brief 設定組件的 Z-Index 層級，並標記排序狀態為 Dirty。
+     * @param component 要設定的組件
+     * @param index     新的 Z-Index 數值
+     */
+    void SetComponentZIndex(const std::shared_ptr<Component>& component, float index);
+
 private:
     // 使用 weak_ptr 避免循環所有權，組件的生命週期由持有方（App/Scene）負責
     std::vector<std::weak_ptr<Component>> m_Components;
