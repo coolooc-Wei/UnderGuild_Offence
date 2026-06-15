@@ -49,6 +49,7 @@ namespace Scene {
         const std::string& GetTypeID() const;
         Core::Velocity GetIntendedMovement() const;
         Core::Velocity GetRepelMovement() const;
+        uint64_t GetInstanceID() const;
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
@@ -113,6 +114,7 @@ namespace Scene {
 
         EffectAnimationData m_AttackAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
         EffectAnimationData m_DamageAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
+        uint64_t m_InstanceID = 0;
     };
 
 } // namespace Scene
