@@ -170,7 +170,7 @@ namespace UGO::System {
     void EnemiesSpawnerSystem::GenerateNextBatch() {
         if (m_BatchDataList.empty()) {
             LOG_INFO("All batch finished.");
-            m_BatchTimer.Start(0.0f);
+            m_BatchTimer.Start(9999999.0f);
             return;
         }
         auto batchData = m_BatchDataList.front();
