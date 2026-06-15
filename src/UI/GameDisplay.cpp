@@ -70,7 +70,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(m_WinIcon->GetGameObject());
 
     m_Wave = std::make_shared<Scene::BasicObject>();
-    m_Wave->SetImage("../Resources/Image/Title/Title_Wave.png");
+    m_Wave->SetImage("../Resources/Image/title/Title_Wave.png");
     m_Wave->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Wave->SetSize(75.0f, 25.0f);
     m_Wave->GetGameObject()->m_Transform.translation = {-600.0f, 320.0f};
@@ -79,7 +79,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(m_Wave->GetGameObject());
 
     m_TimeBG = std::make_shared<Scene::BasicObject>();
-    m_TimeBG->SetImage("../Resources/Image/Title/1105438.png");
+    m_TimeBG->SetImage("../Resources/Image/title/1105438.png");
     m_TimeBG->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_TimeBG->SetSize(100.0f, 35.0f);
     m_TimeBG->GetGameObject()->m_Transform.translation = {-590.0f, 230.0f};
@@ -88,7 +88,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(m_TimeBG->GetGameObject());
 
     m_PauseIcon = std::make_shared<Scene::BasicObject>();
-    m_PauseIcon->SetImage("../Resources/Image/Button/pause.png");
+    m_PauseIcon->SetImage("../Resources/Image/button/pause.png");
     m_PauseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_PauseIcon->SetSize(40.0f, 40.0f);
     m_PauseIcon->GetGameObject()->m_Transform.translation = {591.0f, 312.0f};
@@ -97,7 +97,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(m_PauseIcon->GetGameObject());
     
     m_ContinueIcon = std::make_shared<Scene::BasicObject>();
-    m_ContinueIcon->SetImage("../Resources/Image/Button/Route2.png");
+    m_ContinueIcon->SetImage("../Resources/Image/button/Route2.png");
     m_ContinueIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_ContinueIcon->SetSize(30.0f, 30.0f);
     m_ContinueIcon->GetGameObject()->m_Transform.translation = {592.0f, 312.0f};
@@ -106,7 +106,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(m_ContinueIcon->GetGameObject());
 
     m_EnemyIcon = std::make_shared<Scene::BasicObject>();
-    m_EnemyIcon->SetImage("../Resources/Image/Title/Icon_Mon.png");
+    m_EnemyIcon->SetImage("../Resources/Image/title/Icon_Mon.png");
     m_EnemyIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_EnemyIcon->SetSize(30.0f, 30.0f);
     m_EnemyIcon->GetGameObject()->m_Transform.translation = {-620.0f, 190.0f};

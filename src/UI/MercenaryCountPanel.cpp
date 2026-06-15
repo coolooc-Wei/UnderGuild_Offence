@@ -3,17 +3,9 @@
 
 namespace UGO::UI {
 
-MercenaryCountPanel::MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory)
-    : m_Root(root), m_Factory(factory) {
-    // Compose 按鈕：位於左下角卡牌區左上方
-    const glm::vec2 btnPos = { START_X - COMPOSE_BTN_W * 0.5f, PANEL_Y + COMPOSE_BTN_H + 6.0f };
-    m_ComposeButton = std::make_shared<UI::Button>(
-        btnPos,
-        COMPOSE_BTN_W, COMPOSE_BTN_H,
-        ""  // 尚未有專用圖片，待日後替換
-    );
-    m_ComposeButton->SetVisible(false);
-    m_Root.AddChild(m_ComposeButton);
+MercenaryCountPanel::MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory, UIManager& uiManager)
+    : m_Root(root), m_Factory(factory), m_UIManager(uiManager) {
+    // 全局合成按鈕已移除，各卡牌自行管理其專屬按鈕（由 CreateCard 初始化）
 }
 
 void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, System::BattleManager::MercenaryCount>& currentCounts) {
@@ -34,8 +26,8 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, Sys
         // 偵測數量變動
         auto prevIt = m_PreviousCounts.find(typeID);
         const bool hasPrev = (prevIt != m_PreviousCounts.end());
-        const bool countChanged = !hasPrev || 
-                                  (prevIt->second.aliveCount != counts.aliveCount) || 
+        const bool countChanged = !hasPrev ||
+                                  (prevIt->second.aliveCount != counts.aliveCount) ||
                                   (prevIt->second.totalCount != counts.totalCount);
         if (countChanged) {
             card->SetCount(counts.aliveCount, counts.totalCount);
@@ -73,27 +65,27 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, Sys
         RearrangeCards();
     }
 
-    // ── 更新 Compose 按鈕狀態 ──────────────────────────────
-    if (m_ComposeButton && m_ConditionSystem) {
-        const bool canCompose = m_ConditionSystem->HasAnyAvailableRecipe();
-        m_ComposeButton->SetVisible(canCompose);
+    // ── Step 4：各卡牌專屬合成按鈕狀態更新 ───────────────────────────────
+    // 每幀依合成條件判定，控制各張卡牌上方的合成按鈕是否顯示。
+    // 設計意圖：由 Panel 統一查詢系統狀態，再委派給各 Card 控制自身按鈕，
+    //           維持 Panel(Controller) → Card(View) 的 top-down 指令流向。
+    if (m_ConditionSystem) {
+        for (auto& [typeID, card] : m_Cards) {
+            const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
+            if (!recipeID.empty()) {
+                const bool canCompose = m_ConditionSystem->CanSynthesize(recipeID) && m_IsVisible;
+                card->SetComposeButtonVisible(canCompose);
+            }
+        }
     }
 
     m_PreviousCounts = currentCounts;
 }
 
 void MercenaryCountPanel::Update() {
+    // 各卡牌的 Update() 已內含合成按鈕的位置同步與脈衝動畫，無需在此額外處理
     for (auto& [typeID, card] : m_Cards) {
         card->Update();
-    }
-
-    // ── Compose 按鈕跳動動畫 ────────────────────────────────
-    if (m_ComposeButton && m_ComposeButton->GetVisible()) {
-        m_PulseTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
-        // 8% 的縮放幅度，頻率 5 rad/s
-        const float scale = 1.0f + 0.08f * std::sin(m_PulseTimer * 5.0f);
-        m_ComposeButton->SetSize(COMPOSE_BTN_W * scale, COMPOSE_BTN_H * scale);
-        m_ComposeButton->Update();
     }
 }
 
@@ -106,12 +98,21 @@ void MercenaryCountPanel::Show() {
             card->SetVisible(true);
         }
     }
+    // 面板顯示時，立即重新評估各卡牌的合成按鈕（避免等到下一幀 UpdateCounts）
+    if (m_ConditionSystem) {
+        for (auto& [typeID, card] : m_Cards) {
+            const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
+            if (!recipeID.empty()) {
+                card->SetComposeButtonVisible(m_ConditionSystem->CanSynthesize(recipeID));
+            }
+        }
+    }
 }
 
 void MercenaryCountPanel::Hide() {
     m_IsVisible = false;
     for (auto& [typeID, card] : m_Cards) {
-        card->SetVisible(false);
+        card->SetVisible(false); // SetVisible(false) 內部已連帶隱藏合成按鈕
     }
 }
 
@@ -129,25 +130,42 @@ void MercenaryCountPanel::RearrangeCards() {
 
 void MercenaryCountPanel::CreateCard(const std::string& typeID) {
     auto [iconPath, iconSize] = m_Factory.GetMercenaryIconInfo(typeID);
-    auto card = std::make_unique<MercenaryDisplayCard>(m_Root, typeID, iconPath, iconSize);
+    auto card = std::make_unique<MercenaryDisplayCard>(m_Root, typeID, iconPath, iconSize, m_UIManager);
     card->SetVisible(false);
+
+    // 若為普通傭兵（ID 以 "m_" 開頭）且 ConditionSystem 已注入，
+    // 則查詢對應配方並初始化卡牌專屬合成按鈕。
+    // 低耦合設計：Card 不知道 ConditionSystem，只接受一個純回調函數。
+    if (m_ConditionSystem && typeID.rfind("m_", 0) == 0) {
+        const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
+        if (!recipeID.empty()) {
+            card->InitComposeButton(m_Root, [this, recipeID]() {
+                if (m_ConditionSystem) {
+                    m_ConditionSystem->ExecuteSynthesis(recipeID);
+                }
+            });
+        }
+    }
+
     m_Cards.emplace(typeID, std::move(card));
 }
 
 void MercenaryCountPanel::SetConditionSystem(System::MercenaryConditionSystem* conditionSystem) {
     m_ConditionSystem = conditionSystem;
 
-    // 綁定點擊回調：取得當前第一個可用配方並執行合成
-    if (m_ComposeButton && m_ConditionSystem) {
-        m_ComposeButton->SetOnClickCallback([this]() {
-            if (!m_ConditionSystem) { return; }
-            const std::string recipeID = m_ConditionSystem->GetFirstAvailableRecipe();
-            if (!recipeID.empty()) {
-                m_ConditionSystem->ExecuteSynthesis(recipeID);
-                // 重置跳動動畫計時器，讓動畫從頭開始
-                m_PulseTimer = 0.0f;
-            }
-        });
+    // 防禦性寫法：若 SetConditionSystem 在部分卡牌已建立後才呼叫，
+    // 補充為這些已存在的普通傭兵卡牌初始化合成按鈕。
+    if (!m_ConditionSystem) { return; }
+    for (auto& [typeID, card] : m_Cards) {
+        if (typeID.rfind("m_", 0) != 0) { continue; } // 只處理普通傭兵
+        const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
+        if (!recipeID.empty()) {
+            card->InitComposeButton(m_Root, [this, recipeID]() {
+                if (m_ConditionSystem) {
+                    m_ConditionSystem->ExecuteSynthesis(recipeID);
+                }
+            });
+        }
     }
 }
 

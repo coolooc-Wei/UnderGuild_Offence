@@ -4,8 +4,11 @@
 #include "UGO_pch.hpp"
 #include "Util/Text.hpp"
 #include "Scene/BasicObject.hpp"
+#include "UI/Button.hpp"
 
 namespace UGO::UI {
+
+class UIManager;
 
 /**
  * @class MercenaryDisplayCard
@@ -41,7 +44,8 @@ public:
         Util::Renderer& root,
         const std::string& typeID,
         const std::string& iconPath,
-        const glm::vec2& iconSize
+        const glm::vec2& iconSize,
+        UIManager& uiManager
     );
     ~MercenaryDisplayCard() = default;
 
@@ -71,7 +75,21 @@ public:
     const std::string& GetTypeID() const { return m_TypeID; }
 
     /**
-     * @brief 每幀更新：執行 Lerp 平滑移動。
+     * @brief 初始化此卡牌專屬的合成按鈕，並綁定點擊回調。
+     *        只有擁有對應普通升級配方的卡牌需要呼叫此方法。
+     * @param root     場景根節點
+     * @param callback 點擊合成按鈕時觸發的回調
+     */
+    void InitComposeButton(Util::Renderer& root, std::function<void()> callback);
+
+    /**
+     * @brief 設定合成按鈕的顯示/隱藏。
+     *        外部由 MercenaryCountPanel 依每幀合成條件判定後呼叫。
+     */
+    void SetComposeButtonVisible(bool visible);
+
+    /**
+     * @brief 每幀更新：執行 Lerp 平滑移動，並同步合成按鈕位置與脈衝動畫。
      *        應由 MercenaryCountPanel::Update() 統一呼叫。
      */
     void Update();
@@ -80,6 +98,7 @@ private:
     void UpdateAllPositions(const glm::vec2& pos);
 
     std::string m_TypeID;
+    UIManager&  m_UIManager;
 
     // 視覺元件
     std::shared_ptr<Scene::BasicObject> m_Background; ///< Bg_Card_Mini2.png
@@ -91,6 +110,18 @@ private:
     glm::vec2 m_CurrentPos  = {0.0f, 0.0f};
     glm::vec2 m_TargetPos   = {0.0f, 0.0f};
     static constexpr float LERP_SPEED = 10.0f; ///< 平滑移動係數（幀速率非感知，需乘 deltaTime）
+
+    // ── 合成按鈕 ─────────────────────────────────────────────────────────
+    std::shared_ptr<UI::Button> m_ComposeButton = nullptr;
+    float m_PulseTimer = 0.0f;
+
+    /// 合成按鈕尺寸：寬為卡牌的 3/4，圖片使用 UISprite.png
+    static constexpr float COMPOSE_BTN_W   = CARD_WIDTH * 0.75f;  ///< 39.0f
+    static constexpr float COMPOSE_BTN_H   = 24.0f;
+    static constexpr float COMPOSE_BTN_GAP = 4.0f;                ///< 按鈕與卡牌頂部的間距
+    /// 按鈕中心相對卡牌中心的 Y 偏移量（卡牌半高 + 按鈕半高 + 間距）
+    static constexpr float COMPOSE_BTN_Y_OFFSET =
+        CARD_HEIGHT * 0.5f + COMPOSE_BTN_H * 0.5f + COMPOSE_BTN_GAP;
 };
 
 } // namespace UGO::UI

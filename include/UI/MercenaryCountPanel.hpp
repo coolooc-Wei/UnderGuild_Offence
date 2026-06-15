@@ -10,6 +10,8 @@
 
 namespace UGO::UI {
 
+class UIManager;
+
 /**
  * @class MercenaryCountPanel
  * @brief 管理所有傭兵種類計數卡牌的容器 UI。
@@ -35,8 +37,9 @@ public:
      * @brief 建構面板。
      * @param root    場景根節點
      * @param factory CharacterFactory（唯讀，用於查詢傭兵圖標資訊）
+     * @param uiManager UI管理器參照，用以註冊卡牌的合成按鈕
      */
-    MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory);
+    MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory, UIManager& uiManager);
     ~MercenaryCountPanel() = default;
 
     /**
@@ -89,6 +92,7 @@ private:
 
     Util::Renderer&          m_Root;
     System::CharacterFactory& m_Factory;
+    UIManager&               m_UIManager;
 
     // 已知的傭兵種類卡牌（key = typeID）
     std::unordered_map<std::string, std::unique_ptr<MercenaryDisplayCard>> m_Cards;
@@ -101,20 +105,11 @@ private:
 
     bool m_IsVisible = false;
 
-    // ── Compose 按鈕 ──────────────────────────────────────────────────────
-    /// 合成條件系統（不擁有生命週期，由外部 SetConditionSystem 注入）
+    // ── MercenaryConditionSystem（不擁有生命週期，由外部 SetConditionSystem 注入）────
+    /// 供 UpdateCounts 為各卡牌查詢配方可用性、InitComposeButton 綁定回調使用
     System::MercenaryConditionSystem* m_ConditionSystem = nullptr;
-
-    /// Compose 按鈕（條件滿足時顯示，點擊觸發合成）
-    std::shared_ptr<UI::Button> m_ComposeButton;
-
-    /// 跳動動畫計時器（秒）
-    float m_PulseTimer = 0.0f;
-
-    /// Compose 按鈕的預設尺寸
-    static constexpr float COMPOSE_BTN_W = 80.0f;
-    static constexpr float COMPOSE_BTN_H = 32.0f;
 };
+
 
 } // namespace UGO::UI
 

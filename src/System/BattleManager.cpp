@@ -374,9 +374,13 @@ namespace UGO::System {
 
     void BattleManager::RemoveMercenaries(const std::vector<Scene::Mercenary*>& mercenaries) {
         for (auto* mercenary : mercenaries) {
-            if (mercenary && !mercenary->IsDead()) {
+            // 條件放寬為 !IsTrulyDead()：
+            // 原本的 !IsDead() 會跳過重生中（RESPAWNING）的傭兵（因為 RESPAWNING 時 IsDead()==true），
+            // 導致合成消耗後，被當作原料的重生傭兵仍會在冷卻後復活，造成傭兵複製漏洞。
+            // 現在不論存活或重生中，只要尚未被標記為 TrulyDead，就強制回收。
+            if (mercenary && !mercenary->IsTrulyDead()) {
                 mercenary->SetTrulyDead();
-                mercenary->OnDeath(); // 標記死亡並觸發 visible=false，由 Update() 自動回收
+                mercenary->OnDeath(); // 觸發 visible=false，由 Update() 自動從 Pool 移除
             }
         }
         m_IsCacheDirty = true;

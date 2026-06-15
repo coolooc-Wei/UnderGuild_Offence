@@ -116,6 +116,16 @@ namespace System {
          */
         bool CanSynthesize(const std::string& recipeID) const;
 
+        /**
+         * @brief 根據主要原料種類 ID 尋找對應的普通傭兵合成配方 ID。
+         *        傳說級/神話級（outputTypeID 以 "s_" 開頭）會被忽略，留給專屬 UI 處理。
+         *        設計意圖：UI 層只需傳入卡牌的 typeID，無須直接接觸 SynthesisRecipe 結構。
+         * @param typeID 原料傭兵種類 ID（e.g. "m_001"）
+         * @return std::string 對應配方的 recipeID；若無對應配方則返回空字串
+         */
+        std::string GetRecipeIDForIngredient(const std::string& typeID) const;
+
+
         // ── 執行 API ──
 
         /**

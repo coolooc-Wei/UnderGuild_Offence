@@ -77,6 +77,15 @@ namespace Scene {
          */
         void RemoveStatusEffectBySource(const std::string& sourceID);
 
+        /**
+         * @brief 查詢是否已擁有特定來源的狀態效果。
+         *        供羈絆系統在層級未改變時，為新生成的角色補套用 Buff，
+         *        避免同一來源的效果被重複堆疊。
+         * @param sourceID 要查詢的效果來源識別碼，不可為空字串
+         * @return true  已擁有；false 未擁有（含 sourceID 為空的情況）
+         */
+        bool HasStatusEffectBySource(const std::string& sourceID) const;
+
         // System methods
         void Update() override;
         void OnDraw() override;

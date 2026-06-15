@@ -68,6 +68,16 @@ namespace UGO::Scene {
         m_StatusEffects.erase(it, m_StatusEffects.end());
     }
 
+    bool Character::HasStatusEffectBySource(const std::string& sourceID) const {
+        if (sourceID.empty()) { return false; } // 保護：空字串視為無特定來源，不匹配
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetSourceID() == sourceID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }
     void Character::AddRepelMovement(const Core::Velocity& repelMovement) { m_RepelMovement += repelMovement; }
 

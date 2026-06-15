@@ -72,7 +72,7 @@ void UGO::App::Start() {
         m_HealthBarSystem->Hide();
 
         // 傭兵計數面板：左下角卡牌顯示，初始隱藏
-        m_MercenaryCountPanel = std::make_unique<UI::MercenaryCountPanel>(m_Root, *m_CharacterFactory);
+        m_MercenaryCountPanel = std::make_unique<UI::MercenaryCountPanel>(m_Root, *m_CharacterFactory, *m_UIManager);
 
         // 傭兵合成條件系統：資源路徑使用相對路徑（執行檔在 build/ 子目錄中）
         m_MercenaryConditionSystem = std::make_unique<System::MercenaryConditionSystem>(*m_BattleManager);
