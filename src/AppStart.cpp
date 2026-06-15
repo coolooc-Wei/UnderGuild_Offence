@@ -21,6 +21,7 @@
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
 #include "UI/MercenaryCountPanel.hpp"
+#include "UI/PauseMapUI.hpp"
 
 
 void UGO::App::Start() {
@@ -109,6 +110,9 @@ void UGO::App::Start() {
 
         // Initialize Game Display (Background, HUD, Win/Lose Screens)
         m_GameDisplay = std::make_unique<UI::GameDisplay>(m_Root);
+
+        // 暫停時關卡地圖可視化 UI
+        m_PauseMapUI = std::make_unique<UI::PauseMapUI>(m_Root, *m_LevelSystem);
 
         // Initialize Game Buttons
         m_GameButtons = std::make_unique<UI::GameButtons>(

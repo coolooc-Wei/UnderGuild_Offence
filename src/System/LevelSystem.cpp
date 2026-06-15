@@ -210,6 +210,10 @@ namespace UGO::System {
 
     const Core::Level::LevelData& LevelSystem::GetCurrentLevelData() const { return m_CurrentLevelData; }
 
+    const std::vector<Core::Map::RoomNode>& LevelSystem::GetLayout() const { return m_Layout; }
+
+    const Core::Map::RoomNode* LevelSystem::GetCurrentRoomPtr() const { return m_CurrentRoom; }
+
     bool LevelSystem::TryMoveToRoom(Core::Map::MapCoord coord) {
         if (!IsRoomCleared()) {
             LOG_INFO("From LevelSystem::TryMoveToRoom: Current room is not cleared.");
