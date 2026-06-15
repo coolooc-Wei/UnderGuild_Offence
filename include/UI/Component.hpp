@@ -54,7 +54,6 @@ public:
     bool IsMouseHovering() const;
 
     bool GetVisible() const;
-    void SetVisible(const bool visible);
 
     bool GetEnabled() const;
     void SetEnabled(const bool enabled);
@@ -63,7 +62,6 @@ protected:
     Core::RectangleBox m_BoundingBox;
 
 private:
-    bool m_Visible = false;
     bool m_Enabled = true;
 };
 
