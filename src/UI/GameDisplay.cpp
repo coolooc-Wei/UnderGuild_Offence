@@ -87,23 +87,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_TimeBG->GetGameObject()->SetVisible(false);
     root.AddChild(m_TimeBG->GetGameObject());
 
-    m_PauseIcon = std::make_shared<Scene::BasicObject>();
-    m_PauseIcon->SetImage("../Resources/Image/button/pause.png");
-    m_PauseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_PauseIcon->SetSize(40.0f, 40.0f);
-    m_PauseIcon->GetGameObject()->m_Transform.translation = {591.0f, 312.0f};
-    m_PauseIcon->GetGameObject()->SetZIndex(100.0f);
-    m_PauseIcon->GetGameObject()->SetVisible(false);
-    root.AddChild(m_PauseIcon->GetGameObject());
-    
-    m_ContinueIcon = std::make_shared<Scene::BasicObject>();
-    m_ContinueIcon->SetImage("../Resources/Image/button/Route2.png");
-    m_ContinueIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_ContinueIcon->SetSize(30.0f, 30.0f);
-    m_ContinueIcon->GetGameObject()->m_Transform.translation = {592.0f, 312.0f};
-    m_ContinueIcon->GetGameObject()->SetZIndex(100.0f);
-    m_ContinueIcon->GetGameObject()->SetVisible(false);
-    root.AddChild(m_ContinueIcon->GetGameObject());
+
 
     m_EnemyIcon = std::make_shared<Scene::BasicObject>();
     m_EnemyIcon->SetImage("../Resources/Image/title/Icon_Mon.png");
@@ -180,11 +164,11 @@ void GameDisplay::SetStateVisible(bool visible) {
 }
 
 void GameDisplay::SetPauseVisible(bool visible) {
-    if (m_PauseIcon) m_PauseIcon->GetGameObject()->SetVisible(visible);
+    // Visibility and alignment consolidated in GameButtons
 }
 
 void GameDisplay::SetContinueVisible(bool visible) {
-    if (m_ContinueIcon) m_ContinueIcon->GetGameObject()->SetVisible(visible);
+    // Visibility and alignment consolidated in GameButtons
 }
 
 void GameDisplay::Update() {

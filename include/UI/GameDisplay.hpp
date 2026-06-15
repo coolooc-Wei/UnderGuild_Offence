@@ -38,8 +38,6 @@ private:
     std::shared_ptr<Scene::BasicObject> m_LoseIcon;
     std::shared_ptr<Scene::BasicObject> m_WinLoseBackground;
 
-    std::shared_ptr<Scene::BasicObject> m_PauseIcon;
-    std::shared_ptr<Scene::BasicObject> m_ContinueIcon;
     std::shared_ptr<Scene::BasicObject> m_Wave;
     std::shared_ptr<Scene::BasicObject> m_TimeBG;
     std::shared_ptr<Scene::BasicObject> m_EnemyIcon;
