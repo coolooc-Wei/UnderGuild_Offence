@@ -7,7 +7,8 @@ namespace UGO::System {
     EnemiesSpawnerSystem::EnemiesSpawnerSystem(BattleManager& battleManager, EffectAnimationManager& effectAnimationManager)
     : m_BattleManager(battleManager),
       m_EffectAnimationManager(effectAnimationManager),
-      m_SpawnTimer(Core::Time::CountDownTimer(0.0f)),
+      m_BatchTimer(0.0f),
+      m_WaveTimer(0.0f),
       /* Since the warning indicators are stateless, pre-load and share the animation */
       m_WarningIndicatorAnim(std::make_shared<Util::Animation>(
           std::vector<std::string>{m_WarningIndicatorPath},
@@ -19,27 +20,12 @@ namespace UGO::System {
     void EnemiesSpawnerSystem::SetGetEnemySizeCallback(GetEnemySizeCallback callback) { mf_GetEnemySizeCallback = std::move(callback); }
 
     void EnemiesSpawnerSystem::Update() {
-        if (isSpawnActive && m_SpawnTimer.IsTimeUp()) {
-            GenerateNextWave();
-            m_SpawnTimer.Start();
+        if (m_IsSpawnActive) {
+            if (m_WaveTimer.IsTimeUp()) { StartNextWave(); }
+            else if (m_BatchTimer.IsTimeUp()) { GenerateNextBatch(); }
         }
 
         if (!m_PaddingWaves.empty() && m_PaddingWaves.front().enemiesComingTimer.IsTimeUp()) { ExecutePendingSpawns(); }
-    }
-
-    void EnemiesSpawnerSystem::GenerateNextWave() {
-        // normalRoom or bossRoom
-        if (m_SpawnConfig.extraPool.empty()) { RandomSpawnEnemy(m_SpawnConfig.periodicPool); }
-        // specialRoom
-        else {
-            /* HACK: Take one-third of quota to extra enemies */
-            int extraMin = std::max(1, m_SpawnCount.min / 3);
-            int extraMax = std::max(1, m_SpawnCount.max / 3);
-            int normalMin = std::max(1, m_SpawnCount.min - extraMin);
-            int normalMax = std::max(1, m_SpawnCount.max - extraMax);
-            RandomSpawnEnemy(m_SpawnConfig.periodicPool, normalMin, normalMax);
-            RandomSpawnEnemy(m_SpawnConfig.extraPool, extraMin, extraMax);
-        }
     }
 
     void EnemiesSpawnerSystem::ExecutePendingSpawns() {
@@ -53,10 +39,17 @@ namespace UGO::System {
         m_PaddingWaves.pop();
     }
 
-    /* URGENT: edge cases (corners) */
-    void EnemiesSpawnerSystem::RandomSpawnEnemy(const std::vector<std::string>& enemyPool, const int minAmount, const int maxAmount) {
+    void EnemiesSpawnerSystem::RandomSpawnEnemy(const std::vector<std::string>& enemyPool, const int amount1, const int amount2) {
         if (enemyPool.empty()) { return; }
-        int spawnAmount = (minAmount == -1) ? ( Core::RandomInt(m_SpawnCount.min, m_SpawnCount.max) ) : ( Core::RandomInt(minAmount, maxAmount) );
+
+        int spawnAmount;
+        if (amount1 == -1) {
+            LOG_ERROR("From EnemiesSpawnerSystem::RandomSpawnEnemy: minAmount == -1");
+            spawnAmount = 0;
+        }
+        else if (amount2 == -1) { spawnAmount = amount1; }
+        else { spawnAmount = Core::RandomInt(amount1, amount2); }
+
 
         std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
 
@@ -123,30 +116,85 @@ namespace UGO::System {
         }
     }
 
-    void EnemiesSpawnerSystem::StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::Difficulty& difficulty, int extraDifficulty) {
+    bool EnemiesSpawnerSystem::IsAllWaveBegan() { return m_CurrentWaveID >= m_WaveConfig.waveCount;}
+
+    void EnemiesSpawnerSystem::StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::WaveConfig& waveConfig, int roomBaseDiffuculty) {
+        LOG_INFO("New battle room starting.");
+
+        m_IsSpawnActive = true;
+
+        m_RoomBaseDifficulty = roomBaseDiffuculty;
+        m_CurrentWaveID = 0;
+
         m_SpawnConfig = spawnConfig;
+        m_WaveConfig  = waveConfig;
 
-        assert(difficulty.spawnInterval > 0.0f && "From EnemiesSpawnerSystem::StartBattleRoom: invalid spawnInterval.");
-        m_SpawnTimer.SetDuration(difficulty.spawnInterval);
-        m_SpawnTimer.Start();
-        isSpawnActive = true;
+        m_WaveInterval = static_cast<float>(m_WaveConfig.batchCount) * m_WaveConfig.batchInterval;
 
-        m_SpawnCount.min = difficulty.enemiesCountPerWave.min + extraDifficulty;
-        m_SpawnCount.max = difficulty.enemiesCountPerWave.max + extraDifficulty;
+        if (!spawnConfig.bossID.empty()) {
+            m_BattleManager.AddBossByID(spawnConfig.bossID, {0.0f, 0.0f});
+            LOG_INFO("Enter the boss room, boss spawned.");
+        }
+        StartNextWave();
+    }
+    void EnemiesSpawnerSystem::StartNextWave() {
+        if (IsAllWaveBegan()) {
+            LOG_INFO("All wave finished.");
+            m_IsSpawnActive = false;
+            return;
+        }
+        m_BatchDataList = std::queue<BatchData>();
 
-        if (!m_SpawnConfig.bossID.empty()) {
-            LOG_INFO("Detected get into a boss room, spawning the boss.");
-            m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f});
+        auto batchInterval = m_WaveConfig.batchInterval;
+        auto batchIntervalVariance = m_WaveConfig.batchIntervalVariance;
+
+        auto enemyCountPerBatch = m_WaveConfig.baseEnemyCountPerBatch + 
+             static_cast<float>((m_RoomBaseDifficulty + m_CurrentWaveID) * m_WaveConfig.difficultyGrowthPerWave);
+        auto enemiesCountVariance = m_WaveConfig.enemiesCountVariancePerBatch;
+
+        if (m_WaveConfig.batchCount == 0) {
+            LOG_ERROR("From EnemiesSpawnerSystem::StartNextWave: Batch count equals to zero.");
+            return;
+        }
+        for (int waveID = 0; waveID < m_WaveConfig.batchCount; ++waveID) {
+            m_BatchDataList.emplace( BatchData{
+                Core::RandomFloat(batchInterval - batchIntervalVariance, batchInterval + batchIntervalVariance),
+                Core::RandomFloat(enemyCountPerBatch - enemiesCountVariance, enemyCountPerBatch + enemiesCountVariance)
+            } );
         }
 
-        // Start first wave
-        GenerateNextWave();
+        GenerateNextBatch();
+        LOG_INFO("Starting wave number {}", ++m_CurrentWaveID);
+        m_WaveTimer.Start(m_WaveInterval);
+    }
+    void EnemiesSpawnerSystem::GenerateNextBatch() {
+        if (m_BatchDataList.empty()) {
+            LOG_INFO("All batch finished.");
+            m_BatchTimer.Start(0.0f);
+            return;
+        }
+        auto batchData = m_BatchDataList.front();
+        m_BatchDataList.pop();
+        LOG_INFO("Generating next batch (Interval: {}, Count: {})", batchData.intervalTime, batchData.enimiesCount);
+
+        // normalRoom or bossRoom
+        if (m_SpawnConfig.extraPool.empty()) { RandomSpawnEnemy(m_SpawnConfig.periodicPool, batchData.enimiesCount); }
+        // specialRoom
+        else {
+            /* HACK: Take one-third of quota to extra enemies */
+            int extraCount = batchData.enimiesCount / 3;
+            int normalCount = batchData.enimiesCount - extraCount;
+            RandomSpawnEnemy(m_SpawnConfig.extraPool,    extraCount);
+            RandomSpawnEnemy(m_SpawnConfig.periodicPool, normalCount);
+        }
+
+        m_BatchTimer.Start(batchData.intervalTime);
     }
 
     void EnemiesSpawnerSystem::PauseBattleRoom() {
         m_SpawnConfig.periodicPool.clear();
         m_SpawnConfig.extraPool.clear();
-        isSpawnActive = false;
+        m_IsSpawnActive = false;
 
         // clear padding
         m_PaddingWaves = {};

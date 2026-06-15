@@ -10,6 +10,8 @@ namespace Level {
 
     using LevelID = std::string;
     using CharacterID = std::string;
+    using Difficulty = int;
+    using EnemiesCount = float; /* use float to enable variance */
 
     struct LayoutConfig {
         int normalRoomCount = 5;
@@ -23,21 +25,31 @@ namespace Level {
         CharacterID bossID;
     };
 
-    struct EnemiesCountPerWave {
-        int min = 20;
-        int max = 25;
-    };
+    struct WaveConfig {
+        /* Wave and Batch:
+         *   normal / special rooms have 3 waves
+         *   boss rooms have 1 waves only.
+         */
+        int waveCount = 3;
+        int batchCount = 8;
 
-    struct Difficulty {
-        EnemiesCountPerWave enemiesCountPerWave;
-        float spawnInterval = 5.0f;
-        Time::Second roomClearDuration = 30.0f;
+        /* Basic parameters */
+        Time::Second batchInterval = 2.0f;
+        EnemiesCount baseEnemyCountPerBatch = 4;
+
+        /* Difficulty */
+        EnemiesCount enemiesCountGrowthPerDifficulty = 1;
+        Difficulty difficultyGrowthPerWave = 1;
+
+        /* Parameter variances */
+        float batchIntervalVariance = 0.3f;       /* 30% */
+        float enemiesCountVariancePerBatch = 0.2f; /* 20% */
     };
 
     struct LevelData {
         LayoutConfig layoutConfig;
-        SpawnConfig spawnConfig;
-        Difficulty difficulty;
+        SpawnConfig  spawnConfig;
+        WaveConfig   waveConfig;
     };
 
 } // namespace Level

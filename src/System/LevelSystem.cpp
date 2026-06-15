@@ -79,17 +79,19 @@ namespace UGO::System {
             }
             else { LOG_ERROR("From LevelSystem::ParseLevelJSON: lost \"spawnConfig\" target for levelID: {}", levelID); }
 
-            // Parse difficulty
-            if (jsonLevelData.contains("difficulty")) {
-                const auto& diff = jsonLevelData["difficulty"];
-                if (diff.contains("roomClearDuration") && diff["roomClearDuration"].is_number()) { levelData.difficulty.roomClearDuration = diff["roomClearDuration"].get<float>(); }
-                if (diff.contains("spawnInterval") && diff["spawnInterval"].is_number()) { levelData.difficulty.spawnInterval = diff["spawnInterval"].get<float>(); }
-                if (diff.contains("enemiesCountPerWave")) {
-                    const auto& enemiesCount = diff["enemiesCountPerWave"];
-                    if (enemiesCount.contains("min") && enemiesCount["min"].is_number_integer()) { levelData.difficulty.enemiesCountPerWave.min = enemiesCount["min"].get<int>(); }
-                    if (enemiesCount.contains("max") && enemiesCount["max"].is_number_integer()) { levelData.difficulty.enemiesCountPerWave.max = enemiesCount["max"].get<int>(); }
-                }
+            // Parse waveConfig
+            if (jsonLevelData.contains("waveConfig")) {
+                const auto& wCfg = jsonLevelData["waveConfig"];
+                if (wCfg.contains("waveCount") && wCfg["waveCount"].is_number_integer())   { levelData.waveConfig.waveCount     = wCfg["waveCount"].get<int>(); }
+                if (wCfg.contains("batchCount") && wCfg["batchCount"].is_number_integer()) { levelData.waveConfig.batchCount    = wCfg["batchCount"].get<int>(); }
+                if (wCfg.contains("batchInterval") && wCfg["batchInterval"].is_number())   { levelData.waveConfig.batchInterval = wCfg["batchInterval"].get<Core::Time::Second>(); }
+                if (wCfg.contains("baseEnemyCountPerBatch") && wCfg["baseEnemyCountPerBatch"].is_number()) { levelData.waveConfig.baseEnemyCountPerBatch = wCfg["baseEnemyCountPerBatch"].get<Core::Level::EnemiesCount>(); }
+                if (wCfg.contains("enemiesCountGrowthPerDifficulty") && wCfg["enemiesCountGrowthPerDifficulty"].is_number()) { levelData.waveConfig.enemiesCountGrowthPerDifficulty = wCfg["enemiesCountGrowthPerDifficulty"].get<Core::Level::EnemiesCount>(); }
+                if (wCfg.contains("difficultyGrowthPerWave") && wCfg["difficultyGrowthPerWave"].is_number_integer())         { levelData.waveConfig.difficultyGrowthPerWave         = wCfg["difficultyGrowthPerWave"].get<Core::Level::Difficulty>(); }
+                if (wCfg.contains("batchIntervalVariance") && wCfg["batchIntervalVariance"].is_number())                     { levelData.waveConfig.batchIntervalVariance           = wCfg["batchIntervalVariance"].get<float>(); }
+                if (wCfg.contains("enemiesCountVariancePerBatch") && wCfg["enemiesCountVariancePerBatch"].is_number())         { levelData.waveConfig.enemiesCountVariancePerBatch     = wCfg["enemiesCountVariancePerBatch"].get<float>(); }
             }
+            else { LOG_ERROR("From LevelSystem::ParseLevelJSON: lost \"waveConfig\" target for levelID: {}", levelID); }
 
             m_Levels[levelID] = levelData;
             m_LevelIDs.push_back(levelID);
@@ -123,10 +125,11 @@ namespace UGO::System {
         return m_CurrentRoom->isCleared;
     }
 
-    bool LevelSystem::ShouldClearRoom() const {
+    bool LevelSystem::ShouldClearRoom(bool isAllWavesBegan, int currentEnemiesCount) const {
         if (!m_CurrentRoom) { return false; }
+
         if (m_CurrentRoom->roomType == Core::Map::RoomType::Boss) { return !mf_IsBossAlive(); }
-        return m_RoomClearTimer.IsTimeUp();
+        return (isAllWavesBegan && currentEnemiesCount <= 0);
     }
 
     std::optional<Core::Map::MapCoord> LevelSystem::CheckPortalCollision(const Core::Box& heroBox) const {
@@ -154,8 +157,6 @@ namespace UGO::System {
             }
             LOG_INFO("Changing the room state to Battling.");
             m_CurrentRoomState = RoomState::Battling;
-
-            m_RoomClearTimer.Start(m_CurrentLevelData.difficulty.roomClearDuration);
         } break;
         case RoomState::Cleared: {
             if (m_CurrentRoomState != RoomState::Setting && m_CurrentRoomState != RoomState::Battling) {

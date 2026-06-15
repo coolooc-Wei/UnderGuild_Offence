@@ -21,6 +21,10 @@ namespace System {
             std::string enemyID;
             Core::WorldPosition position;
         };
+        struct BatchData {
+            Core::Time::Second intervalTime;
+            Core::Level::EnemiesCount enimiesCount;
+        };
 
 
         EnemiesSpawnerSystem(
@@ -30,14 +34,17 @@ namespace System {
         ~EnemiesSpawnerSystem();
 
         void Update();
-        /* TODO: Store waves data in a json file.
-         *       Spawner will ramdomly choose a enemy type to spawn.
+        /* Parameters setting:
+         * amount1 = amount2 = -1       --> illegal;
+         * amount1 != -1, amount2 = -1  --> spawn enemies * amount1;
+         * amount1 != -1, amount2 != -1 --> spawn enmemies * randomInt(amount1, amount2);
          */
-        void RandomSpawnEnemy(const std::vector<std::string>& enemyPool, const int minAmount = -1, const int maxAmount = -1);
-        /* Resets the spawner state for a new room.
-         * Adjusts spawn amounts based on difficulty and spawns extra enemies for Special/Boss rooms.
-         */
-        void StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::Difficulty& difficulty, int extraDifficulty);
+        void RandomSpawnEnemy(const std::vector<std::string>& enemyPool, const int amount1 = -1, const int amount2 = -1);
+
+        /*  */
+        bool IsAllWaveBegan();
+
+        void StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::WaveConfig& waveConfig, int difficultyLevel);
         void PauseBattleRoom();
 
         void SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback);
@@ -46,7 +53,9 @@ namespace System {
         void SetGetEnemySizeCallback(GetEnemySizeCallback callback);
 
     private:
-        void GenerateNextWave();
+        void StartNextWave();
+        void GenerateNextBatch();
+
         void ExecutePendingSpawns();
 
         BattleManager& m_BattleManager;
@@ -54,22 +63,26 @@ namespace System {
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
         std::shared_ptr<Util::Animation> m_WarningIndicatorAnim;
 
-        Core::Time::CountDownTimer m_SpawnTimer{0.0f};
         const Core::Time::Second m_WarningIndicatorDuration = 1.0f;
         const Core::Distance m_StepNudgeDistance = 3.0 * (float)Core::TILE_SIZE / 5.0;
 
-        bool isSpawnActive = false;
+        bool m_IsSpawnActive = false;
 
         Core::Level::SpawnConfig m_SpawnConfig;
 
         Core::IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
         GetEnemySizeCallback mf_GetEnemySizeCallback = nullptr;
 
-        Core::Level::EnemiesCountPerWave m_SpawnCount;
-
         std::queue<SpawnWaveInfo> m_PaddingWaves;
         std::queue<SpawnInfo> m_PaddingSpawns;
 
+        Core::Time::Second m_WaveInterval = 20.0f;
+        Core::Time::CountDownTimer m_WaveTimer;
+        Core::Time::CountDownTimer m_BatchTimer;
+        Core::Level::WaveConfig   m_WaveConfig;
+        std::queue<BatchData> m_BatchDataList;
+        int m_CurrentWaveID = 0;
+        int m_RoomBaseDifficulty = 0;
 
         enum class Side {
             TOP,

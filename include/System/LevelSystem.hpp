@@ -46,7 +46,7 @@ namespace System {
         };
         RoomState GetRoomState() const;
         void ChangeRoomState(RoomState targetState);
-        bool ShouldClearRoom() const;
+        bool ShouldClearRoom(bool isAllWavesBegan, int currentEnemiesCount) const;
 
         bool IsRoomPreviouslyCleared() const;
         std::optional<Core::Map::MapCoord> CheckPortalCollision(const Core::Box& heroBox) const;
@@ -110,10 +110,7 @@ namespace System {
         Core::Map::RoomNode* m_CurrentRoom = nullptr;
         RoomState m_CurrentRoomState = RoomState::Setting;
 
-        Core::Time::CountDownTimer m_RoomClearTimer{0.0f};
-
         // Difficulty controllers
-        unsigned int m_GlobalWaveIndex = 0; /* unused for now. Reserved for future wave difficulty */
         int m_DifficultyLevel = 0;
 
         // Portal icons pool (4 directions)

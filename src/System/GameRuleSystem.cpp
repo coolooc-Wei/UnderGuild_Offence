@@ -41,14 +41,14 @@ namespace UGO::System {
                 m_LevelSystem.ChangeRoomState(LevelSystem::RoomState::Battling);
                 m_EnemiesSpawnerSystem.StartBattleRoom(
                     m_LevelSystem.GetCurrentRoomSpawnConfig(),
-                    m_LevelSystem.GetCurrentLevelData().difficulty,
+                    m_LevelSystem.GetCurrentLevelData().waveConfig,
                     m_LevelSystem.GetDifficultyLevel()
                 );
             }
         } break;
 
         case LevelSystem::RoomState::Battling: {
-            if (m_LevelSystem.ShouldClearRoom()) {
+            if (m_LevelSystem.ShouldClearRoom(m_EnemiesSpawnerSystem.IsAllWaveBegan(), m_BattleManager.GetAllEnemies().size())) {
                 LOG_INFO("GameRuleSystem: Room cleared, stopping spawner.");
                 m_EnemiesSpawnerSystem.PauseBattleRoom();
                 m_LevelSystem.ChangeRoomState(LevelSystem::RoomState::Cleared);
