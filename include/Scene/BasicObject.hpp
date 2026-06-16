@@ -40,7 +40,7 @@ namespace Scene {
 
         // Getters
         Core::WorldPosition GetWorldPosition() const;
-        SpeedValue GetSpeed() const;
+        virtual SpeedValue GetSpeed() const;
         bool IsDead() const;
         std::shared_ptr<Util::GameObject> GetGameObject() const;
         std::shared_ptr<Util::Animation> GetAnimation() const;

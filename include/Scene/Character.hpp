@@ -46,6 +46,7 @@ namespace Scene {
         HpValue GetMaxHP() const;
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
+        SpeedValue GetSpeed() const override;
         const std::string& GetTypeID() const;
         Core::Velocity GetIntendedMovement() const;
         Core::Velocity GetRepelMovement() const;
@@ -115,6 +116,7 @@ namespace Scene {
         EffectAnimationData m_AttackAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
         EffectAnimationData m_DamageAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
         uint64_t m_InstanceID = 0;
+        mutable float m_LastSpeedMultiplier = 1.0f;
     };
 
 } // namespace Scene

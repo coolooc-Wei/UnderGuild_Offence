@@ -354,7 +354,7 @@ void MercenaryConditionSystem::ActivateBondTier(const BondConfig& bond, int tier
             character->AddStatusEffect(tier.effect.effectData);
         }
     }
-    LOG_DEBUG("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
+    LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
               std::to_string(tier.threshold) + " activated.");
 }
 
@@ -369,7 +369,7 @@ void MercenaryConditionSystem::DeactivateBond(const BondConfig& bond) {
             }
         }
     }
-    LOG_DEBUG("MercenaryConditionSystem: Bond [" + bond.bondID + "] deactivated.");
+    LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] deactivated.");
 }
 
 void MercenaryConditionSystem::ProcessBonds() {

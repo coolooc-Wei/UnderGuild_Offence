@@ -53,24 +53,25 @@ namespace UGO::System {
         if (!card) {
             LOG_WARN("[UpgradeManager] Unknown card id: {}", id);
         } else {
+            LOG_INFO("[UpgradeManager] Applying Upgrade Card - ID: {}, Title: '{}', Action: '{}'", card->id, card->title, card->actionType);
             const auto& params = card->effectParams;
 
             if (card->actionType == "Heal" && m_CurrentHero) {
                 float percent = params.value("percent", 0.3f);
                 m_CurrentHero->OnHeal(m_CurrentHero->GetMaxHP() * percent);
-                LOG_INFO("[UpgradeManager] Hero healed {}%", percent * 100.0f);
+                LOG_INFO("[UpgradeManager] Action [Heal] executed - Healed Hero by {}%", percent * 100.0f);
             }
             else if (card->actionType == "AddStatusEffect") {
                 Scene::StatusEffectData data = ParseStatusEffectData(params);
                 if (card->actionTarget == "Hero" && m_CurrentHero) {
                     m_CurrentHero->AddStatusEffect(data);
-                    LOG_INFO("[UpgradeManager] Applied StatusEffect to Hero");
+                    LOG_INFO("[UpgradeManager] Action [AddStatusEffect] executed - StatusEffect type: {}, multiplier: {} applied to Hero", params.value("type", "AttackUp"), params.value("multiplier", 1.0f));
                 }
             }
             else if (card->actionType == "AddGlobalStatusEffect") {
                 Scene::StatusEffectData data = ParseStatusEffectData(params);
                 m_BattleManager.AddGlobalEnemyStatusEffect(data);
-                LOG_INFO("[UpgradeManager] Added global enemy debuff");
+                LOG_INFO("[UpgradeManager] Action [AddGlobalStatusEffect] executed - Global enemy debuff type: {}, multiplier: {} added", params.value("type", "AttackUp"), params.value("multiplier", 1.0f));
             }
             else if (card->actionType == "SummonMercenary") {
                 std::string entityId = params.value("entity_id", "m_001");
@@ -85,12 +86,12 @@ namespace UGO::System {
                     float oy = Core::RandomFloat(-60.0f, 60.0f);
                     m_BattleManager.AddMercenaryByID(entityId, spawnBase + Core::WorldPosition(ox, oy));
                 }
-                LOG_INFO("[UpgradeManager] Summoned {} mercenary/mercenaries", count);
+                LOG_INFO("[UpgradeManager] Action [SummonMercenary] executed - Summoned {} mercenary/mercenaries of type: {}", count, entityId);
             }
             else if (card->actionType == "MercenaryBuff") {
                 Scene::StatusEffectData data = ParseStatusEffectData(params);
                 m_BattleManager.AddStatusEffectToAllMercenaries(data);
-                LOG_INFO("[UpgradeManager] Applied buff to all mercenaries");
+                LOG_INFO("[UpgradeManager] Action [MercenaryBuff] executed - Buff type: {}, multiplier: {} applied to all mercenaries", params.value("type", "AttackUp"), params.value("multiplier", 1.0f));
             }
         }
 
@@ -169,7 +170,7 @@ namespace UGO::System {
             }
         }
 
-        LOG_INFO("[UpgradeManager] Rerolled slot {} -> {}", slotIndex, m_CurrentCards[slotIndex].id);
+        LOG_INFO("[UpgradeManager] Rerolled slot {} -> Card ID: {}, Title: '{}'", slotIndex, m_CurrentCards[slotIndex].id, m_CurrentCards[slotIndex].title);
     }
 
     void UpgradeManager::DrawCards() {
@@ -184,6 +185,10 @@ namespace UGO::System {
         for (auto& slot : m_CurrentCards) {
             slot = m_CardPool[dist(rng)];
         }
+        LOG_INFO("[UpgradeManager] Cards drawn - Slot 0: ID: {}, Title: '{}' | Slot 1: ID: {}, Title: '{}' | Slot 2: ID: {}, Title: '{}'",
+                 m_CurrentCards[0].id, m_CurrentCards[0].title,
+                 m_CurrentCards[1].id, m_CurrentCards[1].title,
+                 m_CurrentCards[2].id, m_CurrentCards[2].title);
     }
 
     Scene::StatusEffectData UpgradeManager::ParseStatusEffectData(const nlohmann::json& params) const {
