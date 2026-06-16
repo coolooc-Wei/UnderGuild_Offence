@@ -158,7 +158,62 @@ namespace UGO::System {
 
     void BattleManager::AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;
-        m_MercenaryPool.emplace_back(m_CharacterFactory.CreateMercenary(std::move(params), position));
+
+        Core::WorldPosition spawnPos = position;
+        const auto& walkCallback = m_CharacterFactory.GetIsGridWalkableCallback();
+        if (walkCallback) {
+            float halfWidth = params.size.x / 2.0f;
+            float halfHeight = params.size.y / 2.0f;
+
+            if (!Core::IsAreaWalkable(spawnPos, halfWidth, halfHeight, walkCallback)) {
+                // Phase 1: Try 5 random offsets around the Hero's position (or origin if hero is absent)
+                Core::WorldPosition heroPos = {0.0f, 0.0f};
+                if (!m_AllHeroes.empty() && m_AllHeroes[0]) {
+                    heroPos = m_AllHeroes[0]->GetWorldPosition();
+                } else {
+                    heroPos = position; // Fallback to initial spawn point if hero is null
+                }
+
+                bool foundSafe = false;
+                for (int attempt = 0; attempt < 5; ++attempt) {
+                    float rx = Core::RandomFloat(-50.0f, 50.0f);
+                    float ry = Core::RandomFloat(-50.0f, 50.0f);
+                    Core::WorldPosition testPos = heroPos + Core::WorldPosition(rx, ry);
+                    if (Core::IsAreaWalkable(testPos, halfWidth, halfHeight, walkCallback)) {
+                        spawnPos = testPos;
+                        foundSafe = true;
+                        break;
+                    }
+                }
+
+                // Phase 2: If all 5 retries failed, nudge from the last tested spawnPos towards the Hero
+                if (!foundSafe) {
+                    glm::vec2 diff = heroPos - spawnPos;
+                    float dist = glm::length(diff);
+                    if (dist > 0.001f) {
+                        glm::vec2 direction = diff / dist;
+                        float stepSize = 4.0f; // Nudge step in pixels
+                        float walked = 0.0f;
+                        bool adjusted = false;
+                        while (walked < dist) {
+                            spawnPos += direction * stepSize;
+                            walked += stepSize;
+                            if (Core::IsAreaWalkable(spawnPos, halfWidth, halfHeight, walkCallback)) {
+                                adjusted = true;
+                                break;
+                            }
+                        }
+                        if (!adjusted) {
+                            spawnPos = heroPos; // Ultimate fallback directly to hero position
+                        }
+                    } else {
+                        spawnPos = heroPos;
+                    }
+                }
+            }
+        }
+
+        m_MercenaryPool.emplace_back(m_CharacterFactory.CreateMercenary(std::move(params), spawnPos));
     }
     void BattleManager::AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position) {
         AddMercenary(m_CharacterFactory.GetMercenaryParams(mercenaryID), position);

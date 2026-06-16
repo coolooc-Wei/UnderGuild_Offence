@@ -31,6 +31,7 @@ namespace System {
         Core::Size GetEnemySize(const std::string& enemyID);
 
         void SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback);
+        const Core::IsGridWalkableCallback& GetIsGridWalkableCallback() const { return mf_IsGridWalkableCallback; }
 
         std::pair<std::string, glm::vec2> GetMercenaryIconInfo(const std::string& mercenaryID);
 
