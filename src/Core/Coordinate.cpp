@@ -8,11 +8,19 @@ namespace UGO::Core {
     namespace Map {
         /* HACK: Hardcode map size */
         GridPosition g_MapGridSize = {
-            // WINDOW_WIDTH / TILE_SIZE,
-            // WINDOW_HEIGHT / TILE_SIZE
-            864 / 32,
-            480 / 32
+            WINDOW_WIDTH / TILE_SIZE,
+            WINDOW_HEIGHT / TILE_SIZE
         };
+
+        void ChangeMapSize(Distance gridWidth, Distance gridHeight) {
+            g_MapGridSize.x = gridWidth;
+            g_MapGridSize.y = gridHeight;
+            g_WorldBounds = Bounds::FromCenter(
+                static_cast<float>(g_MapGridSize.x * TILE_SIZE),
+                static_cast<float>(g_MapGridSize.y * TILE_SIZE)
+            );
+        }
+
         Bounds g_WorldBounds = Bounds::FromCenter(
             static_cast<float>(g_MapGridSize.x * TILE_SIZE),
             static_cast<float>(g_MapGridSize.y * TILE_SIZE)
@@ -50,6 +58,28 @@ namespace UGO::Core {
             glm::clamp(pos.x, Map::g_WorldBounds.minX + halfWidth,  Map::g_WorldBounds.maxX - halfWidth),
             glm::clamp(pos.y, Map::g_WorldBounds.minY + halfHeight, Map::g_WorldBounds.maxY - halfHeight)
         };
+    }
+
+    bool IsAreaWalkable(
+        const WorldPosition& center, Distance halfWidth, Distance halfHeight,
+        const IsGridWalkableCallback& isWalkable
+    ) {
+        if (!isWalkable) {
+            LOG_ERROR("From Core::IsAreaWalkable: isWalkable callback is null. Defaulting to return true.");
+            return true;
+        }
+
+        GridPosition maxGridPos = WorldToGrid({center.x + halfWidth, center.y + halfHeight});
+        GridPosition minGridPos = WorldToGrid({center.x - halfWidth, center.y - halfHeight});
+        int maxX = maxGridPos.x;
+        int maxY = maxGridPos.y;
+        int minX = minGridPos.x;
+        int minY = minGridPos.y;
+
+        for (int x = minX; x <= maxX; ++x)    { if (!isWalkable({x,minY}) || !isWalkable({x,maxY})) { return false; } }
+        for (int y = minY + 1; y < maxY; ++y) { if (!isWalkable({minX,y}) || !isWalkable({maxX,y})) { return false; } }
+
+        return true;
     }
 
 }

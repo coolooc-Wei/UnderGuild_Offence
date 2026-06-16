@@ -1,0 +1,20 @@
+{
+    "EXAMPLE": {
+        "width": {
+            "TYPE": "int"
+        },
+        "height": {
+            "TYPE": "int"
+        },
+        "backgroundPath": {
+            "TYPE": "FilePath"
+        },
+        "tiles": {
+            "TYPE": "list<TileID>",
+            "RULES": [
+                "1. The center of the room must be clear of obstacles (prevents hero from spawning inside collisions).",
+                "2. Connected obstacles must form complete rectangles without L-shapes (prevents current movement logic from deadlocking)."
+            ]
+        }
+    }
+}

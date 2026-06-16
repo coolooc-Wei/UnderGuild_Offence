@@ -12,6 +12,12 @@ namespace Scene {
     class Hero;
     class Enemy;
 
+    enum class MercenaryState {
+        ALIVE,
+        RESPAWNING,
+        TRULY_DEAD
+    };
+
     class Mercenary : public Bot {
     public:
         Mercenary(CharacterParams&& params);
@@ -30,8 +36,16 @@ namespace Scene {
         void OnHeal(HpValue amount) override;
         void OnDeath() override;
 
-    private:
+        bool IsTrulyDead() const { return m_State == MercenaryState::TRULY_DEAD; }
+        void SetTrulyDead() { m_State = MercenaryState::TRULY_DEAD; }
+        bool IsRespawning() const { return m_State == MercenaryState::RESPAWNING; }
+        bool CanRespawn() const;
+        void StartRespawnCooldown();
+        void Respawn(const Core::WorldPosition& spawnPosition);
 
+    private:
+        MercenaryState m_State = MercenaryState::ALIVE;
+        Core::Time::CountDownTimer m_RespawnTimer = Core::Time::CountDownTimer(8.0f);
     };
 
 } // namespace Scene

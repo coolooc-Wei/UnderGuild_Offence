@@ -1,0 +1,180 @@
+{
+    "upgrades": [
+        {
+            "id": "hero_atk_up_15",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_1.png",
+            "description": "Hero attack up 15%",
+            "action_target": "Hero",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.15 }
+        },
+        {
+            "id": "hero_atk_up_30",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_1.png",
+            "description": "Hero attack up 30%",
+            "action_target": "Hero",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.30 }
+        },
+        {
+            "id": "hero_heal_30",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_UnitHPrecovery.png",
+            "description": "HP Recovery 30%",
+            "action_target": "Hero",
+            "action_type": "Heal",
+            "effect_params": { "percent": 0.30 }
+        },
+        {
+            "id": "hero_heal_50",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_3.png",
+            "description": "HP Recovery 50%",
+            "action_target": "Hero",
+            "action_type": "Heal",
+            "effect_params": { "percent": 0.50 }
+        },
+        {
+            "id": "merc_summon_m001",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001" }
+        },
+        {
+            "id": "merc_summon_m001_x2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_01.png",
+            "description": "summon two \nmercenaries",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001", "count": 2 }
+        },
+        {
+            "id": "merc_atk_up_20",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_Unit3.png",
+            "description": "all mercenaries \nattack power \nup 20%",
+            "action_target": "Mercenary",
+            "action_type": "AddStatusEffect",
+            "effect_params": { "type": "AttackUp", "multiplier": 1.20 }
+        },
+        {
+            "id": "enemy_spd_down_20",
+            "title": "../Resources/Image/Buffimage/Icon_Growth_MonAtk.png",
+            "description": "all enemies move \nspeed down 20%",
+            "action_target": "Enemy",
+            "action_type": "AddGlobalStatusEffect",
+            "effect_params": { "type": "SlowDown", "multiplier": 0.80 }
+        },
+        {
+            "id": "enemy_hp_down_15",
+            "title": "../Resources/Image/Buffimage/Icon_BuffImage_BossHpDown.png",
+            "description": "all enemies max \nhealth down 15%",
+            "action_target": "Enemy",
+            "action_type": "AddGlobalStatusEffect",
+            "effect_params": { "type": "SlowDown", "multiplier": 1.00 }
+        },
+        {
+            "id": "merc_summon_m001_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001_1" }
+        },
+        {
+            "id": "merc_summon_m001_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_001_2" }
+        },
+        {
+            "id": "merc_summon_m002",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_02.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_002" }
+        },
+        {
+            "id": "merc_summon_m002_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_002_1" }
+        },
+        {
+            "id": "merc_summon_m002_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_022.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_002_2" }
+        },
+        {
+            "id": "merc_summon_m004",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_04.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_004" }
+        },
+        {
+            "id": "merc_summon_m004_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_004_1" }
+        },
+        {
+            "id": "merc_summon_m004_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_004_2" }
+        },
+        {
+            "id": "merc_summon_m008",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_08.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_008" }
+        },
+        {
+            "id": "merc_summon_m008_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_008_1" }
+        },
+        {
+            "id": "merc_summon_m008_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_008_2" }
+        },
+        {
+            "id": "merc_summon_s023",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_23_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_023" }
+        },
+        {
+            "id": "merc_summon_s025",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_25_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_025" }
+        }
+    ]
+}

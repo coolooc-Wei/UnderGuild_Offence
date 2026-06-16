@@ -1,4 +1,4 @@
-#include "App.hpp"
+    #include "App.hpp"
 
 #include "System/BattleManager.hpp"
 #include "System/SteeringSystem.hpp"
@@ -7,19 +7,44 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/GameRuleSystem.hpp"
+#include "System/MapSystem.hpp"
+#include "System/LevelSystem.hpp"
 
+#include "System/RewardManager.hpp"
+#include "System/UpgradeManager.hpp"
+#include "System/MercenaryConditionSystem.hpp"
+#include "UI/Button.hpp"
+#include "UI/GameButtons.hpp"
+#include "UI/GameDisplay.hpp"
+#include "UI/UpgradePage.hpp"
+#include "UI/ExperienceBar.hpp"
+#include "UI/HealthBarSystem.hpp"
+#include "UI/MercenaryCountPanel.hpp"
+#include "UI/PauseMapUI.hpp"
 
 
 void UGO::App::Start() {
     LOG_TRACE("Start");
 
+    // Register systems
     m_SteeringSystem = std::make_unique<System::SteeringSystem>();
     m_EffectAnimationManager = std::make_unique<System::EffectAnimationManager>(m_Root);
     m_CharacterFactory = std::make_unique<System::CharacterFactory>(m_Root);
-    m_ExpSystem = std::make_unique<System::ExpSystem>(m_Root, *m_CharacterFactory);
+    m_ExpSystem = std::make_unique<System::ExpSystem>();
     m_DropSystem = std::make_unique<System::DropSystem>(m_Root, *m_ExpSystem);
-    m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_DropSystem, *m_ExpSystem, m_Root);
+    m_RewardManager = std::make_unique<System::RewardManager>(m_Root, *m_CharacterFactory, *m_ExpSystem, *m_DropSystem);
+    m_BattleManager = std::make_unique<System::BattleManager>(*m_EffectAnimationManager, *m_CharacterFactory, *m_SteeringSystem, *m_RewardManager, m_Root);
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
+    m_MapSystem   = std::make_unique<System::MapSystem>(m_Root);
+    m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem, m_Root);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem, *m_DropSystem);
+
+    // Set Callback functions
+    m_CharacterFactory->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_LevelSystem->SetIsBossAliveCallBack([this](){ return this->m_BattleManager->IsBossAlive(); });
+    m_EnemiesSpawnerSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_EnemiesSpawnerSystem->SetGetEnemySizeCallback([this](const std::string& id){ return this->m_CharacterFactory->GetEnemySize(id); });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -33,87 +58,84 @@ void UGO::App::Start() {
         m_Root.AddChild(page.second);
         page.second->SetVisible(false);
     }
+    
+    // UI Setting
+        m_UIManager = std::make_unique<UI::UIManager>();
+        m_UpgradeManager = std::make_unique<System::UpgradeManager>(*m_ExpSystem, *m_BattleManager, *m_CharacterFactory);
+        m_UpgradePage = std::make_unique<UI::UpgradePage>(m_Root, *m_UIManager);
 
-    // Initialize background
-    /* HACK: Remove maybe
-    */
-    m_Background = std::make_unique<Scene::BasicObject>();
-    m_Background->SetImage("../Resources/Image/background/Ground_0_GM_1.png");
-    m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Background->SetSize(864, 480); // 480p(16:9) but 854 is not divisible by 32
-    m_Background->GetGameObject()->SetZIndex(-10.0f);
-    m_Background->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_Background->GetGameObject());
+        // 經驗條 UI：固定於畫面最上方，由 GAMING 狀態控制顯示/隱藏
+        m_ExperienceBar = std::make_unique<UI::ExperienceBar>(m_Root);
+        m_ExperienceBar->Hide();
 
-    m_ShowHp = std::make_shared<Util::GameObject>();
-    m_HPValueText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 30, "HP: 10000/10000",
-        Util::Color::FromName(Util::Colors::RED)
-    );
-    m_ShowHp->SetDrawable(m_HPValueText);
-    m_ShowHp->m_Transform.translation = {0.0f, -300.0f};
-    m_ShowHp->SetVisible(true);
-    m_Root.AddChild(m_ShowHp);
+        // 血條系統：管理所有角色頭頂血條，初始隱藏
+        m_HealthBarSystem = std::make_unique<UI::HealthBarSystem>(m_Root);
+        m_HealthBarSystem->Hide();
 
-    m_ShowKillCount = std::make_shared<Util::GameObject>();
-    m_KillCountText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 30, "Kills: 0",
-        Util::Color::FromName(Util::Colors::WHITE)
-    );
-    m_ShowKillCount->SetDrawable(m_KillCountText);
-    m_ShowKillCount->m_Transform.translation = {0.0f, -340.0f};
-    m_ShowKillCount->SetVisible(true);
-    m_Root.AddChild(m_ShowKillCount);
+        // 傭兵計數面板：左下角卡牌顯示，初始隱藏
+        m_MercenaryCountPanel = std::make_unique<UI::MercenaryCountPanel>(m_Root, *m_CharacterFactory, *m_UIManager);
 
-    m_Win = std::make_shared<Scene::BasicObject>();
-    m_Win->SetImage("../Resources/Image/title/Title_Win.png");
-    m_Win->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Win->SetSize(200.0f, 100.0f);
-    m_Win->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
-    m_Win->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_Win->GetGameObject());
+        // 傭兵合成條件系統：資源路徑使用相對路徑（執行檔在 build/ 子目錄中）
+        m_MercenaryConditionSystem = std::make_unique<System::MercenaryConditionSystem>(*m_BattleManager);
+        m_MercenaryConditionSystem->LoadRecipes("../Resources/Json/Character/synthesis.json");
+        m_MercenaryConditionSystem->LoadBonds("../Resources/Json/Character/bonds.json");
 
-    m_Lose = std::make_shared<Scene::BasicObject>();
-    m_Lose->SetImage("../Resources/Image/title/Title_Lose.png");
-    m_Lose->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Lose->SetSize(200.0f, 100.0f);
-    m_Lose->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
-    m_Lose->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_Lose->GetGameObject());
+        // 將合成系統注入面板，面板內部會綁定按鈕點擊回調
+        m_MercenaryCountPanel->SetConditionSystem(m_MercenaryConditionSystem.get());
 
-    m_WinLoseBackground = std::make_shared<Scene::BasicObject>();
-    m_WinLoseBackground->SetImage("../Resources/Image/background/Long_Bg_1.png");
-    m_WinLoseBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_WinLoseBackground->SetSize(300.0f, 604.5f);
-    m_WinLoseBackground->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_WinLoseBackground->GetGameObject()->SetZIndex(-5.0f);
-    m_WinLoseBackground->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_WinLoseBackground->GetGameObject());
+        // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
+        m_UpgradeManager->SetOnReadyCallback([this]() {
+            // 卡片已抽好：暫停遊戲並顯示 UI
+            m_IsUpgradePause = true;
+            ChangeGameState(GameState::PAUSE);
+            m_UpgradePage->Show(m_UpgradeManager->GetCurrentDisplayData());
+        });
+        m_UpgradeManager->SetOnCompletedCallback([this]() {
+            // 選擇完畢：隱藏 UI 並恢復遊戲
+            m_UpgradePage->Hide();
+            m_IsUpgradePause = false;
+            ChangeGameState(GameState::GAMING);
+        });
+        m_UpgradePage->SetOnCardSelectedCallback([this](const std::string& id) {
+            // UI 只回報 ID，邏輯由 UpgradeManager 處理
+            m_UpgradeManager->ApplyUpgrade(id);
+        });
+        m_UpgradePage->SetOnCardRefreshedCallback([this](int slotIndex) {
+            // UI 回報刷新的插槽索引，UpgradeManager 重新抽取該位置的卡牌
+            m_UpgradeManager->RerollCard(slotIndex);
+            // 將新卡牌資料回傳給 UI，更新顯示
+            auto cards = m_UpgradeManager->GetCurrentDisplayData();
+            m_UpgradePage->UpdateCard(slotIndex, cards[slotIndex]);
+        });
 
-    m_LoseIcon = std::make_shared<Scene::BasicObject>();
-    m_LoseIcon->SetImage("../Resources/Image/buffimage/Image_Defeat.png");
-    m_LoseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_LoseIcon->SetSize(150.0f, 150.0f);
-    m_LoseIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_LoseIcon->GetGameObject()->SetZIndex(1.0f);
-    m_LoseIcon->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_LoseIcon->GetGameObject());
+        // Initialize Game Display (Background, HUD, Win/Lose Screens)
+        m_GameDisplay = std::make_unique<UI::GameDisplay>(m_Root);
 
-    m_WinIcon = std::make_shared<Scene::BasicObject>();
-    m_WinIcon->SetImage("../Resources/Image/buffimage/Icon_BuffImage_1.png");
-    m_WinIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_WinIcon->SetSize(150.0f, 150.0f);
-    m_WinIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_WinIcon->GetGameObject()->SetZIndex(1.0f);
-    m_WinIcon->GetGameObject()->SetVisible(false);
-    m_Root.AddChild(m_WinIcon->GetGameObject());
+        // 暫停時關卡地圖可視化 UI
+        m_PauseMapUI = std::make_unique<UI::PauseMapUI>(m_Root, *m_LevelSystem);
 
-    // Change states
-    ChangeGameState(GameState::GAMING);
-    m_CurrentState = State::UPDATE;
+        // Initialize Game Buttons
+        m_GameButtons = std::make_unique<UI::GameButtons>(
+            m_Root, *m_UIManager,
+            [this]() {
+                LOG_INFO("[UI] Start Game button clicked!");
+                ChangeGameState(GameState::LEVEL_INIT);
+            },
+            [this]() {
+                LOG_INFO("[UI] Pause button clicked!");
+                ChangeGameState(GameState::PAUSE);
+            },
+            [this]() {
+                LOG_INFO("[UI] Continue button clicked!");
+                ChangeGameState(GameState::GAMING);
+            }
+        );
 
     // Initialize camera position
     m_Camera.SetCameraPos({.0f, .0f});
 
 
+    // Change states
+    m_CurrentState = State::UPDATE;
+    ChangeGameState(GameState::WELCOME);
 }

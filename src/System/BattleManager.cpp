@@ -17,15 +17,13 @@ namespace UGO::System {
         EffectAnimationManager& effectAnimationManager,
         CharacterFactory& characterFactory,
         SteeringSystem& steeringSystem,
-        DropSystem& dropSystem,
-        ExpSystem& expSystem,
+        RewardManager& rewardManager,
         Util::Renderer& root
     )
     : m_EffectAnimationManager(effectAnimationManager),
       m_CharacterFactory(characterFactory),
       m_SteeringSystem(steeringSystem),
-      m_DropSystem(dropSystem),
-      m_ExpSystem(expSystem),
+      m_RewardManager(rewardManager),
       m_Root(root) {
         // Reserve memory for the vectors
         m_AllHeroes.reserve(10);
@@ -39,8 +37,6 @@ namespace UGO::System {
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
 
-        /* HACK: build a function for callback */
-        m_ExpSystem.SetOnLevelUpCallback( [this](const std::string& id, const Core::WorldPosition& pos){ this->AddMercenaryByID(id, pos); } );
     }
     BattleManager::~BattleManager() {}
 
@@ -56,6 +52,7 @@ namespace UGO::System {
         m_AllHeroesAsCharacterCache.clear();
         m_AllCharactersCache.clear();
         m_AllAlliesCache.clear();
+        m_MercenaryCountsCache.clear();
 
         m_AllCharactersCache.reserve(m_AllHeroes.size() + m_EnemyPool.size() + m_MercenaryPool.size());
         m_AllAlliesCache.reserve(m_AllHeroes.size() + m_MercenaryPool.size());
@@ -80,6 +77,12 @@ namespace UGO::System {
                 m_AllMercenariesCache.push_back(mercenary.get());
                 m_AllCharactersCache.push_back(mercenary.get());
                 m_AllAlliesCache.push_back(mercenary.get());
+                
+                auto& countInfo = m_MercenaryCountsCache[mercenary->GetTypeID()];
+                countInfo.totalCount++;
+                if (!mercenary->IsDead() && !mercenary->IsRespawning()) {
+                    countInfo.aliveCount++;
+                }
             }
         }
     }
@@ -114,6 +117,13 @@ namespace UGO::System {
     }
 
 
+    bool BattleManager::IsHeroAlive() const { return !m_AllHeroes.empty(); }
+    int BattleManager::GetEnemyCount() const { return static_cast<int>(m_EnemyPool.size()); }
+    void BattleManager::ClearAllEnemies() {
+        m_EnemyPool.clear();
+        m_CurrentBoss = nullptr;
+        m_IsCacheDirty = true;
+    }
 
     void BattleManager::AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;
@@ -128,8 +138,23 @@ namespace UGO::System {
         m_EnemyPool.emplace_back(m_CharacterFactory.CreateEnemy(std::move(params), position));
     }
     void BattleManager::AddEnemyByID(const std::string& enemyID, const Core::WorldPosition& position) {
-        AddEnemy(m_CharacterFactory.GetEnemyParams(enemyID), position);
+        auto params = m_CharacterFactory.GetEnemyParams(enemyID);
+        AddEnemy(std::move(params), position);
+        // 自動套用全局 debuff
+        if (!m_GlobalEnemyDebuffs.empty() && !m_EnemyPool.empty()) {
+            auto* enemy = m_EnemyPool.back().get();
+            for (const auto& debuff : m_GlobalEnemyDebuffs) {
+                enemy->AddStatusEffect(debuff);
+            }
+        }
     }
+
+    void BattleManager::AddBossByID(const std::string& enemyID, const Core::WorldPosition& position) {
+        AddEnemyByID(enemyID, position);
+        if (!m_EnemyPool.empty()) { m_CurrentBoss = m_EnemyPool.back().get(); }
+    }
+
+    bool BattleManager::IsBossAlive() const { return m_CurrentBoss != nullptr; }
 
     void BattleManager::AddMercenary(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;
@@ -153,7 +178,6 @@ namespace UGO::System {
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
         for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
-        for (auto* icon: m_ExpSystem.GetAllIcons()) { icon->GetGameObject()->SetVisible(visable); }
     }
 
     void BattleManager::AIUpdate() {
@@ -277,11 +301,9 @@ namespace UGO::System {
         /* HACK: refactoring need */
         auto removeEnemies = std::remove_if(m_EnemyPool.begin(), m_EnemyPool.end(), [this](const auto& enemy){ 
             if (enemy->IsDead()) {
-                m_ExpSystem.GrantExpToHero(GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0], enemy->GetExpReward());
-                LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
-                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
-                    m_DropSystem.SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
-                }
+                if (enemy.get() == m_CurrentBoss) { m_CurrentBoss = nullptr; }
+                m_RewardManager.OnEnemyDeath(enemy.get(), GetAllHeroes().empty() ? nullptr : GetAllHeroes()[0]);
+
                 m_EnemyKillCount++;
                 return true;
             }
@@ -292,11 +314,76 @@ namespace UGO::System {
             m_IsCacheDirty = true;
         }
 
-        auto removeMercenaries = std::remove_if(m_MercenaryPool.begin(), m_MercenaryPool.end(), [](const auto& mercenary){ return mercenary->IsDead(); });
+        auto removeMercenaries = std::remove_if(m_MercenaryPool.begin(), m_MercenaryPool.end(), [](const auto& mercenary){ 
+            return mercenary->IsTrulyDead(); 
+        });
         if (removeMercenaries != m_MercenaryPool.end()) {
             m_MercenaryPool.erase(removeMercenaries, m_MercenaryPool.end());
             m_IsCacheDirty = true;
         }
+
+        // Drive respawns from the top down for normally dead mercenaries
+        for (auto& mercenary : m_MercenaryPool) {
+            if (mercenary && mercenary->CanRespawn()) {
+                Core::WorldPosition spawnPos = {0.0f, 0.0f};
+                if (!m_AllHeroes.empty()) {
+                    spawnPos = m_AllHeroes[0]->GetWorldPosition();
+                    spawnPos.x += (rand() % 40 - 20); // Small offset
+                    spawnPos.y += (rand() % 40 - 20);
+                }
+                mercenary->Respawn(spawnPos);
+                m_IsCacheDirty = true;
+            }
+        }
     }
 
-}
+    void BattleManager::AddGlobalEnemyStatusEffect(const Scene::StatusEffectData& data) {
+        m_GlobalEnemyDebuffs.push_back(data);
+        // 對場上現有的敵人也立即套用
+        for (auto& enemy : m_EnemyPool) {
+            if (enemy && !enemy->IsDead()) {
+                enemy->AddStatusEffect(data);
+            }
+        }
+    }
+
+    void BattleManager::AddStatusEffectToAllMercenaries(const Scene::StatusEffectData& data) {
+        for (auto& mercenary : m_MercenaryPool) {
+            if (mercenary && !mercenary->IsDead()) {
+                mercenary->AddStatusEffect(data);
+            }
+        }
+    }
+
+    int BattleManager::GetEnemyKillCount() const { return m_EnemyKillCount; }
+
+    std::unordered_map<std::string, BattleManager::MercenaryCount> BattleManager::GetMercenaryCounts() const {
+        if (m_IsCacheDirty) { RebuildCaches(); }
+        return m_MercenaryCountsCache;
+    }
+
+    std::vector<Scene::Mercenary*> BattleManager::GetMercenariesByType(const std::string& typeID) const {
+        std::vector<Scene::Mercenary*> result;
+        for (const auto& mercenary : m_MercenaryPool) {
+            if (mercenary && !mercenary->IsDead() && mercenary->GetTypeID() == typeID) {
+                result.push_back(mercenary.get());
+            }
+        }
+        return result;
+    }
+
+    void BattleManager::RemoveMercenaries(const std::vector<Scene::Mercenary*>& mercenaries) {
+        for (auto* mercenary : mercenaries) {
+            // 條件放寬為 !IsTrulyDead()：
+            // 原本的 !IsDead() 會跳過重生中（RESPAWNING）的傭兵（因為 RESPAWNING 時 IsDead()==true），
+            // 導致合成消耗後，被當作原料的重生傭兵仍會在冷卻後復活，造成傭兵複製漏洞。
+            // 現在不論存活或重生中，只要尚未被標記為 TrulyDead，就強制回收。
+            if (mercenary && !mercenary->IsTrulyDead()) {
+                mercenary->SetTrulyDead();
+                mercenary->OnDeath(); // 觸發 visible=false，由 Update() 自動從 Pool 移除
+            }
+        }
+        m_IsCacheDirty = true;
+    }
+
+} // namespace UGO::System

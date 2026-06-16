@@ -26,17 +26,13 @@ namespace UGO::Scene {
         BasicObject::OnDraw();
     }
 
-    void Drop::OnPickup() {
+    void Drop::OnPickup(Hero* hero) {
         // Base OnPickup can be empty or handle general cleanup
     }
 
     void Drop::MoveTo(const Core::WorldPosition& target) {
         m_TargetPosition = target;
         m_State = State::FLYING;
-    }
-
-    ExpValue Drop::GetExpAmount() const {
-        return 0.0f;
     }
 
 }

@@ -1,0 +1,25 @@
+{
+    "test": {
+        "layout": {
+            "normalRoomCount": 2,
+            "specialRoomCount": 1,
+            "bossRoomCount": 1
+        },
+        "spawnConfig": {
+            "periodicPool": ["e_001"],
+            "extraPool": ["e_002"],
+            "bossID": "e_b01"
+        },
+        "waveConfig": {
+            "waveCount": 3,
+            "bossWaveCount": 1,
+            "batchCount": 1,
+            "batchInterval": 2.0,
+            "baseEnemyCountPerBatch": 4.0,
+            "enemiesCountGrowthPerDifficulty": 1.0,
+            "difficultyGrowthPerWave": 1,
+            "batchIntervalVariance": 0.3,
+            "enemiesCountVariancePerBatch": 0.2
+        }
+    }
+}

@@ -9,6 +9,10 @@ set(CORE_INC
     Core/Time.hpp
     Core/Box.hpp
     Core/UGO_Math.hpp
+    Core/MapData.hpp
+    Core/Hash.hpp
+    Core/MapData.hpp
+    Core/Hash.hpp
 )
 
 # --- SYSTEM ---
@@ -20,6 +24,12 @@ set(SYSTEM_SRC
     System/EnemiesSpawnerSystem.cpp
     System/DropSystem.cpp
     System/ExpSystem.cpp
+    System/GameRuleSystem.cpp
+    System/RewardManager.cpp
+    System/UpgradeManager.cpp
+    System/MapSystem.cpp
+    System/LevelSystem.cpp
+    System/MercenaryConditionSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -29,14 +39,44 @@ set(SYSTEM_INC
     System/EnemiesSpawnerSystem.hpp
     System/DropSystem.hpp
     System/ExpSystem.hpp
+    System/RewardManager.hpp
+    System/UpgradeManager.hpp
+    System/GameRuleSystem.hpp
+    System/MapSystem.hpp
+    System/LevelSystem.hpp
+    System/MercenaryConditionSystem.hpp
 )
 
 # --- UI ---
 set(UI_SRC
     UI/Page.cpp
+    UI/Component.cpp
+    UI/Button.cpp
+    UI/UIManager.cpp
+    UI/UpgradePage.cpp
+    UI/ExperienceBar.cpp
+    UI/HealthBar.cpp
+    UI/HealthBarSystem.cpp
+    UI/GameButtons.cpp
+    UI/GameDisplay.cpp
+    UI/MercenaryDisplayCard.cpp
+    UI/MercenaryCountPanel.cpp
+    UI/PauseMapUI.cpp
 )
 set(UI_INC
     UI/Page.hpp
+    UI/Component.hpp
+    UI/Button.hpp
+    UI/UIManager.hpp
+    UI/UpgradePage.hpp
+    UI/ExperienceBar.hpp
+    UI/HealthBar.hpp
+    UI/HealthBarSystem.hpp
+    UI/GameButtons.hpp
+    UI/GameDisplay.hpp
+    UI/MercenaryDisplayCard.hpp
+    UI/MercenaryCountPanel.hpp
+    UI/PauseMapUI.hpp
 )
 
 # --- Input ---

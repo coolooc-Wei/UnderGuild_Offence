@@ -1,12 +1,11 @@
 #include "System/DropSystem.hpp"
-#include "System/ExpSystem.hpp"
 #include "Scene/ExpPack.hpp"
+#include "System/ExpSystem.hpp"
 
 namespace UGO::System {
 
     DropSystem::DropSystem(Util::Renderer& root, ExpSystem& expSystem)
-    : m_Root(root),
-      m_ExpSystem(expSystem) {}
+    : m_Root(root), m_ExpSystem(expSystem) {}
 
     DropSystem::~DropSystem() = default;
 
@@ -17,11 +16,7 @@ namespace UGO::System {
 
     void DropSystem::SpawnExpPack(const Core::WorldPosition& position, Scene::ExpValue value) {
         auto expPack = std::make_unique<Scene::ExpPack>(value);
-        expPack->SetImage("../Resources/Image/drop/Cost_3335.png");
-        expPack->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        expPack->SetSize(16, 16);
         expPack->SetWorldPosition(position);
-        expPack->GetGameObject()->SetVisible(true);
         AddDrop(std::move(expPack));
     }
 
@@ -38,14 +33,12 @@ namespace UGO::System {
             }
 
             if (distance < m_PickupRadius) {
-                /* TODO: 預留接口 - 未來掉落物多型化可新增繼承 Scene::Drop 的類別（例如 MercenaryTokenDrop）
-                 * 未來的特殊掉落物應該透過 drop->OnPickup() 裡的委託來呼叫 AddMercenary() 等行為，不再將所有邏輯寫在此處。
-                 */
-                UGO::Scene::ExpValue expAmount = drop->GetExpAmount();
-                if (expAmount > 0.0f) {
-                    m_ExpSystem.GrantExpToHero(hero, expAmount);
+                auto* expPack = dynamic_cast<Scene::ExpPack*>(drop.get());
+                if (expPack) {
+                    m_ExpSystem.GrantExpToHero(hero, expPack->GetExpValue());
+                } else {
+                    drop->OnPickup(hero);
                 }
-                drop->OnPickup();
                 m_Root.RemoveChild(drop->GetGameObject());
                 it = m_AllDrops.erase(it);
             }

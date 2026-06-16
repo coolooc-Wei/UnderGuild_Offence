@@ -1,0 +1,174 @@
+[
+    {
+        "recipeID": "m001_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_001_1"
+    },
+    {
+        "recipeID": "m001_1_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_1",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_001_2"
+    },
+    {
+        "recipeID": "m002_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_002_1"
+    },
+    {
+        "recipeID": "m002_1_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002_1",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_002_2"
+    },
+    {
+        "recipeID": "m004_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_004",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_004_1"
+    },
+    {
+        "recipeID": "m004_1_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_004_1",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_004_2"
+    },
+    {
+        "recipeID": "m008_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_008",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_008_1"
+    },
+    {
+        "recipeID": "m008_1_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_008_1",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_008_2"
+    },
+    {
+        "recipeID": "s_023_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_008_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_023"
+    },
+    {
+        "recipeID": "s_025_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_008_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_008_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_008",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_025"
+    }
+]

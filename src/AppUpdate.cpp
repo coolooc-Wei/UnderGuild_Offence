@@ -7,8 +7,15 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
 #include "System/ExpSystem.hpp"
+#include "System/GameRuleSystem.hpp"
+#include "System/LevelSystem.hpp"
+#include "System/MapSystem.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
+#include "UI/GameDisplay.hpp"
+#include "UI/GameButtons.hpp"
+#include "UI/MercenaryCountPanel.hpp"
 
 void UGO::App::Update() {
   switch (m_CurrentGameState) {
@@ -19,14 +26,23 @@ void UGO::App::Update() {
     }
   } break;
   case GameState::MENU: {
+    // 保留鍵盤備用方案
     if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
         Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
-      ChangeGameState(GameState::GAMING);
+      ChangeGameState(GameState::LEVEL_INIT);
     }
   } break;
+  case GameState::LEVEL_INIT: {
+    /* TODO: Hardcode of GenerateLevel for now */
+    m_BattleManager->AddHeroByID("h_001", {0.0f, 0.0f});
+    m_LevelSystem->GenerateLevel("test");
+    m_LevelSystem->EnterStartRoom();
+
+    ChangeGameState(GameState::GAMING);
+  } break;
   case GameState::PAUSE: {
-    // Use P temporarity instead of ESCAPE
-    if (Util::Input::IsKeyDown(Util::Keycode::P)) {
+    // 升級暫停期間不允許 P 鍵跳過，必須透過卡片選擇恢復
+    if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
       ChangeGameState(GameState::GAMING);
     }
 
@@ -73,26 +89,75 @@ void UGO::App::Update() {
     else { ChangeGameState(GameState::SETTLING); }
 
     m_BattleManager->UpdateSystem();
+
+    if (m_RewardManager->HasPendingMercenaries()) {
+        for (const auto& pending : m_RewardManager->ConsumePendingMercenaries()) {
+            m_BattleManager->AddMercenaryByID(pending.id, pending.pos);
+        }
+    }
+
     m_EffectAnimationManager->Update();
     m_EnemiesSpawnerSystem->Update();
     /* HACK: remove after demo */
-    if (!m_BattleManager->GetAllHeroes().empty()) {
-        m_HPValueText->SetText("HP: " + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetCurrentHP()) + "/" + std::to_string((int)m_BattleManager->GetAllHeroes()[0]->GetMaxHP()));
+    if (m_BattleManager->IsHeroAlive()) {
+        auto* hero = m_BattleManager->GetAllHeroes()[0];
+        if (m_GameDisplay) {
+            m_GameDisplay->UpdateHUD(hero->GetCurrentHP(), hero->GetMaxHP(), m_BattleManager->GetEnemyKillCount(), m_BattleManager->GetEnemyCount());
+        }
+
+        // 經驗條同步：每幀將 Hero 的 exp 資料推送給 ExperienceBar
+        if (m_ExperienceBar) {
+            m_ExperienceBar->SetProgress(hero->GetCurrentExp(), hero->GetMaxExp());
+        }
     }
-    m_KillCountText->SetText("Kills: " + std::to_string(m_BattleManager->GetEnemyKillCount()));
+
+    // 血條同步：每幀更新所有存活角色的血條位置與血量
+    if (m_HealthBarSystem) {
+        m_HealthBarSystem->Update(
+            m_BattleManager->GetAllAllies(),
+            m_BattleManager->GetAllEnemiesAsCharacters()
+        );
+    }
+
+    // 傭兵計數面板同步：每幀將計數資料傳遞給 UI
+    if (m_MercenaryCountPanel && m_BattleManager) {
+        m_MercenaryCountPanel->UpdateCounts(m_BattleManager->GetMercenaryCounts());
+        m_MercenaryCountPanel->Update();
+    }
+
+    // 傭兵罈結同步：每幀更新罈結層級與 Buff
+    if (m_MercenaryConditionSystem) {
+        m_MercenaryConditionSystem->UpdateBonds();
+    }
+
+
     
-    if (m_BattleManager->GetEnemyKillCount() >= 100) {
-        // Collect all remaining drops at level end
-        auto heroes = m_BattleManager->GetAllHeroes();
-        if (!heroes.empty()) {
-            m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
+    int enemyCount = m_BattleManager->GetEnemyCount();
+    bool isHeroAlive = m_BattleManager->IsHeroAlive();
+
+    auto gameResult = m_GameRuleSystem->DetectGameResult(
+        m_LevelSystem->IsLevelCompleted(),
+        isHeroAlive,
+        enemyCount
+    );
+
+    // When Game over (Win or Lose)
+    if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
+        if (gameResult == System::GameRuleSystem::GameResult::WIN) {
+            // Collect all remaining drops at level end
+            auto heroes = m_BattleManager->GetAllHeroes();
+            if (!heroes.empty()) {
+                m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
+            }
         }
 
         m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }
+
+    m_GameRuleSystem->Update();
     /* END HACK */
-    
+
     /* DO NOT DELETE THIS LINE.
      * IT IS USED FOR THE GAME TIMING.
      */
@@ -119,17 +184,19 @@ void UGO::App::Update() {
       // Check for completion or timeout
       if (m_DropSystem->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
 
-      Core::Time::AdvanceTick();
+      m_MapSystem->ClearRoom();
   } break;
   case GameState::END: {
   } break;
   default: {} break;
   }
 
-  /* HACK: Remove maybe
-  */
-  if (m_Background) { m_Background->Update(); }
-  
+  /* HACK: Remove maybe */
+  if (m_GameDisplay) { m_GameDisplay->Update(); }
+
+  // UI 更新統一由 UIManager 處理，不在此處單獨呼叫 m_StartGameButton->Update()
+  if (m_UIManager) { m_UIManager->Update(); }
+
   m_Root.Update();
   /*
    * Do not touch the code below as they serve the purpose for

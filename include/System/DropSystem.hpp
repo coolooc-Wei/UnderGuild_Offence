@@ -7,7 +7,7 @@
 #include "Scene/Hero.hpp"
 
 namespace UGO::System {
-
+    
     class ExpSystem;
 
     class DropSystem {

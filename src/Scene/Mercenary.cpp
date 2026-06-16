@@ -8,6 +8,7 @@ namespace UGO::Scene {
   : Bot(std::move(params)) {}
   Mercenary::~Mercenary() {}
   void Mercenary::Reset(CharacterParams&& params) {
+    m_State = MercenaryState::ALIVE;
     Bot::Reset(std::move(params));
   }
 
@@ -20,13 +21,55 @@ namespace UGO::Scene {
     Bot::OnDamage(amount);
   }
   void Mercenary::OnHeal(HpValue amount) { Bot::OnHeal(amount); }
-  void Mercenary::OnDeath() { Bot::OnDeath(); }
+  
+  void Mercenary::OnDeath() {
+    if (m_State != MercenaryState::TRULY_DEAD) {
+      StartRespawnCooldown();
+    } else {
+      Bot::OnDeath();
+    }
+  }
+
+  bool Mercenary::CanRespawn() const {
+    return m_State == MercenaryState::RESPAWNING && m_RespawnTimer.IsTimeUp();
+  }
+
+  void Mercenary::StartRespawnCooldown() {
+    m_State = MercenaryState::RESPAWNING;
+    SetDead(true);
+    if (auto go = GetGameObject()) {
+      go->SetVisible(false);
+    }
+    ActivateHitBox(false);
+    ActivateHurtBox(false);
+    m_RespawnTimer.Start(8.0f);
+  }
+
+  void Mercenary::Respawn(const Core::WorldPosition& spawnPosition) {
+    SetWorldPosition(spawnPosition);
+    m_State = MercenaryState::ALIVE;
+    SetDead(false);
+    if (auto go = GetGameObject()) {
+      go->SetVisible(true);
+    }
+    ActivateHitBox(true);
+    ActivateHurtBox(true);
+    OnHeal(GetMaxHP());
+  }
 
   void Mercenary::AIUpdate(const std::vector<Character*>& targets) {
+    if (IsDead() || IsRespawning()) {
+      return;
+    }
     Bot::AIUpdate(targets);
   }
 
-  void Mercenary::Update() { Bot::Update(); }
+  void Mercenary::Update() {
+    if (IsDead() || IsRespawning()) {
+      return;
+    }
+    Bot::Update();
+  }
 
   void Mercenary::OnDraw() {}
 

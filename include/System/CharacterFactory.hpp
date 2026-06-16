@@ -7,6 +7,7 @@
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
+#include "Scene/BasicObject.hpp"
 
 namespace UGO {
 namespace System {
@@ -27,8 +28,19 @@ namespace System {
         Scene::Character::CharacterParams GetEnemyParams(const std::string& enemyID);
         Scene::Character::CharacterParams GetMercenaryParams(const std::string& mercenaryID);
         Scene::Character::CharacterParams GetHeroParams(const std::string& heroID);
+        Core::Size GetEnemySize(const std::string& enemyID);
+
+        void SetIsGridWalkableCallback(Core::IsGridWalkableCallback callback);
+
+        std::pair<std::string, glm::vec2> GetMercenaryIconInfo(const std::string& mercenaryID);
 
     private:
+        const std::string m_EnemyDatabasePath = "../Resources/Json/Character/enemy.json";
+        const std::string m_MercenaryDatabasePath = "../Resources/Json/Character/mercenary.json";
+        const std::string m_HeroDatabasePath = "../Resources/Json/Character/hero.json";
+        
+        Core::IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
+
         /* Stores all values parsed from JSON in copyable form.
          * Avoids re-parsing JSON on repeated GetXxxParams() calls for the same ID.
          */
