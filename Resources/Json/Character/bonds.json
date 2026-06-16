@@ -31,5 +31,731 @@
                 }
             }
         ]
+    },
+    {
+        "bondID": "birds",
+        "name": "鳥類",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 3,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "cover_fire",
+        "name": "掩護射擊",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 3,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "vampire",
+        "name": "吸血鬼",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "vigor_potion",
+        "name": "活力藥水",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "necromancer",
+        "name": "死靈",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "rainbow_robot",
+        "name": "彩虹機器人",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "multi_race",
+        "name": "多種族",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "multi_shot",
+        "name": "多重射擊",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "mystic",
+        "name": "神秘",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "angel_feather",
+        "name": "天使羽毛",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "reinforcements",
+        "name": "支援軍",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "assault_force",
+        "name": "突擊部隊",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "clock_hands",
+        "name": "時鐘指針",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "valiant",
+        "name": "勇猛",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "willpower",
+        "name": "意志",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "life_link",
+        "name": "生命連結",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "giant_footprint",
+        "name": "巨人腳印",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 3,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "blessing",
+        "name": "祝福",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "dark_energy",
+        "name": "暗黑能量",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 3,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "tentacles",
+        "name": "觸手",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 3,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "bountiful_orc_barrel",
+        "name": "豐饒的獸人桶",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 4,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "bondID": "medic",
+        "name": "醫務兵",
+        "condition": {
+            "type": "BY_TYPE_LIST",
+            "target": "",
+            "countOnlyAlive": true
+        },
+        "tiers": [
+            {
+                "threshold": 2,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            },
+            {
+                "threshold": 3,
+                "effect": {
+                    "targetSelector": "ALL_ALLIES",
+                    "effectData": {
+                        "type": "AttackUp",
+                        "multiplier": 1.0,
+                        "isPermanent": true
+                    }
+                }
+            }
+        ]
     }
 ]
