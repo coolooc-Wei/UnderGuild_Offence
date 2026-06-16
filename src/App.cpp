@@ -15,6 +15,7 @@
 #include "UI/GameDisplay.hpp"
 #include "UI/GameButtons.hpp"
 #include "UI/MercenaryCountPanel.hpp"
+#include "UI/PauseMapUI.hpp"
 
 namespace UGO {
 
@@ -47,6 +48,9 @@ namespace UGO {
         }
 
 
+        // 每次切換狀態：先隱藏地圖（避免殘留）
+        if (m_PauseMapUI) { m_PauseMapUI->Hide(); }
+
         // Hide all pages
         for (auto& page: m_Pages) {
             if (page.second) {
@@ -75,7 +79,12 @@ namespace UGO {
                 m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
                 if (m_Pages[GameState::PAUSE]) {
                     m_Pages[GameState::PAUSE]->SetVisible(false);
-                } 
+                }
+                // 手動暫停才顯示地圖（升級暫停時不顯示）
+                if (!m_IsUpgradePause && m_PauseMapUI) {
+                    m_PauseMapUI->UpdateMap();
+                    m_PauseMapUI->Show();
+                }
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);

@@ -43,7 +43,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
         "../Resources/Image/button/Bt_12_1.png",
         "../Resources/Image/button/Bt_12_2.png"
     );
-    m_ContinueButton->SetZIndex(10.0f);
+    m_ContinueButton->SetZIndex(60.0f);
     m_ContinueButton->SetVisible(false);
     m_ContinueButton->SetOnClickCallback(onContinue);
     root.AddChild(m_ContinueButton);

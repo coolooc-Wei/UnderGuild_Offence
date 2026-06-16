@@ -32,6 +32,7 @@ namespace UGO::UI {
     class GameButtons;
     class GameDisplay;
     class MercenaryCountPanel;
+    class PauseMapUI;
 }
 
 namespace UGO {
@@ -129,6 +130,8 @@ private:
     std::unique_ptr<UI::HealthBarSystem>  m_HealthBarSystem;
     // 傭兵種類計數面板（左下角卡牌顯示）
     std::unique_ptr<UI::MercenaryCountPanel> m_MercenaryCountPanel;
+    // 暫停時的關卡地圖（手動暫停時顯示，升級暫停時不顯示）
+    std::unique_ptr<UI::PauseMapUI> m_PauseMapUI;
 };
 
 } // namespace UGO

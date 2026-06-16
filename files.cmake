@@ -61,6 +61,7 @@ set(UI_SRC
     UI/GameDisplay.cpp
     UI/MercenaryDisplayCard.cpp
     UI/MercenaryCountPanel.cpp
+    UI/PauseMapUI.cpp
 )
 set(UI_INC
     UI/Page.hpp
@@ -75,6 +76,7 @@ set(UI_INC
     UI/GameDisplay.hpp
     UI/MercenaryDisplayCard.hpp
     UI/MercenaryCountPanel.hpp
+    UI/PauseMapUI.hpp
 )
 
 # --- Input ---

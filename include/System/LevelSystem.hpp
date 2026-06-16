@@ -77,6 +77,12 @@ namespace System {
 
         const Core::Level::LevelData& GetCurrentLevelData() const;
 
+        /** @brief 返回完整的房間佈局（唯讀），供地圖 UI 繪製使用。 */
+        const std::vector<Core::Map::RoomNode>& GetLayout() const;
+
+        /** @brief 返回當前房間的指標，用以判斷英雄所在位置（可能為 nullptr）。 */
+        const Core::Map::RoomNode* GetCurrentRoomPtr() const;
+
         /* return nullptr if the room does not exist. */
         Core::Map::RoomNode* GetRoomByCoord(Core::Map::MapCoord coord);
         /* there should be a room at the target coord. */
