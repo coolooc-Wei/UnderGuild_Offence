@@ -27,7 +27,7 @@ public:
      * @param barWidth  血條寬度（通常等於角色寬度）
      */
     HealthBar(Util::Renderer& root, OwnerType ownerType, float barWidth);
-    ~HealthBar() = default;
+    ~HealthBar();
 
     HealthBar(const HealthBar&)            = delete;
     HealthBar& operator=(const HealthBar&) = delete;
@@ -65,6 +65,8 @@ private:
 
     std::shared_ptr<Scene::BasicObject> m_Background;
     std::shared_ptr<Scene::BasicObject> m_Fill;
+
+    Util::Renderer& m_Root;
 
     float      m_BarWidth   = 32.0f;
     float      m_CurrentHP  = 1.0f;

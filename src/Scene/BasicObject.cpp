@@ -91,8 +91,14 @@ namespace UGO::Scene {
         if (m_HitBox) { m_HitBox->SetPosition(m_Position); }
     }
 
+    static std::unordered_map<std::string, std::shared_ptr<Util::Image>> s_ImageCache;
+
     void BasicObject::SetImage(const std::shared_ptr<Util::Image> &image) { m_Image = image; }
-    void BasicObject::SetImage(const std::string &imagePath) { m_Image = std::make_shared<Util::Image>(imagePath); }
+    void BasicObject::SetImage(const std::string &imagePath) {
+        auto& cached = s_ImageCache[imagePath];
+        if (!cached) { cached = std::make_shared<Util::Image>(imagePath); }
+        m_Image = cached;
+    }
 
     void BasicObject::SetAnimation(const std::shared_ptr<Util::Animation> &animation) { m_Animation = animation; }
     void BasicObject::SetAnimation(

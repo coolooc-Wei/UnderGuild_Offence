@@ -34,6 +34,7 @@ namespace UGO::Scene {
         if (m_Animation == nullptr) { LOG_WARN("From EffectAnimation::End: animation is nullptr"); }
         if (m_Animation != nullptr) { m_Animation->Pause(); }
         SetVisible(false);
+        SetDrawable(nullptr);
 
         m_Animation = nullptr;
         m_IsOccupied = false;
