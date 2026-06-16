@@ -14,8 +14,8 @@ void HealthBarSystem::Update(
     // ── Step 1：移除已不在場的角色血條 ──────────────────────────────────
     // 建立當前存活角色的唯一識別 ID 集合，方便 O(1) 查找，防範 ABA 問題
     std::unordered_set<uint64_t> aliveSet;
-    for (auto* c : allies)  { if (c) { aliveSet.insert(c->GetInstanceID()); } }
-    for (auto* c : enemies) { if (c) { aliveSet.insert(c->GetInstanceID()); } }
+    for (auto* c : allies)  { if (c && !c->IsDead()) { aliveSet.insert(c->GetInstanceID()); } }
+    for (auto* c : enemies) { if (c && !c->IsDead()) { aliveSet.insert(c->GetInstanceID()); } }
 
     // 找出需要刪除的 key (Instance ID)
     std::vector<uint64_t> toRemove;
@@ -54,7 +54,7 @@ void HealthBarSystem::SyncBars(
     HealthBar::OwnerType ownerType)
 {
     for (auto* character : characters) {
-        if (!character) { continue; }
+        if (!character || character->IsDead()) { continue; }
 
         const uint64_t id = character->GetInstanceID();
 

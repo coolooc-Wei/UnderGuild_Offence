@@ -233,8 +233,9 @@ namespace UGO::System {
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
         for (auto* character: GetAllCharacters()) { 
-            if (visable && character->IsDead()) { continue; }
-            character->GetGameObject()->SetVisible(visable); 
+            if (!character) { continue; }
+            else if (character->IsDead()) { character->GetGameObject()->SetVisible(false); }
+            else { character->GetGameObject()->SetVisible(visable); }
         }
     }
 
