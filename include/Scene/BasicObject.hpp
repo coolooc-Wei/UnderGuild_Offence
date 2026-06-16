@@ -48,6 +48,7 @@ namespace Scene {
 
         Core::Box* GetHitBox() const;
         Core::Box* GetHurtBox() const;
+        Core::Box* GetCollisionBox() const;
 
         // Setters
         void SetWorldPosition(const Core::WorldPosition &pos);
