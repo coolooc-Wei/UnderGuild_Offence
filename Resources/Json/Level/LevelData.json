@@ -12,6 +12,7 @@
         },
         "waveConfig": {
             "waveCount": 3,
+            "bossWaveCount": 1,
             "batchCount": 8,
             "batchInterval": 2.0,
             "baseEnemyCountPerBatch": 4.0,

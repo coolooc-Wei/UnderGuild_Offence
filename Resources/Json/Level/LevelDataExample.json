@@ -30,6 +30,10 @@
                 "TYPE": "int",
                 "DEFAULT": 3
             },
+            "bossWaveCount": {
+                "TYPE": "int",
+                "DEFAULT": 1
+            },
             "batchCount": {
                 "TYPE": "int",
                 "DEFAULT": 8

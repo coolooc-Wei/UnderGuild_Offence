@@ -31,6 +31,7 @@ namespace Level {
          *   boss rooms have 1 waves only.
          */
         int waveCount = 3;
+        int bossWaveCount = 1;
         int batchCount = 8;
 
         /* Basic parameters */

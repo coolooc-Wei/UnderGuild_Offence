@@ -116,7 +116,9 @@ namespace UGO::System {
         }
     }
 
-    bool EnemiesSpawnerSystem::IsAllWaveBegan() { return m_CurrentWaveID >= m_WaveConfig.waveCount;}
+    bool EnemiesSpawnerSystem::IsAllWaveBegan() {
+        if (!m_SpawnConfig.bossID.empty()) { return m_CurrentWaveID >= m_WaveConfig.bossWaveCount; }
+        return m_CurrentWaveID >= m_WaveConfig.waveCount;}
 
     void EnemiesSpawnerSystem::StartBattleRoom(const Core::Level::SpawnConfig& spawnConfig, const Core::Level::WaveConfig& waveConfig, int roomBaseDiffuculty) {
         LOG_INFO("New battle room starting.");
@@ -131,8 +133,9 @@ namespace UGO::System {
 
         m_WaveInterval = static_cast<float>(m_WaveConfig.batchCount) * m_WaveConfig.batchInterval;
 
-        if (!spawnConfig.bossID.empty()) {
-            m_BattleManager.AddBossByID(spawnConfig.bossID, {0.0f, 0.0f});
+        // Boss room
+        if (!m_SpawnConfig.bossID.empty()) {
+            m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f});
             LOG_INFO("Enter the boss room, boss spawned.");
         }
         StartNextWave();
