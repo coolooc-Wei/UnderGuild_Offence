@@ -111,6 +111,8 @@ namespace UGO {
                 for (auto drop : m_DropSystem->GetAllDrops()) {
                     drop->GetGameObject()->SetVisible(false);
                 }
+                
+                m_LevelSystem->UpdatePortalVisuals(true); // Force hide portals on Game Over/Win
             } break;
 
             default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;
