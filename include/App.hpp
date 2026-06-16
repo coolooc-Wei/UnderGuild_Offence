@@ -25,6 +25,7 @@ namespace UGO::System {
     class UpgradeManager;
     class MapSystem;
     class LevelSystem;
+    class MercenaryConditionSystem;
 }
 
 namespace UGO::UI {
@@ -83,24 +84,28 @@ private:
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
     
+    // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
+    std::unique_ptr<UI::UIManager> m_UIManager;
+    
     std::unique_ptr<UI::GameDisplay> m_GameDisplay;
     std::unique_ptr<UI::GameButtons> m_GameButtons;
     float m_SettlingTimer;
 
 
     // Register Systems
-    std::unique_ptr<System::SteeringSystem> m_SteeringSystem;
-    std::unique_ptr<System::EffectAnimationManager> m_EffectAnimationManager;
-    std::unique_ptr<System::CharacterFactory> m_CharacterFactory;
-    std::unique_ptr<System::ExpSystem> m_ExpSystem;
-    std::unique_ptr<System::DropSystem> m_DropSystem;
-    std::unique_ptr<System::RewardManager> m_RewardManager;
-    std::unique_ptr<System::BattleManager> m_BattleManager;
-    std::unique_ptr<System::EnemiesSpawnerSystem> m_EnemiesSpawnerSystem;
-    std::unique_ptr<System::GameRuleSystem> m_GameRuleSystem;
-    std::unique_ptr<System::UpgradeManager> m_UpgradeManager;
-    std::unique_ptr<System::MapSystem>   m_MapSystem;
-    std::unique_ptr<System::LevelSystem> m_LevelSystem;
+    std::unique_ptr<System::SteeringSystem>          m_SteeringSystem;
+    std::unique_ptr<System::EffectAnimationManager>  m_EffectAnimationManager;
+    std::unique_ptr<System::CharacterFactory>        m_CharacterFactory;
+    std::unique_ptr<System::ExpSystem>               m_ExpSystem;
+    std::unique_ptr<System::DropSystem>              m_DropSystem;
+    std::unique_ptr<System::RewardManager>           m_RewardManager;
+    std::unique_ptr<System::BattleManager>           m_BattleManager;
+    std::unique_ptr<System::EnemiesSpawnerSystem>    m_EnemiesSpawnerSystem;
+    std::unique_ptr<System::GameRuleSystem>          m_GameRuleSystem;
+    std::unique_ptr<System::UpgradeManager>          m_UpgradeManager;
+    std::unique_ptr<System::MapSystem>               m_MapSystem;
+    std::unique_ptr<System::LevelSystem>             m_LevelSystem;
+    std::unique_ptr<System::MercenaryConditionSystem> m_MercenaryConditionSystem;
 
 
 
@@ -115,9 +120,6 @@ private:
         {GameState::END, nullptr},
     };
 
-    // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
-    std::unique_ptr<UI::UIManager> m_UIManager;
-    
     // 升級選擇頁面（不繼承 Page，是獨立的複合 UI 組件）
     std::unique_ptr<UI::UpgradePage> m_UpgradePage;
     bool m_IsUpgradePause = false; ///< 是否因升級而暫停（而非手動暫停）

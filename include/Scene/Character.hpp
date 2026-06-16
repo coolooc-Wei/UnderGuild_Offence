@@ -49,6 +49,7 @@ namespace Scene {
         const std::string& GetTypeID() const;
         Core::Velocity GetIntendedMovement() const;
         Core::Velocity GetRepelMovement() const;
+        uint64_t GetInstanceID() const;
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
@@ -68,6 +69,23 @@ namespace Scene {
 
         // Upgrade
         void AddStatusEffect(const StatusEffectData& data);
+
+        /**
+         * @brief 移除所有 sourceID 完全吻合的狀態效果。
+         *        供羈絆系統在失效時安全清除所施加的 Buff，
+         *        不影響 sourceID 為空（如卡牌增益）或不同來源的效果。
+         * @param sourceID 要移除的效果來源識別碼，不可為空字串
+         */
+        void RemoveStatusEffectBySource(const std::string& sourceID);
+
+        /**
+         * @brief 查詢是否已擁有特定來源的狀態效果。
+         *        供羈絆系統在層級未改變時，為新生成的角色補套用 Buff，
+         *        避免同一來源的效果被重複堆疊。
+         * @param sourceID 要查詢的效果來源識別碼，不可為空字串
+         * @return true  已擁有；false 未擁有（含 sourceID 為空的情況）
+         */
+        bool HasStatusEffectBySource(const std::string& sourceID) const;
 
         // System methods
         void Update() override;
@@ -96,6 +114,7 @@ namespace Scene {
 
         EffectAnimationData m_AttackAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
         EffectAnimationData m_DamageAnimationData = {nullptr, 0.0f, false, 0.0f, {0.0f, 0.0f}};
+        uint64_t m_InstanceID = 0;
     };
 
 } // namespace Scene

@@ -5,7 +5,9 @@ namespace UGO {
 namespace UI {
 
 Component::Component()
-    : m_BoundingBox({0.0f, 0.0f}, 0.0f, 0.0f) {}
+    : m_BoundingBox({0.0f, 0.0f}, 0.0f, 0.0f) {
+    SetVisible(false);
+}
 
 void Component::SetPosition(const glm::vec2& pos) {
     m_Transform.translation = pos;
@@ -23,13 +25,16 @@ bool Component::IsMouseHovering() const {
     return m_BoundingBox.IsCollidingWith(cursorBox);
 }
 
-void Component::SetVisible(const bool visible) {
-    m_Visible = visible;
-    Util::GameObject::SetVisible(visible);
-}
-
 bool Component::GetVisible() const {
     return m_Visible;
+}
+
+void Component::SetEnabled(const bool enabled) {
+    m_Enabled = enabled;
+}
+
+bool Component::GetEnabled() const {
+    return m_Enabled;
 }
 
 } // namespace UI

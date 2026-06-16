@@ -111,9 +111,6 @@ namespace UGO {
                 for (auto drop : m_DropSystem->GetAllDrops()) {
                     drop->GetGameObject()->SetVisible(false);
                 }
-                for (auto icon : m_RewardManager->GetAllIcons()) {
-                    icon->GetGameObject()->SetVisible(false);
-                }
             } break;
 
             default: { LOG_ERROR("From App::ChangeGameState: some state is not handles."); } break;
@@ -150,8 +147,11 @@ namespace UGO {
         if (m_MercenaryCountPanel) {
             if (state == GameState::GAMING || state == GameState::PAUSE) {
                 m_MercenaryCountPanel->Show();
+                // 僅在 GAMING 狀態下允許點擊合成，暫停期間（PAUSE）失效
+                m_MercenaryCountPanel->SetInteractionEnabled(state == GameState::GAMING);
             } else {
                 m_MercenaryCountPanel->Hide();
+                m_MercenaryCountPanel->SetInteractionEnabled(false);
             }
         }
 

@@ -1,12 +1,20 @@
 #include "Scene/Character.hpp"
 #include "Scene/Weapon.hpp"
 #include "Scene/StatusEffect.hpp"
+#include <atomic>
 
 namespace UGO::Scene {
 
-    Character::Character() : BasicObject() {}
+    namespace {
+        std::atomic<uint64_t> s_NextID{1};
+        uint64_t GenerateNextID() {
+            return s_NextID.fetch_add(1, std::memory_order_relaxed);
+        }
+    }
+
+    Character::Character() : BasicObject(), m_InstanceID(GenerateNextID()) {}
     Character::Character(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-    : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower) {}
+    : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower), m_InstanceID(GenerateNextID()) {}
     Character::Character(CharacterParams&& params)
     : BasicObject(std::move(params)),
       m_MaxHP(params.maxHP),
@@ -18,8 +26,8 @@ namespace UGO::Scene {
       m_Weapon(std::move(params.weapon)),
       m_StatusEffects(std::move(params.statusEffects)),
       m_AttackAnimationData(params.attackAnimationData),
-      m_DamageAnimationData(params.damageAnimationData
-    ) {}
+      m_DamageAnimationData(params.damageAnimationData),
+      m_InstanceID(GenerateNextID()) {}
     Character::~Character() = default;
     void Character::Reset(CharacterParams&& params) {
         m_MaxHP = params.maxHP;
@@ -34,12 +42,14 @@ namespace UGO::Scene {
         m_DamageAnimationData = params.damageAnimationData;
         m_IntentedMovement = {0.f, 0.f};
         m_RepelMovement = {0.f, 0.f};
+        m_InstanceID = GenerateNextID();
         BasicObject::Reset(std::move(params));
     }
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
     const std::string& Character::GetTypeID() const { return m_TypeID; }
+    uint64_t Character::GetInstanceID() const { return m_InstanceID; }
 
     HpValue Character::GetAttackPower() const {
         float multiplier = 1.0f;
@@ -55,6 +65,27 @@ namespace UGO::Scene {
 
     void Character::AddStatusEffect(const StatusEffectData& data) {
         m_StatusEffects.push_back(std::make_unique<StatusEffect>(data));
+    }
+
+    void Character::RemoveStatusEffectBySource(const std::string& sourceID) {
+        if (sourceID.empty()) { return; } // 保護：不允許移除無來源的基礎效果（如卡牌增益）
+        auto it = std::remove_if(
+            m_StatusEffects.begin(), m_StatusEffects.end(),
+            [&sourceID](const std::unique_ptr<StatusEffect>& effect) {
+                return effect && effect->GetSourceID() == sourceID;
+            }
+        );
+        m_StatusEffects.erase(it, m_StatusEffects.end());
+    }
+
+    bool Character::HasStatusEffectBySource(const std::string& sourceID) const {
+        if (sourceID.empty()) { return false; } // 保護：空字串視為無特定來源，不匹配
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetSourceID() == sourceID) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void Character::SetIntendedMovement(const Core::Velocity& intendedMovement) { m_IntentedMovement = intendedMovement; }

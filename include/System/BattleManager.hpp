@@ -54,12 +54,17 @@ namespace System {
 
         int GetEnemyKillCount() const;
 
+        struct MercenaryCount {
+            int aliveCount = 0;
+            int totalCount = 0;
+        };
+
         /**
-         * @brief 取得場上各種類傭兵的存活數量 Map。
-         *        Key 為 mercenaryID（e.g. "m_001"），Value 為該種類存活數量。
+         * @brief 取得場上各種類傭兵的數量 Map (含場上現存活數/總數)。
+         *        Key 為 mercenaryID（e.g. "m_001"），Value 為該種類存活數量與總數。
          *        由快取機制機制驅動，與 RebuildCaches 同步更新。
          */
-        std::unordered_map<std::string, int> GetMercenaryCounts() const;
+        std::unordered_map<std::string, MercenaryCount> GetMercenaryCounts() const;
 
         /**
          * @brief [Synthesis Interface] 根據種類 ID 取得場上存活傭兵的原始指標。
@@ -118,7 +123,7 @@ namespace System {
         mutable std::vector<Scene::Character*> m_AllCharactersCache;
         mutable std::vector<Scene::Character*> m_AllAlliesCache;
         mutable bool m_IsCacheDirty = true;
-        mutable std::unordered_map<std::string, int> m_MercenaryCountsCache; ///< 各傭兵種類存活數量快取
+        mutable std::unordered_map<std::string, MercenaryCount> m_MercenaryCountsCache; ///< 各傭兵種類數量快取
 
         Scene::Enemy* m_CurrentBoss = nullptr;
 

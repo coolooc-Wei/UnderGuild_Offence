@@ -10,6 +10,7 @@
 #include "System/GameRuleSystem.hpp"
 #include "System/LevelSystem.hpp"
 #include "System/MapSystem.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 #include "UI/GameDisplay.hpp"
@@ -127,6 +128,11 @@ void UGO::App::Update() {
     if (m_MercenaryCountPanel && m_BattleManager) {
         m_MercenaryCountPanel->UpdateCounts(m_BattleManager->GetMercenaryCounts());
         m_MercenaryCountPanel->Update();
+    }
+
+    // 傭兵罈結同步：每幀更新罈結層級與 Buff
+    if (m_MercenaryConditionSystem) {
+        m_MercenaryConditionSystem->UpdateBonds();
     }
 
 

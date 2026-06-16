@@ -55,6 +55,7 @@ public:
             }
         }
         m_Components.emplace_back(baseComponent);
+        m_SortDirty = true;
     }
 
     /**
@@ -68,14 +69,15 @@ public:
 
         auto baseComponent = std::static_pointer_cast<Component>(component);
 
-        m_Components.erase(
-            std::remove_if(m_Components.begin(), m_Components.end(),
-                [&baseComponent](const std::weak_ptr<Component>& weak) {
-                    auto locked = weak.lock();
-                    return !locked || locked == baseComponent;
-                }),
-            m_Components.end()
-        );
+        auto it = std::remove_if(m_Components.begin(), m_Components.end(),
+            [&baseComponent](const std::weak_ptr<Component>& weak) {
+                auto locked = weak.lock();
+                return !locked || locked == baseComponent;
+            });
+        if (it != m_Components.end()) {
+            m_Components.erase(it, m_Components.end());
+            m_SortDirty = true;
+        }
     }
 
     /**
@@ -97,9 +99,17 @@ public:
      */
     void Update();
 
+    /**
+     * @brief 設定組件的 Z-Index 層級，並標記排序狀態為 Dirty。
+     * @param component 要設定的組件
+     * @param index     新的 Z-Index 數值
+     */
+    void SetComponentZIndex(const std::shared_ptr<Component>& component, float index);
+
 private:
     // 使用 weak_ptr 避免循環所有權，組件的生命週期由持有方（App/Scene）負責
     std::vector<std::weak_ptr<Component>> m_Components;
+    bool m_SortDirty = true;
 
     /**
      * @brief 清除已過期的 weak_ptr 條目。

@@ -66,8 +66,8 @@ private:
 
     Util::Renderer& m_Root;
 
-    // key = Character 原始指標（不持有所有權），value = 對應的 HealthBar
-    std::unordered_map<Scene::Character*, std::unique_ptr<HealthBar>> m_Bars;
+    // key = Character 唯一識別 ID，value = 對應的 HealthBar
+    std::unordered_map<uint64_t, std::unique_ptr<HealthBar>> m_Bars;
 
     bool m_IsVisible = false;
 };

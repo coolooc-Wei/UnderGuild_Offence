@@ -3,9 +3,14 @@
 
 #include "UGO_pch.hpp"
 #include "UI/MercenaryDisplayCard.hpp"
+#include "UI/Button.hpp"
 #include "System/CharacterFactory.hpp"
+#include "System/BattleManager.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 
 namespace UGO::UI {
+
+class UIManager;
 
 /**
  * @class MercenaryCountPanel
@@ -32,9 +37,17 @@ public:
      * @brief 建構面板。
      * @param root    場景根節點
      * @param factory CharacterFactory（唯讀，用於查詢傭兵圖標資訊）
+     * @param uiManager UI管理器參照，用以註冊卡牌的合成按鈕
      */
-    MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory);
+    MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory, UIManager& uiManager);
     ~MercenaryCountPanel() = default;
+
+    /**
+     * @brief 連結合成條件系統，供面板查詢是否可合成並執行合成。
+     *        在 LEVEL_INIT 初始化完成後呼叫一次即可。
+     * @param conditionSystem 不擁有其生命週期，僅作為觀察者使用
+     */
+    void SetConditionSystem(System::MercenaryConditionSystem* conditionSystem);
 
     MercenaryCountPanel(const MercenaryCountPanel&) = delete;
     MercenaryCountPanel& operator=(const MercenaryCountPanel&) = delete;
@@ -44,7 +57,7 @@ public:
      *        應在 GAMING 狀態下每幀呼叫。
      * @param currentCounts BattleManager::GetMercenaryCounts() 的回傳值
      */
-    void UpdateCounts(const std::unordered_map<std::string, int>& currentCounts);
+    void UpdateCounts(const std::unordered_map<std::string, System::BattleManager::MercenaryCount>& currentCounts);
 
     /**
      * @brief 每幀更新所有卡牌的 Lerp 移動動畫。
@@ -57,6 +70,9 @@ public:
 
     /** @brief 隱藏面板上所有卡牌。 */
     void Hide();
+
+    /** @brief 設定面板上所有合成按鈕的啟用/停用狀態。 */
+    void SetInteractionEnabled(bool enabled);
 
 private:
     /**
@@ -79,6 +95,7 @@ private:
 
     Util::Renderer&          m_Root;
     System::CharacterFactory& m_Factory;
+    UIManager&               m_UIManager;
 
     // 已知的傭兵種類卡牌（key = typeID）
     std::unordered_map<std::string, std::unique_ptr<MercenaryDisplayCard>> m_Cards;
@@ -87,10 +104,16 @@ private:
     std::vector<std::string> m_DisplayOrder;
 
     // 上一幀的計數快照，用於偵測變動
-    std::unordered_map<std::string, int> m_PreviousCounts;
+    std::unordered_map<std::string, System::BattleManager::MercenaryCount> m_PreviousCounts;
 
     bool m_IsVisible = false;
+    bool m_InteractionEnabled = true;
+
+    // ── MercenaryConditionSystem（不擁有生命週期，由外部 SetConditionSystem 注入）────
+    /// 供 UpdateCounts 為各卡牌查詢配方可用性、InitComposeButton 綁定回調使用
+    System::MercenaryConditionSystem* m_ConditionSystem = nullptr;
 };
+
 
 } // namespace UGO::UI
 

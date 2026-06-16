@@ -28,7 +28,7 @@ Button::Button(
     }
 }
 
-void Button::Update() {
+bool Button::Update() {
     const bool hovering = IsMouseHovering();
     const bool lbDown   = Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB);     // 按下瞬間
     const bool lbHeld   = Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB);  // 持續按住
@@ -64,6 +64,8 @@ void Button::Update() {
     if (m_State != prevState) {
         SyncDrawableToState();
     }
+
+    return hovering;
 }
 
 void Button::SetOnClickCallback(std::function<void()> callback) {

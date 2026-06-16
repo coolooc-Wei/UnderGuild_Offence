@@ -32,40 +32,6 @@ namespace UGO::System {
 
     void RewardManager::OnHeroLevelUp(Scene::Hero* hero) {
         if (!hero) return;
-
-        SpawnLevelUpIcon();
-        // 傭兵召喚已移至 UpgradeManager 的卡片選擇機制處理
-    }
-
-    void RewardManager::SpawnLevelUpIcon() {
-        auto icon = std::make_unique<Scene::Icon>();
-        icon->SetImage("../Resources/Image/character/pet/Creature_2_1.png");
-        icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        icon->SetSize(32, 32);
-        float startX = 600.0f;
-        float startY = 320.0f;
-        float offsetY = m_LevelUpIconCount * 30.0f;
-        icon->SetWorldPosition({startX, startY - offsetY});
-        icon->GetGameObject()->SetVisible(true);
-        icon->Update();
-        AddIcon(std::move(icon));
-        m_LevelUpIconCount++;
-
-        LOG_INFO("Spawned level-up icon at position: {}, {}", startX, startY - offsetY);
-    }
-
-    void RewardManager::AddIcon(std::unique_ptr<Scene::Icon> icon) {
-        m_Root.AddChild(icon->GetGameObject());
-        m_LevelUpIcons.push_back(std::move(icon));
-    }
-
-    std::vector<Scene::Icon*> RewardManager::GetAllIcons() const {
-        std::vector<Scene::Icon*> icons;
-        icons.reserve(m_LevelUpIcons.size());
-        for (const auto& icon: m_LevelUpIcons) {
-            icons.push_back(icon.get());
-        }
-        return icons;
     }
 
     bool RewardManager::HasPendingMercenaries() const {
