@@ -3,17 +3,31 @@
 namespace UGO {
 namespace UI {
 
-GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue)
+GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue)
     : m_Root(root), m_UIManager(uiManager) {
-    // 「開始遊戲」按鈕，置於畫面中央
-    m_StartGameButton = std::make_shared<UI::Button>(
-        glm::vec2{0.0f, 0.0f - 150.0f}, // 畫面中央 (PTSD 框架原點在中心)
-        300.0f, 90.0f,              // 大小
+
+    m_StartMenuButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, - 320.0f}, // 畫面中央 (PTSD 框架原點在中心)
+        150.0f, 45.0f,              // 大小
         "../Resources/Image/button/Bt_02.png",
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
     );
-    m_StartGameButton->SetZIndex(10.0f);
+    m_StartMenuButton->SetZIndex(70.0f);
+    m_StartMenuButton->SetVisible(false); // 初始隱藏
+    m_StartMenuButton->SetOnClickCallback(onMenu);
+    root.AddChild(m_StartMenuButton);
+    uiManager.Register(m_StartMenuButton);
+
+    // 「開始遊戲」按鈕，置於畫面中央
+    m_StartGameButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, 0.0f - 320.0f}, // 畫面中央 (PTSD 框架原點在中心)
+        200.0f, 60.0f,              // 大小
+        "../Resources/Image/button/Bt_02.png",
+        "../Resources/Image/button/Bt_2_1.png",
+        "../Resources/Image/button/Bt_02_1.png"
+    );
+    m_StartGameButton->SetZIndex(70.0f);
     m_StartGameButton->SetVisible(false); // 初始隱藏
     m_StartGameButton->SetOnClickCallback(onStart);
     root.AddChild(m_StartGameButton);
@@ -93,6 +107,12 @@ GameButtons::~GameButtons() {
 void GameButtons::SetStartButtonVisible(bool visible) {
     if (m_StartGameButton) {
         m_StartGameButton->SetVisible(visible);
+    }
+}
+
+void GameButtons::SetStartMenuButtonVisible(bool visible) {
+    if (m_StartMenuButton) {
+        m_StartMenuButton->SetVisible(visible);
     }
 }
 

@@ -22,6 +22,7 @@
 #include "UI/HealthBarSystem.hpp"
 #include "UI/MercenaryCountPanel.hpp"
 #include "UI/PauseMapUI.hpp"
+#include "UI/SelectLevelPage.hpp"
 
 
 void UGO::App::Start() {
@@ -114,18 +115,39 @@ void UGO::App::Start() {
         // 暫停時關卡地圖可視化 UI
         m_PauseMapUI = std::make_unique<UI::PauseMapUI>(m_Root, *m_LevelSystem);
 
+        // Initialize SelectLevelPage popup overlay
+        m_SelectLevelPage = std::make_unique<UI::SelectLevelPage>(m_Root, *m_UIManager, m_LevelSystem->GetLevelIDs());
+        m_SelectLevelPage->SetOnEnterGameCallback([this](const std::string& levelID) {
+            m_SelectedLevelID = levelID;
+            m_SelectLevelPage->Hide();
+            ChangeGameState(GameState::LEVEL_INIT);
+        });
+        m_SelectLevelPage->SetOnCancelCallback([this]() {
+            m_SelectLevelPage->Hide();
+            if (m_GameButtons) {
+                m_GameButtons->SetStartButtonVisible(true);
+            }
+        });
+
         // Initialize Game Buttons
         m_GameButtons = std::make_unique<UI::GameButtons>(
             m_Root, *m_UIManager,
-            [this]() {
-                LOG_INFO("[UI] Start Game button clicked!");
-                ChangeGameState(GameState::LEVEL_INIT);
+            [this]() { // onMenu
+                LOG_INFO("[UI] Start Menu button clicked!");
+                ChangeGameState(GameState::MENU);
             },
-            [this]() {
+            [this]() { // onStart (開始選關)
+                LOG_INFO("[UI] Start Game (Level Select) button clicked!");
+                if (m_GameButtons) {
+                    m_GameButtons->SetStartButtonVisible(false);
+                }
+                m_SelectLevelPage->Show();
+            },
+            [this]() { // onPause
                 LOG_INFO("[UI] Pause button clicked!");
                 ChangeGameState(GameState::PAUSE);
             },
-            [this]() {
+            [this]() { // onContinue
                 LOG_INFO("[UI] Continue button clicked!");
                 ChangeGameState(GameState::GAMING);
             }

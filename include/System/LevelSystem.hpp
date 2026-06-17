@@ -33,6 +33,7 @@ namespace System {
         const Core::Level::LevelData& GetLevelData(const Core::Level::LevelID& levelID);
         void GenerateLevel(const std::string& levelID);
         bool IsLevelCompleted() const;
+        const std::vector<std::string>& GetLevelIDs() const { return m_LevelIDs; }
 
         const Core::Map::RoomNode& GetCurrentRoom() const;
         const Core::Map::RoomData& GetCurrentRoomData() const;

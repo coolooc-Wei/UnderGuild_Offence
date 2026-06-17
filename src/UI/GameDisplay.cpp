@@ -87,8 +87,6 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_TimeBG->GetGameObject()->SetVisible(false);
     root.AddChild(m_TimeBG->GetGameObject());
 
-
-
     m_EnemyIcon = std::make_shared<Scene::BasicObject>();
     m_EnemyIcon->SetImage("../Resources/Image/title/Icon_Mon.png");
     m_EnemyIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
@@ -108,6 +106,204 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_ShowMonCount->SetVisible(false); // Default hidden
     m_ShowMonCount->AddChild(m_ShowKillCount); // 怪物數量顯示在擊殺數量旁
     root.AddChild(m_ShowMonCount);
+
+    m_WelcomeBackground = std::make_shared<Scene::BasicObject>();
+    m_WelcomeBackground->SetImage("../Resources/Image/title/Title_Bg1.png");
+    m_WelcomeBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_WelcomeBackground->SetSize(464.6f, 780.0f);
+    m_WelcomeBackground->GetGameObject()->m_Transform.translation = {0.0f, -20.0f};
+    m_WelcomeBackground->GetGameObject()->SetZIndex(50.0f);
+    m_WelcomeBackground->GetGameObject()->SetVisible(false);
+    root.AddChild(m_WelcomeBackground->GetGameObject());
+
+    m_WelcomeTitle = std::make_shared<Scene::BasicObject>();
+    m_WelcomeTitle->SetImage("../Resources/Image/title/Title_1.png");
+    m_WelcomeTitle->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_WelcomeTitle->SetSize(280.0f, 180.0f);
+    m_WelcomeTitle->GetGameObject()->m_Transform.translation = {0.0f, 200.0f};
+    m_WelcomeTitle->GetGameObject()->SetZIndex(51.0f);
+    m_WelcomeTitle->GetGameObject()->SetVisible(false);
+    root.AddChild(m_WelcomeTitle->GetGameObject());
+
+    m_WelcomeTitle_1 = std::make_shared<Scene::BasicObject>();
+    m_WelcomeTitle_1->SetImage("../Resources/Image/title/Ui_Line_2.png");
+    m_WelcomeTitle_1->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_WelcomeTitle_1->SetSize(250.0f, 3.0f);
+    m_WelcomeTitle_1->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
+    m_WelcomeTitle_1->GetGameObject()->SetZIndex(51.0f);
+    m_WelcomeTitle_1->GetGameObject()->SetVisible(false);
+    root.AddChild(m_WelcomeTitle_1->GetGameObject());
+
+    m_WelcomeTitle_2 = std::make_shared<Scene::BasicObject>();
+    m_WelcomeTitle_2->SetImage("../Resources/Image/title/Title_Offense_1.png");
+    m_WelcomeTitle_2->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_WelcomeTitle_2->SetSize(90.0f, 30.0f);
+    m_WelcomeTitle_2->GetGameObject()->m_Transform.translation = {0.0f, 60.0f};
+    m_WelcomeTitle_2->GetGameObject()->SetZIndex(51.0f);
+    m_WelcomeTitle_2->GetGameObject()->SetVisible(false);
+    root.AddChild(m_WelcomeTitle_2->GetGameObject());
+
+    m_MenuBackground = std::make_shared<Scene::BasicObject>();
+    m_MenuBackground->SetImage("../Resources/Image/background/Long_Bg_1.png");
+    m_MenuBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuBackground->SetSize(1800.0f, 800.0f);
+    m_MenuBackground->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
+    m_MenuBackground->GetGameObject()->SetZIndex(10.0f);
+    m_MenuBackground->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuBackground->GetGameObject());
+
+    m_MenuHasugu1 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu1->SetImage("../Resources/Image/hasugu/Hasugu_2_1.png");
+    m_MenuHasugu1->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu1->SetSize(220.0f, 318.8f);
+    m_MenuHasugu1->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
+    m_MenuHasugu1->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu1->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu1->GetGameObject());
+
+    m_MenuHasugu2 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu2->SetImage("../Resources/Image/hasugu/Hasugu_3_1.png");
+    m_MenuHasugu2->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu2->SetSize(220.0f, 318.8f);
+    m_MenuHasugu2->GetGameObject()->m_Transform.translation = {320.0f, 180.0f};
+    m_MenuHasugu2->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu2->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu2->GetGameObject());
+
+    m_MenuHasugu3 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu3->SetImage("../Resources/Image/hasugu/Hasugu_7_1.png");
+    m_MenuHasugu3->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu3->SetSize(220.0f, 318.8f);
+    m_MenuHasugu3->GetGameObject()->m_Transform.translation = {180.0f, -320.0f};
+    m_MenuHasugu3->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu3->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu3->GetGameObject());
+
+    m_MenuHasugu4 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu4->SetImage("../Resources/Image/hasugu/Hasugu_9_1.png");
+    m_MenuHasugu4->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu4->SetSize(220.0f, 318.8f);
+    m_MenuHasugu4->GetGameObject()->m_Transform.translation = {540.0f, -140.0f};
+    m_MenuHasugu4->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu4->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu4->GetGameObject());
+
+    m_MenuHasugu5 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu5->SetImage("../Resources/Image/hasugu/Hasugu_10_1.png");
+    m_MenuHasugu5->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu5->SetSize(220.0f, 318.8f);
+    m_MenuHasugu5->GetGameObject()->m_Transform.translation = {-220.0f, 340.0f};
+    m_MenuHasugu5->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu5->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu5->GetGameObject());
+
+    m_MenuHasugu6 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu6->SetImage("../Resources/Image/hasugu/Hasugu_15_1.png");
+    m_MenuHasugu6->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu6->SetSize(220.0f, 318.8f);
+    m_MenuHasugu6->GetGameObject()->m_Transform.translation = {-290.0f, -110.0f};
+    m_MenuHasugu6->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu6->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu6->GetGameObject());
+
+    m_MenuHasugu7 = std::make_shared<Scene::BasicObject>();
+    m_MenuHasugu7->SetImage("../Resources/Image/hasugu/Hasugu_16_1.png");
+    m_MenuHasugu7->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHasugu7->SetSize(220.0f, 318.8f);
+    m_MenuHasugu7->GetGameObject()->m_Transform.translation = {-580.0f, -30.0f};
+    m_MenuHasugu7->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu7->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHasugu7->GetGameObject());
+
+    m_Mask = std::make_shared<Scene::BasicObject>();
+    m_Mask->SetImage("../Resources/Image/hasugu/Long_Bg_2.png");
+    m_Mask->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Mask->SetSize(1800.0f, 1200.0f);
+    m_Mask->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
+    m_Mask->GetGameObject()->SetZIndex(54.0f);
+    m_Mask->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Mask->GetGameObject());
+
+    m_Pipe1 = std::make_shared<Scene::BasicObject>();
+    m_Pipe1->SetImage("../Resources/Image/hasugu/Pipe_2.png");
+    m_Pipe1->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe1->SetSize(110.0f, 33.0f);
+    m_Pipe1->GetGameObject()->m_Transform.translation = {-150.0f, -20.0f};
+    m_Pipe1->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe1->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe1->GetGameObject());
+
+    m_Pipe2 = std::make_shared<Scene::BasicObject>();
+    m_Pipe2->SetImage("../Resources/Image/hasugu/Pipe_2.png");
+    m_Pipe2->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe2->SetSize(440.0f, 33.0f);
+    m_Pipe2->GetGameObject()->m_Transform.translation = {50.0f, 295.0f};
+    m_Pipe2->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe2->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe2->GetGameObject());
+
+    m_Pipe3 = std::make_shared<Scene::BasicObject>();
+    m_Pipe3->SetImage("../Resources/Image/hasugu/Pipe_18.png");
+    m_Pipe3->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe3->SetSize(140.0f, 100.0f);
+    m_Pipe3->GetGameObject()->m_Transform.translation = {160.0f, 110.0f};
+    m_Pipe3->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe3->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe3->GetGameObject());
+
+    m_Pipe4 = std::make_shared<Scene::BasicObject>();
+    m_Pipe4->SetImage("../Resources/Image/hasugu/Pipe_2.png");
+    m_Pipe4->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe4->SetSize(140.0f, 33.0f);
+    m_Pipe4->GetGameObject()->m_Transform.translation = {-430.0f, -70.0f};
+    m_Pipe4->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe4->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe4->GetGameObject());
+
+    m_Pipe5 = std::make_shared<Scene::BasicObject>();
+    m_Pipe5->SetImage("../Resources/Image/hasugu/Pipe_18.png");
+    m_Pipe5->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe5->SetSize(180.0f, 120.0f);
+    m_Pipe5->GetGameObject()->m_Transform.translation = {360.0f, -200.0f};
+    m_Pipe5->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe5->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe5->GetGameObject());
+
+    m_Pipe6 = std::make_shared<Scene::BasicObject>();
+    m_Pipe6->SetImage("../Resources/Image/hasugu/Pipe_17.png");
+    m_Pipe6->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe6->SetSize(80.0f, 100.0f);
+    m_Pipe6->GetGameObject()->m_Transform.translation = {-165.0f, -190.0f};
+    m_Pipe6->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe6->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe6->GetGameObject());
+
+    m_Pipe7 = std::make_shared<Scene::BasicObject>();
+    m_Pipe7->SetImage("../Resources/Image/hasugu/Pipe_2.png");
+    m_Pipe7->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe7->SetSize(140.0f, 35.0f);
+    m_Pipe7->GetGameObject()->m_Transform.translation = {-70.0f, -222.0f};
+    m_Pipe7->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe7->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe7->GetGameObject());
+
+    m_Pipe8 = std::make_shared<Scene::BasicObject>();
+    m_Pipe8->SetImage("../Resources/Image/hasugu/Pipe_7.png");
+    m_Pipe8->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe8->SetSize(90.0f, 80.0f);
+    m_Pipe8->GetGameObject()->m_Transform.translation = {-10.0f, -245.0f};
+    m_Pipe8->GetGameObject()->SetZIndex(46.0f);
+    m_Pipe8->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe8->GetGameObject());
+
+    m_Pipe9 = std::make_shared<Scene::BasicObject>();
+    m_Pipe9->SetImage("../Resources/Image/hasugu/Pipe_2.png");
+    m_Pipe9->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_Pipe9->SetSize(140.0f, 35.0f);
+    m_Pipe9->GetGameObject()->m_Transform.translation = {65.0f, -265.0f};
+    m_Pipe9->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe9->GetGameObject()->SetVisible(false);
+    root.AddChild(m_Pipe9->GetGameObject());
 }
 
 void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int monCount) {
@@ -169,6 +365,38 @@ void GameDisplay::SetPauseVisible(bool visible) {
 
 void GameDisplay::SetContinueVisible(bool visible) {
     // Visibility and alignment consolidated in GameButtons
+}
+
+void GameDisplay::ShowWelcomeBackground(bool visible) {
+    if (m_WelcomeBackground) {
+        m_WelcomeBackground->GetGameObject()->SetVisible(visible);
+        m_WelcomeTitle->GetGameObject()->SetVisible(visible);
+        m_WelcomeTitle_1->GetGameObject()->SetVisible(visible);
+        m_WelcomeTitle_2->GetGameObject()->SetVisible(visible);
+    }
+}
+
+void GameDisplay::ShowMenuBackground(bool visible) {
+    if (m_MenuBackground) {
+        m_MenuBackground->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu1->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu2->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu3->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu4->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu5->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu6->GetGameObject()->SetVisible(visible);
+        m_MenuHasugu7->GetGameObject()->SetVisible(visible);
+        m_Mask->GetGameObject()->SetVisible(visible);
+        m_Pipe1->GetGameObject()->SetVisible(visible);
+        m_Pipe2->GetGameObject()->SetVisible(visible);
+        m_Pipe3->GetGameObject()->SetVisible(visible);
+        m_Pipe4->GetGameObject()->SetVisible(visible);
+        m_Pipe5->GetGameObject()->SetVisible(visible);
+        m_Pipe6->GetGameObject()->SetVisible(visible);
+        m_Pipe7->GetGameObject()->SetVisible(visible);
+        m_Pipe8->GetGameObject()->SetVisible(visible);
+        m_Pipe9->GetGameObject()->SetVisible(visible);
+    }
 }
 
 void GameDisplay::Update() {

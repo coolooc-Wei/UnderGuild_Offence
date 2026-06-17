@@ -33,6 +33,7 @@ namespace UGO::UI {
     class GameDisplay;
     class MercenaryCountPanel;
     class PauseMapUI;
+    class SelectLevelPage;
 }
 
 namespace UGO {
@@ -90,6 +91,8 @@ private:
     
     std::unique_ptr<UI::GameDisplay> m_GameDisplay;
     std::unique_ptr<UI::GameButtons> m_GameButtons;
+    std::unique_ptr<UI::SelectLevelPage> m_SelectLevelPage;
+    std::string m_SelectedLevelID = "test";
     float m_SettlingTimer;
 
 
