@@ -171,7 +171,9 @@ namespace UGO::System {
 
         newParams.speed              = cached.speed;
         newParams.drawableType       = cached.drawableType;
-        newParams.animation          = std::make_shared<Util::Animation>(cached.animationPaths, false, 50, true, 50);
+        newParams.animation          = std::make_shared<Scene::AnimationLite>(
+            Scene::AnimationLite::MakeSharedFrames(cached.animationPaths), false, 50, true, 50
+        );
         newParams.image              = cached.image;
         newParams.size               = cached.size;
         newParams.isCollidable       = cached.isCollidable;
@@ -205,7 +207,9 @@ namespace UGO::System {
 
         if (!cached.attackAnimPaths.empty()) {
             newParams.attackAnimationData = Scene::Character::EffectAnimationData{
-                std::make_shared<Util::Animation>(cached.attackAnimPaths, false, 50, false, 50),
+                std::make_shared<Scene::AnimationLite>(
+                    Scene::AnimationLite::MakeSharedFrames(cached.attackAnimPaths), false, 50, false, 50
+                ),
                 cached.attackAnimDuration,
                 cached.attackAnimIsImage,
                 cached.attackAnimOffsetAngle,
@@ -214,7 +218,9 @@ namespace UGO::System {
         }
         if (!cached.damageAnimPaths.empty()) {
             newParams.damageAnimationData = Scene::Character::EffectAnimationData{
-                std::make_shared<Util::Animation>(cached.damageAnimPaths, false, 50, false, 50),
+                std::make_shared<Scene::AnimationLite>(
+                    Scene::AnimationLite::MakeSharedFrames(cached.damageAnimPaths), false, 50, false, 50
+                ),
                 cached.damageAnimDuration,
                 cached.damageAnimIsImage,
                 cached.damageAnimOffsetAngle,

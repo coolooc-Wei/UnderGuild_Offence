@@ -8,6 +8,9 @@
 #include "Scene/SceneTypes.hpp"
 
 namespace UGO {
+namespace Scene {
+    class AnimationLite;
+}
 namespace System {
 
     class EffectAnimationManager {
@@ -18,7 +21,7 @@ namespace System {
         void Update();
 
         std::shared_ptr<Util::GameObject> Create(
-            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
+            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Scene::AnimationLite> animation, bool isImage,
             Core::Angle rotateAngle, Core::Size size
         );
 

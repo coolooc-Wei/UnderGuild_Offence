@@ -1,5 +1,6 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 
+#include "Scene/AnimationLite.hpp"
 #include "Core/UGO_Math.hpp"
 
 namespace UGO::System {
@@ -10,8 +11,8 @@ namespace UGO::System {
       m_BatchTimer(0.0f),
       m_WaveTimer(0.0f),
       /* Since the warning indicators are stateless, pre-load and share the animation */
-      m_WarningIndicatorAnim(std::make_shared<Util::Animation>(
-          std::vector<std::string>{m_WarningIndicatorPath},
+      m_WarningIndicatorAnim(std::make_shared<Scene::AnimationLite>(
+          Scene::AnimationLite::MakeSharedFrames(std::vector<std::string>{m_WarningIndicatorPath}),
           false, 100, true, 100
       )) {}
     EnemiesSpawnerSystem::~EnemiesSpawnerSystem() = default;

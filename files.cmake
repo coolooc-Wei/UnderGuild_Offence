@@ -96,8 +96,12 @@ set(AUDIO_SRC)
 set(AUDIO_INC)
 
 # --- Resource ---
-set(RESOURCE_SRC)
-set(RESOURCE_INC)
+set(RESOURCE_SRC
+    Resource/ImageCache.cpp
+)
+set(RESOURCE_INC
+    Resource/ImageCache.hpp
+)
 
 # --- Physics ---
 set(PHYSICS_SRC)
@@ -120,6 +124,7 @@ set(SCENE_SRC
     Scene/Bot.cpp
     Scene/Icon.cpp
     Scene/DamageTextAnimation.cpp
+    Scene/AnimationLite.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -138,6 +143,7 @@ set(SCENE_INC
     Scene/Bot.hpp
     Scene/Icon.hpp
     Scene/DamageTextAnimation.hpp
+    Scene/AnimationLite.hpp
 )
 
 # --- Combine All ---

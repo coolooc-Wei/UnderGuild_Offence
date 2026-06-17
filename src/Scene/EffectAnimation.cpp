@@ -1,4 +1,5 @@
 #include "Scene/EffectAnimation.hpp"
+#include "Scene/AnimationLite.hpp"
 
 namespace UGO::Scene {
 
@@ -6,7 +7,7 @@ namespace UGO::Scene {
     EffectAnimation::~EffectAnimation() = default;
 
     void EffectAnimation::Start(
-            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
+            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<AnimationLite> animation, bool isImage,
             Core::Angle rotationAngle, Core::Size size
     ) {
 

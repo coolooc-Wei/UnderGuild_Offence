@@ -9,6 +9,9 @@
 #include "Core/LevelData.hpp"
 
 namespace UGO {
+namespace Scene {
+    class AnimationLite;
+}
 namespace System {
 
     class EnemiesSpawnerSystem {
@@ -61,7 +64,7 @@ namespace System {
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
-        std::shared_ptr<Util::Animation> m_WarningIndicatorAnim;
+        std::shared_ptr<Scene::AnimationLite> m_WarningIndicatorAnim;
 
         const Core::Time::Second m_WarningIndicatorDuration = 1.0f;
         const Core::Distance m_StepNudgeDistance = 3.0 * (float)Core::TILE_SIZE / 5.0;

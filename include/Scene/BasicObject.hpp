@@ -10,6 +10,8 @@
 namespace UGO {
 namespace Scene {
 
+    class AnimationLite;
+
     /* TODO: Build config struct pattern
      */
 
@@ -20,7 +22,7 @@ namespace Scene {
         struct BasicObjectParams {
             SpeedValue speed = 10.0f;
             DrawableType drawableType = DrawableType::None;
-            std::shared_ptr<Util::Animation> animation = nullptr;
+            std::shared_ptr<AnimationLite> animation = nullptr;
             std::shared_ptr<Util::Image> image = nullptr;
             Core::Size size = {32.0f, 32.0f};
 
@@ -43,7 +45,7 @@ namespace Scene {
         SpeedValue GetSpeed() const;
         bool IsDead() const;
         std::shared_ptr<Util::GameObject> GetGameObject() const;
-        std::shared_ptr<Util::Animation> GetAnimation() const;
+        std::shared_ptr<AnimationLite> GetAnimation() const;
         glm::vec2 GetSize() const;
 
         Core::Box* GetHitBox() const;
@@ -54,7 +56,7 @@ namespace Scene {
         void SetWorldPosition(const Core::WorldPosition &pos);
         void SetImage(const std::shared_ptr<Util::Image> &image);
         void SetImage(const std::string &imagePath);
-        void SetAnimation(const std::shared_ptr<Util::Animation> &animation);
+        void SetAnimation(const std::shared_ptr<AnimationLite> &animation);
         void SetAnimation(
             const std::vector<std::string> &paths, bool play,
             std::size_t interval, bool looping = true,
@@ -100,7 +102,7 @@ namespace Scene {
         std::shared_ptr<Util::GameObject> m_GameObject = nullptr;
 
         // Drawable
-        std::shared_ptr<Util::Animation> m_Animation = nullptr;
+        std::shared_ptr<AnimationLite> m_Animation = nullptr;
         std::shared_ptr<Util::Image> m_Image = nullptr;
         DrawableType m_DrawableType = DrawableType::Image;
         glm::vec2 m_Scale = {1.0f, 1.0f};  // Keep values be positive forever

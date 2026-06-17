@@ -21,15 +21,17 @@ namespace Time {
 
     class CountDownTimer {
     public:
-        CountDownTimer(Second durationInSecond);
+        CountDownTimer(Second durationInSecond, bool silence = false);
         ~CountDownTimer();
         void SetDuration(Second durationInSecond);
         void Start();
         void Start(Second durationInSecond);
+        void SetSilence(bool silence);
         bool IsTimeUp() const;
     // private:
         TimeStep duration;
         Tick endTick;
+        bool m_Silence;
     };
 
 } // namespace Time

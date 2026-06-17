@@ -15,7 +15,7 @@ namespace Scene {
     class Character : public BasicObject {
     public:
         struct EffectAnimationData {
-            std::shared_ptr<Util::Animation> ainmation = nullptr;
+            std::shared_ptr<AnimationLite> ainmation = nullptr;
             Core::Time::Second duration = 0.0f;
             bool isImage = false;
             Core::Angle offsetAngle = 0.0f;

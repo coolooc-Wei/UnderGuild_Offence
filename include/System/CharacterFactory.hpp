@@ -4,6 +4,7 @@
 #include "UGO_pch.hpp"
 
 #include "Scene/Character.hpp"
+#include "Scene/AnimationLite.hpp"
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
