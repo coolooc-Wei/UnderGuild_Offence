@@ -177,7 +177,10 @@ namespace UGO::System {
     }
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
-        for (auto* character: GetAllCharacters()) { character->GetGameObject()->SetVisible(visable); }
+        for (auto* character: GetAllCharacters()) { 
+            if (visable && character->IsDead()) { continue; }
+            character->GetGameObject()->SetVisible(visable); 
+        }
     }
 
     void BattleManager::AIUpdate() {
