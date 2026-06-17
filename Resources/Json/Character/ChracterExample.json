@@ -8,8 +8,17 @@
             "TYPE": "string",
             "VALUE": ["Animation", "Image", "None"]
         },
-        "animationPath": {
-            "TYPE": "list<string>"
+        "bodyAnimation": {
+            "walk": {
+                "paths": {
+                    "TYPE": "list<string>"
+                }
+            },
+            "attack": {
+                "paths": {
+                    "TYPE": "list<string>"
+                }
+            }
         },
         "imagePath": {
             "TYPE": "list<string>"

@@ -51,13 +51,13 @@ namespace UGO::System {
         else if (amount2 == -1) { spawnAmount = amount1; }
         else { spawnAmount = Core::RandomInt(amount1, amount2); }
 
-
-        std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
-
         Core::Time::CountDownTimer timer(m_WarningIndicatorDuration);
         timer.Start();
         m_PaddingWaves.push({timer, spawnAmount});
         for (int i=0; i<spawnAmount; ++i) {
+            // choose a type
+            std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
+
             // Choose a side
             Side side;
             float positionScale;
