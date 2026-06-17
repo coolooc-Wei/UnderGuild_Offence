@@ -6,6 +6,7 @@
 #include "UI/Page.hpp"
 #include "UI/UIManager.hpp"
 #include "UI/UpgradePage.hpp"
+#include "UI/MythicSynthesisPage.hpp"
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
@@ -135,6 +136,10 @@ private:
     std::unique_ptr<UI::MercenaryCountPanel> m_MercenaryCountPanel;
     // 暫停時的關卡地圖（手動暫停時顯示，升級暫停時不顯示）
     std::unique_ptr<UI::PauseMapUI> m_PauseMapUI;
+
+    // 傳說/神話合成頁面與狀態
+    std::unique_ptr<UI::MythicSynthesisPage> m_MythicSynthesisPage;
+    bool m_IsMixOpen = false;
 };
 
 } // namespace UGO

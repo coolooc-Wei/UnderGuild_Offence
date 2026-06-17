@@ -63,6 +63,7 @@ set(UI_SRC
     UI/MercenaryCountPanel.cpp
     UI/PauseMapUI.cpp
     UI/SelectLevelPage.cpp
+    UI/MythicSynthesisPage.cpp
 )
 set(UI_INC
     UI/Page.hpp
@@ -79,6 +80,7 @@ set(UI_INC
     UI/MercenaryCountPanel.hpp
     UI/PauseMapUI.hpp
     UI/SelectLevelPage.hpp
+    UI/MythicSynthesisPage.hpp
 )
 
 # --- Input ---

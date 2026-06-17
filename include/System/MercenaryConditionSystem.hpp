@@ -122,8 +122,14 @@ namespace System {
          *        設計意圖：UI 層只需傳入卡牌的 typeID，無須直接接觸 SynthesisRecipe 結構。
          * @param typeID 原料傭兵種類 ID（e.g. "m_001"）
          * @return std::string 對應配方的 recipeID；若無對應配方則返回空字串
+         * 
          */
         std::string GetRecipeIDForIngredient(const std::string& typeID) const;
+
+        /**
+         * @brief 取得所有傳說/神話級合成配方（outputTypeID 以 "s_" 開頭的配方）。
+         */
+        std::vector<SynthesisRecipe> GetLegendaryRecipes() const;
 
 
         // ── 執行 API ──

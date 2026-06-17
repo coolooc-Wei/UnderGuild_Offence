@@ -84,6 +84,18 @@ void UGO::App::Start() {
         // 將合成系統注入面板，面板內部會綁定按鈕點擊回調
         m_MercenaryCountPanel->SetConditionSystem(m_MercenaryConditionSystem.get());
 
+        // 初始化傳說/神話級合成頁面
+        m_MythicSynthesisPage = std::make_unique<UI::MythicSynthesisPage>(
+            m_Root, *m_UIManager, *m_MercenaryConditionSystem, *m_CharacterFactory, *m_BattleManager
+        );
+        m_MythicSynthesisPage->SetOnCloseCallback([this]() {
+            if (m_MythicSynthesisPage) {
+                m_MythicSynthesisPage->Hide();
+            }
+            m_IsMixOpen = false;
+            ChangeGameState(GameState::GAMING);
+        });
+
         // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
         m_UpgradeManager->SetOnReadyCallback([this]() {
             // 卡片已抽好：暫停遊戲並顯示 UI
@@ -150,6 +162,14 @@ void UGO::App::Start() {
             [this]() { // onContinue
                 LOG_INFO("[UI] Continue button clicked!");
                 ChangeGameState(GameState::GAMING);
+            },
+            [this]() { // onMix
+                LOG_INFO("[UI] Mix button clicked!");
+                m_IsMixOpen = true;
+                if (m_MythicSynthesisPage) {
+                    m_MythicSynthesisPage->Show();
+                }
+                ChangeGameState(GameState::PAUSE);
             }
         );
 

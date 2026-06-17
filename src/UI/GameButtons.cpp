@@ -3,7 +3,7 @@
 namespace UGO {
 namespace UI {
 
-GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue)
+GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix)
     : m_Root(root), m_UIManager(uiManager) {
 
     m_StartMenuButton = std::make_shared<UI::Button>(
@@ -81,6 +81,30 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_ContinueIcon->GetGameObject()->SetZIndex(100.0f);
     m_ContinueIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_ContinueIcon->GetGameObject());
+
+    // Mix button slightly above the mercenary count panel
+    const glm::vec2 mixPos = glm::vec2{-570.0f, -220.0f};
+    m_MixButton = std::make_shared<UI::Button>(
+        mixPos,
+        50.0f, 50.0f,
+        "../Resources/Image/button/Bt_12.png",
+        "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png"
+    );
+    m_MixButton->SetZIndex(10.0f);
+    m_MixButton->SetVisible(false);
+    m_MixButton->SetOnClickCallback(onMix);
+    root.AddChild(m_MixButton);
+    uiManager.Register(m_MixButton);
+
+    m_MixIcon = std::make_shared<Scene::BasicObject>();
+    m_MixIcon->SetImage("../Resources/Image/title/Title_Mix.png");
+    m_MixIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MixIcon->SetSize(35.0f, 35.0f);
+    m_MixIcon->GetGameObject()->m_Transform.translation = mixPos;
+    m_MixIcon->GetGameObject()->SetZIndex(100.0f);
+    m_MixIcon->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MixIcon->GetGameObject());
 }
 
 GameButtons::~GameButtons() {
@@ -96,11 +120,18 @@ GameButtons::~GameButtons() {
         m_Root.RemoveChild(m_ContinueButton);
         m_UIManager.Unregister(m_ContinueButton);
     }
+    if (m_MixButton) {
+        m_Root.RemoveChild(m_MixButton);
+        m_UIManager.Unregister(m_MixButton);
+    }
     if (m_PauseIcon && m_PauseIcon->GetGameObject()) {
         m_Root.RemoveChild(m_PauseIcon->GetGameObject());
     }
     if (m_ContinueIcon && m_ContinueIcon->GetGameObject()) {
         m_Root.RemoveChild(m_ContinueIcon->GetGameObject());
+    }
+    if (m_MixIcon && m_MixIcon->GetGameObject()) {
+        m_Root.RemoveChild(m_MixIcon->GetGameObject());
     }
 }
 
@@ -131,6 +162,15 @@ void GameButtons::SetContinueButtonVisible(bool visible) {
     }
     if (m_ContinueIcon) {
         m_ContinueIcon->GetGameObject()->SetVisible(visible);
+    }
+}
+
+void GameButtons::SetMixButtonVisible(bool visible) {
+    if (m_MixButton) {
+        m_MixButton->SetVisible(visible);
+    }
+    if (m_MixIcon) {
+        m_MixIcon->GetGameObject()->SetVisible(visible);
     }
 }
 

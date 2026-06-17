@@ -272,6 +272,16 @@ std::string MercenaryConditionSystem::GetRecipeIDForIngredient(const std::string
     return "";
 }
 
+std::vector<SynthesisRecipe> MercenaryConditionSystem::GetLegendaryRecipes() const {
+    std::vector<SynthesisRecipe> legendaryRecipes;
+    for (const auto& recipe : m_Recipes) {
+        if (recipe.outputTypeID.rfind("s_", 0) == 0) {
+            legendaryRecipes.push_back(recipe);
+        }
+    }
+    return legendaryRecipes;
+}
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 公開執行 API
