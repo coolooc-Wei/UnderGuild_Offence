@@ -556,6 +556,192 @@
             }
         }
     },
+    "m_007": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_07_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_07_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_07_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_07_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_07_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_07_7.png"
+                ]
+            }
+        },
+        "imagePath": [],
+        "size": {
+            "width": 38.0,
+            "height": 34.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+    "m_007_1": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_7.png"
+                ]
+            }
+        },
+        "imagePath": [],
+        "size": {
+            "width": 42.0,
+            "height": 38.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+    "m_007_2": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_7.png"
+                ]
+            }
+        },
+        "imagePath": [],
+        "size": {
+            "width": 46.0,
+            "height": 42.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
     "m_008": {
         "speed": 1.5,
         "drawableType": "Animation",
@@ -695,6 +881,189 @@
                     "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_5.png",
                     "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_6.png",
                     "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_7.png"
+                ]
+            }
+        },
+        "imagePath": [],
+        "size": {
+            "width": 46.0,
+            "height": 42.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+    "m_016": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_16.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_16_2.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_16_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_16_4.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_16_5.png"
+                ]
+            }
+        },
+        "imagePath": [],
+        "size": {
+            "width": 38.0,
+            "height": 34.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+    "m_016_1": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_161_1.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_161_2.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_161_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_161_4.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_161_5.png"
+                ]
+            }
+        },
+        "imagePath": [],
+        "size": {
+            "width": 42.0,
+            "height": 38.0
+        },
+        "hitBox": {
+            "type": "RECTANGLE",
+            "width": 64.0,
+            "height": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": false,
+        "maxHP": 1000.0,
+        "attackPower": 20.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.5,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": false,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/weapon/Weapon_031_2 #91622.png"
+            ],
+            "duration": 0.05,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 32.0,
+                "height": 32.0
+            }
+        }
+    },
+    "m_016_2": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_162_1.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_162_2.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_162_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_162_4.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_162_5.png"
                 ]
             }
         },
