@@ -472,13 +472,10 @@ std::string BondPage::GetGradeImagePath(const std::string& typeID) const {
     if (typeID.size() > 2 && typeID.compare(typeID.size() - 2, 2, "_2") == 0) {
         return "../Resources/Image/card/Grade_03.png";
     }
+    if (typeID.rfind("g_", 0) == 0) {
+        return "../Resources/Image/card/Grade_101.png";
+    }
     if (typeID.rfind("s_", 0) == 0) {
-        if (typeID == "s_023") {
-            return "../Resources/Image/card/Grade_05.png";
-        }
-        if (typeID == "s_025") {
-            return "../Resources/Image/card/Grade_101.png";
-        }
         return "../Resources/Image/card/Grade_05.png";
     }
     return "";

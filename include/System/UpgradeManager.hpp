@@ -29,7 +29,7 @@ namespace UGO::System {
      *        - 其他情況   -> Tier1 (一級)
      */
     inline MercenaryGrade GetMercenaryGradeFromID(const std::string& mercenaryID) {
-        if (mercenaryID.rfind("s_", 0) == 0) {
+        if (mercenaryID.rfind("s_", 0) == 0 || mercenaryID.rfind("g_", 0) == 0) {
             return MercenaryGrade::Legendary;
         }
         if (mercenaryID.size() >= 2 && mercenaryID.compare(mercenaryID.size() - 2, 2, "_2") == 0) {
