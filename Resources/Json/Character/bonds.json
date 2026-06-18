@@ -1,106 +1,8 @@
 [
     {
-        "bondID": "example_bond_special_combo",
-        "name": "特殊協同",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_001,s_025",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 1,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.1,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.3,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "birds",
-        "name": "鳥類",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "cover_fire",
-        "name": "掩護射擊",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
         "bondID": "vampire",
         "name": "吸血鬼",
+        "IconPath": "../Resources/Image/synergy/Synergy_11.png",
         "condition": {
             "type": "BY_TYPE_LIST",
             "target": "m_001,s_023,m_002_2,s_025",
@@ -134,9 +36,10 @@
     {
         "bondID": "vigor_potion",
         "name": "活力藥水",
+        "IconPath": "../Resources/Image/synergy/Synergy_12.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -167,9 +70,10 @@
     {
         "bondID": "necromancer",
         "name": "死靈",
+        "IconPath": "../Resources/Image/synergy/Synergy_17.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -200,9 +104,10 @@
     {
         "bondID": "rainbow_robot",
         "name": "彩虹機器人",
+        "IconPath": "../Resources/Image/synergy/Synergy_18.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -233,42 +138,10 @@
     {
         "bondID": "multi_race",
         "name": "多種族",
+        "IconPath": "../Resources/Image/synergy/Synergy_19.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "multi_shot",
-        "name": "多重射擊",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -299,9 +172,10 @@
     {
         "bondID": "mystic",
         "name": "神秘",
+        "IconPath": "../Resources/Image/synergy/Synergy_10.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -332,9 +206,10 @@
     {
         "bondID": "angel_feather",
         "name": "天使羽毛",
+        "IconPath": "../Resources/Image/synergy/Synergy_10.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -365,9 +240,10 @@
     {
         "bondID": "reinforcements",
         "name": "支援軍",
+        "IconPath": "../Resources/Image/synergy/Synergy_13.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -398,9 +274,10 @@
     {
         "bondID": "assault_force",
         "name": "突擊部隊",
+        "IconPath": "../Resources/Image/synergy/Synergy_14.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -431,9 +308,10 @@
     {
         "bondID": "clock_hands",
         "name": "時鐘指針",
+        "IconPath": "../Resources/Image/synergy/Synergy_16.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -464,9 +342,10 @@
     {
         "bondID": "valiant",
         "name": "勇猛",
+        "IconPath": "../Resources/Image/synergy/Synergy_1.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -497,9 +376,10 @@
     {
         "bondID": "willpower",
         "name": "意志",
+        "IconPath": "../Resources/Image/synergy/Synergy_2.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -530,9 +410,10 @@
     {
         "bondID": "life_link",
         "name": "生命連結",
+        "IconPath": "../Resources/Image/synergy/Synergy_3.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -563,9 +444,10 @@
     {
         "bondID": "giant_footprint",
         "name": "巨人腳印",
+        "IconPath": "../Resources/Image/synergy/Synergy_7.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -596,9 +478,10 @@
     {
         "bondID": "blessing",
         "name": "祝福",
+        "IconPath": "../Resources/Image/synergy/Synergy_8.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -627,77 +510,12 @@
         ]
     },
     {
-        "bondID": "dark_energy",
-        "name": "暗黑能量",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "tentacles",
-        "name": "觸手",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
         "bondID": "bountiful_orc_barrel",
         "name": "豐饒的獸人桶",
+        "IconPath": "../Resources/Image/synergy/Synergy_5.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -728,9 +546,10 @@
     {
         "bondID": "medic",
         "name": "醫務兵",
+        "IconPath": "../Resources/Image/synergy/Synergy_6.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001,s_023,m_002_2,s_025",
             "countOnlyAlive": true
         },
         "tiers": [

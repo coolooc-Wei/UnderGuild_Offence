@@ -84,8 +84,9 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
     m_Bonds.clear();
     for (const auto& entry : j) {
         BondConfig bond;
-        bond.bondID = entry.at("bondID").get<std::string>();
-        bond.name   = entry.value("name", "");
+        bond.bondID   = entry.at("bondID").get<std::string>();
+        bond.name     = entry.value("name", "");
+        bond.iconPath = entry.value("IconPath", "");
 
         // 條件
         const auto& condJson = entry.at("condition");

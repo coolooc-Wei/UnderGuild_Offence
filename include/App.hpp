@@ -7,6 +7,7 @@
 #include "UI/UIManager.hpp"
 #include "UI/UpgradePage.hpp"
 #include "UI/MythicSynthesisPage.hpp"
+#include "UI/BondPage.hpp"
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
@@ -140,6 +141,10 @@ private:
     // 傳說/神話合成頁面與狀態
     std::unique_ptr<UI::MythicSynthesisPage> m_MythicSynthesisPage;
     bool m_IsMixOpen = false;
+
+    // 羈絆面板與狀態
+    std::unique_ptr<UI::BondPage> m_BondPage;
+    bool m_IsBondOpen = false;
 };
 
 } // namespace UGO

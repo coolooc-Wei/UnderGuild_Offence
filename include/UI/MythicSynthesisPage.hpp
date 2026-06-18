@@ -30,6 +30,7 @@ public:
     void UpdateDisplay();
 
     void SetOnCloseCallback(std::function<void()> callback);
+    void SetOnBondCallback(std::function<void()> callback);
 
 private:
     struct RecipeRow {
@@ -82,6 +83,12 @@ private:
 
     // Close Button (using Bt_12)
     std::shared_ptr<UI::Button> m_CloseButton;
+
+    // Bonds Entry Button
+    std::shared_ptr<UI::Button> m_BondButton;
+    std::shared_ptr<Util::GameObject> m_BondButtonTextObj;
+    std::shared_ptr<Util::Text> m_BondButtonText;
+    std::function<void()> m_OnBondCallback;
 
     // Recipe rows
     std::vector<RecipeRow> m_Rows;

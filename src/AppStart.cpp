@@ -96,6 +96,30 @@ void UGO::App::Start() {
             ChangeGameState(GameState::GAMING);
         });
 
+        m_MythicSynthesisPage->SetOnBondCallback([this]() {
+            if (m_MythicSynthesisPage) {
+                m_MythicSynthesisPage->Hide();
+            }
+            m_IsBondOpen = true;
+            if (m_BondPage) {
+                m_BondPage->Show();
+            }
+        });
+
+        // 初始化羈絆頁面
+        m_BondPage = std::make_unique<UI::BondPage>(
+            m_Root, *m_UIManager, *m_MercenaryConditionSystem, *m_CharacterFactory, *m_BattleManager
+        );
+        m_BondPage->SetOnCloseCallback([this]() {
+            if (m_BondPage) {
+                m_BondPage->Hide();
+            }
+            m_IsBondOpen = false;
+            if (m_MythicSynthesisPage) {
+                m_MythicSynthesisPage->Show();
+            }
+        });
+
         // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
         m_UpgradeManager->SetOnReadyCallback([this]() {
             // 卡片已抽好：暫停遊戲並顯示 UI

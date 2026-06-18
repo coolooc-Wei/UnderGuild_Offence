@@ -47,7 +47,9 @@ void UGO::App::Update() {
     if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
       ChangeGameState(GameState::GAMING);
     }
-
+    if (m_IsBondOpen && m_BondPage) {
+      m_BondPage->Update();
+    }
   } break;
   case GameState::GAMING: {
 

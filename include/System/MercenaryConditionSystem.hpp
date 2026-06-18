@@ -61,6 +61,7 @@ namespace System {
         std::string    name;
         CountCondition condition;          ///< 計算觸發數量的條件
         std::vector<BondTier> tiers;       ///< 依 threshold 升序排列
+        std::string    iconPath;           ///< 羈絆圖示路徑
     };
 
     // ─────────────────────────────────────────────
@@ -152,8 +153,10 @@ namespace System {
          */
         void UpdateBonds();
 
-    private:
-        // ── 內部輔助：條件計算 ──
+        /**
+         * @brief 取得所有載入的羈絆配置。
+         */
+        const std::vector<BondConfig>& GetBonds() const { return m_Bonds; }
 
         /**
          * @brief 計算滿足 CountCondition 的傭兵數量。
@@ -164,6 +167,9 @@ namespace System {
          * @brief 計算滿足 CountCondition 且不重複的傭兵類別 (TypeID) 數量。
          */
         int CountUniqueMatchingTypes(const CountCondition& cond) const;
+
+    private:
+        // ── 內部輔助：條件計算 ──
 
         /**
          * @brief 取得所有滿足 CountCondition 的傭兵原始指標。

@@ -90,16 +90,18 @@ namespace UGO {
                 // if (m_Pages[GameState::PAUSE]) {
                 //     m_Pages[GameState::PAUSE]->SetVisible(false);
                 // }
-                // 手動暫停才顯示地圖（升級暫停與合成介面暫停時不顯示）
-                if (!m_IsUpgradePause && !m_IsMixOpen && m_PauseMapUI) {
+                // 手動暫停才顯示地圖（升級暫停與合成介面暫停與羈絆介面開啟時不顯示）
+                if (!m_IsUpgradePause && !m_IsMixOpen && !m_IsBondOpen && m_PauseMapUI) {
                     m_PauseMapUI->UpdateMap();
                     m_PauseMapUI->Show();
                 }
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);
-                // 如果是從升級暫停恢復，確保強化頁面已隱藏
+                // 如果是從升級暫停或羈絆頁面恢復，確保頁面已隱藏
                 if (m_UpgradePage) { m_UpgradePage->Hide(); }
+                if (m_BondPage) { m_BondPage->Hide(); }
+                m_IsBondOpen = false;
                 /* HACK: Remove these lines after testing */
                 if (m_BattleManager->GetAllHeroes().empty()) {
                     Core::WorldPosition heroPos = {-300.0f, -300.0f};
@@ -140,15 +142,15 @@ namespace UGO {
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
         if (m_GameDisplay) {
             m_GameDisplay->SetBackgroundVisible(isInGame);
-            m_GameDisplay->SetHUDVisible(isInGame && !m_IsMixOpen);
+            m_GameDisplay->SetHUDVisible(isInGame && !m_IsMixOpen && !m_IsBondOpen);
             m_GameDisplay->SetStateVisible(isInGame);
             m_GameDisplay->SetPauseVisible(state == GameState::GAMING && !m_IsMixOpen);
-            m_GameDisplay->SetContinueVisible(state == GameState::PAUSE && !m_IsUpgradePause && !m_IsMixOpen);
+            m_GameDisplay->SetContinueVisible(state == GameState::PAUSE && !m_IsUpgradePause && !m_IsMixOpen && !m_IsBondOpen);
         }
 
         // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
         if (m_ExperienceBar) {
-            if ((state == GameState::GAMING || state == GameState::PAUSE) && !m_IsMixOpen) {
+            if ((state == GameState::GAMING || state == GameState::PAUSE) && !m_IsMixOpen && !m_IsBondOpen) {
                 m_ExperienceBar->Show();
             } else {
                 m_ExperienceBar->Hide();
@@ -157,7 +159,7 @@ namespace UGO {
 
         // 血條系統：GAMING 與 PAUSE 狀態皆顯示，其他狀態隱藏
         if (m_HealthBarSystem) {
-            if ((state == GameState::GAMING || state == GameState::PAUSE) && !m_IsMixOpen) {
+            if ((state == GameState::GAMING || state == GameState::PAUSE) && !m_IsMixOpen && !m_IsBondOpen) {
                 m_HealthBarSystem->Show();
             } else {
                 m_HealthBarSystem->Hide();

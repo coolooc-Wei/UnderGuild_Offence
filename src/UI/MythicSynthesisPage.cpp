@@ -39,7 +39,7 @@ MythicSynthesisPage::MythicSynthesisPage(
 
     // 3. Close Button "X" (using Bt_12)
     m_CloseButton = std::make_shared<UI::Button>(
-        glm::vec2{0.0f, -200.0f},
+        glm::vec2{80.0f, -200.0f},
         50.0f, 50.0f,
         "../Resources/Image/button/Bt_12.png",
         "../Resources/Image/button/Bt_12_1.png",
@@ -54,6 +54,35 @@ MythicSynthesisPage::MythicSynthesisPage(
     });
     m_Root.AddChild(m_CloseButton);
     m_UIManager.Register(m_CloseButton);
+
+    // Bonds button
+    m_BondButton = std::make_shared<UI::Button>(
+        glm::vec2{-80.0f, -200.0f},
+        100.0f, 50.0f,
+        "../Resources/Image/button/Bt_12.png",
+        "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png"
+    );
+    m_BondButton->SetZIndex(71.0f);
+    m_BondButton->SetVisible(false);
+    m_BondButton->SetOnClickCallback([this]() {
+        if (m_OnBondCallback) {
+            m_OnBondCallback();
+        }
+    });
+    m_Root.AddChild(m_BondButton);
+    m_UIManager.Register(m_BondButton);
+
+    m_BondButtonText = std::make_shared<Util::Text>(
+        fontPath, 14, "bonds",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_BondButtonTextObj = std::make_shared<Util::GameObject>();
+    m_BondButtonTextObj->SetDrawable(m_BondButtonText);
+    m_BondButtonTextObj->SetZIndex(72.0f);
+    m_BondButtonTextObj->m_Transform.translation = {-98.0f, -205.0f}; // Align text slightly to offset width of "bonds"
+    m_BondButtonTextObj->SetVisible(false);
+    m_Root.AddChild(m_BondButtonTextObj);
 
     // 4. Retrieve legendary/mythic recipes and build visual rows
     auto recipes = m_ConditionSystem.GetLegendaryRecipes();
@@ -231,6 +260,13 @@ MythicSynthesisPage::~MythicSynthesisPage() {
         m_Root.RemoveChild(m_CloseButton);
         m_UIManager.Unregister(m_CloseButton);
     }
+    if (m_BondButton) {
+        m_Root.RemoveChild(m_BondButton);
+        m_UIManager.Unregister(m_BondButton);
+    }
+    if (m_BondButtonTextObj) {
+        m_Root.RemoveChild(m_BondButtonTextObj);
+    }
     for (auto& row : m_Rows) {
         if (row.outputCardBg && row.outputCardBg->GetGameObject()) {
             m_Root.RemoveChild(row.outputCardBg->GetGameObject());
@@ -285,6 +321,8 @@ void MythicSynthesisPage::Show() {
     m_Background->GetGameObject()->SetVisible(true);
     m_Title->GetGameObject()->SetVisible(true);
     m_CloseButton->SetVisible(true);
+    m_BondButton->SetVisible(true);
+    m_BondButtonTextObj->SetVisible(true);
 
     for (auto& row : m_Rows) {
         row.outputCardBg->GetGameObject()->SetVisible(true);
@@ -317,6 +355,8 @@ void MythicSynthesisPage::Hide() {
     m_Background->GetGameObject()->SetVisible(false);
     m_Title->GetGameObject()->SetVisible(false);
     m_CloseButton->SetVisible(false);
+    m_BondButton->SetVisible(false);
+    m_BondButtonTextObj->SetVisible(false);
 
     for (auto& row : m_Rows) {
         row.outputCardBg->GetGameObject()->SetVisible(false);
@@ -377,6 +417,10 @@ void MythicSynthesisPage::UpdateDisplay() {
 
 void MythicSynthesisPage::SetOnCloseCallback(std::function<void()> callback) {
     m_OnCloseCallback = std::move(callback);
+}
+
+void MythicSynthesisPage::SetOnBondCallback(std::function<void()> callback) {
+    m_OnBondCallback = std::move(callback);
 }
 
 std::string MythicSynthesisPage::GetGradeImagePath(const std::string& typeID) const {
