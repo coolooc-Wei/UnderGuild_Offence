@@ -62,6 +62,7 @@ namespace UGO::System {
     void BarrelSystem::Update(const Scene::Hero& hero) {
         // Barrel has spawned
         if (m_ActiveBarrel != nullptr) {
+            m_ActiveBarrel->Update();
             auto collisionBox = hero.GetCollisionBox();
             if (collisionBox) { m_ActiveBarrel->UpdateInteraction(*collisionBox); }
             if (m_ActiveBarrel->IsCompleted()) { OnBarrelCompleted(); }
@@ -118,7 +119,6 @@ namespace UGO::System {
         params.indicatorObject = indicator;
         m_ActiveBarrel = std::make_unique<Scene::Barrel>(std::move(params));
         m_Root.AddChild(m_ActiveBarrel->GetGameObject());
-        if (indicator) { m_Root.AddChild(indicator); }
 
         m_LevelSystem.SetWalkableOverride(targetPos, false);
     }

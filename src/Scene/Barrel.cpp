@@ -18,6 +18,7 @@ namespace UGO::Scene {
         if (m_IndicatorObject) {
             m_IndicatorObject->SetVisible(false);
             m_IndicatorObject->m_Transform.translation = params.position + m_IndicatorOffset;
+            BasicObject::GetGameObject()->AddChild(m_IndicatorObject);
         }
     }
     Barrel::~Barrel() = default;
