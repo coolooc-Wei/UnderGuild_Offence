@@ -313,8 +313,19 @@ namespace UGO::System {
         for (auto& event : attackEvents) {
             if (event.Victim->IsDead() || event.Attacker->IsDead()) continue;
 
+            bool wasAlive = !event.Victim->IsDead();
             event.Attacker->OnAttack();
             event.Victim->OnDamage(event.Damage);
+
+            if (wasAlive && event.Victim->IsDead()) {
+                float vampireMultiplier = event.Attacker->GetVampireMultiplier();
+                if (vampireMultiplier > 0.0f) {
+                    float healAmount = event.Attacker->GetMaxHP() * vampireMultiplier;
+                    event.Attacker->OnHeal(healAmount);
+                    LOG_INFO("[Vampire] Attacker (ID: {}) heals {} HP (multiplier: {}) on kill", 
+                             event.Attacker->GetInstanceID(), healAmount, vampireMultiplier);
+                }
+            }
 
             Core::Velocity attackerToVictim = event.Victim->GetWorldPosition() - event.Attacker->GetWorldPosition();
             Core::Direction attackerToVictimDirection = glm::normalize(attackerToVictim);

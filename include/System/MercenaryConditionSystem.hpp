@@ -198,7 +198,7 @@ namespace System {
         /**
          * @brief 根據 BondEffect::targetSelector 取得應套用/移除 Buff 的角色列表。
          */
-        std::vector<Scene::Character*> ResolveBondTargets(const std::string& targetSelector) const;
+        std::vector<Scene::Character*> ResolveBondTargets(const std::string& targetSelector, const BondConfig& bond) const;
 
         // ── 成員 ──
 

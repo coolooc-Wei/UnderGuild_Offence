@@ -116,6 +116,7 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
             else if (effectTypeStr == "Poison")    { tier.effect.effectData.type = Scene::StatusEffectType::Poison; }
             else if (effectTypeStr == "Burn")      { tier.effect.effectData.type = Scene::StatusEffectType::Burn; }
             else if (effectTypeStr == "Freeze")    { tier.effect.effectData.type = Scene::StatusEffectType::Freeze; }
+            else if (effectTypeStr == "Vampire")   { tier.effect.effectData.type = Scene::StatusEffectType::Vampire; }
             else {
                 LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
             }
@@ -339,8 +340,17 @@ bool MercenaryConditionSystem::ExecuteSynthesis(const std::string& recipeID) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
-    const std::string& targetSelector) const
+    const std::string& targetSelector, const BondConfig& bond) const
 {
+    if (targetSelector == "BOND_MEMBERS") {
+        std::vector<Scene::Character*> result;
+        for (Scene::Mercenary* m : m_BattleManager.GetAllMercenaries()) {
+            if (m && MatchesConditionFilter(m, bond.condition)) {
+                result.push_back(static_cast<Scene::Character*>(m));
+            }
+        }
+        return result;
+    }
     if (targetSelector == "ALL_MERCENARIES") {
         // Mercenary* 不能隱式轉換為 Character* 的 vector，需明確轉型
         std::vector<Scene::Character*> result;
@@ -358,7 +368,7 @@ std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
 
 void MercenaryConditionSystem::ActivateBondTier(const BondConfig& bond, int tierIndex) {
     const BondTier& tier = bond.tiers[tierIndex];
-    auto targets = ResolveBondTargets(tier.effect.targetSelector);
+    auto targets = ResolveBondTargets(tier.effect.targetSelector, bond);
     for (auto* character : targets) {
         if (character) {
             character->AddStatusEffect(tier.effect.effectData);

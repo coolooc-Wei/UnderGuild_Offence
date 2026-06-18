@@ -82,6 +82,16 @@ namespace UGO::Scene {
         return finalSpeed;
     }
 
+    float Character::GetVampireMultiplier() const {
+        float multiplier = 0.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetType() == StatusEffectType::Vampire) {
+                multiplier += effect->GetMultiplier();
+            }
+        }
+        return multiplier;
+    }
+
     Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
     Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
 
