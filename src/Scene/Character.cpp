@@ -112,6 +112,16 @@ namespace UGO::Scene {
         return multiplier;
     }
 
+    float Character::GetRespawnTimeReduction() const {
+        float reduction = 0.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetType() == StatusEffectType::LifeLink) {
+                reduction = std::max(reduction, effect->GetMultiplier());
+            }
+        }
+        return reduction;
+    }
+
     Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
     Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
 

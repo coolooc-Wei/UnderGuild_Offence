@@ -20,6 +20,7 @@ namespace Scene {
         AttackUp,
         Vampire,
         Blessing,
+        LifeLink,
     };
 
     struct StatusEffectData {

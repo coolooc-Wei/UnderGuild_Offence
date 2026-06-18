@@ -121,6 +121,7 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
             else if (effectTypeStr == "Freeze")    { tier.effect.effectData.type = Scene::StatusEffectType::Freeze; }
             else if (effectTypeStr == "Vampire")   { tier.effect.effectData.type = Scene::StatusEffectType::Vampire; }
             else if (effectTypeStr == "Blessing")  { tier.effect.effectData.type = Scene::StatusEffectType::Blessing; }
+            else if (effectTypeStr == "LifeLink")  { tier.effect.effectData.type = Scene::StatusEffectType::LifeLink; }
             else {
                 LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
             }

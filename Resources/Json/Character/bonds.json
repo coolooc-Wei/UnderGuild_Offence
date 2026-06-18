@@ -376,8 +376,8 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "LifeLink",
+                        "multiplier": 0.2,
                         "isPermanent": true
                     }
                 }
@@ -387,8 +387,8 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "LifeLink",
+                        "multiplier": 0.4,
                         "isPermanent": true
                     }
                 }

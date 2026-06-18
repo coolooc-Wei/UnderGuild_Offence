@@ -63,6 +63,7 @@ namespace Scene {
         Core::Velocity GetRepelMovement() const;
         uint64_t GetInstanceID() const;
         float GetVampireMultiplier() const;
+        float GetRespawnTimeReduction() const;
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
