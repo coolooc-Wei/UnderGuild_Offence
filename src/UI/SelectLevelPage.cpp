@@ -18,50 +18,91 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
     m_Overlay->SetVisible(false);
     m_Root.AddChild(m_Overlay);
 
-    // ── 標題文字 ────────────────────────────────────────────
-    m_TitleText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 36, "SELECT LEVEL",
-        Util::Color::FromName(Util::Colors::WHITE)
-    );
-    m_TitleObj = std::make_shared<Util::GameObject>();
-    m_TitleObj->SetDrawable(m_TitleText);
-    m_TitleObj->m_Transform.translation = { 0.0f, 130.0f };
-    m_TitleObj->SetZIndex(61.0f);
-    m_TitleObj->SetVisible(false);
-    m_Root.AddChild(m_TitleObj);
+    // ── 背景層疊加 (224327756.jpg) ──────────────────────────────
+    m_BackgroundOverlay = std::make_shared<Util::GameObject>();
+    auto bgOverlayImg = std::make_shared<Util::Image>("../Resources/Image/card/224327756.jpg");
+    m_BackgroundOverlay->SetDrawable(bgOverlayImg);
+    m_BackgroundOverlay->m_Transform.translation = { 0.0f, 30.0f };
+    glm::vec2 bgSize = bgOverlayImg->GetSize();
+    if (bgSize.x > 0 && bgSize.y > 0) {
+        float bgScale = 380.0f / bgSize.x;
+        m_BackgroundOverlay->m_Transform.scale = { bgScale, bgScale };
+    }
+    m_BackgroundOverlay->SetZIndex(61.0f);
+    m_BackgroundOverlay->SetVisible(false);
+    m_Root.AddChild(m_BackgroundOverlay);
 
-    // ── 取消按鈕 ────────────────────────────────────────────
-    m_CloseButton = std::make_shared<Button>(
-        glm::vec2{ -120.0f, -120.0f }, CONTROL_BTN_WIDTH, CONTROL_BTN_HEIGHT,
-        "../Resources/Image/button/Bt_02.png",
-        "../Resources/Image/button/Bt_2_1.png",
-        "../Resources/Image/button/Bt_02_1.png"
+    // ── 標題背景 (Title_main_2.png) ──────────────────────────────────
+    m_TitleBg = std::make_shared<Util::GameObject>();
+    auto titleBgImg = std::make_shared<Util::Image>("../Resources/Image/title/Title_main_2.png");
+    m_TitleBg->SetDrawable(titleBgImg);
+    m_TitleBg->m_Transform.translation = { 0.0f, 0.0f };
+    glm::vec2 titleBgSize = titleBgImg->GetSize();
+    if (titleBgSize.x > 0 && titleBgSize.y > 0) {
+        float titleBgScale = 60.0f / titleBgSize.x;
+        m_TitleBg->m_Transform.scale = { titleBgScale, titleBgScale };
+    }
+    m_TitleBg->SetZIndex(62.0f);
+    m_TitleBg->SetVisible(false);
+    m_Root.AddChild(m_TitleBg);
+
+    // ── 標題文字圖片 (Title_main.png) ────────────────────────────────
+    m_TitleWord = std::make_shared<Util::GameObject>();
+    auto titleWordImg = std::make_shared<Util::Image>("../Resources/Image/title/Title_main.png");
+    m_TitleWord->SetDrawable(titleWordImg);
+    m_TitleWord->m_Transform.translation = { 0.0f, -60.0f };
+    glm::vec2 titleWordSize = titleWordImg->GetSize();
+    if (titleWordSize.x > 0 && titleWordSize.y > 0) {
+        float titleWordScale = 120.0f / titleWordSize.x;
+        m_TitleWord->m_Transform.scale = { titleWordScale, titleWordScale };
+    }
+    m_TitleWord->SetZIndex(63.0f);
+    m_TitleWord->SetVisible(false);
+    m_Root.AddChild(m_TitleWord);
+
+    // ── 向左箭頭按鈕 (Point_2.png 指向左側) ───────────────────────────────
+    m_PrevButton = std::make_shared<Button>(
+        glm::vec2{ -100.0f, -160.0f }, ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT,
+        "../Resources/Image/button/Point_1.png",
+        "../Resources/Image/button/Point_2.png",
+        "../Resources/Image/button/Point_2.png"
     );
-    m_CloseButton->SetZIndex(61.0f);
-    m_CloseButton->SetVisible(false);
-    m_CloseButton->SetOnClickCallback([this]() {
-        if (m_OnCancelCallback) {
-            m_OnCancelCallback();
-        } else {
-            Hide();
-        }
+    m_PrevButton->SetZIndex(62.0f);
+    m_PrevButton->SetVisible(false);
+    m_PrevButton->SetOnClickCallback([this]() {
+        CycleSelectedLevel(-1);
     });
-    m_Root.AddChild(m_CloseButton);
+    m_Root.AddChild(m_PrevButton);
 
-    m_CloseText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 20, "CANCEL",
+    // ── 向右箭頭按鈕 (Point_1.png 指向右側) ───────────────────────────────
+    m_NextButton = std::make_shared<Button>(
+        glm::vec2{ 100.0f, -160.0f }, ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT,
+        "../Resources/Image/button/Point_right_1.png",
+        "../Resources/Image/button/Point_right_2.png",
+        "../Resources/Image/button/Point_right_2.png"
+    );
+    m_NextButton->SetZIndex(62.0f);
+    m_NextButton->SetVisible(false);
+    m_NextButton->SetOnClickCallback([this]() {
+        CycleSelectedLevel(1);
+    });
+    m_Root.AddChild(m_NextButton);
+
+    std::string initialText = m_LevelIDs.empty() ? "None" : m_LevelIDs[0];
+    m_LevelDetailsText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 24, initialText,
         Util::Color::FromName(Util::Colors::WHITE)
     );
-    m_CloseTextObj = std::make_shared<Util::GameObject>();
-    m_CloseTextObj->SetDrawable(m_CloseText);
-    m_CloseTextObj->m_Transform.translation = { -120.0f, -120.0f };
-    m_CloseTextObj->SetZIndex(62.0f);
-    m_CloseTextObj->SetVisible(false);
-    m_Root.AddChild(m_CloseTextObj);
+    m_LevelDetailsTextObj = std::make_shared<Util::GameObject>();
+    m_LevelDetailsTextObj->SetDrawable(m_LevelDetailsText);
+    m_LevelDetailsTextObj->m_Transform.translation = { 10.0f, -160.0f };
+    m_LevelDetailsTextObj->SetZIndex(62.0f);
+    m_LevelDetailsTextObj->SetVisible(false);
+    m_Root.AddChild(m_LevelDetailsTextObj);
 
-    // ── 開始遊戲按鈕 ────────────────────────────────────────
+    // ── 進入遊戲按鈕 ──────────────────────────────────────────
     m_EnterGameButton = std::make_shared<Button>(
-        glm::vec2{ 120.0f, -120.0f }, CONTROL_BTN_WIDTH, CONTROL_BTN_HEIGHT,
+        glm::vec2{ 0.0f, -230.0f }, ENTER_BTN_WIDTH, ENTER_BTN_HEIGHT,
         "../Resources/Image/button/Bt_02.png",
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
@@ -76,121 +117,88 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
     m_Root.AddChild(m_EnterGameButton);
 
     m_EnterText = std::make_shared<Util::Text>(
-        "../PTSD/assets/fonts/Inter.ttf", 20, "START",
+        "../PTSD/assets/fonts/Inter.ttf", 24, "ENTER",
         Util::Color::FromName(Util::Colors::WHITE)
     );
     m_EnterTextObj = std::make_shared<Util::GameObject>();
     m_EnterTextObj->SetDrawable(m_EnterText);
-    m_EnterTextObj->m_Transform.translation = { 120.0f, -120.0f };
+    m_EnterTextObj->m_Transform.translation = { 10.0f, -230.0f };
     m_EnterTextObj->SetZIndex(62.0f);
     m_EnterTextObj->SetVisible(false);
     m_Root.AddChild(m_EnterTextObj);
 
-    // ── 關卡選項按鈕生成 ────────────────────────────────────
-    int numLevels = m_LevelIDs.size();
-    if (numLevels > 0) {
-        float totalWidth = numLevels * LEVEL_BTN_WIDTH + (numLevels - 1) * LEVEL_BTN_GAP;
-        float startX = -totalWidth / 2.0f + LEVEL_BTN_WIDTH / 2.0f;
-
-        for (int i = 0; i < numLevels; ++i) {
-            float x = startX + i * (LEVEL_BTN_WIDTH + LEVEL_BTN_GAP);
-            float y = 10.0f;
-
-            auto btn = std::make_shared<Button>(
-                glm::vec2{ x, y }, LEVEL_BTN_WIDTH, LEVEL_BTN_HEIGHT,
-                "../Resources/Image/button/Bt_02.png",
-                "../Resources/Image/button/Bt_2_1.png",
-                "../Resources/Image/button/Bt_02_1.png"
-            );
-            btn->SetZIndex(61.0f);
-            btn->SetVisible(false);
-
-            std::string levelID = m_LevelIDs[i];
-            btn->SetOnClickCallback([this, levelID]() {
-                m_SelectedLevelID = levelID;
-                UpdateCheckIconPosition();
-            });
-
-            m_Root.AddChild(btn);
-            m_LevelButtons.push_back(btn);
-
-            auto txt = std::make_shared<Util::Text>(
-                "../PTSD/assets/fonts/Inter.ttf", 18, levelID,
-                Util::Color::FromName(Util::Colors::WHITE)
-            );
-            auto txtObj = std::make_shared<Util::GameObject>();
-            txtObj->SetDrawable(txt);
-            txtObj->m_Transform.translation = { x, y };
-            txtObj->SetZIndex(62.0f);
-            txtObj->SetVisible(false);
-            m_Root.AddChild(txtObj);
-
-            m_LevelTexts.push_back(txt);
-            m_LevelTextObjs.push_back(txtObj);
+    // ── 關閉按鈕 (Icon_Esc.png 菱形按鈕) ───────────────────────
+    m_CloseButton = std::make_shared<Button>(
+        glm::vec2{ 0.0f, -310.0f }, CLOSE_BTN_WIDTH, CLOSE_BTN_HEIGHT,
+        "../Resources/Image/button/Icon_Esc.png",
+        "../Resources/Image/button/Icon_Esc.png",
+        "../Resources/Image/button/Icon_Esc.png"
+    );
+    m_CloseButton->SetZIndex(61.0f);
+    m_CloseButton->SetVisible(false);
+    m_CloseButton->SetOnClickCallback([this]() {
+        if (m_OnCancelCallback) {
+            m_OnCancelCallback();
+        } else {
+            Hide();
         }
+    });
+    m_Root.AddChild(m_CloseButton);
 
+    // 初始化目前選中的關卡 ID
+    if (!m_LevelIDs.empty()) {
         m_SelectedLevelID = m_LevelIDs[0];
     }
-
-    // ── Check 圖示 ──────────────────────────────────────────
-    m_CheckIcon = std::make_shared<Util::GameObject>();
-    auto checkImg = std::make_shared<Util::Image>("../Resources/Image/button/Check.png");
-    m_CheckIcon->SetDrawable(checkImg);
-    glm::vec2 checkSize = checkImg->GetSize();
-    if (checkSize.x > 0 && checkSize.y > 0) {
-        m_CheckIcon->m_Transform.scale = { 30.0f / checkSize.x, 30.0f / checkSize.y };
-    }
-    m_CheckIcon->SetZIndex(63.0f);
-    m_CheckIcon->SetVisible(false);
-    m_Root.AddChild(m_CheckIcon);
 }
 
 void SelectLevelPage::Show() {
     m_IsVisible = true;
     m_Overlay->SetVisible(true);
-    m_TitleObj->SetVisible(true);
+    m_BackgroundOverlay->SetVisible(true);
+    m_TitleBg->SetVisible(true);
+    m_TitleWord->SetVisible(true);
+    m_LevelDetailsTextObj->SetVisible(true);
 
-    m_CloseButton->SetVisible(true);
-    m_CloseTextObj->SetVisible(true);
-    m_UIManager.Register(m_CloseButton);
+    m_PrevButton->SetVisible(true);
+    m_UIManager.Register(m_PrevButton);
+
+    m_NextButton->SetVisible(true);
+    m_UIManager.Register(m_NextButton);
 
     m_EnterGameButton->SetVisible(true);
     m_EnterTextObj->SetVisible(true);
     m_UIManager.Register(m_EnterGameButton);
 
-    for (size_t i = 0; i < m_LevelButtons.size(); ++i) {
-        m_LevelButtons[i]->SetVisible(true);
-        m_LevelTextObjs[i]->SetVisible(true);
-        m_UIManager.Register(m_LevelButtons[i]);
-    }
+    m_CloseButton->SetVisible(true);
+    m_UIManager.Register(m_CloseButton);
 
     if (m_SelectedLevelID.empty() && !m_LevelIDs.empty()) {
         m_SelectedLevelID = m_LevelIDs[0];
     }
 
-    UpdateCheckIconPosition();
+    UpdateSelectedLevelDisplay();
 }
 
 void SelectLevelPage::Hide() {
     m_IsVisible = false;
     m_Overlay->SetVisible(false);
-    m_TitleObj->SetVisible(false);
+    m_BackgroundOverlay->SetVisible(false);
+    m_TitleBg->SetVisible(false);
+    m_TitleWord->SetVisible(false);
+    m_LevelDetailsTextObj->SetVisible(false);
 
-    m_CloseButton->SetVisible(false);
-    m_CloseTextObj->SetVisible(false);
-    m_UIManager.Unregister(m_CloseButton);
+    m_PrevButton->SetVisible(false);
+    m_UIManager.Unregister(m_PrevButton);
+
+    m_NextButton->SetVisible(false);
+    m_UIManager.Unregister(m_NextButton);
 
     m_EnterGameButton->SetVisible(false);
     m_EnterTextObj->SetVisible(false);
     m_UIManager.Unregister(m_EnterGameButton);
 
-    for (size_t i = 0; i < m_LevelButtons.size(); ++i) {
-        m_LevelButtons[i]->SetVisible(false);
-        m_LevelTextObjs[i]->SetVisible(false);
-        m_UIManager.Unregister(m_LevelButtons[i]);
-    }
-
-    m_CheckIcon->SetVisible(false);
+    m_CloseButton->SetVisible(false);
+    m_UIManager.Unregister(m_CloseButton);
 }
 
 void SelectLevelPage::SetOnEnterGameCallback(std::function<void(const std::string& levelID)> callback) {
@@ -209,22 +217,35 @@ bool SelectLevelPage::IsVisible() const {
     return m_IsVisible;
 }
 
-void SelectLevelPage::UpdateCheckIconPosition() {
-    if (m_SelectedLevelID.empty() || !m_IsVisible) {
-        m_CheckIcon->SetVisible(false);
+void SelectLevelPage::CycleSelectedLevel(int offset) {
+    if (m_LevelIDs.empty()) return;
+
+    int curIdx = -1;
+    for (size_t i = 0; i < m_LevelIDs.size(); ++i) {
+        if (m_LevelIDs[i] == m_SelectedLevelID) {
+            curIdx = static_cast<int>(i);
+            break;
+        }
+    }
+
+    if (curIdx == -1) {
+        curIdx = 0;
+    } else {
+        int size = static_cast<int>(m_LevelIDs.size());
+        curIdx = (curIdx + offset + size) % size;
+    }
+
+    m_SelectedLevelID = m_LevelIDs[curIdx];
+    UpdateSelectedLevelDisplay();
+}
+
+void SelectLevelPage::UpdateSelectedLevelDisplay() {
+    if (!m_IsVisible || m_SelectedLevelID.empty()) {
         return;
     }
 
-    for (size_t i = 0; i < m_LevelIDs.size(); ++i) {
-        if (m_LevelIDs[i] == m_SelectedLevelID) {
-            auto btn = m_LevelButtons[i];
-            glm::vec2 btnPos = btn->m_Transform.translation;
-            m_CheckIcon->m_Transform.translation = btnPos + glm::vec2{ LEVEL_BTN_WIDTH / 2.0f - 10.0f, LEVEL_BTN_HEIGHT / 2.0f - 10.0f };
-            m_CheckIcon->SetVisible(true);
-            return;
-        }
-    }
-    m_CheckIcon->SetVisible(false);
+    // 更新顯示文字，直接顯示選中的關卡 ID，不帶有「關卡」字樣
+    m_LevelDetailsText->SetText(m_SelectedLevelID);
 }
 
 } // namespace UGO::UI

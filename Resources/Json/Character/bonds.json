@@ -75,7 +75,7 @@
         "bondID": "rainbow_robot",
         "name": "彩虹機器人",
         "Title": "Rainbow Robot",
-        "Description": "Whenever a minion is merged, all minions gain 50% / 150% attack speed for 10 seconds. (Does not stack.)",
+        "Description": "Whenever a mercenary is merged, all mercenaries gain 50% / 150% attack speed for 10 seconds. (Does not stack.)",
         "IconPath": "../Resources/Image/synergy/Synergy_18.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -111,7 +111,7 @@
         "bondID": "multi_race",
         "name": "多種族",
         "Title": "Multi-Race",
-        "Description": "For each different type of summoned minion present, all minions gain +15% / +35% attack power",
+        "Description": "For each different type of summoned mercenary present, all mercenaries gain +15% / +35% attack power",
         "IconPath": "../Resources/Image/synergy/Synergy_19.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -147,7 +147,7 @@
         "bondID": "mystic",
         "name": "神秘",
         "Title": "Mystic",
-        "Description": "Defeated minions have a 3% / 7% chance to appear as a Mystic Minion. Combining 3 Machines summons 1 Mechanical Minion",
+        "Description": "Defeated mercenaries have a 3% / 7% chance to appear as a Mystic Mercenary. Combining 3 Machines summons 1 Mechanical Mercenary",
         "IconPath": "../Resources/Image/synergy/Synergy_4.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -183,7 +183,7 @@
         "bondID": "angel_feather",
         "name": "天使羽毛",
         "Title": "Angel Feather",
-        "Description": "Summoned or revived minions become invincible for 4 / 8 seconds",
+        "Description": "Summoned or revived mercenaries become invincible for 4 / 8 seconds",
         "IconPath": "../Resources/Image/synergy/Synergy_9.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -219,7 +219,7 @@
         "bondID": "reinforcements",
         "name": "支援軍",
         "Title": "Reinforcements",
-        "Description": "After each wave switch, there is a 50% / 75% chance to obtain a random companion minion",
+        "Description": "After each wave switch, there is a 50% / 75% chance to obtain a random companion mercenary",
         "IconPath": "../Resources/Image/synergy/Synergy_13.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -255,7 +255,7 @@
         "bondID": "assault_force",
         "name": "突擊部隊",
         "Title": "Assault Force",
-        "Description": "Melee minion HP increases by 100% / 250%, and melee units gain 10% / 20% Critical Hit Chance",
+        "Description": "Mercenary HP increases by 100% / 250%, and gain 10% / 20% Critical Hit Chance",
         "IconPath": "../Resources/Image/synergy/Synergy_14.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -327,7 +327,7 @@
         "bondID": "valiant",
         "name": "勇猛",
         "Title": "Valiant",
-        "Description": "All minion attack power increases by 150% / 300%",
+        "Description": "All mercenary attack power increases by 150% / 300%",
         "IconPath": "../Resources/Image/synergy/Synergy_1.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -399,7 +399,7 @@
         "bondID": "life_link",
         "name": "生命連結",
         "Title": "Life Link",
-        "Description": "Minion revival time is reduced by 20% / 40%",
+        "Description": "Mercenary revival time is reduced by 20% / 40%",
         "IconPath": "../Resources/Image/synergy/Synergy_3.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -543,7 +543,7 @@
         "bondID": "medic",
         "name": "醫務兵",
         "Title": "Medic",
-        "Description": "Every 3 seconds, all allied minions around the hero recover 5% / 10% HP. If there are no allied minions nearby, the hero instead recovers 2% HP",
+        "Description": "Every 3 seconds, all allied mercenaries around the hero recover 5% / 10% HP. If there are no allied mercenaries nearby, the hero instead recovers 2% HP",
         "IconPath": "../Resources/Image/synergy/Synergy_6.png",
         "condition": {
             "type": "BY_TYPE_LIST",
