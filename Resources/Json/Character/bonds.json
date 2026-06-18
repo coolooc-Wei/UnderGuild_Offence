@@ -412,7 +412,7 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Blessing",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -423,7 +423,7 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Blessing",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }

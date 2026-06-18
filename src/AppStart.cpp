@@ -86,6 +86,7 @@ void UGO::App::Start() {
 
         // 將合成系統注入面板，面板內部會綁定按鈕點擊回調
         m_MercenaryCountPanel->SetConditionSystem(m_MercenaryConditionSystem.get());
+        m_RewardManager->SetConditionSystem(m_MercenaryConditionSystem.get());
 
         // 初始化傳說/神話級合成頁面
         m_MythicSynthesisPage = std::make_unique<UI::MythicSynthesisPage>(

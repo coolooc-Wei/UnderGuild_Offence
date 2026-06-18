@@ -154,6 +154,7 @@ namespace System {
          *        - 自動增減對應角色的 Buff（依 sourceID 精確識別）
          */
         void UpdateBonds();
+        int GetActiveBondTier(const std::string& bondID) const;
 
         /**
          * @brief 取得所有載入的羈絆配置。

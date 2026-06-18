@@ -120,6 +120,7 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
             else if (effectTypeStr == "Burn")      { tier.effect.effectData.type = Scene::StatusEffectType::Burn; }
             else if (effectTypeStr == "Freeze")    { tier.effect.effectData.type = Scene::StatusEffectType::Freeze; }
             else if (effectTypeStr == "Vampire")   { tier.effect.effectData.type = Scene::StatusEffectType::Vampire; }
+            else if (effectTypeStr == "Blessing")  { tier.effect.effectData.type = Scene::StatusEffectType::Blessing; }
             else {
                 LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
             }
@@ -428,6 +429,14 @@ void MercenaryConditionSystem::ProcessBonds() {
 
 void MercenaryConditionSystem::UpdateBonds() {
     ProcessBonds();
+}
+
+int MercenaryConditionSystem::GetActiveBondTier(const std::string& bondID) const {
+    auto it = m_ActiveBondTiers.find(bondID);
+    if (it != m_ActiveBondTiers.end()) {
+        return it->second;
+    }
+    return -1;
 }
 
 } // namespace UGO::System
