@@ -65,11 +65,11 @@ BondPage::BondPage(
 
     // 3. Close Button
     m_CloseButton = std::make_shared<UI::Button>(
-        glm::vec2{0.0f, -265.0f},
-        45.0f, 45.0f,
-        "../Resources/Image/button/Bt_12.png",
-        "../Resources/Image/button/Bt_12_1.png",
-        "../Resources/Image/button/Bt_12_2.png"
+        glm::vec2{0.0f, -300.0f},
+        65.0f, 65.0f,
+        "../Resources/Image/button/Icon_Esc.png",
+        "../Resources/Image/button/Icon_Esc.png",
+        "../Resources/Image/button/Icon_Esc.png"
     );
     m_CloseButton->SetZIndex(81.0f);
     m_CloseButton->SetVisible(false);
@@ -379,7 +379,7 @@ void BondPage::UpdateDisplay() {
             row.titleObj->SetVisible(true);
 
             // Update Description
-            std::string wrappedDesc = WrapText(bond.description, 56);
+            std::string wrappedDesc = WrapText(bond.description, 52);
             row.descText->SetText(wrappedDesc);
             float descX = -145.0f + row.descText->GetSize().x / 2.0f;
             row.descObj->m_Transform.translation = {descX, rowY + 42.0f};

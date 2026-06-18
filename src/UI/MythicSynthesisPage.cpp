@@ -1,5 +1,8 @@
 #include "UI/MythicSynthesisPage.hpp"
 #include "Util/Color.hpp"
+#include "Util/Input.hpp"
+#include <sstream>
+#include <algorithm>
 
 namespace UGO::UI {
 
@@ -17,11 +20,11 @@ MythicSynthesisPage::MythicSynthesisPage(
 {
     const std::string fontPath = "../PTSD/assets/fonts/Inter.ttf";
 
-    // 1. Background Panel (700 x 550)
+    // 1. Background Panel (400 x 520)
     m_Background = std::make_shared<Scene::BasicObject>();
     m_Background->SetImage("../Resources/Image/card/Ui_CardBg.png");
     m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_Background->SetSize(700.0f, 550.0f);
+    m_Background->SetSize(400.0f, 520.0f);
     m_Background->GetGameObject()->m_Transform.translation = {0.0f, -10.0f};
     m_Background->GetGameObject()->SetZIndex(70.0f);
     m_Background->GetGameObject()->SetVisible(false);
@@ -33,17 +36,16 @@ MythicSynthesisPage::MythicSynthesisPage(
     m_Title->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Title->SetSize(150.0f, 60.0f);
     m_Title->GetGameObject()->SetZIndex(71.0f);
-    m_Title->GetGameObject()->m_Transform.translation = {0.0f, 200.0f};
+    m_Title->GetGameObject()->m_Transform.translation = {0.0f, 270.0f};
     m_Title->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Title->GetGameObject());
 
-    // 3. Close Button "X" (using Bt_12)
     m_CloseButton = std::make_shared<UI::Button>(
-        glm::vec2{80.0f, -200.0f},
-        50.0f, 50.0f,
-        "../Resources/Image/button/Bt_12.png",
-        "../Resources/Image/button/Bt_12_1.png",
-        "../Resources/Image/button/Bt_12_2.png"
+        glm::vec2{0.0f, -260.0f},
+        65.0f, 65.0f,
+        "../Resources/Image/button/Icon_Esc.png",
+        "../Resources/Image/button/Icon_Esc.png",
+        "../Resources/Image/button/Icon_Esc.png"
     );
     m_CloseButton->SetZIndex(71.0f);
     m_CloseButton->SetVisible(false);
@@ -57,11 +59,11 @@ MythicSynthesisPage::MythicSynthesisPage(
 
     // Bonds button
     m_BondButton = std::make_shared<UI::Button>(
-        glm::vec2{-80.0f, -200.0f},
-        100.0f, 50.0f,
-        "../Resources/Image/button/Bt_12.png",
-        "../Resources/Image/button/Bt_12_1.png",
-        "../Resources/Image/button/Bt_12_2.png"
+        glm::vec2{130.0f, 260.0f},
+        100.0f, 30.0f,
+        "../Resources/Image/button/UISprite.png",
+        "../Resources/Image/button/UISprite.png",
+        "../Resources/Image/button/UISprite.png"
     );
     m_BondButton->SetZIndex(71.0f);
     m_BondButton->SetVisible(false);
@@ -75,182 +77,137 @@ MythicSynthesisPage::MythicSynthesisPage(
 
     m_BondButtonText = std::make_shared<Util::Text>(
         fontPath, 14, "bonds",
-        Util::Color::FromName(Util::Colors::WHITE)
+        Util::Color::FromName(Util::Colors::BLACK)
     );
     m_BondButtonTextObj = std::make_shared<Util::GameObject>();
     m_BondButtonTextObj->SetDrawable(m_BondButtonText);
     m_BondButtonTextObj->SetZIndex(72.0f);
-    m_BondButtonTextObj->m_Transform.translation = {-98.0f, -205.0f}; // Align text slightly to offset width of "bonds"
+    m_BondButtonTextObj->m_Transform.translation = {135.0f, 260.0f}; // Align text slightly to offset width of "bonds"
     m_BondButtonTextObj->SetVisible(false);
     m_Root.AddChild(m_BondButtonTextObj);
 
-    // 4. Retrieve legendary/mythic recipes and build visual rows
-    auto recipes = m_ConditionSystem.GetLegendaryRecipes();
-    m_Rows.clear();
-
-    for (size_t i = 0; i < recipes.size(); ++i) {
-        const auto& recipe = recipes[i];
+    // 4. Create 4 visual rows
+    float rowYs[4] = {175.0f, 75.0f, -25.0f, -125.0f};
+    for (int i = 0; i < 4; ++i) {
         RecipeRow row;
-        row.recipeID = recipe.recipeID;
+        float rowY = rowYs[i];
 
-        // Row vertical coordinate (Row 0 at Y = 80, Row 1 at Y = -60)
-        float rowY = 80.0f - static_cast<float>(i) * 140.0f;
+        // Row Background
+        row.rowBg = std::make_shared<Scene::BasicObject>();
+        row.rowBg->SetImage("../Resources/Image/card/Ui_CardListBg_2.png");
+        row.rowBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        row.rowBg->SetSize(340.0f, 86.0f);
+        row.rowBg->GetGameObject()->m_Transform.translation = {0.0f, rowY};
+        row.rowBg->GetGameObject()->SetZIndex(71.0f);
+        row.rowBg->GetGameObject()->SetVisible(false);
+        m_Root.AddChild(row.rowBg->GetGameObject());
 
-        // ── Output Card ──
-        float outX = -240.0f;
+        // Output Card Bg
         row.outputCardBg = std::make_shared<Scene::BasicObject>();
         row.outputCardBg->SetImage("../Resources/Image/card/Bt_14 #49210.png");
         row.outputCardBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        row.outputCardBg->SetSize(52.0f, 68.0f);
-        row.outputCardBg->GetGameObject()->SetZIndex(71.0f);
-        row.outputCardBg->GetGameObject()->m_Transform.translation = {outX, rowY};
+        row.outputCardBg->SetSize(42.0f, 42.0f);
+        row.outputCardBg->GetGameObject()->SetZIndex(72.0f);
+        row.outputCardBg->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
         row.outputCardBg->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.outputCardBg->GetGameObject());
 
         // Output Icon
-        auto [outIconPath, outIconSize] = m_Factory.GetMercenaryIconInfo(recipe.outputTypeID);
         row.outputIcon = std::make_shared<Scene::BasicObject>();
-        row.outputIcon->SetImage(outIconPath);
         row.outputIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        // Scale icon to fit nicely in 52x68 card
-        float outW = glm::min(outIconSize.x, 36.0f);
-        float outH = glm::min(outIconSize.y, 36.0f);
-        row.outputIcon->SetSize(outW, outH);
-        row.outputIcon->GetGameObject()->SetZIndex(72.0f);
-        row.outputIcon->GetGameObject()->m_Transform.translation = {outX, rowY + 6.0f};
+        row.outputIcon->SetSize(30.0f, 30.0f);
+        row.outputIcon->GetGameObject()->SetZIndex(73.0f);
+        row.outputIcon->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
         row.outputIcon->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.outputIcon->GetGameObject());
 
-        // Output Grade Overlay
-        std::string outGradePath = GetGradeImagePath(recipe.outputTypeID);
-        if (!outGradePath.empty()) {
-            row.outputGrade = std::make_shared<Scene::BasicObject>();
-            row.outputGrade->SetImage(outGradePath);
-            row.outputGrade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-            row.outputGrade->SetSize(52.0f, 68.0f);
-            row.outputGrade->GetGameObject()->SetZIndex(73.0f);
-            row.outputGrade->GetGameObject()->m_Transform.translation = {outX, rowY};
-            row.outputGrade->GetGameObject()->SetVisible(false);
-            m_Root.AddChild(row.outputGrade->GetGameObject());
-        }
+        // Output Grade
+        row.outputGrade = std::make_shared<Scene::BasicObject>();
+        row.outputGrade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        row.outputGrade->SetSize(42.0f, 42.0f);
+        row.outputGrade->GetGameObject()->SetZIndex(74.0f);
+        row.outputGrade->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
+        row.outputGrade->GetGameObject()->SetVisible(false);
+        m_Root.AddChild(row.outputGrade->GetGameObject());
 
-        // ── Minus Sign ──
+        // Minus Sign
         row.minusSign = std::make_shared<Scene::BasicObject>();
         row.minusSign->SetImage("../Resources/Image/title/Icon_Minus.png");
         row.minusSign->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        row.minusSign->SetSize(30.0f, 30.0f);
-        row.minusSign->GetGameObject()->SetZIndex(71.0f);
-        row.minusSign->GetGameObject()->m_Transform.translation = {outX + 50.0f, rowY};
+        row.minusSign->SetSize(24.0f, 8.0f);
+        row.minusSign->GetGameObject()->SetZIndex(72.0f);
+        row.minusSign->GetGameObject()->m_Transform.translation = {-80.0f, rowY};
         row.minusSign->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.minusSign->GetGameObject());
 
-        // ── Ingredients ──
-        float ingStartX = -110.0f;
-        float ingGapX = 90.0f;
-
-        for (size_t j = 0; j < recipe.ingredients.size(); ++j) {
-            const auto& req = recipe.ingredients[j];
+        // 3 Ingredients (pre-create)
+        for (int j = 0; j < 3; ++j) {
             RecipeRow::IngredientVisual ing;
-            ing.typeID = req.condition.target;
-            ing.requiredCount = req.condition.requiredCount;
-            ing.countOnlyAlive = req.condition.countOnlyAlive;
-
-            float ingX = ingStartX + static_cast<float>(j) * ingGapX;
-
-            // Card Background
             ing.cardBg = std::make_shared<Scene::BasicObject>();
             ing.cardBg->SetImage("../Resources/Image/card/Bt_14 #49210.png");
             ing.cardBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-            ing.cardBg->SetSize(52.0f, 68.0f);
-            ing.cardBg->GetGameObject()->SetZIndex(71.0f);
-            ing.cardBg->GetGameObject()->m_Transform.translation = {ingX, rowY};
+            ing.cardBg->SetSize(42.0f, 42.0f);
+            ing.cardBg->GetGameObject()->SetZIndex(72.0f);
             ing.cardBg->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.cardBg->GetGameObject());
 
-            // Mercenary Icon
-            auto [ingIconPath, ingIconSize] = m_Factory.GetMercenaryIconInfo(req.condition.target);
             ing.icon = std::make_shared<Scene::BasicObject>();
-            ing.icon->SetImage(ingIconPath);
             ing.icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-            float ingW = glm::min(ingIconSize.x, 36.0f);
-            float ingH = glm::min(ingIconSize.y, 36.0f);
-            ing.icon->SetSize(ingW, ingH);
-            ing.icon->GetGameObject()->SetZIndex(72.0f);
-            ing.icon->GetGameObject()->m_Transform.translation = {ingX, rowY + 6.0f};
+            ing.icon->SetSize(30.0f, 30.0f);
+            ing.icon->GetGameObject()->SetZIndex(73.0f);
             ing.icon->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.icon->GetGameObject());
 
-            // Grade Overlay
-            std::string ingGradePath = GetGradeImagePath(req.condition.target);
-            if (!ingGradePath.empty()) {
-                ing.grade = std::make_shared<Scene::BasicObject>();
-                ing.grade->SetImage(ingGradePath);
-                ing.grade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-                ing.grade->SetSize(52.0f, 68.0f);
-                ing.grade->GetGameObject()->SetZIndex(73.0f);
-                ing.grade->GetGameObject()->m_Transform.translation = {ingX, rowY};
-                ing.grade->GetGameObject()->SetVisible(false);
-                m_Root.AddChild(ing.grade->GetGameObject());
-            }
+            ing.grade = std::make_shared<Scene::BasicObject>();
+            ing.grade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+            ing.grade->SetSize(42.0f, 42.0f);
+            ing.grade->GetGameObject()->SetZIndex(74.0f);
+            ing.grade->GetGameObject()->SetVisible(false);
+            m_Root.AddChild(ing.grade->GetGameObject());
 
-            // Checkmark
             ing.checkmark = std::make_shared<Scene::BasicObject>();
             ing.checkmark->SetImage("../Resources/Image/button/Check.png");
             ing.checkmark->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-            ing.checkmark->SetSize(16.0f, 16.0f);
-            ing.checkmark->GetGameObject()->SetZIndex(74.0f);
-            ing.checkmark->GetGameObject()->m_Transform.translation = {ingX - 18.0f, rowY + 24.0f};
+            ing.checkmark->SetSize(12.0f, 12.0f);
+            ing.checkmark->GetGameObject()->SetZIndex(75.0f);
             ing.checkmark->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.checkmark->GetGameObject());
 
-            // Count Text (Placed below the card)
             ing.countText = std::make_shared<Util::Text>(
-                fontPath, 14, "(0)",
+                fontPath, 12, "(0)",
                 Util::Color::FromName(Util::Colors::WHITE)
             );
             ing.countObj = std::make_shared<Util::GameObject>();
             ing.countObj->SetDrawable(ing.countText);
-            ing.countObj->SetZIndex(74.0f);
-            ing.countObj->m_Transform.translation = {ingX, rowY - 45.0f};
+            ing.countObj->SetZIndex(75.0f);
             ing.countObj->SetVisible(false);
             m_Root.AddChild(ing.countObj);
 
             row.ingredients.push_back(ing);
-
-            // Plus Sign (between ingredients)
-            if (j < recipe.ingredients.size() - 1) {
-                auto plus = std::make_shared<Scene::BasicObject>();
-                plus->SetImage("../Resources/Image/title/Icon_Plus_1.png");
-                plus->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-                plus->SetSize(20.0f, 20.0f);
-                plus->GetGameObject()->SetZIndex(71.0f);
-                plus->GetGameObject()->m_Transform.translation = {ingX + 45.0f, rowY};
-                plus->GetGameObject()->SetVisible(false);
-                m_Root.AddChild(plus->GetGameObject());
-                row.plusSigns.push_back(plus);
-            }
         }
 
-        // ── Synthesis Button ──
-        std::string rID = recipe.recipeID;
+        // 2 Plus Signs (pre-create)
+        for (int s = 0; s < 2; ++s) {
+            auto plus = std::make_shared<Scene::BasicObject>();
+            plus->SetImage("../Resources/Image/title/Icon_Plus_1.png");
+            plus->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+            plus->SetSize(12.0f, 12.0f);
+            plus->GetGameObject()->SetZIndex(72.0f);
+            plus->GetGameObject()->SetVisible(false);
+            m_Root.AddChild(plus->GetGameObject());
+            row.plusSigns.push_back(plus);
+        }
+
+        // Synthesis Button
         row.synthesizeButton = std::make_shared<UI::Button>(
-            glm::vec2{220.0f, rowY},
-            80.0f, 40.0f,
+            glm::vec2{120.0f, rowY},
+            70.0f, 32.0f,
             "../Resources/Image/button/UISprite.png"
         );
-        row.synthesizeButton->SetZIndex(72.0f);
+        row.synthesizeButton->SetZIndex(73.0f);
         row.synthesizeButton->SetVisible(false);
-        row.synthesizeButton->SetOnClickCallback([this, rID]() {
-            if (m_ConditionSystem.ExecuteSynthesis(rID)) {
-                LOG_INFO("Synthesis success for recipe: {}", rID);
-                UpdateDisplay(); // Refresh counts and visibilities immediately
-            } else {
-                LOG_ERROR("Synthesis failed for recipe: {}", rID);
-            }
-        });
         m_Root.AddChild(row.synthesizeButton);
         m_UIManager.Register(row.synthesizeButton);
-
         m_Rows.push_back(row);
     }
 }
@@ -268,6 +225,9 @@ MythicSynthesisPage::~MythicSynthesisPage() {
         m_Root.RemoveChild(m_BondButtonTextObj);
     }
     for (auto& row : m_Rows) {
+        if (row.rowBg && row.rowBg->GetGameObject()) {
+            m_Root.RemoveChild(row.rowBg->GetGameObject());
+        }
         if (row.outputCardBg && row.outputCardBg->GetGameObject()) {
             m_Root.RemoveChild(row.outputCardBg->GetGameObject());
         }
@@ -317,35 +277,11 @@ MythicSynthesisPage::~MythicSynthesisPage() {
 
 void MythicSynthesisPage::Show() {
     m_IsVisible = true;
-    LOG_INFO("MythicSynthesisPage::Show() called. Number of recipe rows: {}", m_Rows.size());
     m_Background->GetGameObject()->SetVisible(true);
     m_Title->GetGameObject()->SetVisible(true);
     m_CloseButton->SetVisible(true);
     m_BondButton->SetVisible(true);
     m_BondButtonTextObj->SetVisible(true);
-
-    for (auto& row : m_Rows) {
-        row.outputCardBg->GetGameObject()->SetVisible(true);
-        row.outputIcon->GetGameObject()->SetVisible(true);
-        if (row.outputGrade) {
-            row.outputGrade->GetGameObject()->SetVisible(true);
-        }
-        row.minusSign->GetGameObject()->SetVisible(true);
-
-        for (auto& ing : row.ingredients) {
-            ing.cardBg->GetGameObject()->SetVisible(true);
-            ing.icon->GetGameObject()->SetVisible(true);
-            if (ing.grade) {
-                ing.grade->GetGameObject()->SetVisible(true);
-            }
-            ing.countObj->SetVisible(true);
-            // checkmark visibility is computed in UpdateDisplay
-        }
-        for (auto& plus : row.plusSigns) {
-            plus->GetGameObject()->SetVisible(true);
-        }
-        // synthesizeButton visibility is computed in UpdateDisplay
-    }
 
     UpdateDisplay();
 }
@@ -359,19 +295,16 @@ void MythicSynthesisPage::Hide() {
     m_BondButtonTextObj->SetVisible(false);
 
     for (auto& row : m_Rows) {
+        if (row.rowBg) row.rowBg->GetGameObject()->SetVisible(false);
         row.outputCardBg->GetGameObject()->SetVisible(false);
         row.outputIcon->GetGameObject()->SetVisible(false);
-        if (row.outputGrade) {
-            row.outputGrade->GetGameObject()->SetVisible(false);
-        }
+        row.outputGrade->GetGameObject()->SetVisible(false);
         row.minusSign->GetGameObject()->SetVisible(false);
 
         for (auto& ing : row.ingredients) {
             ing.cardBg->GetGameObject()->SetVisible(false);
             ing.icon->GetGameObject()->SetVisible(false);
-            if (ing.grade) {
-                ing.grade->GetGameObject()->SetVisible(false);
-            }
+            ing.grade->GetGameObject()->SetVisible(false);
             ing.checkmark->GetGameObject()->SetVisible(false);
             ing.countObj->SetVisible(false);
         }
@@ -382,36 +315,200 @@ void MythicSynthesisPage::Hide() {
     }
 }
 
+void MythicSynthesisPage::Update() {
+    if (!m_IsVisible) return;
+
+    if (Util::Input::IfScroll()) {
+        glm::vec2 scroll = Util::Input::GetScrollDistance();
+        float scrollY = scroll.y;
+
+        int totalRecipes = static_cast<int>(m_ConditionSystem.GetLegendaryRecipes().size());
+        int prevIndex = m_ScrollIndex;
+
+        if (scrollY > 0.1f) {
+            m_ScrollIndex--;
+        } else if (scrollY < -0.1f) {
+            m_ScrollIndex++;
+        }
+
+        m_ScrollIndex = std::clamp(m_ScrollIndex, 0, std::max(0, totalRecipes - 4));
+
+        if (m_ScrollIndex != prevIndex) {
+            UpdateDisplay();
+        }
+    }
+}
+
 void MythicSynthesisPage::UpdateDisplay() {
     if (!m_IsVisible) return;
-    LOG_INFO("MythicSynthesisPage::UpdateDisplay() executing.");
 
-    for (auto& row : m_Rows) {
-        // Update ingredient counts & checkmarks
-        for (auto& ing : row.ingredients) {
-            int currentCount = 0;
-            // Query battle manager for mercenary count matching this typeID
-            for (const auto* m : m_BattleManager.GetAllMercenaries()) {
-                if (!m || m->IsTrulyDead()) continue;
-                if (ing.countOnlyAlive && (m->IsRespawning() || m->IsDead())) continue;
-                if (m->GetTypeID() == ing.typeID) {
-                    currentCount++;
+    auto recipes = m_ConditionSystem.GetLegendaryRecipes();
+    int totalRecipes = static_cast<int>(recipes.size());
+
+    m_ScrollIndex = std::clamp(m_ScrollIndex, 0, std::max(0, totalRecipes - 4));
+
+    float rowYs[4] = {175.0f, 75.0f, -25.0f, -125.0f};
+
+    for (int i = 0; i < 4; ++i) {
+        int recipeIdx = m_ScrollIndex + i;
+        auto& row = m_Rows[i];
+        float rowY = rowYs[i];
+
+        if (recipeIdx < totalRecipes) {
+            const auto& recipe = recipes[recipeIdx];
+            row.recipeID = recipe.recipeID;
+
+            // Output Card Bg & Icon & Grade
+            row.outputCardBg->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
+            row.outputCardBg->GetGameObject()->SetVisible(true);
+
+            auto [outIconPath, outIconSize] = m_Factory.GetMercenaryIconInfo(recipe.outputTypeID);
+            row.outputIcon->SetImage(outIconPath);
+            row.outputIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+            row.outputIcon->SetSize(30.0f, 30.0f);
+            row.outputIcon->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
+            row.outputIcon->GetGameObject()->SetVisible(true);
+
+            std::string outGradePath = GetGradeImagePath(recipe.outputTypeID);
+            if (!outGradePath.empty()) {
+                row.outputGrade->SetImage(outGradePath);
+                row.outputGrade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+                row.outputGrade->SetSize(42.0f, 42.0f);
+                row.outputGrade->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
+                row.outputGrade->GetGameObject()->SetVisible(true);
+            } else {
+                row.outputGrade->GetGameObject()->SetVisible(false);
+            }
+
+            // Minus Sign
+            row.minusSign->GetGameObject()->m_Transform.translation = {-80.0f, rowY};
+            row.minusSign->GetGameObject()->SetVisible(true);
+
+            // Ingredients placement
+            int numIngs = static_cast<int>(recipe.ingredients.size());
+            std::vector<float> ingXs;
+            std::vector<float> plusXs;
+
+            if (numIngs == 1) {
+                ingXs = {10.0f};
+            } else if (numIngs == 2) {
+                ingXs = {-15.0f, 40.0f};
+                plusXs = {12.5f};
+            } else if (numIngs == 3) {
+                ingXs = {-40.0f, 10.0f, 60.0f};
+                plusXs = {-15.0f, 35.0f};
+            }
+
+            // Update Ingredients
+            for (int j = 0; j < 3; ++j) {
+                auto& ing = row.ingredients[j];
+                if (j < numIngs) {
+                    const auto& req = recipe.ingredients[j];
+                    ing.typeID = req.condition.target;
+                    ing.requiredCount = req.condition.requiredCount;
+                    ing.countOnlyAlive = req.condition.countOnlyAlive;
+
+                    float ingX = ingXs[j];
+
+                    // Set coordinates
+                    ing.cardBg->GetGameObject()->m_Transform.translation = {ingX, rowY};
+                    ing.cardBg->GetGameObject()->SetVisible(true);
+
+                    auto [ingIconPath, ingIconSize] = m_Factory.GetMercenaryIconInfo(req.condition.target);
+                    ing.icon->SetImage(ingIconPath);
+                    ing.icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+                    ing.icon->SetSize(30.0f, 30.0f);
+                    ing.icon->GetGameObject()->m_Transform.translation = {ingX, rowY};
+                    ing.icon->GetGameObject()->SetVisible(true);
+
+                    std::string ingGradePath = GetGradeImagePath(req.condition.target);
+                    if (!ingGradePath.empty()) {
+                        ing.grade->SetImage(ingGradePath);
+                        ing.grade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+                        ing.grade->SetSize(42.0f, 42.0f);
+                        ing.grade->GetGameObject()->m_Transform.translation = {ingX, rowY};
+                        ing.grade->GetGameObject()->SetVisible(true);
+                    } else {
+                        ing.grade->GetGameObject()->SetVisible(false);
+                    }
+
+                    // Check Possession count
+                    int currentCount = 0;
+                    for (const auto* m : m_BattleManager.GetAllMercenaries()) {
+                        if (!m || m->IsTrulyDead()) continue;
+                        if (ing.countOnlyAlive && (m->IsRespawning() || m->IsDead())) continue;
+                        if (m->GetTypeID() == ing.typeID) {
+                            currentCount++;
+                        }
+                    }
+
+                    ing.countText->SetText("(" + std::to_string(currentCount) + ")");
+                    ing.countObj->m_Transform.translation = {ingX, rowY - 29.0f};
+                    ing.countObj->SetVisible(true);
+
+                    // Checkmark
+                    bool satisfied = (currentCount >= ing.requiredCount);
+                    ing.checkmark->GetGameObject()->m_Transform.translation = {ingX - 14.0f, rowY + 16.0f};
+                    ing.checkmark->GetGameObject()->SetVisible(satisfied);
+                } else {
+                    ing.cardBg->GetGameObject()->SetVisible(false);
+                    ing.icon->GetGameObject()->SetVisible(false);
+                    ing.grade->GetGameObject()->SetVisible(false);
+                    ing.checkmark->GetGameObject()->SetVisible(false);
+                    ing.countObj->SetVisible(false);
                 }
             }
 
-            // Set text
-            ing.countText->SetText("(" + std::to_string(currentCount) + ")");
-            // Set checkmark visibility
-            bool satisfied = (currentCount >= ing.requiredCount);
-            ing.checkmark->GetGameObject()->SetVisible(satisfied);
-            LOG_INFO("Ingredient: {}, required: {}, current: {}, satisfied: {}", ing.typeID, ing.requiredCount, currentCount, satisfied);
-        }
+            // Update Plus Signs
+            int numPluses = numIngs - 1;
+            for (int s = 0; s < 2; ++s) {
+                auto& plus = row.plusSigns[s];
+                if (s < numPluses) {
+                    plus->GetGameObject()->m_Transform.translation = {plusXs[s], rowY};
+                    plus->GetGameObject()->SetVisible(true);
+                } else {
+                    plus->GetGameObject()->SetVisible(false);
+                }
+            }
 
-        // Set synthesize button visibility based on whether the recipe is satisfiable
-        bool canSynthesize = m_ConditionSystem.CanSynthesize(row.recipeID);
-        row.synthesizeButton->SetVisible(canSynthesize);
-        row.synthesizeButton->SetEnabled(canSynthesize);
-        LOG_INFO("Recipe: {}, canSynthesize: {}", row.recipeID, canSynthesize);
+            // Synthesize Button
+            row.synthesizeButton->m_Transform.translation = {120.0f, rowY};
+            std::string rID = recipe.recipeID;
+            row.synthesizeButton->SetOnClickCallback([this, rID]() {
+                if (m_ConditionSystem.ExecuteSynthesis(rID)) {
+                    LOG_INFO("Synthesis success for recipe: {}", rID);
+                    UpdateDisplay(); // Refresh counts and visibilities immediately
+                } else {
+                    LOG_ERROR("Synthesis failed for recipe: {}", rID);
+                }
+            });
+
+            bool canSynthesize = m_ConditionSystem.CanSynthesize(rID);
+            row.synthesizeButton->SetVisible(canSynthesize);
+            row.synthesizeButton->SetEnabled(canSynthesize);
+
+            // Row Bg
+            row.rowBg->GetGameObject()->SetVisible(true);
+        } else {
+            // Hide everything in this visual row
+            row.rowBg->GetGameObject()->SetVisible(false);
+            row.outputCardBg->GetGameObject()->SetVisible(false);
+            row.outputIcon->GetGameObject()->SetVisible(false);
+            row.outputGrade->GetGameObject()->SetVisible(false);
+            row.minusSign->GetGameObject()->SetVisible(false);
+
+            for (auto& ing : row.ingredients) {
+                ing.cardBg->GetGameObject()->SetVisible(false);
+                ing.icon->GetGameObject()->SetVisible(false);
+                ing.grade->GetGameObject()->SetVisible(false);
+                ing.checkmark->GetGameObject()->SetVisible(false);
+                ing.countObj->SetVisible(false);
+            }
+            for (auto& plus : row.plusSigns) {
+                plus->GetGameObject()->SetVisible(false);
+            }
+            row.synthesizeButton->SetVisible(false);
+        }
     }
 }
 

@@ -27,16 +27,19 @@ public:
 
     void Show();
     void Hide();
+    void Update();
     void UpdateDisplay();
 
     void SetOnCloseCallback(std::function<void()> callback);
     void SetOnBondCallback(std::function<void()> callback);
 
 private:
+    int m_ScrollIndex = 0;
     struct RecipeRow {
         std::string recipeID;
         
         // Output card
+        std::shared_ptr<Scene::BasicObject> rowBg;
         std::shared_ptr<Scene::BasicObject> outputCardBg;
         std::shared_ptr<Scene::BasicObject> outputIcon;
         std::shared_ptr<Scene::BasicObject> outputGrade;

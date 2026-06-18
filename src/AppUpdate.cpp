@@ -50,6 +50,9 @@ void UGO::App::Update() {
     if (m_IsBondOpen && m_BondPage) {
       m_BondPage->Update();
     }
+    if (m_IsMixOpen && m_MythicSynthesisPage) {
+      m_MythicSynthesisPage->Update();
+    }
   } break;
   case GameState::GAMING: {
 
