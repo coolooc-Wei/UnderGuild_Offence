@@ -263,8 +263,8 @@ bool MercenaryConditionSystem::CanSynthesize(const std::string& recipeID) const 
 
 std::string MercenaryConditionSystem::GetRecipeIDForIngredient(const std::string& typeID) const {
     for (const auto& recipe : m_Recipes) {
-        // 傳說級/神話級（outputTypeID 以 "s_" 開頭）留給專屬 UI 處理，此處略過
-        if (recipe.outputTypeID.rfind("s_", 0) == 0) { continue; }
+        // 傳說級/神話級（outputTypeID 以 "s_" 或 "g_" 開頭）留給專屬 UI 處理，此處略過
+        if (recipe.outputTypeID.rfind("s_", 0) == 0 || recipe.outputTypeID.rfind("g_", 0) == 0) { continue; }
         // 比對第一個原料：類型必須為精確比對且目標符合 typeID
         if (!recipe.ingredients.empty()) {
             const auto& cond = recipe.ingredients[0].condition;
@@ -279,7 +279,7 @@ std::string MercenaryConditionSystem::GetRecipeIDForIngredient(const std::string
 std::vector<SynthesisRecipe> MercenaryConditionSystem::GetLegendaryRecipes() const {
     std::vector<SynthesisRecipe> legendaryRecipes;
     for (const auto& recipe : m_Recipes) {
-        if (recipe.outputTypeID.rfind("s_", 0) == 0) {
+        if (recipe.outputTypeID.rfind("s_", 0) == 0 || recipe.outputTypeID.rfind("g_", 0) == 0) {
             legendaryRecipes.push_back(recipe);
         }
     }

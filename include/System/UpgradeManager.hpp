@@ -14,6 +14,33 @@ namespace UGO::System {
 
 namespace UGO::System {
 
+    enum class MercenaryGrade {
+        Tier1,
+        Tier2,
+        Tier3,
+        Legendary
+    };
+
+    /**
+     * @brief 根據傭兵 ID 判定其等級。
+     *        - 前綴為 "s_" -> Legendary (傳說級)
+     *        - 尾綴為 "_2" -> Tier3 (三級)
+     *        - 尾綴為 "_1" -> Tier2 (二級)
+     *        - 其他情況   -> Tier1 (一級)
+     */
+    inline MercenaryGrade GetMercenaryGradeFromID(const std::string& mercenaryID) {
+        if (mercenaryID.rfind("s_", 0) == 0 || mercenaryID.rfind("g_", 0) == 0) {
+            return MercenaryGrade::Legendary;
+        }
+        if (mercenaryID.size() >= 2 && mercenaryID.compare(mercenaryID.size() - 2, 2, "_2") == 0) {
+            return MercenaryGrade::Tier3;
+        }
+        if (mercenaryID.size() >= 2 && mercenaryID.compare(mercenaryID.size() - 2, 2, "_1") == 0) {
+            return MercenaryGrade::Tier2;
+        }
+        return MercenaryGrade::Tier1;
+    }
+
 /**
  * @class UpgradeManager
  * @brief 局內抽卡邏輯核心，負責卡池管理、隨機抽取、效果派發。
@@ -71,6 +98,8 @@ private:
     void DrawCards();
 
     Scene::StatusEffectData ParseStatusEffectData(const nlohmann::json& params) const;
+
+    int GetCardWeight(const UpgradeCardData& card) const;
 
     ExpSystem&        m_ExpSystem;
     BattleManager&    m_BattleManager;

@@ -42,15 +42,17 @@ public:
     bool IsVisible() const;
 
 private:
-    static constexpr float OVERLAY_WIDTH     = 700.0f;
-    static constexpr float OVERLAY_HEIGHT    = 450.0f;
+    static constexpr float OVERLAY_WIDTH     = 450.0f;
+    static constexpr float OVERLAY_HEIGHT    = 650.0f;
 
-    static constexpr float LEVEL_BTN_WIDTH   = 160.0f;
-    static constexpr float LEVEL_BTN_HEIGHT  = 60.0f;
-    static constexpr float LEVEL_BTN_GAP     = 20.0f;
+    static constexpr float ARROW_BTN_WIDTH   = 40.0f;
+    static constexpr float ARROW_BTN_HEIGHT  = 40.0f;
 
-    static constexpr float CONTROL_BTN_WIDTH  = 180.0f;
-    static constexpr float CONTROL_BTN_HEIGHT = 60.0f;
+    static constexpr float ENTER_BTN_WIDTH   = 180.0f;
+    static constexpr float ENTER_BTN_HEIGHT  = 60.0f;
+
+    static constexpr float CLOSE_BTN_WIDTH   = 60.0f;
+    static constexpr float CLOSE_BTN_HEIGHT  = 60.0f;
 
     Util::Renderer& m_Root;
     UIManager& m_UIManager;
@@ -60,31 +62,33 @@ private:
 
     // UI 元件
     std::shared_ptr<Util::GameObject> m_Overlay;
-    std::shared_ptr<Util::GameObject> m_TitleObj;
-    std::shared_ptr<Util::Text> m_TitleText;
+    std::shared_ptr<Util::GameObject> m_BackgroundOverlay;
 
-    std::vector<std::shared_ptr<Button>> m_LevelButtons;
-    std::vector<std::shared_ptr<Util::GameObject>> m_LevelTextObjs;
-    std::vector<std::shared_ptr<Util::Text>> m_LevelTexts;
+    std::shared_ptr<Util::GameObject> m_TitleBg;
+    std::shared_ptr<Util::GameObject> m_TitleWord;
+
+    std::shared_ptr<Button> m_PrevButton;
+    std::shared_ptr<Button> m_NextButton;
+
+    std::shared_ptr<Util::GameObject> m_LevelDetailsTextObj;
+    std::shared_ptr<Util::Text> m_LevelDetailsText;
 
     std::shared_ptr<Button> m_EnterGameButton;
     std::shared_ptr<Util::GameObject> m_EnterTextObj;
     std::shared_ptr<Util::Text> m_EnterText;
 
     std::shared_ptr<Button> m_CloseButton;
-    std::shared_ptr<Util::GameObject> m_CloseTextObj;
-    std::shared_ptr<Util::Text> m_CloseText;
-
-    // 選中狀態的 Check 標記
-    std::shared_ptr<Util::GameObject> m_CheckIcon;
 
     std::function<void(const std::string&)> m_OnEnterGameCallback;
     std::function<void()> m_OnCancelCallback;
 
     bool m_IsVisible = false;
 
-    /** @brief 根據選中的關卡 ID 更新 Check 標記的位置與顯示 */
-    void UpdateCheckIconPosition();
+    /** @brief 根據左右方向切換當前選中的關卡，並更新顯示 */
+    void CycleSelectedLevel(int offset);
+
+    /** @brief 根據選中的關卡 ID 更新關卡細節文字顯示 */
+    void UpdateSelectedLevelDisplay();
 };
 
 } // namespace UGO::UI

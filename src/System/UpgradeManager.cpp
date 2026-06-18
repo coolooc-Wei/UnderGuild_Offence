@@ -154,18 +154,26 @@ namespace UGO::System {
         } else {
             // 過濾掉當前同 ID 的卡牌，從剩餘卡牌中隨機選取
             std::vector<const UpgradeCardData*> candidates;
+            std::vector<int> weights;
             candidates.reserve(m_CardPool.size());
+            weights.reserve(m_CardPool.size());
             for (const auto& c : m_CardPool) {
                 if (c.id != currentId) {
                     candidates.push_back(&c);
+                    weights.push_back(GetCardWeight(c));
                 }
             }
-            // 若過濾後仍有候選，從中隨機選取；否則直接全池隨機（理論上不會發生）
+            // 若過濾後仍有候選，從中加權隨機選取；否則全池加權隨機
             if (!candidates.empty()) {
-                std::uniform_int_distribution<size_t> dist(0, candidates.size() - 1);
+                std::discrete_distribution<size_t> dist(weights.begin(), weights.end());
                 m_CurrentCards[slotIndex] = *candidates[dist(rng)];
             } else {
-                std::uniform_int_distribution<size_t> dist(0, m_CardPool.size() - 1);
+                std::vector<int> allWeights;
+                allWeights.reserve(m_CardPool.size());
+                for (const auto& c : m_CardPool) {
+                    allWeights.push_back(GetCardWeight(c));
+                }
+                std::discrete_distribution<size_t> dist(allWeights.begin(), allWeights.end());
                 m_CurrentCards[slotIndex] = m_CardPool[dist(rng)];
             }
         }
@@ -181,7 +189,13 @@ namespace UGO::System {
         }
 
         std::mt19937 rng(std::random_device{}());
-        std::uniform_int_distribution<size_t> dist(0, m_CardPool.size() - 1);
+        std::vector<int> weights;
+        weights.reserve(m_CardPool.size());
+        for (const auto& card : m_CardPool) {
+            weights.push_back(GetCardWeight(card));
+        }
+
+        std::discrete_distribution<size_t> dist(weights.begin(), weights.end());
         for (auto& slot : m_CurrentCards) {
             slot = m_CardPool[dist(rng)];
         }
@@ -189,6 +203,26 @@ namespace UGO::System {
                  m_CurrentCards[0].id, m_CurrentCards[0].title,
                  m_CurrentCards[1].id, m_CurrentCards[1].title,
                  m_CurrentCards[2].id, m_CurrentCards[2].title);
+    }
+
+    int UpgradeManager::GetCardWeight(const UpgradeCardData& card) const {
+        if (card.actionType != "SummonMercenary") {
+            return 30; // 非傭兵召喚卡牌機率同二級傭兵
+        }
+
+        std::string entityId = card.effectParams.value("entity_id", "");
+        MercenaryGrade grade = GetMercenaryGradeFromID(entityId);
+        switch (grade) {
+            case MercenaryGrade::Tier1:
+                return 60; // 一級最高
+            case MercenaryGrade::Tier2:
+                return 23; // 二級次之
+            case MercenaryGrade::Tier3:
+                return 12; // 三級再次之
+            case MercenaryGrade::Legendary:
+                return 5;  // 傳說級最低
+        }
+        return 30; // 預防萬一的 fallback
     }
 
     Scene::StatusEffectData UpgradeManager::ParseStatusEffectData(const nlohmann::json& params) const {
