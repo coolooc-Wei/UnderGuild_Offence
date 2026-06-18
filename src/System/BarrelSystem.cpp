@@ -105,18 +105,8 @@ namespace UGO::System {
         Scene::Barrel::BarrelParams params;
         params.originGridPos = targetPos;
         params.position = Core::GridToWorld(targetPos);
+        params.renderer = &m_Root;
 
-        std::shared_ptr<Util::GameObject> indicator = nullptr;
-        if (m_IndicatorImagePath.empty()) { LOG_WARN("BarrelSystem: m_IndicatorImagePath is empty."); }
-        else {
-            std::ifstream infile(m_IndicatorImagePath);
-            if (!infile.good()) { LOG_ERROR("BarrelSystem: Indicator image file not found at '{}'", m_IndicatorImagePath); }
-            else {
-                indicator = std::make_shared<Util::GameObject>();
-                indicator->SetDrawable(std::make_shared<Util::Image>(m_IndicatorImagePath));
-            }
-        }
-        params.indicatorObject = indicator;
         m_ActiveBarrel = std::make_unique<Scene::Barrel>(std::move(params));
         m_Root.AddChild(m_ActiveBarrel->GetGameObject());
 

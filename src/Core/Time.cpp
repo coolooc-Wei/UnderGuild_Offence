@@ -33,4 +33,12 @@ namespace UGO::Core::Time {
 
     bool CountDownTimer::IsTimeUp() const { return GetCurrentTick() >= endTick; }
 
+    float CountDownTimer::GetNormalizedProgress() const {
+        if (duration <= 0.0f || endTick == 0) { return 0.0f; }
+        const Tick current = GetCurrentTick();
+        if (current >= endTick) { return 1.0f; }
+        const float remaining = static_cast<float>(endTick - current);
+        return 1.0f - (remaining / static_cast<float>(duration));
+    }
+
 }

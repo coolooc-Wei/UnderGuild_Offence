@@ -6,6 +6,7 @@
 #include "Scene/BasicObject.hpp"
 #include "Core/Time.hpp"
 #include "Core/Box.hpp"
+#include "UI/HealthBar.hpp"
 
 namespace UGO {
 namespace Scene {
@@ -22,7 +23,7 @@ namespace Scene {
             Core::WorldPosition position;
             Core::Time::Second interactionDuration = 1.0f;
             Core::Distance interactionRadius = 1.5f * static_cast<Core::Distance>(Core::TILE_SIZE);
-            std::shared_ptr<Util::GameObject> indicatorObject = nullptr;
+            Util::Renderer* renderer = nullptr;
             Core::GridPosition originGridPos;
         };
 
@@ -39,13 +40,13 @@ namespace Scene {
         const Core::GridPosition& GetOriginalGridPos() const;
 
     private:
-        const glm::vec2 m_IndicatorOffset = glm::vec2{0.0f, static_cast<Core::Distance>(Core::TILE_SIZE)};;
+        static constexpr float PROGRESS_BAR_WIDTH = static_cast<float>(Core::TILE_SIZE);
 
         BarrelState m_State = BarrelState::Idle;
         Core::Time::Second m_InteractionDuration;
         Core::Time::CountDownTimer m_InteractTimer;
         std::unique_ptr<Core::Box> m_InteractBox = nullptr;
-        std::shared_ptr<Util::GameObject> m_IndicatorObject = nullptr;
+        std::unique_ptr<UI::HealthBar> m_ProgressBar = nullptr;
         Core::GridPosition m_OriginGridPos;
     };
 

@@ -28,6 +28,7 @@ namespace Time {
         void Start(Second durationInSecond);
         void SetSilence(bool silence);
         bool IsTimeUp() const;
+        float GetNormalizedProgress() const;
     // private:
         TimeStep duration;
         Tick endTick;

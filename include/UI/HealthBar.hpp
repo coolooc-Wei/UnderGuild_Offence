@@ -19,7 +19,11 @@ namespace UGO::UI {
  */
 class HealthBar {
 public:
-    enum class OwnerType { Ally, Enemy };
+    enum class OwnerType {
+        Ally,
+        Enemy,
+        Barrel
+    };
 
     /**
      * @param root      場景根節點
@@ -62,6 +66,7 @@ private:
     static const std::string ALLIE_IMAGE_PATH;
     static const std::string ENEMY_IMAGE_PATH;
     static const std::string BG_IMAGE_PATH;
+    static const std::string BARREL_IMAGE_PATH;
 
     std::shared_ptr<Scene::BasicObject> m_Background;
     std::shared_ptr<Scene::BasicObject> m_Fill;
