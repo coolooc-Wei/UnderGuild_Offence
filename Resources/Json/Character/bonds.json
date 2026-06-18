@@ -7,7 +7,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_11.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_016_2,s_007,s_023,s_032",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -43,7 +43,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_12.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_004_2,s_011,s_025,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -79,7 +79,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_18.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_002_2,s_003,s_018,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -115,7 +115,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_19.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_001_2,m_008_2,s_018,s_023,s_032",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -151,7 +151,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_4.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_016_2,s_018,s_023,s_032",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -187,7 +187,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_9.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_007_2,s_003,s_025,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -223,7 +223,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_13.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_001_2,s_003,s_012,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -259,7 +259,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_14.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_007_2,m_008_2,s_011,s_012,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -295,7 +295,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_16.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_004_2,s_022,s_032,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -331,7 +331,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_1.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_001_2,s_018,s_023,g_013,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -367,7 +367,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_2.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_002_2,s_011,s_012,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -403,7 +403,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_3.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_004_2,s_007,s_025,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -439,7 +439,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_7.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_007_2,s_023,s_025,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -475,7 +475,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_8.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_001_2,s_023,s_032,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -511,7 +511,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_5.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_008_2,s_011,s_025,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -547,7 +547,7 @@
         "IconPath": "../Resources/Image/synergy/Synergy_6.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
+            "target": "m_004_2,s_003,s_012,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
