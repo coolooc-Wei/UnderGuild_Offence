@@ -10,6 +10,7 @@
 #include "System/GameRuleSystem.hpp"
 #include "System/MapSystem.hpp"
 #include "System/LevelSystem.hpp"
+#include "System/BarrelSystem.hpp"
 
 #include "System/RewardManager.hpp"
 #include "System/UpgradeManager.hpp"
@@ -38,13 +39,15 @@ void UGO::App::Start() {
     m_EnemiesSpawnerSystem = std::make_unique<System::EnemiesSpawnerSystem>(*m_BattleManager, *m_EffectAnimationManager);
     m_MapSystem   = std::make_unique<System::MapSystem>(m_Root);
     m_LevelSystem = std::make_unique<System::LevelSystem>(*m_MapSystem, m_Root);
-    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem, *m_DropSystem);
+    m_BarrelSystem = std::make_unique<System::BarrelSystem>(m_Root, *m_DropSystem, *m_LevelSystem);
+    m_GameRuleSystem = std::make_unique<System::GameRuleSystem>(*m_LevelSystem, *m_BattleManager, *m_EnemiesSpawnerSystem, *m_DropSystem, *m_BarrelSystem);
 
     // Set Callback functions
     m_CharacterFactory->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
     m_LevelSystem->SetIsBossAliveCallBack([this](){ return this->m_BattleManager->IsBossAlive(); });
     m_EnemiesSpawnerSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
     m_EnemiesSpawnerSystem->SetGetEnemySizeCallback([this](const std::string& id){ return this->m_CharacterFactory->GetEnemySize(id); });
+    m_BarrelSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

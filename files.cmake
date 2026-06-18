@@ -30,6 +30,7 @@ set(SYSTEM_SRC
     System/MapSystem.cpp
     System/LevelSystem.cpp
     System/MercenaryConditionSystem.cpp
+    System/BarrelSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -45,6 +46,7 @@ set(SYSTEM_INC
     System/MapSystem.hpp
     System/LevelSystem.hpp
     System/MercenaryConditionSystem.hpp
+    System/BarrelSystem.hpp
 )
 
 # --- UI ---
@@ -125,6 +127,8 @@ set(SCENE_SRC
     Scene/Icon.cpp
     Scene/DamageTextAnimation.cpp
     Scene/AnimationLite.cpp
+    Scene/Barrel.cpp
+    Scene/HealPack.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -144,6 +148,8 @@ set(SCENE_INC
     Scene/Icon.hpp
     Scene/DamageTextAnimation.hpp
     Scene/AnimationLite.hpp
+    Scene/Barrel.hpp
+    Scene/HealPack.hpp
 )
 
 # --- Combine All ---

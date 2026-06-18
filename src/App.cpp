@@ -10,6 +10,7 @@
 #include "System/ExpSystem.hpp"
 #include "System/MapSystem.hpp"
 #include "System/LevelSystem.hpp"
+#include "System/BarrelSystem.hpp"
 #include "Scene/Drop.hpp"
 #include "System/UpgradeManager.hpp"
 #include "UI/GameDisplay.hpp"

@@ -26,6 +26,7 @@ namespace UGO::System {
     class MapSystem;
     class LevelSystem;
     class MercenaryConditionSystem;
+    class BarrelSystem;
 }
 
 namespace UGO::UI {
@@ -94,19 +95,20 @@ private:
 
 
     // Register Systems
-    std::unique_ptr<System::SteeringSystem>          m_SteeringSystem;
-    std::unique_ptr<System::EffectAnimationManager>  m_EffectAnimationManager;
-    std::unique_ptr<System::CharacterFactory>        m_CharacterFactory;
-    std::unique_ptr<System::ExpSystem>               m_ExpSystem;
-    std::unique_ptr<System::DropSystem>              m_DropSystem;
-    std::unique_ptr<System::RewardManager>           m_RewardManager;
-    std::unique_ptr<System::BattleManager>           m_BattleManager;
-    std::unique_ptr<System::EnemiesSpawnerSystem>    m_EnemiesSpawnerSystem;
-    std::unique_ptr<System::GameRuleSystem>          m_GameRuleSystem;
-    std::unique_ptr<System::UpgradeManager>          m_UpgradeManager;
-    std::unique_ptr<System::MapSystem>               m_MapSystem;
-    std::unique_ptr<System::LevelSystem>             m_LevelSystem;
+    std::unique_ptr<System::SteeringSystem>           m_SteeringSystem;
+    std::unique_ptr<System::EffectAnimationManager>   m_EffectAnimationManager;
+    std::unique_ptr<System::CharacterFactory>         m_CharacterFactory;
+    std::unique_ptr<System::ExpSystem>                m_ExpSystem;
+    std::unique_ptr<System::DropSystem>               m_DropSystem;
+    std::unique_ptr<System::RewardManager>            m_RewardManager;
+    std::unique_ptr<System::BattleManager>            m_BattleManager;
+    std::unique_ptr<System::EnemiesSpawnerSystem>     m_EnemiesSpawnerSystem;
+    std::unique_ptr<System::GameRuleSystem>           m_GameRuleSystem;
+    std::unique_ptr<System::UpgradeManager>           m_UpgradeManager;
+    std::unique_ptr<System::MapSystem>                m_MapSystem;
+    std::unique_ptr<System::LevelSystem>              m_LevelSystem;
     std::unique_ptr<System::MercenaryConditionSystem> m_MercenaryConditionSystem;
+    std::unique_ptr<System::BarrelSystem>             m_BarrelSystem;
 
 
 
