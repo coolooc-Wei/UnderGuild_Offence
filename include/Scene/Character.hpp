@@ -66,6 +66,7 @@ namespace Scene {
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
+        AnimationState GetAnimationState() const;
         // Setters
         void SetIntendedMovement(const Core::Velocity& intendedMovement);
         void AddRepelMovement(const Core::Velocity& repelMovement);

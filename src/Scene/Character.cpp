@@ -284,6 +284,7 @@ namespace UGO::Scene {
 
     Character::EffectAnimationData Character::GetAttackAnimationData() const { return m_AttackAnimationData; }
     Character::EffectAnimationData Character::GetDamageAnimationData() const { return m_DamageAnimationData; }
+    AnimationState Character::GetAnimationState() const { return m_AnimationState; }
 
     void Character::SetAttackAnimationData(const EffectAnimationData& data) { m_AttackAnimationData = data; }
     void Character::SetDamageAnimationData(const EffectAnimationData& data) { m_DamageAnimationData = data; }

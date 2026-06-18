@@ -155,14 +155,6 @@ void UGO::App::Update() {
 
     // When Game over (Win or Lose)
     if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
-        if (gameResult == System::GameRuleSystem::GameResult::WIN) {
-            // Collect all remaining drops at level end
-            auto heroes = m_BattleManager->GetAllHeroes();
-            if (!heroes.empty()) {
-                m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
-            }
-        }
-
         m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }

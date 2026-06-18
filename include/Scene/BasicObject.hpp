@@ -47,6 +47,7 @@ namespace Scene {
         std::shared_ptr<Util::GameObject> GetGameObject() const;
         std::shared_ptr<AnimationLite> GetAnimation() const;
         glm::vec2 GetSize() const;
+        glm::vec2 GetScale() const;
 
         Core::Box* GetHitBox() const;
         Core::Box* GetHurtBox() const;
