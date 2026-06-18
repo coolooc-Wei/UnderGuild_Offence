@@ -107,7 +107,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
     );
-    m_EnterGameButton->SetZIndex(61.0f);
+    m_EnterGameButton->SetZIndex(62.0f);
     m_EnterGameButton->SetVisible(false);
     m_EnterGameButton->SetOnClickCallback([this]() {
         if (m_OnEnterGameCallback && !m_SelectedLevelID.empty()) {
@@ -123,7 +123,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
     m_EnterTextObj = std::make_shared<Util::GameObject>();
     m_EnterTextObj->SetDrawable(m_EnterText);
     m_EnterTextObj->m_Transform.translation = { 10.0f, -230.0f };
-    m_EnterTextObj->SetZIndex(62.0f);
+    m_EnterTextObj->SetZIndex(63.0f);
     m_EnterTextObj->SetVisible(false);
     m_Root.AddChild(m_EnterTextObj);
 

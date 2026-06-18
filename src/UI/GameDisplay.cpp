@@ -304,6 +304,33 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe9->GetGameObject()->SetZIndex(45.0f);
     m_Pipe9->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe9->GetGameObject());
+
+    m_MenuHero = std::make_shared<Scene::BasicObject>();
+    m_MenuHero->SetImage("../Resources/Image/hasugu/Lobby_Hero_101.png");
+    m_MenuHero->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuHero->SetSize(50.0f, 50.0f);
+    m_MenuHero->GetGameObject()->m_Transform.translation = {-30.0f, 40.0f};
+    m_MenuHero->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHero->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuHero->GetGameObject());
+
+    m_MenuSub = std::make_shared<Scene::BasicObject>();
+    m_MenuSub->SetImage("../Resources/Image/hasugu/Lobby_Sub_1.png");
+    m_MenuSub->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuSub->SetSize(30.0f, 30.0f);
+    m_MenuSub->GetGameObject()->m_Transform.translation = {40.0f, 20.0f};
+    m_MenuSub->GetGameObject()->SetZIndex(51.0f);
+    m_MenuSub->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuSub->GetGameObject());
+
+    m_MenuCampFire = std::make_shared<Scene::BasicObject>();
+    m_MenuCampFire->SetImage("../Resources/Image/hasugu/Campfire_Body.png");
+    m_MenuCampFire->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MenuCampFire->SetSize(40.0f, 40.0f);
+    m_MenuCampFire->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
+    m_MenuCampFire->GetGameObject()->SetZIndex(51.0f);
+    m_MenuCampFire->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MenuCampFire->GetGameObject());
 }
 
 void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int monCount) {
@@ -396,6 +423,9 @@ void GameDisplay::ShowMenuBackground(bool visible) {
         m_Pipe7->GetGameObject()->SetVisible(visible);
         m_Pipe8->GetGameObject()->SetVisible(visible);
         m_Pipe9->GetGameObject()->SetVisible(visible);
+        m_MenuHero->GetGameObject()->SetVisible(visible);
+        m_MenuSub->GetGameObject()->SetVisible(visible);
+        m_MenuCampFire->GetGameObject()->SetVisible(visible);
     }
 }
 
