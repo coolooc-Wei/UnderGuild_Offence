@@ -144,42 +144,6 @@
         ]
     },
     {
-        "bondID": "mystic",
-        "name": "神秘",
-        "Title": "Mystic",
-        "Description": "Defeated mercenaries have a 3% / 7% chance to appear as a Mystic Mercenary. Combining 3 Machines summons 1 Mechanical Mercenary",
-        "IconPath": "../Resources/Image/synergy/Synergy_4.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_016_2,s_018,s_023,s_032",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
         "bondID": "angel_feather",
         "name": "天使羽毛",
         "Title": "Angel Feather",
@@ -291,11 +255,11 @@
         "bondID": "clock_hands",
         "name": "時鐘指針",
         "Title": "Clock Hands",
-        "Description": "Generates a mechanical clock hand centered on the hero, dealing 300% / 450% damage to enemies it touches, with a 5% / 10% chance to stun them for 2 seconds",
+        "Description": "Generates a mechanical clock hand centered on the hero, dealing 300% / 450% damage to enemies it touches",
         "IconPath": "../Resources/Image/synergy/Synergy_16.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_004_2,s_022,s_032,g_034",
+            "target": "m_004_2,s_023,s_032,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -338,10 +302,10 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 2.5,
                         "isPermanent": true
                     }
                 }
@@ -349,10 +313,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 4.0,
                         "isPermanent": true
                     }
                 }
@@ -374,10 +338,10 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "HERO",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 2.0,
                         "isPermanent": true
                     }
                 }
@@ -385,10 +349,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "HERO",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 3.0,
                         "isPermanent": true
                     }
                 }
@@ -420,42 +384,6 @@
             },
             {
                 "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "giant_footprint",
-        "name": "巨人腳印",
-        "Title": "Giant Footprint",
-        "Description": "Every 9 / 6 seconds, enemies around the hero are stunned for 2 seconds",
-        "IconPath": "../Resources/Image/synergy/Synergy_7.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_007_2,s_023,s_025,g_013",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
