@@ -14,7 +14,7 @@ namespace UGO::Scene {
         DamageTextAnimation();
         ~DamageTextAnimation();
 
-        void Start(Core::WorldPosition position, HpValue damageAmount);
+        void Start(Core::WorldPosition position, HpValue damageAmount, bool isCritical = false);
         void End();
 
         bool IsOccupied() const;

@@ -65,11 +65,11 @@ namespace UGO::System {
         return obj;
     }
 
-    std::shared_ptr<Util::GameObject> EffectAnimationManager::CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount) {
+    std::shared_ptr<Util::GameObject> EffectAnimationManager::CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount, bool isCritical) {
         bool createdNew = (m_DamageTextOnUseAmount >= m_DamageTextTotalAmount);
         auto obj = AcquireFromPool(m_damageTextPool, m_DamageTextOnUseAmount, m_DamageTextTotalAmount);
 
-        obj->Start(position, damageAmount);
+        obj->Start(position, damageAmount, isCritical);
         ++m_DamageTextOnUseAmount;
 
         if (createdNew) { LOG_INFO("EffectAnimationManger: 10 more DamageTextAnimation created, {}/{}", m_DamageTextOnUseAmount, m_DamageTextTotalAmount); }

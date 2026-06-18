@@ -315,7 +315,20 @@ namespace UGO::System {
 
             bool wasAlive = !event.Victim->IsDead();
             event.Attacker->OnAttack();
-            event.Victim->OnDamage(event.Damage);
+
+            float finalDamage = event.Damage;
+            bool isCrit = false;
+            float critChance = event.Attacker->GetCritChance();
+            if (critChance > 0.0f) {
+                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= critChance) {
+                    isCrit = true;
+                    finalDamage *= 2.0f;
+                    LOG_INFO("[Crit] Attacker (ID: {}) scored a CRITICAL hit on Victim (ID: {})! Damage: {} -> {}", 
+                             event.Attacker->GetInstanceID(), event.Victim->GetInstanceID(), event.Damage, finalDamage);
+                }
+            }
+
+            event.Victim->OnDamage(finalDamage);
 
             if (wasAlive && event.Victim->IsDead()) {
                 float vampireMultiplier = event.Attacker->GetVampireMultiplier();
@@ -341,7 +354,7 @@ namespace UGO::System {
                     event.Victim->GetWorldPosition(), animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
                 );
-                m_EffectAnimationManager.CreateDamageText(event.Victim->GetWorldPosition(), event.Damage);
+                m_EffectAnimationManager.CreateDamageText(event.Victim->GetWorldPosition(), finalDamage, isCrit);
             }
             if (animatedAttackers.insert(event.Attacker).second) {
                 animationData = event.Attacker->GetAttackAnimationData();

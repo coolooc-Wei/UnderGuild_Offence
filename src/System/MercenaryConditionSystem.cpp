@@ -106,33 +106,47 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
             BondTier tier;
             tier.threshold = tierJson.at("threshold").get<int>();
 
-            const auto& effectJson = tierJson.at("effect");
-            tier.effect.targetSelector = effectJson.value("targetSelector", "ALL_ALLIES");
+            std::string sourceID = bond.bondID + "_tier_" + std::to_string(tier.threshold);
 
-            const auto& effectDataJson = effectJson.at("effectData");
-            std::string effectTypeStr  = effectDataJson.at("type").get<std::string>();
+            auto parseEffect = [&](const nlohmann::json& effJson) -> BondEffect {
+                BondEffect effect;
+                effect.targetSelector = effJson.value("targetSelector", "ALL_ALLIES");
 
-            // 解析 StatusEffectType
-            if      (effectTypeStr == "AttackUp")  { tier.effect.effectData.type = Scene::StatusEffectType::AttackUp; }
-            else if (effectTypeStr == "SpeedUp")   { tier.effect.effectData.type = Scene::StatusEffectType::SpeedUp; }
-            else if (effectTypeStr == "SlowDown")  { tier.effect.effectData.type = Scene::StatusEffectType::SlowDown; }
-            else if (effectTypeStr == "Poison")    { tier.effect.effectData.type = Scene::StatusEffectType::Poison; }
-            else if (effectTypeStr == "Burn")      { tier.effect.effectData.type = Scene::StatusEffectType::Burn; }
-            else if (effectTypeStr == "Freeze")    { tier.effect.effectData.type = Scene::StatusEffectType::Freeze; }
-            else if (effectTypeStr == "Vampire")   { tier.effect.effectData.type = Scene::StatusEffectType::Vampire; }
-            else if (effectTypeStr == "Blessing")  { tier.effect.effectData.type = Scene::StatusEffectType::Blessing; }
-            else if (effectTypeStr == "LifeLink")  { tier.effect.effectData.type = Scene::StatusEffectType::LifeLink; }
-            else {
-                LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
+                const auto& effectDataJson = effJson.at("effectData");
+                std::string effectTypeStr  = effectDataJson.at("type").get<std::string>();
+
+                if      (effectTypeStr == "AttackUp")  { effect.effectData.type = Scene::StatusEffectType::AttackUp; }
+                else if (effectTypeStr == "SpeedUp")   { effect.effectData.type = Scene::StatusEffectType::SpeedUp; }
+                else if (effectTypeStr == "SlowDown")  { effect.effectData.type = Scene::StatusEffectType::SlowDown; }
+                else if (effectTypeStr == "Poison")    { effect.effectData.type = Scene::StatusEffectType::Poison; }
+                else if (effectTypeStr == "Burn")      { effect.effectData.type = Scene::StatusEffectType::Burn; }
+                else if (effectTypeStr == "Freeze")    { effect.effectData.type = Scene::StatusEffectType::Freeze; }
+                else if (effectTypeStr == "Vampire")   { effect.effectData.type = Scene::StatusEffectType::Vampire; }
+                else if (effectTypeStr == "Blessing")  { effect.effectData.type = Scene::StatusEffectType::Blessing; }
+                else if (effectTypeStr == "LifeLink")  { effect.effectData.type = Scene::StatusEffectType::LifeLink; }
+                else if (effectTypeStr == "MaxHpUp")   { effect.effectData.type = Scene::StatusEffectType::MaxHpUp; }
+                else if (effectTypeStr == "CritChanceUp") { effect.effectData.type = Scene::StatusEffectType::CritChanceUp; }
+                else {
+                    LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
+                }
+
+                effect.effectData.multiplier  = effectDataJson.value("multiplier", 1.0f);
+                effect.effectData.isPermanent = effectDataJson.value("isPermanent", false);
+                effect.effectData.duration    = effectDataJson.value("duration", 0.0f);
+                effect.effectData.tickRate    = effectDataJson.value("tickRate", 0.0f);
+                effect.effectData.tickDamage  = effectDataJson.value("tickDamage", 0.0f);
+                effect.effectData.sourceID    = sourceID;
+
+                return effect;
+            };
+
+            if (tierJson.contains("effects")) {
+                for (const auto& effJson : tierJson.at("effects")) {
+                    tier.effects.push_back(parseEffect(effJson));
+                }
+            } else if (tierJson.contains("effect")) {
+                tier.effects.push_back(parseEffect(tierJson.at("effect")));
             }
-
-            tier.effect.effectData.multiplier  = effectDataJson.value("multiplier", 1.0f);
-            tier.effect.effectData.isPermanent = effectDataJson.value("isPermanent", false);
-            tier.effect.effectData.duration    = effectDataJson.value("duration", 0.0f);
-            tier.effect.effectData.tickRate    = effectDataJson.value("tickRate", 0.0f);
-            tier.effect.effectData.tickDamage  = effectDataJson.value("tickDamage", 0.0f);
-            // sourceID 由系統產生，不從 JSON 讀取
-            tier.effect.effectData.sourceID    = bond.bondID + "_tier_" + std::to_string(tier.threshold);
 
             bond.tiers.push_back(std::move(tier));
         }
@@ -373,10 +387,12 @@ std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
 
 void MercenaryConditionSystem::ActivateBondTier(const BondConfig& bond, int tierIndex) {
     const BondTier& tier = bond.tiers[tierIndex];
-    auto targets = ResolveBondTargets(tier.effect.targetSelector, bond);
-    for (auto* character : targets) {
-        if (character) {
-            character->AddStatusEffect(tier.effect.effectData);
+    for (const auto& effect : tier.effects) {
+        auto targets = ResolveBondTargets(effect.targetSelector, bond);
+        for (auto* character : targets) {
+            if (character) {
+                character->AddStatusEffect(effect.effectData);
+            }
         }
     }
     LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +

@@ -5,15 +5,23 @@ namespace UGO::Scene {
     DamageTextAnimation::DamageTextAnimation() = default;
     DamageTextAnimation::~DamageTextAnimation() = default;
 
-    void DamageTextAnimation::Start(Core::WorldPosition position, HpValue damageAmount) {
+    void DamageTextAnimation::Start(Core::WorldPosition position, HpValue damageAmount, bool isCritical) {
         SetVisible(true);
         m_Transform.translation = position;
 
         std::string text = "-" + std::to_string((int)damageAmount);
-        m_Text = std::make_shared<Util::Text>(
-            "../PTSD/assets/fonts/Inter.ttf", m_TextSize, text,
-            Util::Color::FromName(Util::Colors::WHITE)
-        );
+        if (isCritical) {
+            text += "!";
+            m_Text = std::make_shared<Util::Text>(
+                "../PTSD/assets/fonts/Inter.ttf", m_TextSize * 1.5f, text,
+                Util::Color::FromName(Util::Colors::YELLOW)
+            );
+        } else {
+            m_Text = std::make_shared<Util::Text>(
+                "../PTSD/assets/fonts/Inter.ttf", m_TextSize, text,
+                Util::Color::FromName(Util::Colors::WHITE)
+            );
+        }
         SetDrawable(m_Text);
     }
 

@@ -53,7 +53,7 @@ namespace System {
 
     struct BondTier {
         int        threshold = 0; ///< 達到此數量時激活
-        BondEffect effect;
+        std::vector<BondEffect> effects;
     };
 
     struct BondConfig {

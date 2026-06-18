@@ -66,7 +66,15 @@ namespace UGO::Scene {
         ChangeAnimationState(AnimationState::Stand);
     }
 
-    HpValue Character::GetMaxHP() const { return m_MaxHP; }
+    HpValue Character::GetMaxHP() const {
+        float multiplier = 1.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetType() == StatusEffectType::MaxHpUp) {
+                multiplier += (effect->GetMultiplier() - 1.0f);
+            }
+        }
+        return m_MaxHP * multiplier;
+    }
     HpValue Character::GetCurrentHP() const { return m_CurrentHP; }
     const std::string& Character::GetTypeID() const { return m_TypeID; }
     uint64_t Character::GetInstanceID() const { return m_InstanceID; }
@@ -122,15 +130,37 @@ namespace UGO::Scene {
         return reduction;
     }
 
+    float Character::GetCritChance() const {
+        float critChance = 0.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetType() == StatusEffectType::CritChanceUp) {
+                critChance += effect->GetMultiplier();
+            }
+        }
+        return critChance;
+    }
+
     Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
     Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
 
     void Character::AddStatusEffect(const StatusEffectData& data) {
-        m_StatusEffects.push_back(std::make_unique<StatusEffect>(data));
+        if (data.type == StatusEffectType::MaxHpUp) {
+            float prevMaxHP = GetMaxHP();
+            m_StatusEffects.push_back(std::make_unique<StatusEffect>(data));
+            float newMaxHP = GetMaxHP();
+            if (prevMaxHP > 0.0f) {
+                m_CurrentHP = m_CurrentHP * (newMaxHP / prevMaxHP);
+            }
+        } else {
+            m_StatusEffects.push_back(std::make_unique<StatusEffect>(data));
+        }
     }
 
     void Character::RemoveStatusEffectBySource(const std::string& sourceID) {
         if (sourceID.empty()) { return; } // 保護：不允許移除無來源的基礎效果（如卡牌增益）
+        
+        float prevMaxHP = GetMaxHP();
+        
         auto it = std::remove_if(
             m_StatusEffects.begin(), m_StatusEffects.end(),
             [&sourceID](const std::unique_ptr<StatusEffect>& effect) {
@@ -138,6 +168,11 @@ namespace UGO::Scene {
             }
         );
         m_StatusEffects.erase(it, m_StatusEffects.end());
+        
+        float newMaxHP = GetMaxHP();
+        if (prevMaxHP > 0.0f && newMaxHP < prevMaxHP) {
+            m_CurrentHP = std::min(m_CurrentHP * (newMaxHP / prevMaxHP), newMaxHP);
+        }
     }
 
     bool Character::HasStatusEffectBySource(const std::string& sourceID) const {

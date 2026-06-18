@@ -21,6 +21,8 @@ namespace Scene {
         Vampire,
         Blessing,
         LifeLink,
+        MaxHpUp,
+        CritChanceUp,
     };
 
     struct StatusEffectData {

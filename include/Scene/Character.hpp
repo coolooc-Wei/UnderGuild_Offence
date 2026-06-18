@@ -64,6 +64,7 @@ namespace Scene {
         uint64_t GetInstanceID() const;
         float GetVampireMultiplier() const;
         float GetRespawnTimeReduction() const;
+        float GetCritChance() const;
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;

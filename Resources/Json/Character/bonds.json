@@ -229,25 +229,45 @@
         "tiers": [
             {
                 "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                "effects": [
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "MaxHpUp",
+                            "multiplier": 2.0,
+                            "isPermanent": true
+                        }
+                    },
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "CritChanceUp",
+                            "multiplier": 0.1,
+                            "isPermanent": true
+                        }
                     }
-                }
+                ]
             },
             {
                 "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                "effects": [
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "MaxHpUp",
+                            "multiplier": 3.5,
+                            "isPermanent": true
+                        }
+                    },
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "CritChanceUp",
+                            "multiplier": 0.2,
+                            "isPermanent": true
+                        }
                     }
-                }
+                ]
             }
         ]
     },
