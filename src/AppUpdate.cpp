@@ -11,6 +11,7 @@
 #include "System/LevelSystem.hpp"
 #include "System/MapSystem.hpp"
 #include "System/MercenaryConditionSystem.hpp"
+#include "System/BarrelSystem.hpp"
 
 #include "Scene/ExpPack.hpp"
 #include "UI/GameDisplay.hpp"
@@ -39,6 +40,7 @@ void UGO::App::Update() {
     m_BattleManager->AddHeroByID("h_001", {0.0f, 0.0f});
     m_LevelSystem->GenerateLevel(m_SelectedLevelID);
     m_LevelSystem->EnterStartRoom();
+    m_BarrelSystem->OnEnterRoom({0, 0});
 
     ChangeGameState(GameState::GAMING);
   } break;
@@ -92,7 +94,10 @@ void UGO::App::Update() {
     /* HACK: Remove after testing
     */
     auto heroes = m_BattleManager->GetAllHeroes();
-    if (!heroes.empty()) { m_DropSystem->UpdateDrops(heroes[0]); }
+    if (!heroes.empty()) {
+        m_DropSystem->UpdateDrops(heroes[0]);
+        m_BarrelSystem->Update(*(heroes[0]));
+    }
     else { ChangeGameState(GameState::SETTLING); }
 
     m_BattleManager->UpdateSystem();

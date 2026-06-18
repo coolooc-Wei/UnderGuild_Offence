@@ -1,5 +1,6 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 
+#include "Scene/AnimationLite.hpp"
 #include "Core/UGO_Math.hpp"
 
 namespace UGO::System {
@@ -10,8 +11,8 @@ namespace UGO::System {
       m_BatchTimer(0.0f),
       m_WaveTimer(0.0f),
       /* Since the warning indicators are stateless, pre-load and share the animation */
-      m_WarningIndicatorAnim(std::make_shared<Util::Animation>(
-          std::vector<std::string>{m_WarningIndicatorPath},
+      m_WarningIndicatorAnim(std::make_shared<Scene::AnimationLite>(
+          Scene::AnimationLite::MakeSharedFrames(std::vector<std::string>{m_WarningIndicatorPath}),
           false, 100, true, 100
       )) {}
     EnemiesSpawnerSystem::~EnemiesSpawnerSystem() = default;
@@ -50,13 +51,13 @@ namespace UGO::System {
         else if (amount2 == -1) { spawnAmount = amount1; }
         else { spawnAmount = Core::RandomInt(amount1, amount2); }
 
-
-        std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
-
         Core::Time::CountDownTimer timer(m_WarningIndicatorDuration);
         timer.Start();
         m_PaddingWaves.push({timer, spawnAmount});
         for (int i=0; i<spawnAmount; ++i) {
+            // choose a type
+            std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
+
             // Choose a side
             Side side;
             float positionScale;

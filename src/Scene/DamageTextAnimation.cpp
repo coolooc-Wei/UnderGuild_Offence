@@ -20,6 +20,7 @@ namespace UGO::Scene {
     void DamageTextAnimation::End() {
         assert(m_Text != nullptr);
         SetVisible(false);
+        SetDrawable(nullptr);
         m_Text = nullptr;
         m_IsOccupied = false;
         m_currentFloatingTimes = 0;

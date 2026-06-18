@@ -30,6 +30,7 @@ set(SYSTEM_SRC
     System/MapSystem.cpp
     System/LevelSystem.cpp
     System/MercenaryConditionSystem.cpp
+    System/BarrelSystem.cpp
 )
 set(SYSTEM_INC
     System/BattleManager.hpp
@@ -45,6 +46,7 @@ set(SYSTEM_INC
     System/MapSystem.hpp
     System/LevelSystem.hpp
     System/MercenaryConditionSystem.hpp
+    System/BarrelSystem.hpp
 )
 
 # --- UI ---
@@ -102,8 +104,12 @@ set(AUDIO_SRC)
 set(AUDIO_INC)
 
 # --- Resource ---
-set(RESOURCE_SRC)
-set(RESOURCE_INC)
+set(RESOURCE_SRC
+    Resource/ImageCache.cpp
+)
+set(RESOURCE_INC
+    Resource/ImageCache.hpp
+)
 
 # --- Physics ---
 set(PHYSICS_SRC)
@@ -126,6 +132,9 @@ set(SCENE_SRC
     Scene/Bot.cpp
     Scene/Icon.cpp
     Scene/DamageTextAnimation.cpp
+    Scene/AnimationLite.cpp
+    Scene/Barrel.cpp
+    Scene/HealPack.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -144,6 +153,9 @@ set(SCENE_INC
     Scene/Bot.hpp
     Scene/Icon.hpp
     Scene/DamageTextAnimation.hpp
+    Scene/AnimationLite.hpp
+    Scene/Barrel.hpp
+    Scene/HealPack.hpp
 )
 
 # --- Combine All ---

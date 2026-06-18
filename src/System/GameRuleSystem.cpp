@@ -4,6 +4,7 @@
 #include "System/BattleManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
+#include "System/BarrelSystem.hpp"
 
 namespace UGO::System {
 
@@ -11,12 +12,14 @@ namespace UGO::System {
         LevelSystem&          levelSystem,
         BattleManager&        battleManager,
         EnemiesSpawnerSystem& spawnerSystem,
-        DropSystem&           dropSystem
+        DropSystem&           dropSystem,
+        BarrelSystem&         barrelSystem
     )
     : m_LevelSystem(levelSystem),
       m_BattleManager(battleManager),
       m_EnemiesSpawnerSystem(spawnerSystem),
-      m_DropSystem(dropSystem) {}
+      m_DropSystem(dropSystem),
+      m_BarrelSystem(barrelSystem) {}
     GameRuleSystem::~GameRuleSystem() = default;
 
     void GameRuleSystem::Update() {
@@ -87,8 +90,10 @@ namespace UGO::System {
             }
 
             if (targetCoord) {
+                m_BarrelSystem.OnLeaveRoom();
                 m_LevelSystem.EnterRoom(*targetCoord);
                 m_LevelSystem.ChangeRoomState(LevelSystem::RoomState::Setting);
+                m_BarrelSystem.OnEnterRoom(*targetCoord);
             }
         } break;
         default: {} break;

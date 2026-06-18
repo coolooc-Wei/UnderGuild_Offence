@@ -6,8 +6,22 @@
             "bossRoomCount": 1
         },
         "spawnConfig": {
-            "periodicPool": ["e_001"],
-            "extraPool": ["e_002"],
+            "periodicPool": [
+                "e_001",
+                "e_004",
+                "e_005",
+                "e_015",
+                "e_016",
+                "e_039"
+            ],
+            "extraPool": [
+                "e_002",
+                "e_054",
+                "e_060",
+                "e_061",
+                "e_062",
+                "e_084"
+            ],
             "bossID": "e_b01"
         },
         "waveConfig": {

@@ -4,6 +4,7 @@
 #include "UGO_pch.hpp"
 
 #include "Scene/Character.hpp"
+#include "Scene/AnimationLite.hpp"
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
 #include "Scene/Mercenary.hpp"
@@ -49,7 +50,8 @@ namespace System {
             // BasicObject fields
             Scene::SpeedValue speed = 10.0f;
             Scene::BasicObject::DrawableType drawableType = Scene::BasicObject::DrawableType::None;
-            std::vector<std::string> animationPaths;
+            std::vector<std::string> walkAnimPaths;
+            std::vector<std::string> attackBodyAnimPaths;
             std::shared_ptr<Util::Image> image = nullptr;  /* stateless: safe to share */
             Core::Size size = {32.0f, 32.0f};
             bool isCollidable = true;

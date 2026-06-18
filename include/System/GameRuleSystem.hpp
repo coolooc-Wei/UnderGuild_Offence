@@ -11,6 +11,7 @@ namespace UGO::System {
     class BattleManager;
     class EnemiesSpawnerSystem;
     class DropSystem;
+    class BarrelSystem;
 
     class GameRuleSystem {
     public:
@@ -28,7 +29,8 @@ namespace UGO::System {
             LevelSystem&          levelSystem,
             BattleManager&        battleManager,
             EnemiesSpawnerSystem& spawnerSystem,
-            DropSystem&           dropSystem
+            DropSystem&           dropSystem,
+            BarrelSystem&         barrelSystem
         );
         ~GameRuleSystem();
 
@@ -47,6 +49,7 @@ namespace UGO::System {
         BattleManager&        m_BattleManager;
         EnemiesSpawnerSystem& m_EnemiesSpawnerSystem;
         DropSystem&           m_DropSystem;
+        BarrelSystem&         m_BarrelSystem;
 
         const int m_MaxEnemyCap = 100;
     };

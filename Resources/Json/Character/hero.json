@@ -2,14 +2,21 @@
     "h_001": {
         "speed": 3.0,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/hero/Hero_101_1.png",
-            "../Resources/Image/character/hero/Hero_101_2.png",
-            "../Resources/Image/character/hero/Hero_101_3.png",
-            "../Resources/Image/character/hero/Hero_101_4.png",
-            "../Resources/Image/character/hero/Hero_101_5.png",
-            "../Resources/Image/character/hero/Hero_101_6.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/hero/Hero_101_1.png",
+                    "../Resources/Image/character/hero/Hero_101_2.png",
+                    "../Resources/Image/character/hero/Hero_101_3.png",
+                    "../Resources/Image/character/hero/Hero_101_4.png",
+                    "../Resources/Image/character/hero/Hero_101_5.png",
+                    "../Resources/Image/character/hero/Hero_101_6.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
         "imagePath": [
             "../Resources/Image/character/hero/Hero_101_1.png"
         ],
@@ -26,8 +33,8 @@
         "isHurtBoxActive": false,
         "isVisible": false,
         "maxHP": 9999999.0,
-        "attackPower": 30.0,
-        "attackCooldown": 1.0,
+        "attackPower": 50.0,
+        "attackCooldown": 0.1,
         "invincibleDuration": 1.0,
         "weapon": "",
         "statusEffects": [],

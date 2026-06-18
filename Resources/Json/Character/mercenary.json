@@ -2,11 +2,21 @@
     "m_001": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_01_6.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 32.0,
@@ -50,15 +60,25 @@
             }
         }
     },
-
     "m_001_1": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_011_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 44.0,
@@ -102,15 +122,26 @@
             }
         }
     },
-
     "m_001_2": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_1.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_012_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 42.0,
@@ -154,15 +185,25 @@
             }
         }
     },
-
     "m_002": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_02_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 24.0,
@@ -206,15 +247,24 @@
             }
         }
     },
-
     "m_002_1": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_021_6.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 28.0,
@@ -258,15 +308,24 @@
             }
         }
     },
-
     "m_002_2": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_022_6.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 36.0,
@@ -310,15 +369,25 @@
             }
         }
     },
-
     "m_004": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_04.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_3.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_04.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_3.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_04.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_04_3.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 20.0,
@@ -362,15 +431,26 @@
             }
         }
     },
-
     "m_004_1": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_1.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_041_4.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 24.0,
@@ -414,15 +494,25 @@
             }
         }
     },
-
     "m_004_2": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_042_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 36.0,
@@ -466,15 +556,24 @@
             }
         }
     },
-
     "m_008": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_08_6.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 38.0,
@@ -518,15 +617,25 @@
             }
         }
     },
-
     "m_008_1": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_081_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 42.0,
@@ -570,15 +679,25 @@
             }
         }
     },
-
     "m_008_2": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_2.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_3.png",
-            "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_2.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_3.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_4.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_5.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_6.png",
+                    "../Resources/Image/character/mercenaries/BasicUnit/Unit_082_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 46.0,
@@ -622,15 +741,27 @@
             }
         }
     },
-
     "s_023": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/SUnit/SUnit_23_1.png",
-            "../Resources/Image/character/mercenaries/SUnit/SUnit_23_2.png",
-            "../Resources/Image/character/mercenaries/SUnit/SUnit_23_3.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_1.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_2.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_3.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_4.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_5.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_6.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_7.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_23_8.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 56.0,
@@ -674,15 +805,26 @@
             }
         }
     },
-
     "s_025": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/mercenaries/SUnit/SUnit_25_1.png",
-            "../Resources/Image/character/mercenaries/SUnit/SUnit_25_2.png",
-            "../Resources/Image/character/mercenaries/SUnit/SUnit_25_3.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_1.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_2.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_3.png"
+                ]
+            },
+            "attack": {
+                "paths": [
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_4.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_5.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_6.png",
+                    "../Resources/Image/character/mercenaries/SUnit/SUnit_25_7.png"
+                ]
+            }
+        },
         "imagePath": [],
         "size": {
             "width": 56.0,

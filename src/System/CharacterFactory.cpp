@@ -160,9 +160,7 @@ namespace UGO::System {
         }
         const auto& cached = it->second;
         // 優先使用第一張動畫幀作為靜態圖標
-        std::string iconPath = (!cached.animationPaths.empty())
-            ? cached.animationPaths[0]
-            : "";
+        std::string iconPath = (!cached.walkAnimPaths.empty()) ? cached.walkAnimPaths[0] : "";
         return { iconPath, cached.size };
     }
 
@@ -171,7 +169,7 @@ namespace UGO::System {
 
         newParams.speed              = cached.speed;
         newParams.drawableType       = cached.drawableType;
-        newParams.animation          = std::make_shared<Util::Animation>(cached.animationPaths, false, 50, true, 50);
+        newParams.animation          = nullptr;
         newParams.image              = cached.image;
         newParams.size               = cached.size;
         newParams.isCollidable       = cached.isCollidable;
@@ -182,6 +180,19 @@ namespace UGO::System {
         newParams.attackPower        = cached.attackPower;
         newParams.attackCooldown     = cached.attackCooldown;
         newParams.invincibleDuration = cached.invincibleDuration;
+
+        newParams.bodyAnimation.walk = nullptr;
+        if (!cached.walkAnimPaths.empty()) {
+            newParams.bodyAnimation.walk = std::make_shared<Scene::AnimationLite>(
+                Scene::AnimationLite::MakeSharedFrames(cached.walkAnimPaths), false, 100, true, 100
+            );
+        }
+        newParams.bodyAnimation.attack = nullptr;
+        if (!cached.attackBodyAnimPaths.empty()) {
+            newParams.bodyAnimation.attack = std::make_shared<Scene::AnimationLite>(
+                Scene::AnimationLite::MakeSharedFrames(cached.attackBodyAnimPaths), false, 100, false, 100
+            );
+        }
 
         // HitBox
         switch (cached.hitBoxType) {
@@ -205,7 +216,9 @@ namespace UGO::System {
 
         if (!cached.attackAnimPaths.empty()) {
             newParams.attackAnimationData = Scene::Character::EffectAnimationData{
-                std::make_shared<Util::Animation>(cached.attackAnimPaths, false, 50, false, 50),
+                std::make_shared<Scene::AnimationLite>(
+                    Scene::AnimationLite::MakeSharedFrames(cached.attackAnimPaths), false, 100, false, 100
+                ),
                 cached.attackAnimDuration,
                 cached.attackAnimIsImage,
                 cached.attackAnimOffsetAngle,
@@ -214,7 +227,9 @@ namespace UGO::System {
         }
         if (!cached.damageAnimPaths.empty()) {
             newParams.damageAnimationData = Scene::Character::EffectAnimationData{
-                std::make_shared<Util::Animation>(cached.damageAnimPaths, false, 50, false, 50),
+                std::make_shared<Scene::AnimationLite>(
+                    Scene::AnimationLite::MakeSharedFrames(cached.damageAnimPaths), false, 100, false, 100
+                ),
                 cached.damageAnimDuration,
                 cached.damageAnimIsImage,
                 cached.damageAnimOffsetAngle,
@@ -243,7 +258,17 @@ namespace UGO::System {
             cached.drawableType = Scene::BasicObject::DrawableType::None;
         }
 
-        cached.animationPaths = jsonParams.at("animationPath").get<std::vector<std::string>>();
+        if (jsonParams.contains("bodyAnimation")) {
+            const auto& bodyAnimJson = jsonParams.at("bodyAnimation");
+            if (bodyAnimJson.contains("walk")) {
+                const auto& walkJson = bodyAnimJson.at("walk");
+                cached.walkAnimPaths = walkJson.at("paths").get<std::vector<std::string>>();
+            }
+            if (bodyAnimJson.contains("attack")) {
+                const auto& attackJson = bodyAnimJson.at("attack");
+                cached.attackBodyAnimPaths = attackJson.at("paths").get<std::vector<std::string>>();
+            }
+        }
 
         std::string imagePathStr;
         if (jsonParams.at("imagePath").is_array() && !jsonParams.at("imagePath").empty()) {

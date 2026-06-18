@@ -1,6 +1,7 @@
 #include "Scene/Character.hpp"
 #include "Scene/Weapon.hpp"
 #include "Scene/StatusEffect.hpp"
+#include "Scene/AnimationLite.hpp"
 #include <atomic>
 
 namespace UGO::Scene {
@@ -12,9 +13,21 @@ namespace UGO::Scene {
         }
     }
 
-    Character::Character() : BasicObject(), m_InstanceID(GenerateNextID()) {}
+    Character::Character()
+    : BasicObject(),
+      m_InstanceID(GenerateNextID()) {
+        ChangeAnimationState(AnimationState::Stand);
+    }
+
     Character::Character(HpValue maxHP, HpValue attackPower, SpeedValue speed)
-    : BasicObject(speed), m_MaxHP(maxHP), m_CurrentHP(maxHP), m_AttackPower(attackPower), m_InstanceID(GenerateNextID()) {}
+    : BasicObject(speed),
+      m_MaxHP(maxHP),
+      m_CurrentHP(maxHP),
+      m_AttackPower(attackPower),
+      m_InstanceID(GenerateNextID()) {
+        ChangeAnimationState(AnimationState::Stand);
+    }
+
     Character::Character(CharacterParams&& params)
     : BasicObject(std::move(params)),
       m_MaxHP(params.maxHP),
@@ -27,7 +40,11 @@ namespace UGO::Scene {
       m_StatusEffects(std::move(params.statusEffects)),
       m_AttackAnimationData(params.attackAnimationData),
       m_DamageAnimationData(params.damageAnimationData),
-      m_InstanceID(GenerateNextID()) {}
+      m_WalkAnimation(params.bodyAnimation.walk),
+      m_AttackAnimation(params.bodyAnimation.attack),
+      m_InstanceID(GenerateNextID()) {
+        ChangeAnimationState(AnimationState::Stand);
+    }
     Character::~Character() = default;
     void Character::Reset(CharacterParams&& params) {
         m_MaxHP = params.maxHP;
@@ -43,7 +60,10 @@ namespace UGO::Scene {
         m_IntentedMovement = {0.f, 0.f};
         m_RepelMovement = {0.f, 0.f};
         m_InstanceID = GenerateNextID();
+        m_WalkAnimation = params.bodyAnimation.walk;
+        m_AttackAnimation = params.bodyAnimation.attack;
         BasicObject::Reset(std::move(params));
+        ChangeAnimationState(AnimationState::Stand);
     }
 
     HpValue Character::GetMaxHP() const { return m_MaxHP; }
@@ -127,6 +147,8 @@ namespace UGO::Scene {
         if (m_AttackCooldown.IsTimeUp()) {
             m_AttackCooldown.Start();
             ActivateHitBox(false);
+            if (m_AttackAnimation) { ChangeAnimationState(AnimationState::Attack); }
+            else { LOG_INFO("Character has no attack animation"); }
         }
     }
 
@@ -205,8 +227,17 @@ namespace UGO::Scene {
     }
 
     void Character::Update() {
-        if (glm::length(m_IntentedMovement) < Core::EPSILON) { SetAnimationState(false); }
-        else { SetAnimationState(true); }
+        if (m_AnimationState == AnimationState::Attack) {
+            if (GetAnimation() && GetAnimation()->GetState() == AnimationLite::State::ENDED) {
+                if (glm::length(m_IntentedMovement) > Core::EPSILON) { ChangeAnimationState(AnimationState::Walk); }
+                else { ChangeAnimationState(AnimationState::Stand); }
+            }
+        }
+        else {
+            bool hasMovement = glm::length(m_IntentedMovement) > Core::EPSILON;
+            if (hasMovement && m_AnimationState != AnimationState::Walk) { ChangeAnimationState(AnimationState::Walk); }
+            else if (!hasMovement && m_AnimationState != AnimationState::Stand) { ChangeAnimationState(AnimationState::Stand); }
+        }
 
         AcceptIntendedMovement();
         if (m_AttackCooldown.IsTimeUp()) { ActivateHitBox(true); }
@@ -216,7 +247,40 @@ namespace UGO::Scene {
     }
     void Character::OnDraw() {}
 
-
+    void Character::ChangeAnimationState(AnimationState state) {
+        m_AnimationState = state;
+        switch (state) {
+        case AnimationState::Stand: {
+            if (m_WalkAnimation) {
+                SetAnimation(m_WalkAnimation);
+                SetDrawableType(DrawableType::Animation);
+                SetSize(GetSize().x, GetSize().y);
+                m_WalkAnimation->SetCurrentFrame(0);
+                m_WalkAnimation->Pause();
+            }
+            else { SetDrawableType(DrawableType::None); }
+        } break;
+        case AnimationState::Walk: {
+            if (m_WalkAnimation) {
+                SetAnimation(m_WalkAnimation);
+                SetDrawableType(DrawableType::Animation);
+                SetSize(GetSize().x, GetSize().y);
+                m_WalkAnimation->Play();
+            }
+            else { SetDrawableType(DrawableType::None); }
+        } break;
+        case AnimationState::Attack: {
+            if (m_AttackAnimation) {
+                SetAnimation(m_AttackAnimation);
+                SetDrawableType(DrawableType::Animation);
+                SetSize(GetSize().x, GetSize().y);
+                m_AttackAnimation->SetCurrentFrame(0);
+                m_AttackAnimation->SetLooping(false);
+                m_AttackAnimation->Play();
+            }
+        } break;
+        }
+    }
 
     Character::EffectAnimationData Character::GetAttackAnimationData() const { return m_AttackAnimationData; }
     Character::EffectAnimationData Character::GetDamageAnimationData() const { return m_DamageAnimationData; }

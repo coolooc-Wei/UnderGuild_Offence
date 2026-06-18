@@ -9,13 +9,15 @@
 namespace UGO {
 namespace Scene {
     
+    class AnimationLite;
+
     class EffectAnimation: public Util::GameObject {
     public:
         EffectAnimation();
         ~EffectAnimation();
 
         void Start(
-            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
+            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<AnimationLite> animation, bool isImage,
             Core::Angle rotateAngle, Core::Size size
         );
         void End();
@@ -25,7 +27,7 @@ namespace Scene {
         /* Returns true if the animation has ended */
         bool Update();
     private:
-        std::shared_ptr<Util::Animation> m_Animation = nullptr;
+        std::shared_ptr<AnimationLite> m_Animation = nullptr;
         Core::Time::CountDownTimer m_AnimationDuration = Core::Time::CountDownTimer(0);
         bool m_IsOccupied = false;
     };

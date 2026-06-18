@@ -1,4 +1,5 @@
 #include "System/EffectAnimationManager.hpp"
+#include "Scene/AnimationLite.hpp"
 
 namespace UGO::System {
 
@@ -47,7 +48,7 @@ namespace UGO::System {
     }
 
     std::shared_ptr<Util::GameObject> EffectAnimationManager::Create(
-        Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
+        Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Scene::AnimationLite> animation, bool isImage,
         Core::Angle rotateAngle, Core::Size size
     ) {
         bool createdNew = (m_OnUseAmount >= m_TotalAmount);

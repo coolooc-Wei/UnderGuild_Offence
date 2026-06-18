@@ -232,10 +232,10 @@ namespace UGO::System {
     }
     
     void BattleManager::SetAllObjectsVisible(bool visable) {
-        for (auto* character: GetAllCharacters()) {
-            if (character) {
-                character->GetGameObject()->SetVisible(visable && !character->IsDead());
-            }
+        for (auto* character: GetAllCharacters()) { 
+            if (!character) { continue; }
+            else if (character->IsDead()) { character->GetGameObject()->SetVisible(false); }
+            else { character->GetGameObject()->SetVisible(visable); }
         }
     }
 
