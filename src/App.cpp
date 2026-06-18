@@ -17,6 +17,7 @@
 #include "UI/GameButtons.hpp"
 #include "UI/MercenaryCountPanel.hpp"
 #include "UI/PauseMapUI.hpp"
+#include "UI/SelectLevelPage.hpp"
 
 namespace UGO {
 
@@ -51,6 +52,7 @@ namespace UGO {
 
         // 每次切換狀態：先隱藏地圖（避免殘留）
         if (m_PauseMapUI) { m_PauseMapUI->Hide(); }
+        if (m_SelectLevelPage) { m_SelectLevelPage->Hide(); }
 
         // Hide all pages
         for (auto& page: m_Pages) {
@@ -61,36 +63,46 @@ namespace UGO {
 
         m_CurrentGameState = state;
         m_CurrentProgressState = state;
-        if (m_Pages[m_CurrentGameState]) {
-            m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING && state != GameState::SETTLING && state != GameState::END);
-        }
+        // if (m_Pages[m_CurrentGameState]) {
+        //     m_Pages[m_CurrentGameState]->SetVisible(state != GameState::GAMING && state != GameState::SETTLING && state != GameState::END);
+        // }
 
         switch (state) {
             case GameState::WELCOME: {
-                // No special init
+                if (m_GameDisplay) {
+                    m_GameDisplay->ShowWelcomeBackground(true);
+                }
             } break;
             case GameState::MENU: {
-                // No special init
+                if (m_GameDisplay) {
+                    m_GameDisplay->ShowWelcomeBackground(false);
+                    m_GameDisplay->ShowMenuBackground(true);
+                }
             } break;
             case GameState::LEVEL_INIT: {
+                if (m_GameDisplay) {
+                    m_GameDisplay->ShowMenuBackground(false);
+                }
                 // No special init
             } break;
             case GameState::PAUSE: {
                 m_EffectAnimationManager->Reset();
-                m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
-                if (m_Pages[GameState::PAUSE]) {
-                    m_Pages[GameState::PAUSE]->SetVisible(false);
-                }
-                // 手動暫停才顯示地圖（升級暫停時不顯示）
-                if (!m_IsUpgradePause && m_PauseMapUI) {
+                //m_BattleManager->SetAllObjectsVisible(true); // 確保角色仍渲染
+                // if (m_Pages[GameState::PAUSE]) {
+                //     m_Pages[GameState::PAUSE]->SetVisible(false);
+                // }
+                // 手動暫停才顯示地圖（升級暫停與合成介面暫停與羈絆介面開啟時不顯示）
+                if (!m_IsUpgradePause && !m_IsMixOpen && !m_IsBondOpen && m_PauseMapUI) {
                     m_PauseMapUI->UpdateMap();
                     m_PauseMapUI->Show();
                 }
             } break;
             case GameState::GAMING: {
                 m_BattleManager->SetAllObjectsVisible(true);
-                // 如果是從升級暫停恢復，確保強化頁面已隱藏
+                // 如果是從升級暫停或羈絆頁面恢復，確保頁面已隱藏
                 if (m_UpgradePage) { m_UpgradePage->Hide(); }
+                if (m_BondPage) { m_BondPage->Hide(); }
+                m_IsBondOpen = false;
                 /* HACK: Remove these lines after testing */
                 if (m_BattleManager->GetAllHeroes().empty()) {
                     Core::WorldPosition heroPos = {-300.0f, -300.0f};
@@ -131,15 +143,15 @@ namespace UGO {
         bool isInGame = (state == GameState::GAMING || state == GameState::PAUSE || state == GameState::SETTLING);
         if (m_GameDisplay) {
             m_GameDisplay->SetBackgroundVisible(isInGame);
-            m_GameDisplay->SetHUDVisible(isInGame);
+            m_GameDisplay->SetHUDVisible(isInGame && !m_IsMixOpen && !m_IsBondOpen);
             m_GameDisplay->SetStateVisible(isInGame);
-            m_GameDisplay->SetPauseVisible(state == GameState::GAMING);
-            m_GameDisplay->SetContinueVisible(state == GameState::PAUSE && !m_IsUpgradePause);
+            m_GameDisplay->SetPauseVisible(state == GameState::GAMING && !m_IsMixOpen);
+            m_GameDisplay->SetContinueVisible(state == GameState::PAUSE && !m_IsUpgradePause && !m_IsMixOpen && !m_IsBondOpen);
         }
 
         // 經驗條：只在 GAMING 狀態顯示（暫停/結算時隱藏，避免遮擋畫面）
         if (m_ExperienceBar) {
-            if (state == GameState::GAMING || state == GameState::PAUSE) {
+            if ((state == GameState::GAMING || state == GameState::PAUSE) && !m_IsMixOpen && !m_IsBondOpen) {
                 m_ExperienceBar->Show();
             } else {
                 m_ExperienceBar->Hide();
@@ -148,7 +160,7 @@ namespace UGO {
 
         // 血條系統：GAMING 與 PAUSE 狀態皆顯示，其他狀態隱藏
         if (m_HealthBarSystem) {
-            if (state == GameState::GAMING || state == GameState::PAUSE) {
+            if ((state == GameState::GAMING || state == GameState::PAUSE) && !m_IsMixOpen && !m_IsBondOpen) {
                 m_HealthBarSystem->Show();
             } else {
                 m_HealthBarSystem->Hide();
@@ -157,7 +169,7 @@ namespace UGO {
 
         // 傭兵計數面板：GAMING 與 PAUSE 狀態顯示，其他狀態隱藏
         if (m_MercenaryCountPanel) {
-            if (state == GameState::GAMING || state == GameState::PAUSE) {
+            if ((state == GameState::GAMING || state == GameState::PAUSE)) {
                 m_MercenaryCountPanel->Show();
                 // 僅在 GAMING 狀態下允許點擊合成，暫停期間（PAUSE）失效
                 m_MercenaryCountPanel->SetInteractionEnabled(state == GameState::GAMING);
@@ -169,9 +181,11 @@ namespace UGO {
 
         // 控制 UI 按鈕的可見性
         if (m_GameButtons) {
+            m_GameButtons->SetStartMenuButtonVisible(state == GameState::WELCOME);
             m_GameButtons->SetStartButtonVisible(state == GameState::MENU);
-            m_GameButtons->SetPauseButtonVisible(state == GameState::GAMING);
-            m_GameButtons->SetContinueButtonVisible(state == GameState::PAUSE && !m_IsUpgradePause);
+            m_GameButtons->SetPauseButtonVisible(state == GameState::GAMING && !m_IsMixOpen);
+            m_GameButtons->SetContinueButtonVisible(state == GameState::PAUSE && !m_IsUpgradePause && !m_IsMixOpen);
+            m_GameButtons->SetMixButtonVisible(state == GameState::GAMING && !m_IsMixOpen);
         }
 
         LOG_INFO("Changing GameState to: {}", stateName);

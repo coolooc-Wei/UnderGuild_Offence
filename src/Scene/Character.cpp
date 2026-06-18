@@ -78,8 +78,40 @@ namespace UGO::Scene {
                 multiplier += (effect->GetMultiplier() - 1.0f);
             }
         }
-        return m_AttackPower * multiplier;
+        HpValue finalAttackPower = m_AttackPower * multiplier;
+        if (multiplier != 1.0f) {
+            LOG_INFO("[StatusEffect] Executed AttackUp on Character (ID: {}, Type: {}): Base Attack: {}, Multiplier: {}, Final Attack: {}",
+                     m_InstanceID, m_TypeID, m_AttackPower, multiplier, finalAttackPower);
+        }
+        return finalAttackPower;
     }
+
+    SpeedValue Character::GetSpeed() const {
+        float multiplier = 1.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect->GetType() == StatusEffectType::SpeedUp || effect->GetType() == StatusEffectType::SlowDown) {
+                multiplier += (effect->GetMultiplier() - 1.0f);
+            }
+        }
+        SpeedValue finalSpeed = BasicObject::GetSpeed() * multiplier;
+        if (multiplier != m_LastSpeedMultiplier) {
+            m_LastSpeedMultiplier = multiplier;
+            LOG_INFO("[StatusEffect] Executed Speed Modification on Character (ID: {}, Type: {}): Base Speed: {}, Multiplier: {}, Final Speed: {}",
+                     m_InstanceID, m_TypeID, BasicObject::GetSpeed(), multiplier, finalSpeed);
+        }
+        return finalSpeed;
+    }
+
+    float Character::GetVampireMultiplier() const {
+        float multiplier = 0.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetType() == StatusEffectType::Vampire) {
+                multiplier += effect->GetMultiplier();
+            }
+        }
+        return multiplier;
+    }
+
     Core::Velocity Character::GetIntendedMovement() const { return m_IntentedMovement; }
     Core::Velocity Character::GetRepelMovement() const { return m_RepelMovement; }
 

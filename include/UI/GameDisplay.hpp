@@ -23,6 +23,8 @@ public:
     void SetPauseVisible(bool visible);
     void SetContinueVisible(bool visible);
     void HideAllResults();
+    void ShowWelcomeBackground(bool visible);
+    void ShowMenuBackground(bool visible);
     void Update();
 
 private:
@@ -43,6 +45,30 @@ private:
     std::shared_ptr<Scene::BasicObject> m_EnemyIcon;
     std::shared_ptr<Util::GameObject> m_ShowMonCount;
     std::shared_ptr<Util::Text> m_MonCountText;
+
+    std::shared_ptr<Scene::BasicObject> m_WelcomeBackground;
+    std::shared_ptr<Scene::BasicObject> m_WelcomeTitle;
+    std::shared_ptr<Scene::BasicObject> m_WelcomeTitle_1;
+    std::shared_ptr<Scene::BasicObject> m_WelcomeTitle_2;
+
+    std::shared_ptr<Scene::BasicObject> m_MenuBackground;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu1;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu2;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu3;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu4;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu5;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu6;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu7;
+    std::shared_ptr<Scene::BasicObject> m_Mask;
+    std::shared_ptr<Scene::BasicObject> m_Pipe1;
+    std::shared_ptr<Scene::BasicObject> m_Pipe2;
+    std::shared_ptr<Scene::BasicObject> m_Pipe3;
+    std::shared_ptr<Scene::BasicObject> m_Pipe4;
+    std::shared_ptr<Scene::BasicObject> m_Pipe5;
+    std::shared_ptr<Scene::BasicObject> m_Pipe6;
+    std::shared_ptr<Scene::BasicObject> m_Pipe7;
+    std::shared_ptr<Scene::BasicObject> m_Pipe8;
+    std::shared_ptr<Scene::BasicObject> m_Pipe9;
 };
 
 } // namespace UI

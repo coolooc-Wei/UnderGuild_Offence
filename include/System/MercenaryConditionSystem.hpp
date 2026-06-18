@@ -59,8 +59,11 @@ namespace System {
     struct BondConfig {
         std::string    bondID;
         std::string    name;
+        std::string    title;              ///< 英文名稱/標題
+        std::string    description;        ///< 羈絆效果描述
         CountCondition condition;          ///< 計算觸發數量的條件
         std::vector<BondTier> tiers;       ///< 依 threshold 升序排列
+        std::string    iconPath;           ///< 羈絆圖示路徑
     };
 
     // ─────────────────────────────────────────────
@@ -122,8 +125,14 @@ namespace System {
          *        設計意圖：UI 層只需傳入卡牌的 typeID，無須直接接觸 SynthesisRecipe 結構。
          * @param typeID 原料傭兵種類 ID（e.g. "m_001"）
          * @return std::string 對應配方的 recipeID；若無對應配方則返回空字串
+         * 
          */
         std::string GetRecipeIDForIngredient(const std::string& typeID) const;
+
+        /**
+         * @brief 取得所有傳說/神話級合成配方（outputTypeID 以 "s_" 開頭的配方）。
+         */
+        std::vector<SynthesisRecipe> GetLegendaryRecipes() const;
 
 
         // ── 執行 API ──
@@ -146,8 +155,10 @@ namespace System {
          */
         void UpdateBonds();
 
-    private:
-        // ── 內部輔助：條件計算 ──
+        /**
+         * @brief 取得所有載入的羈絆配置。
+         */
+        const std::vector<BondConfig>& GetBonds() const { return m_Bonds; }
 
         /**
          * @brief 計算滿足 CountCondition 的傭兵數量。
@@ -158,6 +169,9 @@ namespace System {
          * @brief 計算滿足 CountCondition 且不重複的傭兵類別 (TypeID) 數量。
          */
         int CountUniqueMatchingTypes(const CountCondition& cond) const;
+
+    private:
+        // ── 內部輔助：條件計算 ──
 
         /**
          * @brief 取得所有滿足 CountCondition 的傭兵原始指標。
@@ -192,7 +206,7 @@ namespace System {
         /**
          * @brief 根據 BondEffect::targetSelector 取得應套用/移除 Buff 的角色列表。
          */
-        std::vector<Scene::Character*> ResolveBondTargets(const std::string& targetSelector) const;
+        std::vector<Scene::Character*> ResolveBondTargets(const std::string& targetSelector, const BondConfig& bond) const;
 
         // ── 成員 ──
 

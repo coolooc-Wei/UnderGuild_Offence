@@ -13,23 +13,28 @@ namespace UI {
 
 class GameButtons {
 public:
-    GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue);
+    GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix);
     ~GameButtons();
 
     void SetStartButtonVisible(bool visible);
     void SetPauseButtonVisible(bool visible);
     void SetContinueButtonVisible(bool visible);
+    void SetStartMenuButtonVisible(bool visible);
+    void SetMixButtonVisible(bool visible);
 
 private:
     Util::Renderer& m_Root;
     UIManager& m_UIManager;
 
+    std::shared_ptr<UI::Button> m_StartMenuButton;
     std::shared_ptr<UI::Button> m_StartGameButton;
     std::shared_ptr<UI::Button> m_PauseButton;
     std::shared_ptr<UI::Button> m_ContinueButton;
+    std::shared_ptr<UI::Button> m_MixButton;
 
     std::shared_ptr<Scene::BasicObject> m_PauseIcon;
     std::shared_ptr<Scene::BasicObject> m_ContinueIcon;
+    std::shared_ptr<Scene::BasicObject> m_MixIcon;
 };
 
 } // namespace UI

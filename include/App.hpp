@@ -6,6 +6,8 @@
 #include "UI/Page.hpp"
 #include "UI/UIManager.hpp"
 #include "UI/UpgradePage.hpp"
+#include "UI/MythicSynthesisPage.hpp"
+#include "UI/BondPage.hpp"
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
@@ -34,6 +36,7 @@ namespace UGO::UI {
     class GameDisplay;
     class MercenaryCountPanel;
     class PauseMapUI;
+    class SelectLevelPage;
 }
 
 namespace UGO {
@@ -91,6 +94,8 @@ private:
     
     std::unique_ptr<UI::GameDisplay> m_GameDisplay;
     std::unique_ptr<UI::GameButtons> m_GameButtons;
+    std::unique_ptr<UI::SelectLevelPage> m_SelectLevelPage;
+    std::string m_SelectedLevelID = "test";
     float m_SettlingTimer;
 
 
@@ -134,6 +139,14 @@ private:
     std::unique_ptr<UI::MercenaryCountPanel> m_MercenaryCountPanel;
     // 暫停時的關卡地圖（手動暫停時顯示，升級暫停時不顯示）
     std::unique_ptr<UI::PauseMapUI> m_PauseMapUI;
+
+    // 傳說/神話合成頁面與狀態
+    std::unique_ptr<UI::MythicSynthesisPage> m_MythicSynthesisPage;
+    bool m_IsMixOpen = false;
+
+    // 羈絆面板與狀態
+    std::unique_ptr<UI::BondPage> m_BondPage;
+    bool m_IsBondOpen = false;
 };
 
 } // namespace UGO

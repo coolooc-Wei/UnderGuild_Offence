@@ -3,17 +3,31 @@
 namespace UGO {
 namespace UI {
 
-GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue)
+GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix)
     : m_Root(root), m_UIManager(uiManager) {
-    // 「開始遊戲」按鈕，置於畫面中央
-    m_StartGameButton = std::make_shared<UI::Button>(
-        glm::vec2{0.0f, 0.0f - 150.0f}, // 畫面中央 (PTSD 框架原點在中心)
-        300.0f, 90.0f,              // 大小
+
+    m_StartMenuButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, - 320.0f}, // 畫面中央 (PTSD 框架原點在中心)
+        150.0f, 45.0f,              // 大小
         "../Resources/Image/button/Bt_02.png",
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
     );
-    m_StartGameButton->SetZIndex(10.0f);
+    m_StartMenuButton->SetZIndex(70.0f);
+    m_StartMenuButton->SetVisible(false); // 初始隱藏
+    m_StartMenuButton->SetOnClickCallback(onMenu);
+    root.AddChild(m_StartMenuButton);
+    uiManager.Register(m_StartMenuButton);
+
+    // 「開始遊戲」按鈕，置於畫面中央
+    m_StartGameButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, 0.0f - 320.0f}, // 畫面中央 (PTSD 框架原點在中心)
+        200.0f, 60.0f,              // 大小
+        "../Resources/Image/button/Bt_02.png",
+        "../Resources/Image/button/Bt_2_1.png",
+        "../Resources/Image/button/Bt_02_1.png"
+    );
+    m_StartGameButton->SetZIndex(70.0f);
     m_StartGameButton->SetVisible(false); // 初始隱藏
     m_StartGameButton->SetOnClickCallback(onStart);
     root.AddChild(m_StartGameButton);
@@ -67,6 +81,30 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_ContinueIcon->GetGameObject()->SetZIndex(100.0f);
     m_ContinueIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_ContinueIcon->GetGameObject());
+
+    // Mix button slightly above the mercenary count panel
+    const glm::vec2 mixPos = glm::vec2{-570.0f, -220.0f};
+    m_MixButton = std::make_shared<UI::Button>(
+        mixPos,
+        50.0f, 50.0f,
+        "../Resources/Image/button/Bt_12.png",
+        "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png"
+    );
+    m_MixButton->SetZIndex(10.0f);
+    m_MixButton->SetVisible(false);
+    m_MixButton->SetOnClickCallback(onMix);
+    root.AddChild(m_MixButton);
+    uiManager.Register(m_MixButton);
+
+    m_MixIcon = std::make_shared<Scene::BasicObject>();
+    m_MixIcon->SetImage("../Resources/Image/title/Title_Mix.png");
+    m_MixIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_MixIcon->SetSize(35.0f, 35.0f);
+    m_MixIcon->GetGameObject()->m_Transform.translation = mixPos;
+    m_MixIcon->GetGameObject()->SetZIndex(100.0f);
+    m_MixIcon->GetGameObject()->SetVisible(false);
+    root.AddChild(m_MixIcon->GetGameObject());
 }
 
 GameButtons::~GameButtons() {
@@ -82,17 +120,30 @@ GameButtons::~GameButtons() {
         m_Root.RemoveChild(m_ContinueButton);
         m_UIManager.Unregister(m_ContinueButton);
     }
+    if (m_MixButton) {
+        m_Root.RemoveChild(m_MixButton);
+        m_UIManager.Unregister(m_MixButton);
+    }
     if (m_PauseIcon && m_PauseIcon->GetGameObject()) {
         m_Root.RemoveChild(m_PauseIcon->GetGameObject());
     }
     if (m_ContinueIcon && m_ContinueIcon->GetGameObject()) {
         m_Root.RemoveChild(m_ContinueIcon->GetGameObject());
     }
+    if (m_MixIcon && m_MixIcon->GetGameObject()) {
+        m_Root.RemoveChild(m_MixIcon->GetGameObject());
+    }
 }
 
 void GameButtons::SetStartButtonVisible(bool visible) {
     if (m_StartGameButton) {
         m_StartGameButton->SetVisible(visible);
+    }
+}
+
+void GameButtons::SetStartMenuButtonVisible(bool visible) {
+    if (m_StartMenuButton) {
+        m_StartMenuButton->SetVisible(visible);
     }
 }
 
@@ -111,6 +162,15 @@ void GameButtons::SetContinueButtonVisible(bool visible) {
     }
     if (m_ContinueIcon) {
         m_ContinueIcon->GetGameObject()->SetVisible(visible);
+    }
+}
+
+void GameButtons::SetMixButtonVisible(bool visible) {
+    if (m_MixButton) {
+        m_MixButton->SetVisible(visible);
+    }
+    if (m_MixIcon) {
+        m_MixIcon->GetGameObject()->SetVisible(visible);
     }
 }
 

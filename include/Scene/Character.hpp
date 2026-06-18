@@ -57,10 +57,12 @@ namespace Scene {
         HpValue GetMaxHP() const;
         HpValue GetCurrentHP() const;
         HpValue GetAttackPower() const;
+        SpeedValue GetSpeed() const override;
         const std::string& GetTypeID() const;
         Core::Velocity GetIntendedMovement() const;
         Core::Velocity GetRepelMovement() const;
         uint64_t GetInstanceID() const;
+        float GetVampireMultiplier() const;
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
@@ -131,6 +133,7 @@ namespace Scene {
         AnimationState m_AnimationState = AnimationState::Stand;
         std::shared_ptr<AnimationLite> m_WalkAnimation = nullptr;
         std::shared_ptr<AnimationLite> m_AttackAnimation = nullptr;
+        mutable float m_LastSpeedMultiplier = 1.0f;
     };
 
 } // namespace Scene

@@ -84,8 +84,11 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
     m_Bonds.clear();
     for (const auto& entry : j) {
         BondConfig bond;
-        bond.bondID = entry.at("bondID").get<std::string>();
-        bond.name   = entry.value("name", "");
+        bond.bondID   = entry.at("bondID").get<std::string>();
+        bond.name     = entry.value("name", "");
+        bond.title    = entry.value("Title", "");
+        bond.description = entry.value("Description", "");
+        bond.iconPath = entry.value("IconPath", "");
 
         // 條件
         const auto& condJson = entry.at("condition");
@@ -116,6 +119,7 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
             else if (effectTypeStr == "Poison")    { tier.effect.effectData.type = Scene::StatusEffectType::Poison; }
             else if (effectTypeStr == "Burn")      { tier.effect.effectData.type = Scene::StatusEffectType::Burn; }
             else if (effectTypeStr == "Freeze")    { tier.effect.effectData.type = Scene::StatusEffectType::Freeze; }
+            else if (effectTypeStr == "Vampire")   { tier.effect.effectData.type = Scene::StatusEffectType::Vampire; }
             else {
                 LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
             }
@@ -272,6 +276,16 @@ std::string MercenaryConditionSystem::GetRecipeIDForIngredient(const std::string
     return "";
 }
 
+std::vector<SynthesisRecipe> MercenaryConditionSystem::GetLegendaryRecipes() const {
+    std::vector<SynthesisRecipe> legendaryRecipes;
+    for (const auto& recipe : m_Recipes) {
+        if (recipe.outputTypeID.rfind("s_", 0) == 0) {
+            legendaryRecipes.push_back(recipe);
+        }
+    }
+    return legendaryRecipes;
+}
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 公開執行 API
@@ -329,8 +343,17 @@ bool MercenaryConditionSystem::ExecuteSynthesis(const std::string& recipeID) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
-    const std::string& targetSelector) const
+    const std::string& targetSelector, const BondConfig& bond) const
 {
+    if (targetSelector == "BOND_MEMBERS") {
+        std::vector<Scene::Character*> result;
+        for (Scene::Mercenary* m : m_BattleManager.GetAllMercenaries()) {
+            if (m && MatchesConditionFilter(m, bond.condition)) {
+                result.push_back(static_cast<Scene::Character*>(m));
+            }
+        }
+        return result;
+    }
     if (targetSelector == "ALL_MERCENARIES") {
         // Mercenary* 不能隱式轉換為 Character* 的 vector，需明確轉型
         std::vector<Scene::Character*> result;
@@ -348,13 +371,13 @@ std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
 
 void MercenaryConditionSystem::ActivateBondTier(const BondConfig& bond, int tierIndex) {
     const BondTier& tier = bond.tiers[tierIndex];
-    auto targets = ResolveBondTargets(tier.effect.targetSelector);
+    auto targets = ResolveBondTargets(tier.effect.targetSelector, bond);
     for (auto* character : targets) {
         if (character) {
             character->AddStatusEffect(tier.effect.effectData);
         }
     }
-    LOG_DEBUG("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
+    LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
               std::to_string(tier.threshold) + " activated.");
 }
 
@@ -369,7 +392,7 @@ void MercenaryConditionSystem::DeactivateBond(const BondConfig& bond) {
             }
         }
     }
-    LOG_DEBUG("MercenaryConditionSystem: Bond [" + bond.bondID + "] deactivated.");
+    LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] deactivated.");
 }
 
 void MercenaryConditionSystem::ProcessBonds() {

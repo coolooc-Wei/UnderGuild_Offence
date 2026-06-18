@@ -23,6 +23,7 @@
 #include "UI/HealthBarSystem.hpp"
 #include "UI/MercenaryCountPanel.hpp"
 #include "UI/PauseMapUI.hpp"
+#include "UI/SelectLevelPage.hpp"
 
 
 void UGO::App::Start() {
@@ -86,6 +87,42 @@ void UGO::App::Start() {
         // 將合成系統注入面板，面板內部會綁定按鈕點擊回調
         m_MercenaryCountPanel->SetConditionSystem(m_MercenaryConditionSystem.get());
 
+        // 初始化傳說/神話級合成頁面
+        m_MythicSynthesisPage = std::make_unique<UI::MythicSynthesisPage>(
+            m_Root, *m_UIManager, *m_MercenaryConditionSystem, *m_CharacterFactory, *m_BattleManager
+        );
+        m_MythicSynthesisPage->SetOnCloseCallback([this]() {
+            if (m_MythicSynthesisPage) {
+                m_MythicSynthesisPage->Hide();
+            }
+            m_IsMixOpen = false;
+            ChangeGameState(GameState::GAMING);
+        });
+
+        m_MythicSynthesisPage->SetOnBondCallback([this]() {
+            if (m_MythicSynthesisPage) {
+                m_MythicSynthesisPage->Hide();
+            }
+            m_IsBondOpen = true;
+            if (m_BondPage) {
+                m_BondPage->Show();
+            }
+        });
+
+        // 初始化羈絆頁面
+        m_BondPage = std::make_unique<UI::BondPage>(
+            m_Root, *m_UIManager, *m_MercenaryConditionSystem, *m_CharacterFactory, *m_BattleManager
+        );
+        m_BondPage->SetOnCloseCallback([this]() {
+            if (m_BondPage) {
+                m_BondPage->Hide();
+            }
+            m_IsBondOpen = false;
+            if (m_MythicSynthesisPage) {
+                m_MythicSynthesisPage->Show();
+            }
+        });
+
         // ── 升級事件回調（事件驅動，控制層與邏輯層完全解耦）────────────────
         m_UpgradeManager->SetOnReadyCallback([this]() {
             // 卡片已抽好：暫停遊戲並顯示 UI
@@ -117,20 +154,49 @@ void UGO::App::Start() {
         // 暫停時關卡地圖可視化 UI
         m_PauseMapUI = std::make_unique<UI::PauseMapUI>(m_Root, *m_LevelSystem);
 
+        // Initialize SelectLevelPage popup overlay
+        m_SelectLevelPage = std::make_unique<UI::SelectLevelPage>(m_Root, *m_UIManager, m_LevelSystem->GetLevelIDs());
+        m_SelectLevelPage->SetOnEnterGameCallback([this](const std::string& levelID) {
+            m_SelectedLevelID = levelID;
+            m_SelectLevelPage->Hide();
+            ChangeGameState(GameState::LEVEL_INIT);
+        });
+        m_SelectLevelPage->SetOnCancelCallback([this]() {
+            m_SelectLevelPage->Hide();
+            if (m_GameButtons) {
+                m_GameButtons->SetStartButtonVisible(true);
+            }
+        });
+
         // Initialize Game Buttons
         m_GameButtons = std::make_unique<UI::GameButtons>(
             m_Root, *m_UIManager,
-            [this]() {
-                LOG_INFO("[UI] Start Game button clicked!");
-                ChangeGameState(GameState::LEVEL_INIT);
+            [this]() { // onMenu
+                LOG_INFO("[UI] Start Menu button clicked!");
+                ChangeGameState(GameState::MENU);
             },
-            [this]() {
+            [this]() { // onStart (開始選關)
+                LOG_INFO("[UI] Start Game (Level Select) button clicked!");
+                if (m_GameButtons) {
+                    m_GameButtons->SetStartButtonVisible(false);
+                }
+                m_SelectLevelPage->Show();
+            },
+            [this]() { // onPause
                 LOG_INFO("[UI] Pause button clicked!");
                 ChangeGameState(GameState::PAUSE);
             },
-            [this]() {
+            [this]() { // onContinue
                 LOG_INFO("[UI] Continue button clicked!");
                 ChangeGameState(GameState::GAMING);
+            },
+            [this]() { // onMix
+                LOG_INFO("[UI] Mix button clicked!");
+                m_IsMixOpen = true;
+                if (m_MythicSynthesisPage) {
+                    m_MythicSynthesisPage->Show();
+                }
+                ChangeGameState(GameState::PAUSE);
             }
         );
 

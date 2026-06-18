@@ -17,6 +17,7 @@
 #include "UI/GameDisplay.hpp"
 #include "UI/GameButtons.hpp"
 #include "UI/MercenaryCountPanel.hpp"
+#include "UI/SelectLevelPage.hpp"
 
 void UGO::App::Update() {
   switch (m_CurrentGameState) {
@@ -27,16 +28,17 @@ void UGO::App::Update() {
     }
   } break;
   case GameState::MENU: {
-    // 保留鍵盤備用方案
-    if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
-        Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
-      ChangeGameState(GameState::LEVEL_INIT);
+    // 保留鍵盤備用方案（僅在選關介面未開啟時允許）
+    if (!m_SelectLevelPage || !m_SelectLevelPage->IsVisible()) {
+      if (Util::Input::IsKeyDown(Util::Keycode::KP_ENTER) ||
+          Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
+        ChangeGameState(GameState::LEVEL_INIT);
+      }
     }
   } break;
   case GameState::LEVEL_INIT: {
-    /* TODO: Hardcode of GenerateLevel for now */
     m_BattleManager->AddHeroByID("h_001", {0.0f, 0.0f});
-    m_LevelSystem->GenerateLevel("test");
+    m_LevelSystem->GenerateLevel(m_SelectedLevelID);
     m_LevelSystem->EnterStartRoom();
     m_BarrelSystem->OnEnterRoom({0, 0});
 
@@ -47,7 +49,12 @@ void UGO::App::Update() {
     if (!m_IsUpgradePause && Util::Input::IsKeyDown(Util::Keycode::P)) {
       ChangeGameState(GameState::GAMING);
     }
-
+    if (m_IsBondOpen && m_BondPage) {
+      m_BondPage->Update();
+    }
+    if (m_IsMixOpen && m_MythicSynthesisPage) {
+      m_MythicSynthesisPage->Update();
+    }
   } break;
   case GameState::GAMING: {
 
