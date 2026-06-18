@@ -59,6 +59,8 @@ namespace System {
     struct BondConfig {
         std::string    bondID;
         std::string    name;
+        std::string    title;              ///< 英文名稱/標題
+        std::string    description;        ///< 羈絆效果描述
         CountCondition condition;          ///< 計算觸發數量的條件
         std::vector<BondTier> tiers;       ///< 依 threshold 升序排列
         std::string    iconPath;           ///< 羈絆圖示路徑

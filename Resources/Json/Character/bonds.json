@@ -2,6 +2,8 @@
     {
         "bondID": "vampire",
         "name": "吸血鬼",
+        "Title": "Vampire",
+        "Description": "Mencenaries with this badge restore 4% / 8% of their maximum HP when they kill a monster.",
         "IconPath": "../Resources/Image/synergy/Synergy_11.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -36,41 +38,9 @@
     {
         "bondID": "vigor_potion",
         "name": "活力藥水",
+        "Title": "Vigor Potion",
+        "Description": "The chance for a potion to drop is increased by 1% / 2%",
         "IconPath": "../Resources/Image/synergy/Synergy_12.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_001,s_023,m_002_2,s_025",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "necromancer",
-        "name": "死靈",
-        "IconPath": "../Resources/Image/synergy/Synergy_17.png",
         "condition": {
             "type": "BY_TYPE_LIST",
             "target": "m_001,s_023,m_002_2,s_025",
@@ -104,6 +74,8 @@
     {
         "bondID": "rainbow_robot",
         "name": "彩虹機器人",
+        "Title": "Rainbow Robot",
+        "Description": "Whenever a minion is merged, all minions gain 50% / 150% attack speed for 10 seconds. (Does not stack.)",
         "IconPath": "../Resources/Image/synergy/Synergy_18.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -138,6 +110,8 @@
     {
         "bondID": "multi_race",
         "name": "多種族",
+        "Title": "Multi-Race",
+        "Description": "For each different type of summoned minion present, all minions gain +15% / +35% attack power",
         "IconPath": "../Resources/Image/synergy/Synergy_19.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -172,7 +146,9 @@
     {
         "bondID": "mystic",
         "name": "神秘",
-        "IconPath": "../Resources/Image/synergy/Synergy_10.png",
+        "Title": "Mystic",
+        "Description": "Defeated minions have a 3% / 7% chance to appear as a Mystic Minion. Combining 3 Machines summons 1 Mechanical Minion",
+        "IconPath": "../Resources/Image/synergy/Synergy_4.png",
         "condition": {
             "type": "BY_TYPE_LIST",
             "target": "m_001,s_023,m_002_2,s_025",
@@ -206,7 +182,9 @@
     {
         "bondID": "angel_feather",
         "name": "天使羽毛",
-        "IconPath": "../Resources/Image/synergy/Synergy_10.png",
+        "Title": "Angel Feather",
+        "Description": "Summoned or revived minions become invincible for 4 / 8 seconds",
+        "IconPath": "../Resources/Image/synergy/Synergy_9.png",
         "condition": {
             "type": "BY_TYPE_LIST",
             "target": "m_001,s_023,m_002_2,s_025",
@@ -240,6 +218,8 @@
     {
         "bondID": "reinforcements",
         "name": "支援軍",
+        "Title": "Reinforcements",
+        "Description": "After each wave switch, there is a 50% / 75% chance to obtain a random companion minion",
         "IconPath": "../Resources/Image/synergy/Synergy_13.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -274,6 +254,8 @@
     {
         "bondID": "assault_force",
         "name": "突擊部隊",
+        "Title": "Assault Force",
+        "Description": "Melee minion HP increases by 100% / 250%, and melee units gain 10% / 20% Critical Hit Chance",
         "IconPath": "../Resources/Image/synergy/Synergy_14.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -308,6 +290,8 @@
     {
         "bondID": "clock_hands",
         "name": "時鐘指針",
+        "Title": "Clock Hands",
+        "Description": "Generates a mechanical clock hand centered on the hero, dealing 300% / 450% damage to enemies it touches, with a 5% / 10% chance to stun them for 2 seconds",
         "IconPath": "../Resources/Image/synergy/Synergy_16.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -342,6 +326,8 @@
     {
         "bondID": "valiant",
         "name": "勇猛",
+        "Title": "Valiant",
+        "Description": "All minion attack power increases by 150% / 300%",
         "IconPath": "../Resources/Image/synergy/Synergy_1.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -376,6 +362,8 @@
     {
         "bondID": "willpower",
         "name": "意志",
+        "Title": "Willpower",
+        "Description": "Hero attack power increases by 100% / 200%",
         "IconPath": "../Resources/Image/synergy/Synergy_2.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -410,6 +398,8 @@
     {
         "bondID": "life_link",
         "name": "生命連結",
+        "Title": "Life Link",
+        "Description": "Minion revival time is reduced by 20% / 40%",
         "IconPath": "../Resources/Image/synergy/Synergy_3.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -444,6 +434,8 @@
     {
         "bondID": "giant_footprint",
         "name": "巨人腳印",
+        "Title": "Giant Footprint",
+        "Description": "Every 9 / 6 seconds, enemies around the hero are stunned for 2 seconds",
         "IconPath": "../Resources/Image/synergy/Synergy_7.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -478,6 +470,8 @@
     {
         "bondID": "blessing",
         "name": "祝福",
+        "Title": "Blessing",
+        "Description": "The chance for EXP gems to drop when killing monsters increases by 2% / 4%",
         "IconPath": "../Resources/Image/synergy/Synergy_8.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -512,6 +506,8 @@
     {
         "bondID": "bountiful_orc_barrel",
         "name": "豐饒的獸人桶",
+        "Title": "Bountiful Orc Barrel",
+        "Description": "The number of Orc Barrels generated on the map increases by 1 / 2",
         "IconPath": "../Resources/Image/synergy/Synergy_5.png",
         "condition": {
             "type": "BY_TYPE_LIST",
@@ -546,6 +542,8 @@
     {
         "bondID": "medic",
         "name": "醫務兵",
+        "Title": "Medic",
+        "Description": "Every 3 seconds, all allied minions around the hero recover 5% / 10% HP. If there are no allied minions nearby, the hero instead recovers 2% HP",
         "IconPath": "../Resources/Image/synergy/Synergy_6.png",
         "condition": {
             "type": "BY_TYPE_LIST",

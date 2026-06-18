@@ -6,6 +6,27 @@
 
 namespace UGO::UI {
 
+static std::string WrapText(const std::string& text, size_t lineLength) {
+    std::string result;
+    std::stringstream ss(text);
+    std::string word;
+    size_t currentLineLength = 0;
+
+    while (ss >> word) {
+        if (currentLineLength + word.length() + (currentLineLength > 0 ? 1 : 0) > lineLength) {
+            result += "\n";
+            currentLineLength = 0;
+        }
+        if (currentLineLength > 0) {
+            result += " ";
+            currentLineLength += 1;
+        }
+        result += word;
+        currentLineLength += word.length();
+    }
+    return result;
+}
+
 BondPage::BondPage(
     Util::Renderer& root,
     UIManager& uiManager,
@@ -153,6 +174,28 @@ BondPage::BondPage(
             row.mercenaryCards.push_back(card);
         }
 
+        // Title Text
+        row.titleText = std::make_shared<Util::Text>(
+            fontPath, 14, "Title",
+            Util::Color::FromName(Util::Colors::WHITE)
+        );
+        row.titleObj = std::make_shared<Util::GameObject>();
+        row.titleObj->SetDrawable(row.titleText);
+        row.titleObj->SetZIndex(82.0f);
+        row.titleObj->SetVisible(false);
+        m_Root.AddChild(row.titleObj);
+
+        // Description Text
+        row.descText = std::make_shared<Util::Text>(
+            fontPath, 12, "Description",
+            Util::Color::FromName(Util::Colors::WHITE)
+        );
+        row.descObj = std::make_shared<Util::GameObject>();
+        row.descObj->SetDrawable(row.descText);
+        row.descObj->SetZIndex(82.0f);
+        row.descObj->SetVisible(false);
+        m_Root.AddChild(row.descObj);
+
         m_Rows.push_back(row);
     }
 }
@@ -186,6 +229,9 @@ BondPage::~BondPage() {
                 m_Root.RemoveChild(separator.obj);
             }
         }
+        if (row.titleObj) m_Root.RemoveChild(row.titleObj);
+        if (row.descObj) m_Root.RemoveChild(row.descObj);
+
         for (auto& card : row.mercenaryCards) {
             if (card.cardBg) m_Root.RemoveChild(card.cardBg->GetGameObject());
             if (card.icon) m_Root.RemoveChild(card.icon->GetGameObject());
@@ -219,6 +265,9 @@ void BondPage::Hide() {
         for (auto& separator : row.tierSeparators) {
             separator.obj->SetVisible(false);
         }
+
+        row.titleObj->SetVisible(false);
+        row.descObj->SetVisible(false);
 
         for (auto& card : row.mercenaryCards) {
             card.cardBg->GetGameObject()->SetVisible(false);
@@ -323,6 +372,19 @@ void BondPage::UpdateDisplay() {
                     separator.obj->SetVisible(false);
                 }
             }
+            // Update Title
+            row.titleText->SetText(bond.title);
+            float titleX = -145.0f + row.titleText->GetSize().x / 2.0f;
+            row.titleObj->m_Transform.translation = {titleX, rowY + 77.0f};
+            row.titleObj->SetVisible(true);
+
+            // Update Description
+            std::string wrappedDesc = WrapText(bond.description, 56);
+            row.descText->SetText(wrappedDesc);
+            float descX = -145.0f + row.descText->GetSize().x / 2.0f;
+            row.descObj->m_Transform.translation = {descX, rowY + 42.0f};
+            row.descObj->SetVisible(true);
+
             row.rowBg->GetGameObject()->SetVisible(true);
 
             // Parse members
@@ -387,6 +449,8 @@ void BondPage::UpdateDisplay() {
             for (auto& separator : row.tierSeparators) {
                 separator.obj->SetVisible(false);
             }
+            row.titleObj->SetVisible(false);
+            row.descObj->SetVisible(false);
 
             for (auto& card : row.mercenaryCards) {
                 card.cardBg->GetGameObject()->SetVisible(false);

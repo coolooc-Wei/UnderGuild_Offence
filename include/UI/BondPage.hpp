@@ -47,6 +47,12 @@ private:
         std::vector<TierIndicator> tierIndicators;
         std::vector<TierIndicator> tierSeparators;
 
+        // Title and Description text
+        std::shared_ptr<Util::Text> titleText;
+        std::shared_ptr<Util::GameObject> titleObj;
+        std::shared_ptr<Util::Text> descText;
+        std::shared_ptr<Util::GameObject> descObj;
+
         // Bottom part: Mercenary cards belonging to the bond
         struct MercenaryCard {
             std::string typeID;
