@@ -5,7 +5,6 @@ namespace UGO::Scene {
     Barrel::Barrel(BarrelParams&& params)
     : m_InteractionDuration(params.interactionDuration),
       m_InteractTimer(params.interactionDuration, true),
-      m_IndicatorObject(params.indicatorObject),
       m_OriginGridPos(params.originGridPos) {
         SetWorldPosition(params.position);
         SetImage("../Resources/Image/drop/OakBarrel_1.png");
@@ -15,18 +14,26 @@ namespace UGO::Scene {
 
         m_InteractBox = std::make_unique<Core::CircleBox>(params.position, params.interactionRadius);
 
-        if (m_IndicatorObject) {
-            m_IndicatorObject->SetVisible(false);
-            m_IndicatorObject->m_Transform.translation = params.position + m_IndicatorOffset;
+        if (params.renderer) {
+            m_ProgressBar = std::make_unique<UI::HealthBar>(
+                *params.renderer, UI::HealthBar::OwnerType::Barrel, PROGRESS_BAR_WIDTH
+            );
+            m_ProgressBar->SetProgress(0.0f, m_InteractionDuration);
+            m_ProgressBar->Hide();
         }
     }
     Barrel::~Barrel() = default;
 
     void Barrel::Update() {
         BasicObject::Update();
-        /* Keep the indicator aligned with the barrel */
-        if (m_IndicatorObject && m_IndicatorObject->GetChildren().empty()) {
-            m_IndicatorObject->m_Transform.translation = GetWorldPosition() + m_IndicatorOffset;
+        if (m_ProgressBar && m_State == BarrelState::Interacting) {
+            const float progress = m_InteractTimer.GetNormalizedProgress();
+            m_ProgressBar->SetProgress(progress, 1.0f);
+
+            if (progress > 0.0f) { m_ProgressBar->Show(); }
+            else { m_ProgressBar->Hide(); }
+            
+            m_ProgressBar->UpdatePosition(GetWorldPosition(), static_cast<float>(Core::TILE_SIZE));
         }
     }
 
@@ -43,12 +50,11 @@ namespace UGO::Scene {
             if (m_State == BarrelState::Idle) {
                 m_State = BarrelState::Interacting;
                 m_InteractTimer.Start(m_InteractionDuration);
-                if (m_IndicatorObject) { m_IndicatorObject->SetVisible(true); }
             }
             else if (m_State == BarrelState::Interacting) {
                 if (m_InteractTimer.IsTimeUp()) {
                     m_State = BarrelState::Completed;
-                    if (m_IndicatorObject) { m_IndicatorObject->SetVisible(false); }
+                    if (m_ProgressBar) { m_ProgressBar->Hide(); }
                     BasicObject::SetDead(true);
                     BasicObject::GetGameObject()->SetVisible(false);
                 }
@@ -57,7 +63,10 @@ namespace UGO::Scene {
         else {
             if (m_State == BarrelState::Interacting) {
                 m_State = BarrelState::Idle;
-                if (m_IndicatorObject) { m_IndicatorObject->SetVisible(false); }
+                if (m_ProgressBar) {
+                    m_ProgressBar->SetProgress(0.0f, 1.0f);
+                    m_ProgressBar->Hide();
+                }
             }
         }
     }

@@ -40,7 +40,7 @@ void UGO::App::Update() {
     m_BattleManager->AddHeroByID("h_001", {0.0f, 0.0f});
     m_LevelSystem->GenerateLevel(m_SelectedLevelID);
     m_LevelSystem->EnterStartRoom();
-    m_BarrelSystem->OnEnterRoom({0, 0});
+    m_BarrelSystem->OnEnterRoom(m_LevelSystem->GetCurrentRoom().mapPos);
 
     ChangeGameState(GameState::GAMING);
   } break;

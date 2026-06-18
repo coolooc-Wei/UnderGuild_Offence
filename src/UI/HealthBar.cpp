@@ -7,6 +7,7 @@ namespace UGO::UI {
 const std::string HealthBar::ALLIE_IMAGE_PATH = "../Resources/Image/title/327387_0.jpg";
 const std::string HealthBar::ENEMY_IMAGE_PATH   = "../Resources/Image/title/327388_0.jpg";
 const std::string HealthBar::BG_IMAGE_PATH   = "../Resources/Image/title/325083.jpg";
+const std::string HealthBar::BARREL_IMAGE_PATH = "../Resources/Image/title/1105438.png";
 
 // ── 建構子 ──────────────────────────────────────────────────────────────
     HealthBar::HealthBar(Util::Renderer& root, OwnerType ownerType, float barWidth)
@@ -25,10 +26,19 @@ const std::string HealthBar::BG_IMAGE_PATH   = "../Resources/Image/title/325083.
 
         // ── 填充條 ──────────────────────────────────────────────────────────
         m_Fill = std::make_shared<Scene::BasicObject>();
-        if (ownerType == OwnerType::Ally) {
+        switch (ownerType) {
+        case OwnerType::Ally: {
             m_Fill->SetImage(ALLIE_IMAGE_PATH);
-        } else {
+        } break;
+        case OwnerType::Enemy: {
             m_Fill->SetImage(ENEMY_IMAGE_PATH);
+        } break;
+        case OwnerType::Barrel: {
+            m_Fill->SetImage(BARREL_IMAGE_PATH);
+        } break;
+        default: {
+            LOG_ERROR("From HealthBar::HealthBar: Unhandled owner type.");
+        } break;
         }
         m_Fill->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         m_Fill->SetSize(1.0f, BAR_HEIGHT);

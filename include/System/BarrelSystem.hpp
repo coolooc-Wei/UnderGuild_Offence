@@ -57,7 +57,6 @@ namespace System {
 
         // Barrel parameters
         const Core::Time::Second m_CooldownDuration = 5.0f;
-        const std::string m_IndicatorImagePath = ""; /* FIXME: add image */
 
         // Drops configuration
         const std::vector<DropWeight> m_DropWeights = {
