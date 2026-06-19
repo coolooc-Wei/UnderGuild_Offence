@@ -11,6 +11,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     );
     m_ShowHp->SetDrawable(m_HPValueText);
     m_ShowHp->m_Transform.translation = {0.0f, -300.0f};
+    m_ShowHp->SetZIndex(41.0f);
     m_ShowHp->SetVisible(false); // Default hidden
     root.AddChild(m_ShowHp);
 
@@ -21,6 +22,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     );
     m_ShowKillCount->SetDrawable(m_KillCountText);
     m_ShowKillCount->m_Transform.translation = {0.0f, -340.0f};
+    m_ShowKillCount->SetZIndex(41.0f);
     m_ShowKillCount->SetVisible(false); // Default hidden
     root.AddChild(m_ShowKillCount);
 
@@ -74,7 +76,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Wave->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Wave->SetSize(75.0f, 25.0f);
     m_Wave->GetGameObject()->m_Transform.translation = {-600.0f, 320.0f};
-    m_Wave->GetGameObject()->SetZIndex(100.0f);
+    m_Wave->GetGameObject()->SetZIndex(40.0f);
     m_Wave->GetGameObject()->SetVisible(false);
     root.AddChild(m_Wave->GetGameObject());
 
@@ -83,7 +85,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_TimeBG->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_TimeBG->SetSize(100.0f, 35.0f);
     m_TimeBG->GetGameObject()->m_Transform.translation = {-590.0f, 230.0f};
-    m_TimeBG->GetGameObject()->SetZIndex(100.0f);
+    m_TimeBG->GetGameObject()->SetZIndex(40.0f);
     m_TimeBG->GetGameObject()->SetVisible(false);
     root.AddChild(m_TimeBG->GetGameObject());
 
@@ -92,7 +94,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_EnemyIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_EnemyIcon->SetSize(30.0f, 30.0f);
     m_EnemyIcon->GetGameObject()->m_Transform.translation = {-620.0f, 190.0f};
-    m_EnemyIcon->GetGameObject()->SetZIndex(100.0f);
+    m_EnemyIcon->GetGameObject()->SetZIndex(40.0f);
     m_EnemyIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_EnemyIcon->GetGameObject());
 
@@ -103,9 +105,62 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     );
     m_ShowMonCount->SetDrawable(m_MonCountText);
     m_ShowMonCount->m_Transform.translation = {-565.0f, 190.0f};
+    m_ShowMonCount->SetZIndex(41.0f);
     m_ShowMonCount->SetVisible(false); // Default hidden
     m_ShowMonCount->AddChild(m_ShowKillCount); // 怪物數量顯示在擊殺數量旁
     root.AddChild(m_ShowMonCount);
+
+    // ── Wave Value Text ──
+    m_WaveValueText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 32, "1/19",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_ShowWaveValue = std::make_shared<Util::GameObject>();
+    m_ShowWaveValue->SetDrawable(m_WaveValueText);
+    m_ShowWaveValue->m_Transform.translation = {-585.0f, 280.0f};
+    m_ShowWaveValue->SetZIndex(41.0f);
+    m_ShowWaveValue->SetVisible(false);
+    root.AddChild(m_ShowWaveValue);
+
+    // ── Countdown Timer Text ──
+    m_CountdownText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 20, "00:00",
+        Util::Color::FromName(Util::Colors::BLACK)
+    );
+    m_ShowCountdown = std::make_shared<Util::GameObject>();
+    m_ShowCountdown->SetDrawable(m_CountdownText);
+    m_ShowCountdown->m_Transform.translation = {-580.0f, 230.0f};
+    m_ShowCountdown->SetZIndex(41.0f);
+    m_ShowCountdown->SetVisible(false);
+    root.AddChild(m_ShowCountdown);
+
+    // ── Life Points (Hearts) ──
+    float heartXStart = -620.0f;
+    float heartY = 150.0f;
+    float heartSpacing = 35.0f;
+    for (int i = 0; i < 2; ++i) {
+        float xPos = heartXStart + i * heartSpacing;
+        
+        auto hpOff = std::make_shared<Scene::BasicObject>();
+        hpOff->SetImage("../Resources/Image/title/LifePoint_Off.png");
+        hpOff->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        hpOff->SetSize(30.0f, 30.0f);
+        hpOff->GetGameObject()->m_Transform.translation = {xPos, heartY};
+        hpOff->GetGameObject()->SetZIndex(40.0f);
+        hpOff->GetGameObject()->SetVisible(false);
+        root.AddChild(hpOff->GetGameObject());
+        m_LifePointsOff.push_back(hpOff);
+
+        auto hpOn = std::make_shared<Scene::BasicObject>();
+        hpOn->SetImage("../Resources/Image/title/LifePoint_On.png");
+        hpOn->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+        hpOn->SetSize(30.0f, 30.0f);
+        hpOn->GetGameObject()->m_Transform.translation = {xPos, heartY};
+        hpOn->GetGameObject()->SetZIndex(41.0f);
+        hpOn->GetGameObject()->SetVisible(false);
+        root.AddChild(hpOn->GetGameObject());
+        m_LifePointsOn.push_back(hpOn);
+    }
 
     m_WelcomeBackground = std::make_shared<Scene::BasicObject>();
     m_WelcomeBackground->SetImage("../Resources/Image/title/Title_Bg1.png");
@@ -351,7 +406,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(s_MenuCampFireFlame->GetGameObject());
 }
 
-void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int monCount) {
+void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int monCount, int currentWave, int totalWaves, float countdown) {
     if (m_HPValueText) {
         m_HPValueText->SetText("HP: " + std::to_string((int)currentHp) + "/" + std::to_string((int)maxHp));
     }
@@ -360,6 +415,26 @@ void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int mon
     }
     if (m_MonCountText) {
         m_MonCountText->SetText(std::to_string(monCount) + " / 100");
+    }
+    if (m_WaveValueText) {
+        m_WaveValueText->SetText(std::to_string(currentWave) + "/" + std::to_string(totalWaves));
+    }
+
+    // Countdown formatting
+    if (m_CountdownText) {
+        int minutes = static_cast<int>(countdown) / 60;
+        int seconds = static_cast<int>(countdown) % 60;
+        std::string minStr = std::to_string(minutes);
+        std::string secStr = (seconds < 10 ? "0" : "") + std::to_string(seconds);
+        m_CountdownText->SetText(minStr + ":" + secStr);
+    }
+
+    // Heart (HP bar) updates
+    for (size_t i = 0; i < m_LifePointsOn.size(); ++i) {
+        bool isAlive = (currentHp > static_cast<float>(i));
+        if (m_LifePointsOn[i]) {
+            m_LifePointsOn[i]->GetGameObject()->SetVisible(isAlive);
+        }
     }
 }
 
@@ -390,6 +465,14 @@ void GameDisplay::SetHUDVisible(bool visible) {
     if (m_ShowHp) m_ShowHp->SetVisible(visible);
     if (m_ShowKillCount) m_ShowKillCount->SetVisible(visible);
     if (m_ShowMonCount) m_ShowMonCount->SetVisible(visible);
+    if (m_ShowWaveValue) m_ShowWaveValue->SetVisible(visible);
+    if (m_ShowCountdown) m_ShowCountdown->SetVisible(visible);
+    for (auto& hpOff : m_LifePointsOff) {
+        if (hpOff) hpOff->GetGameObject()->SetVisible(visible);
+    }
+    for (auto& hpOn : m_LifePointsOn) {
+        if (hpOn) hpOn->GetGameObject()->SetVisible(visible);
+    }
 }
 
 void GameDisplay::SetBackgroundVisible(bool visible) {
@@ -402,6 +485,8 @@ void GameDisplay::SetStateVisible(bool visible) {
     if (m_Wave) m_Wave->GetGameObject()->SetVisible(visible);
     if (m_TimeBG) m_TimeBG->GetGameObject()->SetVisible(visible);
     if (m_EnemyIcon) m_EnemyIcon->GetGameObject()->SetVisible(visible);
+    if (m_ShowWaveValue) m_ShowWaveValue->SetVisible(visible);
+    if (m_ShowCountdown) m_ShowCountdown->SetVisible(visible);
 }
 
 void GameDisplay::SetPauseVisible(bool visible) {

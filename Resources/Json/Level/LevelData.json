@@ -1,8 +1,8 @@
 {
     "Level01": {
         "layout": {
-            "normalRoomCount": 1,
-            "specialRoomCount": 0,
+            "normalRoomCount": 3,
+            "specialRoomCount": 1,
             "bossRoomCount": 1
         },
         "spawnConfig": {
@@ -21,7 +21,7 @@
             "waveCount": 3,
             "bossWaveCount": 1,
             "batchCount": 4,
-            "batchInterval": 2.5,
+            "batchInterval": 8.0,
             "baseEnemyCountPerBatch": 4.0,
             "enemiesCountGrowthPerDifficulty": 0.5,
             "difficultyGrowthPerWave": 1,
@@ -31,8 +31,8 @@
     },
     "Level02": {
         "layout": {
-            "normalRoomCount": 3,
-            "specialRoomCount": 2,
+            "normalRoomCount": 4,
+            "specialRoomCount": 1,
             "bossRoomCount": 1
         },
         "spawnConfig": {
@@ -51,7 +51,7 @@
             "waveCount": 3,
             "bossWaveCount": 1,
             "batchCount": 4,
-            "batchInterval": 2.0,
+            "batchInterval": 8.0,
             "baseEnemyCountPerBatch": 4.0,
             "enemiesCountGrowthPerDifficulty": 1.0,
             "difficultyGrowthPerWave": 1,
@@ -61,8 +61,8 @@
     },
     "Level03": {
         "layout": {
-            "normalRoomCount": 5,
-            "specialRoomCount": 1,
+            "normalRoomCount": 3,
+            "specialRoomCount": 2,
             "bossRoomCount": 1
         },
         "spawnConfig": {
@@ -81,7 +81,7 @@
             "waveCount": 4,
             "bossWaveCount": 1,
             "batchCount": 4,
-            "batchInterval": 1.8,
+            "batchInterval": 8.0,
             "baseEnemyCountPerBatch": 5.0,
             "enemiesCountGrowthPerDifficulty": 1.5,
             "difficultyGrowthPerWave": 1,
@@ -91,7 +91,7 @@
     },
     "Level04": {
         "layout": {
-            "normalRoomCount": 6,
+            "normalRoomCount": 4,
             "specialRoomCount": 2,
             "bossRoomCount": 1
         },
@@ -112,7 +112,7 @@
             "waveCount": 4,
             "bossWaveCount": 1,
             "batchCount": 5,
-            "batchInterval": 1.5,
+            "batchInterval": 8.0,
             "baseEnemyCountPerBatch": 6.0,
             "enemiesCountGrowthPerDifficulty": 2.0,
             "difficultyGrowthPerWave": 2,
@@ -122,8 +122,8 @@
     },
     "Level05": {
         "layout": {
-            "normalRoomCount": 8,
-            "specialRoomCount": 2,
+            "normalRoomCount": 4,
+            "specialRoomCount": 3,
             "bossRoomCount": 1
         },
         "spawnConfig": {
@@ -144,7 +144,7 @@
             "waveCount": 5,
             "bossWaveCount": 1,
             "batchCount": 6,
-            "batchInterval": 1.2,
+            "batchInterval": 8.0,
             "baseEnemyCountPerBatch": 7.0,
             "enemiesCountGrowthPerDifficulty": 2.5,
             "difficultyGrowthPerWave": 2,

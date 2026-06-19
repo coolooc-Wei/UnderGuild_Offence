@@ -15,7 +15,7 @@ public:
     GameDisplay(Util::Renderer& root);
     ~GameDisplay() = default;
 
-    void UpdateHUD(float currentHp, float maxHp, int killCount, int monCount);
+    void UpdateHUD(float currentHp, float maxHp, int killCount, int monCount, int currentWave, int totalWaves, float countdown);
     void ShowResult(bool isWin);
     void SetHUDVisible(bool visible);
     void SetBackgroundVisible(bool visible);
@@ -45,6 +45,13 @@ private:
     std::shared_ptr<Scene::BasicObject> m_EnemyIcon;
     std::shared_ptr<Util::GameObject> m_ShowMonCount;
     std::shared_ptr<Util::Text> m_MonCountText;
+
+    std::shared_ptr<Util::Text> m_WaveValueText;
+    std::shared_ptr<Util::GameObject> m_ShowWaveValue;
+    std::shared_ptr<Util::Text> m_CountdownText;
+    std::shared_ptr<Util::GameObject> m_ShowCountdown;
+    std::vector<std::shared_ptr<Scene::BasicObject>> m_LifePointsOff;
+    std::vector<std::shared_ptr<Scene::BasicObject>> m_LifePointsOn;
 
     std::shared_ptr<Scene::BasicObject> m_WelcomeBackground;
     std::shared_ptr<Scene::BasicObject> m_WelcomeTitle;

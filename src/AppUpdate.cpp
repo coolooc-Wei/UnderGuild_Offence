@@ -130,7 +130,34 @@ void UGO::App::Update() {
     if (m_BattleManager->IsHeroAlive()) {
         auto* hero = m_BattleManager->GetAllHeroes()[0];
         if (m_GameDisplay) {
-            m_GameDisplay->UpdateHUD(hero->GetCurrentHP(), hero->GetMaxHP(), m_BattleManager->GetEnemyKillCount(), m_BattleManager->GetEnemyCount());
+            int totalWaves = 0;
+            int currentWave = 0;
+            if (m_LevelSystem) {
+                const auto& waveConfig = m_LevelSystem->GetCurrentLevelData().waveConfig;
+                const auto& rooms = m_LevelSystem->GetLayout();
+                const auto* currentRoom = m_LevelSystem->GetCurrentRoomPtr();
+                for (const auto& room : rooms) {
+                    int roomWaves = (room.roomType == Core::Map::RoomType::Boss) ? waveConfig.bossWaveCount : waveConfig.waveCount;
+                    totalWaves += roomWaves;
+                    if (room.isCleared) {
+                        currentWave += roomWaves;
+                    }
+                }
+                if (currentRoom && !currentRoom->isCleared) {
+                    currentWave += (m_EnemiesSpawnerSystem ? m_EnemiesSpawnerSystem->GetCurrentWaveID() : 0);
+                }
+            }
+            float countdown = m_EnemiesSpawnerSystem ? m_EnemiesSpawnerSystem->GetBatchCountdown() : 0.0f;
+
+            m_GameDisplay->UpdateHUD(
+                hero->GetCurrentHP(),
+                hero->GetMaxHP(),
+                m_BattleManager->GetEnemyKillCount(),
+                m_BattleManager->GetEnemyCount(),
+                currentWave,
+                totalWaves,
+                countdown
+            );
         }
 
         // 經驗條同步：每幀將 Hero 的 exp 資料推送給 ExperienceBar

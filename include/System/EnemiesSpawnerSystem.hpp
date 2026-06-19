@@ -60,6 +60,13 @@ namespace System {
         void SetConditionSystem(MercenaryConditionSystem* conditionSystem) { m_MercenaryConditionSystem = conditionSystem; }
         void SetCharacterFactory(CharacterFactory* characterFactory) { m_CharacterFactory = characterFactory; }
 
+        int GetCurrentWaveID() const { return m_CurrentWaveID; }
+        int GetTotalWaves() const { return m_SpawnConfig.bossID.empty() ? m_WaveConfig.waveCount : m_WaveConfig.bossWaveCount; }
+        float GetBatchCountdown() const {
+            float remaining = m_BatchTimer.GetRemainingSeconds();
+            return remaining > 99.0f ? 0.0f : remaining;
+        }
+
     private:
         void StartNextWave();
         void GenerateNextBatch();

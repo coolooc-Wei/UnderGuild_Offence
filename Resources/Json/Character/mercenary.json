@@ -1,6 +1,6 @@
 {
     "m_001": {
-        "speed": 1.5,
+        "speed": 1.7,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -19,8 +19,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 30.0,
+            "height": 30.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -31,8 +31,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 10.0,
+        "maxHP": 12100.0,
+        "attackPower": 600.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -61,7 +61,7 @@
         }
     },
     "m_001_1": {
-        "speed": 1.5,
+        "speed": 1.7,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -81,8 +81,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 44.0,
-            "height": 48.0
+            "width": 48.0,
+            "height": 36.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -93,8 +93,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 15.0,
+        "maxHP": 26620.0,
+        "attackPower": 1320.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -123,7 +123,7 @@
         }
     },
     "m_001_2": {
-        "speed": 1.5,
+        "speed": 1.7,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -144,7 +144,7 @@
         },
         "imagePath": [],
         "size": {
-            "width": 42.0,
+            "width": 46.0,
             "height": 40.0
         },
         "hitBox": {
@@ -156,8 +156,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
+        "maxHP": 58520.0,
+        "attackPower": 2904.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -186,7 +186,7 @@
         }
     },
     "m_002": {
-        "speed": 1.5,
+        "speed": 2.5,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -206,8 +206,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 24.0,
-            "height": 20.0
+            "width": 30.0,
+            "height": 28.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -218,9 +218,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 8630.0,
+        "attackPower": 260.0,
+        "attackCooldown": 1.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -248,7 +248,7 @@
         }
     },
     "m_002_1": {
-        "speed": 1.5,
+        "speed": 2.5,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -267,8 +267,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 28.0,
-            "height": 24.0
+            "width": 32.0,
+            "height": 28.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -279,9 +279,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 17250.0,
+        "attackPower": 1430.0,
+        "attackCooldown": 3.6,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -309,7 +309,7 @@
         }
     },
     "m_002_2": {
-        "speed": 1.5,
+        "speed": 2.5,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -328,8 +328,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 36.0,
-            "height": 30.0
+            "width": 44.0,
+            "height": 38.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -340,9 +340,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 40250.0,
+        "attackPower": 3250.0,
+        "attackCooldown": 4.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -370,7 +370,7 @@
         }
     },
     "m_004": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -402,8 +402,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
+        "maxHP": 5180.0,
+        "attackPower": 286.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -432,7 +432,7 @@
         }
     },
     "m_004_1": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -453,8 +453,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 24.0,
-            "height": 20.0
+            "width": 30.0,
+            "height": 26.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -465,8 +465,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
+        "maxHP": 11390.0,
+        "attackPower": 715.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -495,7 +495,7 @@
         }
     },
     "m_004_2": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -527,8 +527,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
+        "maxHP": 28520.0,
+        "attackPower": 1794.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -557,7 +557,7 @@
         }
     },
     "m_007": {
-        "speed": 1.5,
+        "speed": 2.2,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -578,7 +578,7 @@
         "imagePath": [],
         "size": {
             "width": 38.0,
-            "height": 34.0
+            "height": 30.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -589,9 +589,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 10930.0,
+        "attackPower": 1040.0,
+        "attackCooldown": 4.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -619,7 +619,7 @@
         }
     },
     "m_007_1": {
-        "speed": 1.5,
+        "speed": 2.2,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -639,8 +639,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 40.0,
+            "height": 34.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -651,9 +651,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 24040.0,
+        "attackPower": 2288.0,
+        "attackCooldown": 4.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -681,7 +681,7 @@
         }
     },
     "m_007_2": {
-        "speed": 1.5,
+        "speed": 2.2,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -701,8 +701,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 46.0,
-            "height": 42.0
+            "width": 48.0,
+            "height": 38.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -713,9 +713,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 52900.0,
+        "attackPower": 5031.0,
+        "attackCooldown": 4.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -774,9 +774,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 25300.0,
+        "attackPower": 650.0,
+        "attackCooldown": 7.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -836,9 +836,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 55660.0,
+        "attackPower": 1430.0,
+        "attackCooldown": 7.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -898,9 +898,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 122480.0,
+        "attackPower": 3146.0,
+        "attackCooldown": 7.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -928,7 +928,7 @@
         }
     },
     "m_016": {
-        "speed": 1.5,
+        "speed": 4.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -947,8 +947,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 38.0,
-            "height": 34.0
+            "width": 24.0,
+            "height": 18.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -959,9 +959,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 5250.0,
+        "attackPower": 242.0,
+        "attackCooldown": 2.4,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -989,7 +989,7 @@
         }
     },
     "m_016_1": {
-        "speed": 1.5,
+        "speed": 4.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1008,8 +1008,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 42.0,
-            "height": 38.0
+            "width": 30.0,
+            "height": 22.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1020,9 +1020,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 11550.0,
+        "attackPower": 528.0,
+        "attackCooldown": 2.4,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1050,7 +1050,7 @@
         }
     },
     "m_016_2": {
-        "speed": 1.5,
+        "speed": 4.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1069,8 +1069,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 46.0,
-            "height": 42.0
+            "width": 32.0,
+            "height": 24.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1081,9 +1081,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 1000.0,
-        "attackPower": 20.0,
-        "attackCooldown": 3.0,
+        "maxHP": 25410.0,
+        "attackPower": 1166.0,
+        "attackCooldown": 2.4,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1111,7 +1111,7 @@
         }
     },
     "s_003": {
-        "speed": 1.5,
+        "speed": 1.1,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1135,8 +1135,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 44.0,
+            "height": 54.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1147,9 +1147,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 316400.0,
+        "attackPower": 6500.0,
+        "attackCooldown": 4.2,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1177,7 +1177,7 @@
         }
     },
     "s_007": {
-        "speed": 1.5,
+        "speed": 1.6,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1198,8 +1198,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 48.0,
+            "height": 46.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1210,8 +1210,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
+        "maxHP": 244860.0,
+        "attackPower": 12870.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -1240,7 +1240,7 @@
         }
     },
     "s_011": {
-        "speed": 1.5,
+        "speed": 1.7,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1262,8 +1262,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 64.0,
+            "height": 44.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1274,9 +1274,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 425900.0,
+        "attackPower": 14560.0,
+        "attackCooldown": 3.6,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1336,9 +1336,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 415280.0,
+        "attackPower": 15730.0,
+        "attackCooldown": 4.8,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1366,7 +1366,7 @@
         }
     },
     "s_018": {
-        "speed": 1.5,
+        "speed": 1.8,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1385,8 +1385,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 32.0,
+            "height": 28.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1397,9 +1397,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 283900.0,
+        "attackPower": 15600.0,
+        "attackCooldown": 6.0,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1449,8 +1449,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 50.0
+            "width": 54.0,
+            "height": 48.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1461,8 +1461,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
+        "maxHP": 324500.0,
+        "attackPower": 9880.0,
         "attackCooldown": 3.0,
         "invincibleDuration": 0.5,
         "weapon": "",
@@ -1491,7 +1491,7 @@
         }
     },
     "s_025": {
-        "speed": 1.5,
+        "speed": 1.7,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1512,8 +1512,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 58.0,
+            "height": 46.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1524,9 +1524,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 405600.0,
+        "attackPower": 12220.0,
+        "attackCooldown": 3.9,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1554,7 +1554,7 @@
         }
     },
     "s_032": {
-        "speed": 1.5,
+        "speed": 1.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1575,8 +1575,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 52.0,
+            "height": 50.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1587,9 +1587,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 456300.0,
+        "attackPower": 16250.0,
+        "attackCooldown": 4.5,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1617,7 +1617,7 @@
         }
     },
     "g_013": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1648,9 +1648,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 871900.0,
+        "attackPower": 23400.0,
+        "attackCooldown": 2.7,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],
@@ -1678,7 +1678,7 @@
         }
     },
     "g_034": {
-        "speed": 1.5,
+        "speed": 2.1,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -1701,8 +1701,8 @@
         },
         "imagePath": [],
         "size": {
-            "width": 56.0,
-            "height": 48.0
+            "width": 62.0,
+            "height": 44.0
         },
         "hitBox": {
             "type": "RECTANGLE",
@@ -1713,9 +1713,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": false,
-        "maxHP": 2000.0,
-        "attackPower": 40.0,
-        "attackCooldown": 3.0,
+        "maxHP": 1123200.0,
+        "attackPower": 41600.0,
+        "attackCooldown": 2.4,
         "invincibleDuration": 0.5,
         "weapon": "",
         "statusEffects": [],

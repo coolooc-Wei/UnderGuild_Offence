@@ -25,9 +25,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 8000.0,
+        "attackPower": 400.0,
+        "attackCooldown": 2.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -55,7 +55,7 @@
         }
     },
     "e_002": {
-        "speed": 1.0,
+        "speed": 4.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -82,9 +82,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 10000.0,
+        "attackPower": 600.0,
+        "attackCooldown": 5.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -112,7 +112,7 @@
         }
     },
     "e_004": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -137,9 +137,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 9000.0,
+        "attackPower": 500.0,
+        "attackCooldown": 2.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -192,9 +192,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 8000.0,
+        "attackPower": 400.0,
+        "attackCooldown": 2.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -222,7 +222,7 @@
         }
     },
     "e_015": {
-        "speed": 1.5,
+        "speed": 3.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -247,9 +247,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 10000.0,
+        "attackPower": 600.0,
+        "attackCooldown": 2.5,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -302,9 +302,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 8000.0,
+        "attackPower": 450.0,
+        "attackCooldown": 2.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -332,7 +332,7 @@
         }
     },
     "e_039": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -357,9 +357,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 6000.0,
+        "attackPower": 850.0,
+        "attackCooldown": 3.5,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -387,7 +387,7 @@
         }
     },
     "e_054": {
-        "speed": 1.5,
+        "speed": 4.5,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -412,8 +412,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
+        "maxHP": 7000.0,
+        "attackPower": 450.0,
         "attackCooldown": 1.0,
         "invincibleDuration": 0.2,
         "weapon": "",
@@ -442,7 +442,7 @@
         }
     },
     "e_060": {
-        "speed": 1.5,
+        "speed": 2.5,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -467,9 +467,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 8000.0,
+        "attackPower": 500.0,
+        "attackCooldown": 3.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -497,7 +497,7 @@
         }
     },
     "e_061": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -522,9 +522,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 9000.0,
+        "attackPower": 550.0,
+        "attackCooldown": 3.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -552,7 +552,7 @@
         }
     },
     "e_062": {
-        "speed": 1.5,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -577,9 +577,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 6000.0,
+        "attackPower": 750.0,
+        "attackCooldown": 3.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -607,7 +607,7 @@
         }
     },
     "e_084": {
-        "speed": 1.5,
+        "speed": 4.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -632,9 +632,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 9000.0,
+        "attackPower": 650.0,
+        "attackCooldown": 1.5,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -690,9 +690,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 300.0,
-        "attackPower": 29.0,
-        "attackCooldown": 2.0,
+        "maxHP": 30000.0,
+        "attackPower": 4500.0,
+        "attackCooldown": 4.6,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],

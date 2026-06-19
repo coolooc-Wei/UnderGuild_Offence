@@ -29,6 +29,11 @@ namespace Time {
         void SetSilence(bool silence);
         bool IsTimeUp() const;
         float GetNormalizedProgress() const;
+        float GetRemainingSeconds() const {
+            Tick current = GetCurrentTick();
+            if (current >= endTick) { return 0.0f; }
+            return static_cast<float>(endTick - current) * FIXED_DELTA_TIME;
+        }
     // private:
         TimeStep duration;
         Tick endTick;
