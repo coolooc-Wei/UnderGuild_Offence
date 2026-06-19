@@ -67,6 +67,10 @@ namespace System {
             float remaining = m_BatchTimer.GetRemainingSeconds();
             return remaining > 99.0f ? 0.0f : remaining;
         }
+        float GetWaveCountdown() const {
+            float remaining = m_WaveTimer.GetRemainingSeconds();
+            return remaining > 99.0f ? 0.0f : remaining;
+        }
 
     private:
         void StartNextWave();

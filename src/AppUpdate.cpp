@@ -178,7 +178,7 @@ void UGO::App::Update() {
                             currentWave += (m_EnemiesSpawnerSystem ? m_EnemiesSpawnerSystem->GetCurrentWaveID() : 0);
                         }
                     }
-                    float countdown = m_EnemiesSpawnerSystem ? m_EnemiesSpawnerSystem->GetBatchCountdown() : 0.0f;
+                    float countdown = m_EnemiesSpawnerSystem ? m_EnemiesSpawnerSystem->GetWaveCountdown() : 0.0f;
 
                     m_GameDisplay->UpdateHUD(
                         hero->GetCurrentHP(),
