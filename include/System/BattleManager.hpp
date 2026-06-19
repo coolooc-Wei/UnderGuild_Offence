@@ -14,6 +14,7 @@
 
 namespace UGO {
 namespace System {
+    class MercenaryConditionSystem;
 
     class BattleManager {
     public:
@@ -88,6 +89,7 @@ namespace System {
          * @brief 向所有較兵新增一個狀態效果。
          */
         void AddStatusEffectToAllMercenaries(const Scene::StatusEffectData& data);
+        void SetConditionSystem(MercenaryConditionSystem* conditionSystem) { m_ConditionSystem = conditionSystem; }
 
         void UpdateSystem();
         void SetAllObjectsVisible(bool visable);
@@ -133,6 +135,7 @@ namespace System {
         SteeringSystem& m_SteeringSystem;
         RewardManager& m_RewardManager;
         Util::Renderer& m_Root;
+        MercenaryConditionSystem* m_ConditionSystem = nullptr;
 
         const Core::Distance m_offsetDis = 32.0f;
         std::vector<Scene::StatusEffectData> m_GlobalEnemyDebuffs; ///< 套用至所有後續生成敵人

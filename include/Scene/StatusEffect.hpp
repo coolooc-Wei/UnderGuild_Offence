@@ -24,6 +24,7 @@ namespace Scene {
         MaxHpUp,
         CritChanceUp,
         Reinforcements,
+        Invincible,
     };
 
     struct StatusEffectData {

@@ -127,6 +127,7 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
                 else if (effectTypeStr == "MaxHpUp")   { effect.effectData.type = Scene::StatusEffectType::MaxHpUp; }
                 else if (effectTypeStr == "CritChanceUp") { effect.effectData.type = Scene::StatusEffectType::CritChanceUp; }
                 else if (effectTypeStr == "Reinforcements") { effect.effectData.type = Scene::StatusEffectType::Reinforcements; }
+                else if (effectTypeStr == "Invincible") { effect.effectData.type = Scene::StatusEffectType::Invincible; }
                 else {
                     LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
                 }

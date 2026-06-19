@@ -264,6 +264,11 @@ namespace UGO::Scene {
 
     void Character::SetAttackCooldownDuration(Core::Time::Second duration) { m_AttackCooldown.SetDuration(duration); }
     void Character::SetInvincibleDuration(Core::Time::Second duration) { m_InvincibleTimer.SetDuration(duration); }
+    void Character::TriggerInvincible(Core::Time::Second duration) {
+        m_InvincibleTimer.SetDuration(duration);
+        m_InvincibleTimer.Start();
+        ActivateHurtBox(false);
+    }
 
     void Character::AcceptIntendedMovement() {
         TryMove(m_IntentedMovement, m_RepelMovement);

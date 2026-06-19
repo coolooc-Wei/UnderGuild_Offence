@@ -84,6 +84,8 @@ void UGO::App::Start() {
         m_MercenaryConditionSystem->LoadRecipes("../Resources/Json/Character/synthesis.json");
         m_MercenaryConditionSystem->LoadBonds("../Resources/Json/Character/bonds.json");
 
+        m_BattleManager->SetConditionSystem(m_MercenaryConditionSystem.get());
+
         // 將合成系統注入面板，面板內部會綁定按鈕點擊回調
         m_MercenaryCountPanel->SetConditionSystem(m_MercenaryConditionSystem.get());
         m_RewardManager->SetConditionSystem(m_MercenaryConditionSystem.get());

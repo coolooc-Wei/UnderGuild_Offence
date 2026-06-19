@@ -4,6 +4,7 @@
 #include "Scene/Character.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 
 namespace {
     inline UGO::Core::Angle GetRotateAngle(UGO::Core::Angle offsetAngle, UGO::Core::Velocity diff) {
@@ -214,6 +215,17 @@ namespace UGO::System {
         }
 
         m_MercenaryPool.emplace_back(m_CharacterFactory.CreateMercenary(std::move(params), spawnPos));
+        
+        if (m_ConditionSystem) {
+            int activeTier = m_ConditionSystem->GetActiveBondTier("angel_feather");
+            if (activeTier >= 0) {
+                float duration = (activeTier == 0) ? 4.0f : 8.0f;
+                if (!m_MercenaryPool.empty()) {
+                    m_MercenaryPool.back()->TriggerInvincible(duration);
+                }
+                LOG_INFO("[Angel Feather Bond] Mercenary summoned! Granted {} seconds of invincibility.", duration);
+            }
+        }
     }
     void BattleManager::AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position) {
         AddMercenary(m_CharacterFactory.GetMercenaryParams(mercenaryID), position);
@@ -415,6 +427,16 @@ namespace UGO::System {
                     spawnPos.y += (rand() % 40 - 20);
                 }
                 mercenary->Respawn(spawnPos);
+                
+                if (m_ConditionSystem) {
+                    int activeTier = m_ConditionSystem->GetActiveBondTier("angel_feather");
+                    if (activeTier >= 0) {
+                        float duration = (activeTier == 0) ? 4.0f : 8.0f;
+                        mercenary->TriggerInvincible(duration);
+                        LOG_INFO("[Angel Feather Bond] Mercenary resurrected! Granted {} seconds of invincibility.", duration);
+                    }
+                }
+
                 m_IsCacheDirty = true;
             }
         }

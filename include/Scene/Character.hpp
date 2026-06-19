@@ -75,6 +75,7 @@ namespace Scene {
         void SetDamageAnimationData(const EffectAnimationData& data);
         void SetAttackCooldownDuration(Core::Time::Second duration);
         void SetInvincibleDuration(Core::Time::Second duration);
+        void TriggerInvincible(Core::Time::Second duration);
 
         // Events
         void OnAttack() override;
