@@ -35,6 +35,8 @@ namespace System {
         const Core::IsGridWalkableCallback& GetIsGridWalkableCallback() const { return mf_IsGridWalkableCallback; }
 
         std::pair<std::string, glm::vec2> GetMercenaryIconInfo(const std::string& mercenaryID);
+        std::vector<std::string> GetLegendaryMercenaryIDs() const;
+        std::vector<std::string> GetAllMercenaryIDs() const;
 
     private:
         const std::string m_EnemyDatabasePath = "../Resources/Json/Character/enemy.json";

@@ -14,7 +14,7 @@ namespace UGO::Scene {
         DamageTextAnimation();
         ~DamageTextAnimation();
 
-        void Start(Core::WorldPosition position, HpValue damageAmount);
+        void Start(Core::WorldPosition position, HpValue damageAmount, bool isCritical = false);
         void End();
 
         bool IsOccupied() const;
@@ -22,10 +22,10 @@ namespace UGO::Scene {
         /* Returns true if the animation has ended */
         bool Update();
     private:
-        std::shared_ptr<Util::Text> GetCachedText(int damageAmount);
+        std::shared_ptr<Util::Text> GetCachedText(int damageAmount, bool isCritical);
 
-
-        static std::unordered_map<int, std::shared_ptr<Util::Text>> s_TextCache;
+        
+        static std::unordered_map<uint64_t, std::shared_ptr<Util::Text>> s_TextCache;
 
         std::shared_ptr<Util::Text> m_Text = nullptr;
         Core::Time::CountDownTimer m_AnimationDuration = Core::Time::CountDownTimer(0);

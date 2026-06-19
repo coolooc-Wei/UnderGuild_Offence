@@ -135,6 +135,7 @@ set(SCENE_SRC
     Scene/AnimationLite.cpp
     Scene/Barrel.cpp
     Scene/HealPack.cpp
+    Scene/ClockHand.cpp
 )
 set(SCENE_INC
     Scene/BasicObject.hpp
@@ -156,6 +157,7 @@ set(SCENE_INC
     Scene/AnimationLite.hpp
     Scene/Barrel.hpp
     Scene/HealPack.hpp
+    Scene/ClockHand.hpp
 )
 
 # --- Combine All ---

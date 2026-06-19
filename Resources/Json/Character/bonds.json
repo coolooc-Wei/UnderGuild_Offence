@@ -36,42 +36,6 @@
         ]
     },
     {
-        "bondID": "vigor_potion",
-        "name": "活力藥水",
-        "Title": "Vigor Potion",
-        "Description": "The chance for a potion to drop is increased by 1% / 2%",
-        "IconPath": "../Resources/Image/synergy/Synergy_12.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_004_2,s_011,s_025,g_034",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
         "bondID": "rainbow_robot",
         "name": "彩虹機器人",
         "Title": "Rainbow Robot",
@@ -86,22 +50,24 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                        "type": "AttackSpeedUp",
+                        "multiplier": 0.5,
+                        "isPermanent": false,
+                        "duration": 10.0
                     }
                 }
             },
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                        "type": "AttackSpeedUp",
+                        "multiplier": 1.5,
+                        "isPermanent": false,
+                        "duration": 10.0
                     }
                 }
             }
@@ -125,7 +91,7 @@
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 1.15,
                         "isPermanent": true
                     }
                 }
@@ -136,43 +102,7 @@
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "mystic",
-        "name": "神秘",
-        "Title": "Mystic",
-        "Description": "Defeated mercenaries have a 3% / 7% chance to appear as a Mystic Mercenary. Combining 3 Machines summons 1 Mechanical Mercenary",
-        "IconPath": "../Resources/Image/synergy/Synergy_4.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_016_2,s_018,s_023,s_032",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 1.35,
                         "isPermanent": true
                     }
                 }
@@ -194,9 +124,9 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Invincible",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -205,9 +135,9 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Invincible",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -230,10 +160,10 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "Reinforcements",
+                        "multiplier": 0.5,
                         "isPermanent": true
                     }
                 }
@@ -241,10 +171,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "Reinforcements",
+                        "multiplier": 0.75,
                         "isPermanent": true
                     }
                 }
@@ -265,25 +195,45 @@
         "tiers": [
             {
                 "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                "effects": [
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "MaxHpUp",
+                            "multiplier": 2.0,
+                            "isPermanent": true
+                        }
+                    },
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "CritChanceUp",
+                            "multiplier": 0.1,
+                            "isPermanent": true
+                        }
                     }
-                }
+                ]
             },
             {
                 "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                "effects": [
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "MaxHpUp",
+                            "multiplier": 3.5,
+                            "isPermanent": true
+                        }
+                    },
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "CritChanceUp",
+                            "multiplier": 0.2,
+                            "isPermanent": true
+                        }
                     }
-                }
+                ]
             }
         ]
     },
@@ -291,11 +241,11 @@
         "bondID": "clock_hands",
         "name": "時鐘指針",
         "Title": "Clock Hands",
-        "Description": "Generates a mechanical clock hand centered on the hero, dealing 300% / 450% damage to enemies it touches, with a 5% / 10% chance to stun them for 2 seconds",
+        "Description": "Generates a mechanical clock hand centered on the hero, dealing 300% / 450% damage to enemies it touches",
         "IconPath": "../Resources/Image/synergy/Synergy_16.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "m_004_2,s_022,s_032,g_034",
+            "target": "m_004_2,s_023,s_032,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -338,10 +288,10 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 2.5,
                         "isPermanent": true
                     }
                 }
@@ -349,10 +299,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 4.0,
                         "isPermanent": true
                     }
                 }
@@ -374,10 +324,10 @@
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "HERO",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 2.0,
                         "isPermanent": true
                     }
                 }
@@ -385,10 +335,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "HERO",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 3.0,
                         "isPermanent": true
                     }
                 }
@@ -412,8 +362,8 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "LifeLink",
+                        "multiplier": 0.2,
                         "isPermanent": true
                     }
                 }
@@ -423,44 +373,8 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "giant_footprint",
-        "name": "巨人腳印",
-        "Title": "Giant Footprint",
-        "Description": "Every 9 / 6 seconds, enemies around the hero are stunned for 2 seconds",
-        "IconPath": "../Resources/Image/synergy/Synergy_7.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_007_2,s_023,s_025,g_013",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "LifeLink",
+                        "multiplier": 0.4,
                         "isPermanent": true
                     }
                 }
@@ -484,7 +398,7 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Blessing",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -495,43 +409,7 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "bountiful_orc_barrel",
-        "name": "豐饒的獸人桶",
-        "Title": "Bountiful Orc Barrel",
-        "Description": "The number of Orc Barrels generated on the map increases by 1 / 2",
-        "IconPath": "../Resources/Image/synergy/Synergy_5.png",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_008_2,s_011,s_025,g_034",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
+                        "type": "Blessing",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }

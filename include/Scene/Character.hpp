@@ -63,6 +63,9 @@ namespace Scene {
         Core::Velocity GetRepelMovement() const;
         uint64_t GetInstanceID() const;
         float GetVampireMultiplier() const;
+        float GetRespawnTimeReduction() const;
+        float GetCritChance() const;
+        float GetAttackSpeedMultiplier() const;
 
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
@@ -74,6 +77,7 @@ namespace Scene {
         void SetDamageAnimationData(const EffectAnimationData& data);
         void SetAttackCooldownDuration(Core::Time::Second duration);
         void SetInvincibleDuration(Core::Time::Second duration);
+        void TriggerInvincible(Core::Time::Second duration);
 
         // Events
         void OnAttack() override;
@@ -120,6 +124,7 @@ namespace Scene {
         HpValue m_CurrentHP;
         HpValue m_AttackPower;
         std::string m_TypeID = ""; ///< 角色種類識別 ID，傭兵使用，其他角色為空字串
+        Core::Time::Second m_BaseAttackCooldown = 0.0f;
         Core::Time::CountDownTimer m_AttackCooldown = Core::Time::CountDownTimer(0.0f);
         Core::Time::CountDownTimer m_InvincibleTimer = Core::Time::CountDownTimer(0.0f);
         std::unique_ptr<Weapon> m_Weapon = nullptr;

@@ -105,9 +105,37 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_MixIcon->GetGameObject()->SetZIndex(100.0f);
     m_MixIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_MixIcon->GetGameObject());
+
+    // ── Welcome 頁面的「Enter Sewer」文字 ──
+    m_StartMenuText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 18, "Enter Sewer",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_StartMenuTextObj = std::make_shared<Util::GameObject>();
+    m_StartMenuTextObj->SetDrawable(m_StartMenuText);
+    m_StartMenuTextObj->m_Transform.translation = glm::vec2{ 10.0f, -320.0f };
+    m_StartMenuTextObj->SetZIndex(71.0f);
+    m_StartMenuTextObj->SetVisible(false);
+    root.AddChild(m_StartMenuTextObj);
+
+    // ── Menu 頁面的「Enter Sewer」文字 ──
+    m_StartGameText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 24, "Enter Sewer",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_StartGameTextObj = std::make_shared<Util::GameObject>();
+    m_StartGameTextObj->SetDrawable(m_StartGameText);
+    m_StartGameTextObj->m_Transform.translation = glm::vec2{ 10.0f, -320.0f };
+    m_StartGameTextObj->SetZIndex(71.0f);
+    m_StartGameTextObj->SetVisible(false);
+    root.AddChild(m_StartGameTextObj);
 }
 
 GameButtons::~GameButtons() {
+    if (m_StartMenuButton) {
+        m_Root.RemoveChild(m_StartMenuButton);
+        m_UIManager.Unregister(m_StartMenuButton);
+    }
     if (m_StartGameButton) {
         m_Root.RemoveChild(m_StartGameButton);
         m_UIManager.Unregister(m_StartGameButton);
@@ -133,17 +161,29 @@ GameButtons::~GameButtons() {
     if (m_MixIcon && m_MixIcon->GetGameObject()) {
         m_Root.RemoveChild(m_MixIcon->GetGameObject());
     }
+    if (m_StartMenuTextObj) {
+        m_Root.RemoveChild(m_StartMenuTextObj);
+    }
+    if (m_StartGameTextObj) {
+        m_Root.RemoveChild(m_StartGameTextObj);
+    }
 }
 
 void GameButtons::SetStartButtonVisible(bool visible) {
     if (m_StartGameButton) {
         m_StartGameButton->SetVisible(visible);
     }
+    if (m_StartGameTextObj) {
+        m_StartGameTextObj->SetVisible(visible);
+    }
 }
 
 void GameButtons::SetStartMenuButtonVisible(bool visible) {
     if (m_StartMenuButton) {
         m_StartMenuButton->SetVisible(visible);
+    }
+    if (m_StartMenuTextObj) {
+        m_StartMenuTextObj->SetVisible(visible);
     }
 }
 

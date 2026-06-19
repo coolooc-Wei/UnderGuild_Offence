@@ -31,7 +31,8 @@ namespace UGO::System {
             m_BattleManager.ClearAllEnemies();
             m_DropSystem.ClearDrops();
 
-            for (auto ally: m_BattleManager.GetAllAllies()) { ally->SetWorldPosition({0.0f, 0.0f}); }
+            for (auto hero: m_BattleManager.GetAllHeroes()) { hero->SetWorldPosition({0.0f, 0.0f}); }
+            m_BattleManager.GatherAllMercenariesToHero();
 
             // Set state machine
             if (m_LevelSystem.IsRoomPreviouslyCleared()) {

@@ -25,7 +25,7 @@ namespace System {
             Core::Angle rotateAngle, Core::Size size
         );
 
-        std::shared_ptr<Util::GameObject> CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount);
+        std::shared_ptr<Util::GameObject> CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount, bool isCritical = false);
 
         void Reset();
 

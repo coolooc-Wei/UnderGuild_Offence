@@ -310,7 +310,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHero->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHero->SetSize(50.0f, 50.0f);
     m_MenuHero->GetGameObject()->m_Transform.translation = {-30.0f, 40.0f};
-    m_MenuHero->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHero->GetGameObject()->SetZIndex(54.0f);
     m_MenuHero->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHero->GetGameObject());
 
@@ -319,7 +319,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuSub->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuSub->SetSize(30.0f, 30.0f);
     m_MenuSub->GetGameObject()->m_Transform.translation = {40.0f, 20.0f};
-    m_MenuSub->GetGameObject()->SetZIndex(51.0f);
+    m_MenuSub->GetGameObject()->SetZIndex(54.0f);
     m_MenuSub->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuSub->GetGameObject());
 
@@ -328,9 +328,27 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuCampFire->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuCampFire->SetSize(40.0f, 40.0f);
     m_MenuCampFire->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_MenuCampFire->GetGameObject()->SetZIndex(51.0f);
+    m_MenuCampFire->GetGameObject()->SetZIndex(52.0f);
     m_MenuCampFire->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuCampFire->GetGameObject());
+
+    
+    std::vector<std::string> flameFrames = {
+        "../Resources/Image/hasugu/Campfire_1.png",
+        "../Resources/Image/hasugu/Campfire_2.png",
+        "../Resources/Image/hasugu/Campfire_3.png",
+        "../Resources/Image/hasugu/Campfire_4.png",
+        "../Resources/Image/hasugu/Campfire_5.png",
+        "../Resources/Image/hasugu/Campfire_6.png"
+    };
+    s_MenuCampFireFlame = std::make_shared<Scene::BasicObject>();
+    s_MenuCampFireFlame->SetAnimation(flameFrames, false, 100, true, 0);
+    s_MenuCampFireFlame->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
+    s_MenuCampFireFlame->SetSize(40.0f, 40.0f);
+    s_MenuCampFireFlame->GetGameObject()->m_Transform.translation = {0.0f, 10.0f};
+    s_MenuCampFireFlame->GetGameObject()->SetZIndex(52.1f);
+    s_MenuCampFireFlame->GetGameObject()->SetVisible(false);
+    root.AddChild(s_MenuCampFireFlame->GetGameObject());
 }
 
 void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int monCount) {
@@ -426,6 +444,10 @@ void GameDisplay::ShowMenuBackground(bool visible) {
         m_MenuHero->GetGameObject()->SetVisible(visible);
         m_MenuSub->GetGameObject()->SetVisible(visible);
         m_MenuCampFire->GetGameObject()->SetVisible(visible);
+        if (s_MenuCampFireFlame){
+            s_MenuCampFireFlame->GetGameObject()->SetVisible(visible);
+            s_MenuCampFireFlame->SetAnimationState(visible);
+        } 
     }
 }
 

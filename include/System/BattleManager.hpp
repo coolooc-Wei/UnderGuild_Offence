@@ -13,7 +13,11 @@
 #include "System/RewardManager.hpp"
 
 namespace UGO {
+namespace Scene {
+    class ClockHand;
+}
 namespace System {
+    class MercenaryConditionSystem;
 
     class BattleManager {
     public:
@@ -35,6 +39,7 @@ namespace System {
         std::vector<Scene::Character*> GetAllEnemiesAsCharacters() const;
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
+        void GatherAllMercenariesToHero();
 
         bool IsHeroAlive() const;
         int GetEnemyCount() const;
@@ -88,6 +93,7 @@ namespace System {
          * @brief 向所有較兵新增一個狀態效果。
          */
         void AddStatusEffectToAllMercenaries(const Scene::StatusEffectData& data);
+        void SetConditionSystem(MercenaryConditionSystem* conditionSystem) { m_ConditionSystem = conditionSystem; }
 
         void UpdateSystem();
         void SetAllObjectsVisible(bool visable);
@@ -133,10 +139,15 @@ namespace System {
         SteeringSystem& m_SteeringSystem;
         RewardManager& m_RewardManager;
         Util::Renderer& m_Root;
+        MercenaryConditionSystem* m_ConditionSystem = nullptr;
+        Core::Time::CountDownTimer m_MedicTimer = Core::Time::CountDownTimer(3.0f, true);
 
         const Core::Distance m_offsetDis = 32.0f;
         std::vector<Scene::StatusEffectData> m_GlobalEnemyDebuffs; ///< 套用至所有後續生成敵人
 
+        std::vector<std::unique_ptr<Scene::ClockHand>> m_ClockHands;
+        int m_CurrentClockHandsTier = -1;
+        void UpdateClockHands(int activeTier);
     };
 
 } // namespace System

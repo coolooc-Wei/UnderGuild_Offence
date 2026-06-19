@@ -2,8 +2,10 @@
 
 #include "Scene/BasicObject.hpp"
 #include "Scene/Character.hpp"
+#include "Scene/ClockHand.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 
 namespace {
     inline UGO::Core::Angle GetRotateAngle(UGO::Core::Angle offsetAngle, UGO::Core::Velocity diff) {
@@ -37,8 +39,15 @@ namespace UGO::System {
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
 
+        m_MedicTimer.Start();
     }
-    BattleManager::~BattleManager() {}
+    BattleManager::~BattleManager() {
+        for (auto& hand : m_ClockHands) {
+            if (hand && hand->GetGameObject()) {
+                m_Root.RemoveChild(hand->GetGameObject());
+            }
+        }
+    }
 
     void BattleManager::RebuildCaches() const {
         if (!m_IsCacheDirty) { return; }
@@ -114,6 +123,23 @@ namespace UGO::System {
     std::vector<Scene::Character*> BattleManager::GetAllAllies() const {
         if (m_IsCacheDirty) { RebuildCaches(); }
         return m_AllAlliesCache;
+    }
+
+    void BattleManager::GatherAllMercenariesToHero() {
+        if (m_AllHeroes.empty() || !m_AllHeroes[0]) {
+            LOG_ERROR("From BattleManager::GatherAllMercenariesToHero: Hero is empty.");
+            return;
+        }
+
+        Core::WorldPosition heroPos = m_AllHeroes[0]->GetWorldPosition();
+        for (auto& mercenary : m_MercenaryPool) {
+            if (mercenary && !mercenary->IsDead()) {
+                Core::WorldPosition targetPos = heroPos;
+                targetPos.x += Core::RandomFloat(-3.0f, 3.0f);
+                targetPos.y += Core::RandomFloat(-3.0f, 3.0f);
+                mercenary->SetWorldPosition(targetPos);
+            }
+        }
     }
 
 
@@ -217,6 +243,17 @@ namespace UGO::System {
         }
 
         m_MercenaryPool.emplace_back(m_CharacterFactory.CreateMercenary(std::move(params), spawnPos));
+        
+        if (m_ConditionSystem) {
+            int activeTier = m_ConditionSystem->GetActiveBondTier("angel_feather");
+            if (activeTier >= 0) {
+                float duration = (activeTier == 0) ? 4.0f : 8.0f;
+                if (!m_MercenaryPool.empty()) {
+                    m_MercenaryPool.back()->TriggerInvincible(duration);
+                }
+                LOG_INFO("[Angel Feather Bond] Mercenary summoned! Granted {} seconds of invincibility.", duration);
+            }
+        }
     }
     void BattleManager::AddMercenaryByID(const std::string& mercenaryID, const Core::WorldPosition& position) {
         AddMercenary(m_CharacterFactory.GetMercenaryParams(mercenaryID), position);
@@ -318,15 +355,32 @@ namespace UGO::System {
 
             bool wasAlive = !event.Victim->IsDead();
             event.Attacker->OnAttack();
-            event.Victim->OnDamage(event.Damage);
+
+            float finalDamage = event.Damage;
+            bool isCrit = false;
+            float critChance = event.Attacker->GetCritChance();
+            if (critChance > 0.0f) {
+                if (UGO::Core::RandomFloat(0.0f, 1.0f) <= critChance) {
+                    isCrit = true;
+                    finalDamage *= 2.0f;
+                    LOG_INFO(
+                        "[Crit] Attacker (ID: {}) scored a CRITICAL hit on Victim (ID: {})! Damage: {} -> {}",
+                        event.Attacker->GetInstanceID(), event.Victim->GetInstanceID(), event.Damage, finalDamage
+                    );
+                }
+            }
+
+            event.Victim->OnDamage(finalDamage);
 
             if (wasAlive && event.Victim->IsDead()) {
                 float vampireMultiplier = event.Attacker->GetVampireMultiplier();
                 if (vampireMultiplier > 0.0f) {
                     float healAmount = event.Attacker->GetMaxHP() * vampireMultiplier;
                     event.Attacker->OnHeal(healAmount);
-                    LOG_INFO("[Vampire] Attacker (ID: {}) heals {} HP (multiplier: {}) on kill", 
-                             event.Attacker->GetInstanceID(), healAmount, vampireMultiplier);
+                    LOG_INFO(
+                        "[Vampire] Attacker (ID: {}) heals {} HP (multiplier: {}) on kill",
+                        event.Attacker->GetInstanceID(), healAmount, vampireMultiplier
+                    );
                 }
             }
 
@@ -344,7 +398,7 @@ namespace UGO::System {
                     event.Victim->GetWorldPosition(), animationData.duration, animationData.ainmation, animationData.isImage,
                     rotationAngle, animationData.size
                 );
-                m_EffectAnimationManager.CreateDamageText(event.Victim->GetWorldPosition(), event.Damage);
+                m_EffectAnimationManager.CreateDamageText(event.Victim->GetWorldPosition(), finalDamage, isCrit);
             }
             if (animatedAttackers.insert(event.Attacker).second) {
                 animationData = event.Attacker->GetAttackAnimationData();
@@ -405,7 +459,71 @@ namespace UGO::System {
                     spawnPos.y += (rand() % 40 - 20);
                 }
                 mercenary->Respawn(spawnPos);
+                
+                if (m_ConditionSystem) {
+                    int activeTier = m_ConditionSystem->GetActiveBondTier("angel_feather");
+                    if (activeTier >= 0) {
+                        float duration = (activeTier == 0) ? 4.0f : 8.0f;
+                        mercenary->TriggerInvincible(duration);
+                        LOG_INFO("[Angel Feather Bond] Mercenary resurrected! Granted {} seconds of invincibility.", duration);
+                    }
+                }
+
                 m_IsCacheDirty = true;
+            }
+        }
+
+        // 醫務兵 (Medic) 羈絆效果處理
+        if (m_ConditionSystem) {
+            if (m_MedicTimer.IsTimeUp()) {
+                m_MedicTimer.Start();
+                int activeTier = m_ConditionSystem->GetActiveBondTier("medic");
+                if (activeTier >= 0) {
+                    float healPercentage = (activeTier == 0) ? 0.05f : 0.10f;
+                    auto heroes = GetAllHeroes();
+                    if (!heroes.empty() && heroes[0] && !heroes[0]->IsDead()) {
+                        auto* hero = heroes[0];
+                        Core::WorldPosition heroPos = hero->GetWorldPosition();
+                        
+                        float rangeThreshold = 200.0f;
+                        std::vector<Scene::Mercenary*> nearbyMercenaries;
+                        for (auto* mercenary : GetAllMercenaries()) {
+                            if (mercenary && !mercenary->IsDead()) {
+                                float dist = glm::distance(mercenary->GetWorldPosition(), heroPos);
+                                if (dist <= rangeThreshold) {
+                                    nearbyMercenaries.push_back(mercenary);
+                                }
+                            }
+                        }
+                        
+                        if (!nearbyMercenaries.empty()) {
+                            for (auto* merc : nearbyMercenaries) {
+                                float healAmount = merc->GetMaxHP() * healPercentage;
+                                merc->OnHeal(healAmount);
+                                LOG_INFO("[Medic Bond] Healed Mercenary (ID: {}, Type: {}) for {} HP ({:.1f}%)",
+                                         merc->GetInstanceID(), merc->GetTypeID(), healAmount, healPercentage * 100.0f);
+                            }
+                        } else {
+                             float heroHealPercentage = 0.02f;
+                            float healAmount = hero->GetMaxHP() * heroHealPercentage;
+                            hero->OnHeal(healAmount);
+                            LOG_INFO("[Medic Bond] No nearby mercenaries. Healed Hero for {} HP (2%)", healAmount);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 時鐘指針 (Clock Hands) 羈絆效果處理
+        if (m_ConditionSystem) {
+            int activeTier = m_ConditionSystem->GetActiveBondTier("clock_hands");
+            UpdateClockHands(activeTier);
+        }
+
+        // Update all Clock Hands
+        for (auto& hand : m_ClockHands) {
+            if (hand) {
+                hand->Update();
             }
         }
     }
@@ -457,6 +575,59 @@ namespace UGO::System {
             }
         }
         m_IsCacheDirty = true;
+    }
+
+    void BattleManager::UpdateClockHands(int activeTier) {
+        if (activeTier == m_CurrentClockHandsTier) {
+            if (activeTier >= 0) {
+                float damageMultiplier = (activeTier == 0) ? 3.0f : 4.5f;
+                for (auto& hand : m_ClockHands) {
+                    if (hand) {
+                        hand->SetDamageMultiplier(damageMultiplier);
+                    }
+                }
+            }
+            return;
+        }
+
+        // Clean up old hands
+        for (auto& hand : m_ClockHands) {
+            if (hand && hand->GetGameObject()) {
+                m_Root.RemoveChild(hand->GetGameObject());
+            }
+        }
+        m_ClockHands.clear();
+
+        m_CurrentClockHandsTier = activeTier;
+
+        if (activeTier < 0) {
+            LOG_INFO("[Clock Hands Bond] Deactivated. All clock hands removed.");
+            return;
+        }
+
+        auto heroes = GetAllHeroes();
+        if (heroes.empty() || !heroes[0]) {
+            return;
+        }
+        auto* hero = heroes[0];
+
+        float damageMultiplier = (activeTier == 0) ? 3.0f : 4.5f;
+
+        // Both Tier 1 (activeTier == 0) and Tier 2 (activeTier == 1) spawn exactly 1 clock hand
+        // length: 180.0f, speed: 2.0f rad/s
+        auto hand = std::make_unique<Scene::ClockHand>(
+            *this,
+            m_EffectAnimationManager,
+            hero,
+            180.0f,          // length
+            2.0f,           // speed (rad/s)
+            damageMultiplier,
+            0.5f            // hit cooldown (seconds)
+        );
+        m_Root.AddChild(hand->GetGameObject());
+        m_ClockHands.push_back(std::move(hand));
+        LOG_INFO("[Clock Hands Bond] Tier {} Activated. Spawned 1 clock hand (Damage: {}%).",
+                 activeTier + 1, static_cast<int>(damageMultiplier * 100.0f));
     }
 
 } // namespace UGO::System

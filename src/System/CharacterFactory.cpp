@@ -164,6 +164,24 @@ namespace UGO::System {
         return { iconPath, cached.size };
     }
 
+    std::vector<std::string> CharacterFactory::GetLegendaryMercenaryIDs() const {
+        std::vector<std::string> ids;
+        for (auto& [key, value] : m_MercenaryDatabase.items()) {
+            if (key.rfind("s_", 0) == 0) {
+                ids.push_back(key);
+            }
+        }
+        return ids;
+    }
+
+    std::vector<std::string> CharacterFactory::GetAllMercenaryIDs() const {
+        std::vector<std::string> ids;
+        for (auto& [key, value] : m_MercenaryDatabase.items()) {
+            ids.push_back(key);
+        }
+        return ids;
+    }
+
     Scene::Character::CharacterParams CharacterFactory::BuildFromCache(const CachedCharacterData& cached) const {
         auto newParams = Scene::Character::CharacterParams();
 

@@ -53,7 +53,7 @@ namespace System {
 
     struct BondTier {
         int        threshold = 0; ///< 達到此數量時激活
-        BondEffect effect;
+        std::vector<BondEffect> effects;
     };
 
     struct BondConfig {
@@ -154,6 +154,8 @@ namespace System {
          *        - 自動增減對應角色的 Buff（依 sourceID 精確識別）
          */
         void UpdateBonds();
+        void TriggerRainbowRobotEffect();
+        int GetActiveBondTier(const std::string& bondID) const;
 
         /**
          * @brief 取得所有載入的羈絆配置。

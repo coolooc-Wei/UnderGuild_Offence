@@ -19,6 +19,13 @@ namespace Scene {
         SlowDown,
         AttackUp,
         Vampire,
+        Blessing,
+        LifeLink,
+        MaxHpUp,
+        CritChanceUp,
+        Reinforcements,
+        Invincible,
+        AttackSpeedUp,
     };
 
     struct StatusEffectData {

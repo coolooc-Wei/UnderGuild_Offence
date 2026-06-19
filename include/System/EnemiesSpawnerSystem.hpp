@@ -13,6 +13,8 @@ namespace Scene {
     class AnimationLite;
 }
 namespace System {
+    class MercenaryConditionSystem;
+    class CharacterFactory;
 
     class EnemiesSpawnerSystem {
     public:
@@ -55,6 +57,9 @@ namespace System {
         using GetEnemySizeCallback = std::function<Core::Size(const std::string&)>;
         void SetGetEnemySizeCallback(GetEnemySizeCallback callback);
 
+        void SetConditionSystem(MercenaryConditionSystem* conditionSystem) { m_MercenaryConditionSystem = conditionSystem; }
+        void SetCharacterFactory(CharacterFactory* characterFactory) { m_CharacterFactory = characterFactory; }
+
     private:
         void StartNextWave();
         void GenerateNextBatch();
@@ -63,6 +68,8 @@ namespace System {
 
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
+        MercenaryConditionSystem* m_MercenaryConditionSystem = nullptr;
+        CharacterFactory* m_CharacterFactory = nullptr;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
         std::shared_ptr<Scene::AnimationLite> m_WarningIndicatorAnim;
 

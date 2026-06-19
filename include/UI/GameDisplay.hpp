@@ -72,6 +72,7 @@ private:
     std::shared_ptr<Scene::BasicObject> m_MenuHero;
     std::shared_ptr<Scene::BasicObject> m_MenuSub;
     std::shared_ptr<Scene::BasicObject> m_MenuCampFire;
+    std::shared_ptr<Scene::BasicObject> s_MenuCampFireFlame;
 };
 
 } // namespace UI
