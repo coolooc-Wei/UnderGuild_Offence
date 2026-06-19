@@ -220,11 +220,12 @@ namespace UGO::Scene {
 
     void Character::OnHeal(HpValue amount) {
         assert(amount >= 0);
-        if(m_CurrentHP + amount <= m_MaxHP) {
+        float maxHP = GetMaxHP();
+        if(m_CurrentHP + amount <= maxHP) {
             m_CurrentHP += amount;
         }
         else {
-            m_CurrentHP = m_MaxHP;
+            m_CurrentHP = maxHP;
         }
     }
 
@@ -254,8 +255,9 @@ namespace UGO::Scene {
     void Character::Heal(HpValue amount) {
         assert(amount >= 0);
 
-        if (m_CurrentHP + amount > m_MaxHP) {
-            m_CurrentHP = m_MaxHP;
+        float maxHP = GetMaxHP();
+        if (m_CurrentHP + amount > maxHP) {
+            m_CurrentHP = maxHP;
         }
         else {
             m_CurrentHP += amount;

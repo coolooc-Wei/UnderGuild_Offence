@@ -396,13 +396,11 @@ void MercenaryConditionSystem::ActivateBondTier(const BondConfig& bond, int tier
     for (const auto& effect : tier.effects) {
         auto targets = ResolveBondTargets(effect.targetSelector, bond);
         for (auto* character : targets) {
-            if (character) {
+            if (character && !character->HasStatusEffectBySource(effect.effectData.sourceID)) {
                 character->AddStatusEffect(effect.effectData);
             }
         }
     }
-    LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
-              std::to_string(tier.threshold) + " activated.");
 }
 
 void MercenaryConditionSystem::DeactivateBond(const BondConfig& bond) {
@@ -440,6 +438,9 @@ void MercenaryConditionSystem::ProcessBonds() {
         int& activeTier = m_ActiveBondTiers[bond.bondID];
 
         if (targetTierIndex == activeTier) {
+            if (targetTierIndex != NO_ACTIVE_TIER) {
+                ActivateBondTier(bond, targetTierIndex);
+            }
             continue; // 無變化，跳過
         }
 
@@ -449,6 +450,8 @@ void MercenaryConditionSystem::ProcessBonds() {
         // 若目標層級有效，激活新層級
         if (targetTierIndex != NO_ACTIVE_TIER) {
             ActivateBondTier(bond, targetTierIndex);
+            LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
+                      std::to_string(bond.tiers[targetTierIndex].threshold) + " activated.");
         }
 
         activeTier = targetTierIndex;
