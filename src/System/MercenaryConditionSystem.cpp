@@ -432,7 +432,7 @@ void MercenaryConditionSystem::ProcessBonds() {
             }
         }
 
-        if (bond.bondID == "rainbow_robot") {
+        if (bond.bondID == "rainbow_robot" || bond.bondID == "medic") {
             m_ActiveBondTiers[bond.bondID] = targetTierIndex;
             continue;
         }

@@ -136,6 +136,7 @@ namespace System {
         RewardManager& m_RewardManager;
         Util::Renderer& m_Root;
         MercenaryConditionSystem* m_ConditionSystem = nullptr;
+        Core::Time::CountDownTimer m_MedicTimer = Core::Time::CountDownTimer(3.0f, true);
 
         const Core::Distance m_offsetDis = 32.0f;
         std::vector<Scene::StatusEffectData> m_GlobalEnemyDebuffs; ///< 套用至所有後續生成敵人

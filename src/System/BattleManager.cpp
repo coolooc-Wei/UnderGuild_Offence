@@ -38,6 +38,7 @@ namespace UGO::System {
         m_AllCharactersCache.reserve(360);
         m_AllAlliesCache.reserve(160);
 
+        m_MedicTimer.Start();
     }
     BattleManager::~BattleManager() {}
 
@@ -438,6 +439,47 @@ namespace UGO::System {
                 }
 
                 m_IsCacheDirty = true;
+            }
+        }
+
+        // 醫務兵 (Medic) 羈絆效果處理
+        if (m_ConditionSystem) {
+            if (m_MedicTimer.IsTimeUp()) {
+                m_MedicTimer.Start();
+                int activeTier = m_ConditionSystem->GetActiveBondTier("medic");
+                if (activeTier >= 0) {
+                    float healPercentage = (activeTier == 0) ? 0.05f : 0.10f;
+                    auto heroes = GetAllHeroes();
+                    if (!heroes.empty() && heroes[0] && !heroes[0]->IsDead()) {
+                        auto* hero = heroes[0];
+                        Core::WorldPosition heroPos = hero->GetWorldPosition();
+                        
+                        float rangeThreshold = 200.0f;
+                        std::vector<Scene::Mercenary*> nearbyMercenaries;
+                        for (auto* mercenary : GetAllMercenaries()) {
+                            if (mercenary && !mercenary->IsDead()) {
+                                float dist = glm::distance(mercenary->GetWorldPosition(), heroPos);
+                                if (dist <= rangeThreshold) {
+                                    nearbyMercenaries.push_back(mercenary);
+                                }
+                            }
+                        }
+                        
+                        if (!nearbyMercenaries.empty()) {
+                            for (auto* merc : nearbyMercenaries) {
+                                float healAmount = merc->GetMaxHP() * healPercentage;
+                                merc->OnHeal(healAmount);
+                                LOG_INFO("[Medic Bond] Healed Mercenary (ID: {}, Type: {}) for {} HP ({:.1f}%)",
+                                         merc->GetInstanceID(), merc->GetTypeID(), healAmount, healPercentage * 100.0f);
+                            }
+                        } else {
+                            float heroHealPercentage = 0.02f;
+                            float healAmount = hero->GetMaxHP() * heroHealPercentage;
+                            hero->OnHeal(healAmount);
+                            LOG_INFO("[Medic Bond] No nearby mercenaries. Healed Hero for {} HP (2%)", healAmount);
+                        }
+                    }
+                }
             }
         }
     }
