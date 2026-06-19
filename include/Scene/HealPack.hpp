@@ -26,7 +26,7 @@ namespace Scene {
         const std::string imagePath = "../Resources/Image/drop/Potion_2.png";
         const Core::Distance imageSize = 24.0f;
 
-        HpValue m_HealAmount = 10.0f;
+        HpValue m_HealAmount = 800.0f;
     };
 
 } // namespace Scene

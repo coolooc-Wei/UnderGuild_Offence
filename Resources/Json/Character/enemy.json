@@ -891,5 +891,60 @@
                 "height": 16.0
             }
         }
+    },
+    "e_b06": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../PTSD/assets/sprites/giraffe.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 88.0,
+            "height": 128.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 12000000.0,
+        "attackPower": 1000.0,
+        "attackCooldown": 5.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
     }
 }

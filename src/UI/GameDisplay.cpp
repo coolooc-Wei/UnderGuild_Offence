@@ -478,6 +478,9 @@ void GameDisplay::SetHUDVisible(bool visible) {
     // for (auto& hpOn : m_LifePointsOn) {
     //     if (hpOn) hpOn->GetGameObject()->SetVisible(visible);
     // }
+    if (!visible && m_ShowHp) {
+        m_ShowHp->SetVisible(false);
+    }
 }
 
 void GameDisplay::SetBackgroundVisible(bool visible) {
