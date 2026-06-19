@@ -125,7 +125,7 @@
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 1.15,
                         "isPermanent": true
                     }
                 }
@@ -136,7 +136,7 @@
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 1.35,
                         "isPermanent": true
                     }
                 }
