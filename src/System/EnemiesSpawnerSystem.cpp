@@ -253,4 +253,12 @@ namespace UGO::System {
         m_PaddingSpawns = {};
     }
 
+    void EnemiesSpawnerSystem::Reset() {
+        m_IsSpawnActive = false;
+        m_CurrentWaveID = 0;
+        m_PaddingWaves = {};
+        m_PaddingSpawns = {};
+        m_BatchDataList = {};
+    }
+
 }

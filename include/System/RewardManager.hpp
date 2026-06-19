@@ -21,6 +21,7 @@ namespace UGO::System {
         RewardManager(Util::Renderer& root, CharacterFactory& characterFactory, ExpSystem& expSystem, DropSystem& dropSystem);
         ~RewardManager();
 
+        void Reset();
         void OnEnemyDeath(Scene::Enemy* enemy, Scene::Hero* hero);
         void OnHeroLevelUp(Scene::Hero* hero);
 

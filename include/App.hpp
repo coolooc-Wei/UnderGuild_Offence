@@ -11,6 +11,7 @@
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
+#include "Scene/SceneTypes.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 
@@ -88,14 +89,24 @@ private:
     GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    
+    struct CheatState {
+        bool isHealthOn = false;
+        Scene::HpValue savedHP = 0.0f;
+        Scene::HpValue savedMaxHP = 0.0f;
+
+        bool isAttackOn = false;
+        Scene::HpValue savedAttackPower = 0.0f;
+        Core::Time::Second savedCooldown = 0.0f;
+    };
+    CheatState m_CheatState;
+
     // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
     std::unique_ptr<UI::UIManager> m_UIManager;
     
     std::unique_ptr<UI::GameDisplay> m_GameDisplay;
     std::unique_ptr<UI::GameButtons> m_GameButtons;
     std::unique_ptr<UI::SelectLevelPage> m_SelectLevelPage;
-    std::string m_SelectedLevelID = "test";
+    std::string m_SelectedLevelID = "";
 
 
     // Register Systems

@@ -24,6 +24,17 @@ namespace UGO::System {
         }
     }
 
+    void LevelSystem::Reset() {
+        m_DifficultyLevel = 0;
+        m_CurrentRoomState = RoomState::Setting;
+        m_CurrentRoom = nullptr;
+        m_WalkableOverrides.clear();
+        UpdatePortalVisuals(true);
+        m_Layout.clear();
+        m_LayoutMap.clear();
+        m_CurrentLevelData = Core::Level::LevelData{};
+    }
+
     void LevelSystem::GenerateLevel(const std::string& levelID) {
         m_CurrentLevelData = GetLevelData(levelID);
         BuildLayout(m_CurrentLevelData.layoutConfig);

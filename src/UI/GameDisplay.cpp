@@ -135,32 +135,32 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     root.AddChild(m_ShowCountdown);
 
     // ── Life Points (Hearts) ──
-    float heartXStart = -620.0f;
-    float heartY = 150.0f;
-    float heartSpacing = 35.0f;
-    for (int i = 0; i < 2; ++i) {
-        float xPos = heartXStart + i * heartSpacing;
+    // float heartXStart = -620.0f;
+    // float heartY = 150.0f;
+    // float heartSpacing = 35.0f;
+    // for (int i = 0; i < 2; ++i) {
+    //     float xPos = heartXStart + i * heartSpacing;
         
-        auto hpOff = std::make_shared<Scene::BasicObject>();
-        hpOff->SetImage("../Resources/Image/title/LifePoint_Off.png");
-        hpOff->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        hpOff->SetSize(30.0f, 30.0f);
-        hpOff->GetGameObject()->m_Transform.translation = {xPos, heartY};
-        hpOff->GetGameObject()->SetZIndex(20.0f);
-        hpOff->GetGameObject()->SetVisible(false);
-        root.AddChild(hpOff->GetGameObject());
-        m_LifePointsOff.push_back(hpOff);
+    //     auto hpOff = std::make_shared<Scene::BasicObject>();
+    //     hpOff->SetImage("../Resources/Image/title/LifePoint_Off.png");
+    //     hpOff->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    //     hpOff->SetSize(30.0f, 30.0f);
+    //     hpOff->GetGameObject()->m_Transform.translation = {xPos, heartY};
+    //     hpOff->GetGameObject()->SetZIndex(20.0f);
+    //     hpOff->GetGameObject()->SetVisible(false);
+    //     root.AddChild(hpOff->GetGameObject());
+    //     m_LifePointsOff.push_back(hpOff);
 
-        auto hpOn = std::make_shared<Scene::BasicObject>();
-        hpOn->SetImage("../Resources/Image/title/LifePoint_On.png");
-        hpOn->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-        hpOn->SetSize(30.0f, 30.0f);
-        hpOn->GetGameObject()->m_Transform.translation = {xPos, heartY};
-        hpOn->GetGameObject()->SetZIndex(21.0f);
-        hpOn->GetGameObject()->SetVisible(false);
-        root.AddChild(hpOn->GetGameObject());
-        m_LifePointsOn.push_back(hpOn);
-    }
+    //     auto hpOn = std::make_shared<Scene::BasicObject>();
+    //     hpOn->SetImage("../Resources/Image/title/LifePoint_On.png");
+    //     hpOn->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    //     hpOn->SetSize(30.0f, 30.0f);
+    //     hpOn->GetGameObject()->m_Transform.translation = {xPos, heartY};
+    //     hpOn->GetGameObject()->SetZIndex(21.0f);
+    //     hpOn->GetGameObject()->SetVisible(false);
+    //     root.AddChild(hpOn->GetGameObject());
+    //     m_LifePointsOn.push_back(hpOn);
+    // }
 
     m_WelcomeBackground = std::make_shared<Scene::BasicObject>();
     m_WelcomeBackground->SetImage("../Resources/Image/title/Title_Bg1.png");
@@ -365,7 +365,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHero->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHero->SetSize(50.0f, 50.0f);
     m_MenuHero->GetGameObject()->m_Transform.translation = {-30.0f, 40.0f};
-    m_MenuHero->GetGameObject()->SetZIndex(12.0f);
+    m_MenuHero->GetGameObject()->SetZIndex(13.0f);
     m_MenuHero->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHero->GetGameObject());
 
@@ -374,7 +374,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuSub->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuSub->SetSize(30.0f, 30.0f);
     m_MenuSub->GetGameObject()->m_Transform.translation = {40.0f, 20.0f};
-    m_MenuSub->GetGameObject()->SetZIndex(12.0f);
+    m_MenuSub->GetGameObject()->SetZIndex(13.0f);
     m_MenuSub->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuSub->GetGameObject());
 
@@ -383,7 +383,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuCampFire->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuCampFire->SetSize(40.0f, 40.0f);
     m_MenuCampFire->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_MenuCampFire->GetGameObject()->SetZIndex(12.0f);
+    m_MenuCampFire->GetGameObject()->SetZIndex(13.0f);
     m_MenuCampFire->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuCampFire->GetGameObject());
 
@@ -401,7 +401,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     s_MenuCampFireFlame->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
     s_MenuCampFireFlame->SetSize(40.0f, 40.0f);
     s_MenuCampFireFlame->GetGameObject()->m_Transform.translation = {0.0f, 10.0f};
-    s_MenuCampFireFlame->GetGameObject()->SetZIndex(12.1f);
+    s_MenuCampFireFlame->GetGameObject()->SetZIndex(13.1f);
     s_MenuCampFireFlame->GetGameObject()->SetVisible(false);
     root.AddChild(s_MenuCampFireFlame->GetGameObject());
 }
@@ -430,12 +430,12 @@ void GameDisplay::UpdateHUD(float currentHp, float maxHp, int killCount, int mon
     }
 
     // Heart (HP bar) updates
-    for (size_t i = 0; i < m_LifePointsOn.size(); ++i) {
-        bool isAlive = (currentHp > static_cast<float>(i));
-        if (m_LifePointsOn[i]) {
-            m_LifePointsOn[i]->GetGameObject()->SetVisible(isAlive);
-        }
-    }
+    // for (size_t i = 0; i < m_LifePointsOn.size(); ++i) {
+    //     bool isAlive = (currentHp > static_cast<float>(i));
+    //     if (m_LifePointsOn[i]) {
+    //         m_LifePointsOn[i]->GetGameObject()->SetVisible(isAlive);
+    //     }
+    // }
 }
 
 void GameDisplay::HideAllResults() {
@@ -461,18 +461,23 @@ void GameDisplay::ShowResult(bool isWin) {
     }
 }
 
-void GameDisplay::SetHUDVisible(bool visible) {
+void GameDisplay::DebugSetHUDVisible(bool visible) {
+    LOG_WARN("DebugSetHUDVisible is called! set visible to {}", visible);
     if (m_ShowHp) m_ShowHp->SetVisible(visible);
-    if (m_ShowKillCount) m_ShowKillCount->SetVisible(visible);
+    // if (m_ShowHp) m_ShowHp->SetVisible(visible);
+}
+void GameDisplay::SetHUDVisible(bool visible) {
+    // if (m_ShowKillCount) m_ShowKillCount->SetVisible(visible);
+    if (m_ShowKillCount) m_ShowKillCount->SetVisible(false);
     if (m_ShowMonCount) m_ShowMonCount->SetVisible(visible);
     if (m_ShowWaveValue) m_ShowWaveValue->SetVisible(visible);
     if (m_ShowCountdown) m_ShowCountdown->SetVisible(visible);
-    for (auto& hpOff : m_LifePointsOff) {
-        if (hpOff) hpOff->GetGameObject()->SetVisible(visible);
-    }
-    for (auto& hpOn : m_LifePointsOn) {
-        if (hpOn) hpOn->GetGameObject()->SetVisible(visible);
-    }
+    // for (auto& hpOff : m_LifePointsOff) {
+    //     if (hpOff) hpOff->GetGameObject()->SetVisible(visible);
+    // }
+    // for (auto& hpOn : m_LifePointsOn) {
+    //     if (hpOn) hpOn->GetGameObject()->SetVisible(visible);
+    // }
 }
 
 void GameDisplay::SetBackgroundVisible(bool visible) {

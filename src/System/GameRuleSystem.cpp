@@ -73,26 +73,7 @@ namespace UGO::System {
                 return;
             }
 
-            /* HACK: Temporary W,A,S,D portal travel */
             std::optional<Core::Map::MapCoord> targetCoord = m_LevelSystem.CheckPortalCollision(*heroBox);
-            if (!targetCoord) {
-                Core::Map::MapCoord dir = {0, 0};
-                if      (Util::Input::IsKeyDown(Util::Keycode::W)) { dir = {0,  1}; }
-                else if (Util::Input::IsKeyDown(Util::Keycode::S)) { dir = {0, -1}; }
-                else if (Util::Input::IsKeyDown(Util::Keycode::A)) { dir = {-1, 0}; }
-                else if (Util::Input::IsKeyDown(Util::Keycode::D)) { dir = { 1, 0}; }
-
-                if (dir.x != 0 || dir.y != 0) {
-                    Core::Map::MapCoord expected = m_LevelSystem.GetCurrentRoom().mapPos + dir;
-                    for (const auto& portal : m_LevelSystem.GetActivePortals()) {
-                        if (portal.targetCoord == expected) {
-                            targetCoord = expected;
-                            break;
-                        }
-                    }
-                }
-            }
-
             if (targetCoord) {
                 m_BarrelSystem.OnLeaveRoom();
                 m_LevelSystem.EnterRoom(*targetCoord);

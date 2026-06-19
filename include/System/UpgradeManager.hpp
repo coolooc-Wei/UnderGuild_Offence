@@ -58,6 +58,8 @@ public:
     );
     ~UpgradeManager();
 
+    void Reset();
+
     // ---------- App 設定介面 ----------
     void SetOnReadyCallback(std::function<void()> cb);
     void SetOnCompletedCallback(std::function<void()> cb);

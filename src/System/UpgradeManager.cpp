@@ -26,6 +26,11 @@ namespace UGO::System {
 
     UpgradeManager::~UpgradeManager() = default;
 
+    void UpgradeManager::Reset() {
+        m_PendingCount = 0;
+        m_CurrentHero = nullptr;
+    }
+
     // ---------- App 設定介面 ----------
     void UpgradeManager::SetOnReadyCallback(std::function<void()> cb) {
         m_OnReadyCallback = std::move(cb);

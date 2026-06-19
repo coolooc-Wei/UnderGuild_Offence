@@ -32,7 +32,7 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": false,
         "isVisible": false,
-        "maxHP": 9999999.0,
+        "maxHP": 10000.0,
         "attackPower": 2132.0,
         "attackCooldown": 0.5,
         "invincibleDuration": 1.0,

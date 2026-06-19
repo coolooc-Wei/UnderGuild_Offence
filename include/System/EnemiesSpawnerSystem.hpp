@@ -38,6 +38,7 @@ namespace System {
         );
         ~EnemiesSpawnerSystem();
 
+        void Reset();
         void Update();
         /* Parameters setting:
          * amount1 = amount2 = -1       --> illegal;

@@ -30,6 +30,7 @@ namespace System {
         LevelSystem(MapSystem& mapSystem, Util::Renderer& renderer);
         ~LevelSystem();
 
+        void Reset();
         const Core::Level::LevelData& GetLevelData(const Core::Level::LevelID& levelID);
         void GenerateLevel(const std::string& levelID);
         bool IsLevelCompleted() const;

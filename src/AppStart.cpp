@@ -49,6 +49,7 @@ void UGO::App::Start() {
     m_EnemiesSpawnerSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
     m_EnemiesSpawnerSystem->SetGetEnemySizeCallback([this](const std::string& id){ return this->m_CharacterFactory->GetEnemySize(id); });
     m_BarrelSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_BarrelSystem->SetIsGridOccupiedCallback([this](const Core::GridPosition& gridPos) { return this->m_BattleManager->IsGridOccupied(gridPos); });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");
@@ -160,7 +161,9 @@ void UGO::App::Start() {
         m_PauseMapUI = std::make_unique<UI::PauseMapUI>(m_Root, *m_LevelSystem);
 
         // Initialize SelectLevelPage popup overlay
-        m_SelectLevelPage = std::make_unique<UI::SelectLevelPage>(m_Root, *m_UIManager, m_LevelSystem->GetLevelIDs());
+        auto levelIDs = m_LevelSystem->GetLevelIDs();
+        if (!levelIDs.empty()) { m_SelectedLevelID = levelIDs.front(); }
+        m_SelectLevelPage = std::make_unique<UI::SelectLevelPage>(m_Root, *m_UIManager, levelIDs);
         m_SelectLevelPage->SetOnEnterGameCallback([this](const std::string& levelID) {
             m_SelectedLevelID = levelID;
             m_SelectLevelPage->Hide();
@@ -202,6 +205,21 @@ void UGO::App::Start() {
                     m_MythicSynthesisPage->Show();
                 }
                 ChangeGameState(GameState::PAUSE);
+            },
+            [this]() { // onBackToMenu
+                LOG_INFO("[UI] Back to Menu button clicked!");
+                m_BattleManager->Reset();
+                m_EnemiesSpawnerSystem->Reset();
+                m_RewardManager->Reset();
+                m_LevelSystem->Reset();
+                m_UpgradeManager->Reset();
+
+                m_DropSystem->ClearDrops();
+                m_BarrelSystem->Clear();
+                m_MapSystem->ClearRoom();
+                m_EffectAnimationManager->Reset();
+
+                ChangeGameState(GameState::MENU);
             }
         );
 

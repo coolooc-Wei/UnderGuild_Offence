@@ -67,6 +67,8 @@ namespace Scene {
         float GetCritChance() const;
         float GetAttackSpeedMultiplier() const;
 
+        Core::Time::Second GetAttackCooldownDuration() const;
+
         EffectAnimationData GetAttackAnimationData() const;
         EffectAnimationData GetDamageAnimationData() const;
         AnimationState GetAnimationState() const;
@@ -78,6 +80,8 @@ namespace Scene {
         void SetAttackCooldownDuration(Core::Time::Second duration);
         void SetInvincibleDuration(Core::Time::Second duration);
         void TriggerInvincible(Core::Time::Second duration);
+        void DebugSetAttackPower(HpValue attackPower);
+        void DebugSetHP(HpValue currentHP, HpValue maxHP);
 
         // Events
         void OnAttack() override;

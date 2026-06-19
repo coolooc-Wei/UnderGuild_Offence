@@ -272,6 +272,21 @@ namespace UGO::Scene {
         m_BaseAttackCooldown = duration;
         m_AttackCooldown.SetDuration(duration);
     }
+    
+    Core::Time::Second Character::GetAttackCooldownDuration() const { return m_BaseAttackCooldown; }
+
+    void Character::DebugSetHP(HpValue currentHP, HpValue maxHP) {
+        LOG_WARN("DebugSetHP is called! Forcing HP to {} / {}", currentHP, maxHP);
+        m_MaxHP = maxHP;
+        m_CurrentHP = currentHP;
+    }
+    
+    void Character::DebugSetAttackPower(HpValue attackPower) {
+        LOG_WARN("DebugSetAttackPower is called! Forcing attackPower to {}", attackPower);
+        assert(attackPower >= 0);
+        m_AttackPower = attackPower;
+    }
+
     void Character::SetInvincibleDuration(Core::Time::Second duration) { m_InvincibleTimer.SetDuration(duration); }
     void Character::TriggerInvincible(Core::Time::Second duration) {
         m_InvincibleTimer.SetDuration(duration);

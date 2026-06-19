@@ -31,6 +31,7 @@ namespace System {
         ~BattleManager();
 
         void RebuildCaches() const;
+        void Reset();
 
         std::vector<Scene::Hero*> GetAllHeroes() const;
         std::vector<Scene::Character*> GetAllHeroesAsCharacters() const;
@@ -40,6 +41,7 @@ namespace System {
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
         void GatherAllMercenariesToHero();
+        bool IsGridOccupied(const Core::GridPosition& gridPos) const;
 
         bool IsHeroAlive() const;
         int GetEnemyCount() const;

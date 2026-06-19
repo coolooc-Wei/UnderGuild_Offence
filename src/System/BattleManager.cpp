@@ -5,6 +5,8 @@
 #include "Scene/ClockHand.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
+#include "Core/MapData.hpp"
+#include "Core/Box.hpp"
 #include "System/MercenaryConditionSystem.hpp"
 
 namespace {
@@ -142,12 +144,39 @@ namespace UGO::System {
         }
     }
 
+    bool BattleManager::IsGridOccupied(const Core::GridPosition& gridPos) const {
+        Core::RectangleBox checkBox(Core::GridToWorld(gridPos), Core::TILE_SIZE, Core::TILE_SIZE);
+        for (auto* character : GetAllCharacters()) {
+            auto* cBox = character->GetCollisionBox();
+            if (cBox && checkBox.IsCollidingWith(*cBox)) { return true; }
+        }
+        return false;
+    }
+
 
     bool BattleManager::IsHeroAlive() const { return !m_AllHeroes.empty(); }
     int BattleManager::GetEnemyCount() const { return static_cast<int>(m_EnemyPool.size()); }
     void BattleManager::ClearAllEnemies() {
         m_EnemyPool.clear();
         m_CurrentBoss = nullptr;
+        m_IsCacheDirty = true;
+    }
+
+    void BattleManager::Reset() {
+        m_AllHeroes.clear();
+        m_EnemyPool.clear();
+        m_MercenaryPool.clear();
+        
+        m_GlobalEnemyDebuffs.clear();
+        m_CurrentBoss = nullptr;
+        m_EnemyKillCount = 0;
+
+        for (auto& hand : m_ClockHands) {
+            if (hand && hand->GetGameObject()) { m_Root.RemoveChild(hand->GetGameObject()); }
+        }
+        m_ClockHands.clear();
+        m_CurrentClockHandsTier = -1;
+
         m_IsCacheDirty = true;
     }
 

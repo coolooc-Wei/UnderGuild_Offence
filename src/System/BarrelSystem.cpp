@@ -18,6 +18,7 @@ namespace UGO::System {
     BarrelSystem::~BarrelSystem() = default;
 
     void BarrelSystem::SetIsGridWalkableCallback(IsGridWalkableCallback callback) { mf_IsGridWalkableCallback = std::move(callback); }
+    void BarrelSystem::SetIsGridOccupiedCallback(IsGridOccupiedCallback callback) { mf_IsGridOccupiedCallback = std::move(callback); }
 
     void BarrelSystem::OnEnterRoom(const Core::Map::MapCoord& coord) {
         m_CurrentRoomCoord = coord;
@@ -57,6 +58,17 @@ namespace UGO::System {
         m_IsInCooldown = false;
         m_SavedGridPos = std::nullopt;
         m_LevelSystem.ClearWalkableOverrides();
+    }
+
+    void BarrelSystem::Clear() {
+        if (m_ActiveBarrel) {
+            m_LevelSystem.ClearWalkableOverride(m_ActiveBarrel->GetOriginalGridPos());
+            m_Root.RemoveChild(m_ActiveBarrel->GetGameObject());
+            m_ActiveBarrel = nullptr;
+        }
+        m_RoomBarrelStates.clear();
+        m_IsInCooldown = false;
+        m_SavedGridPos = std::nullopt;
     }
 
     void BarrelSystem::Update(const Scene::Hero& hero) {
@@ -137,6 +149,7 @@ namespace UGO::System {
             Core::GridPosition candidate = {x, y};
 
             if (mf_IsGridWalkableCallback && mf_IsGridWalkableCallback(candidate)) {
+                if (mf_IsGridOccupiedCallback && mf_IsGridOccupiedCallback(candidate)) { continue; }
                 return candidate;
             }
         }
