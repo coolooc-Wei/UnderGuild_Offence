@@ -145,7 +145,7 @@
             "bossWaveCount": 1,
             "batchCount": 8,
             "batchInterval": 4.0,
-            "baseEnemyCountPerBatch": 12.0,
+            "baseEnemyCountPerBatch": 60.0,
             "enemiesCountGrowthPerDifficulty": 3.5,
             "difficultyGrowthPerWave": 3,
             "batchIntervalVariance": 0.3,

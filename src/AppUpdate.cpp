@@ -144,7 +144,7 @@ void UGO::App::Update() {
                 m_DropSystem->UpdateDrops(heroes[0]);
                 m_BarrelSystem->Update(*(heroes[0]));
             }
-            else { ChangeGameState(GameState::SETTLING); }
+            else { ChangeGameState(GameState::END); }
 
             m_BattleManager->UpdateSystem();
 
@@ -256,7 +256,11 @@ void UGO::App::Update() {
 
             // When Game over (Win or Lose)
             if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
-                ChangeGameState(GameState::SETTLING);
+                if (gameResult == System::GameRuleSystem::GameResult::WIN) {
+                    ChangeGameState(GameState::SETTLING);
+                } else {
+                    ChangeGameState(GameState::END);
+                }
             }
 
             m_GameRuleSystem->Update();
