@@ -189,6 +189,7 @@ void UGO::App::Update() {
                         totalWaves,
                         countdown
                     );
+                    m_GameDisplay->DebugSetHUDVisible(m_CheatState.isHealthOn);
                 }
                 // new end
                 // if (m_GameDisplay) {
