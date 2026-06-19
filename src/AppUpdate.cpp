@@ -12,6 +12,7 @@
 #include "System/MapSystem.hpp"
 #include "System/MercenaryConditionSystem.hpp"
 #include "System/BarrelSystem.hpp"
+#include "Core/UGO_Math.hpp"
 
 #include "Scene/ExpPack.hpp"
 #include "UI/GameDisplay.hpp"
@@ -87,6 +88,22 @@ void UGO::App::Update() {
         auto heroes = m_BattleManager->GetAllHeroes();
         m_ExpSystem->GrantExpToHero(heroes.empty() ? nullptr : heroes[0], 100.0f);
         LOG_INFO("Granted 100 EXP to Hero via ExpSystem!");
+    }
+
+    /* HACK: debug purpose, 為了方便測試羈絆，不得已而為之的快速生成手段 */
+    if (Util::Input::IsKeyDown(Util::Keycode::Y)) { // Press Y to spawn all mercenaries
+        auto heroes = m_BattleManager->GetAllHeroes();
+        if (!heroes.empty() && heroes[0]) {
+            Core::WorldPosition heroPos = heroes[0]->GetWorldPosition();
+            std::vector<std::string> allIDs = m_CharacterFactory->GetAllMercenaryIDs();
+            for (const auto& id : allIDs) {
+                Core::WorldPosition spawnPos = heroPos;
+                spawnPos.x += Core::RandomFloat(-100.0f, 100.0f);
+                spawnPos.y += Core::RandomFloat(-100.0f, 100.0f);
+                m_BattleManager->AddMercenaryByID(id, spawnPos);
+            }
+            LOG_INFO("Spawned one of each mercenary ({} total) around Hero!", allIDs.size());
+        }
     }
     // END TODO
 
