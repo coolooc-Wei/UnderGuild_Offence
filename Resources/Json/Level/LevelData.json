@@ -15,7 +15,7 @@
                 "e_015",
                 "e_016"
             ],
-            "bossID": "e_b02"
+            "bossID": "e_b01"
         },
         "waveConfig": {
             "waveCount": 3,
@@ -45,7 +45,7 @@
                 "e_054",
                 "e_060"
             ],
-            "bossID": "e_b01"
+            "bossID": "e_b02"
         },
         "waveConfig": {
             "waveCount": 3,
@@ -75,7 +75,7 @@
                 "e_062",
                 "e_084"
             ],
-            "bossID": "e_b02"
+            "bossID": "e_b03"
         },
         "waveConfig": {
             "waveCount": 4,
@@ -106,7 +106,7 @@
                 "e_004",
                 "e_005"
             ],
-            "bossID": "e_b01"
+            "bossID": "e_b04"
         },
         "waveConfig": {
             "waveCount": 4,
@@ -138,7 +138,7 @@
                 "e_062",
                 "e_084"
             ],
-            "bossID": "e_b01"
+            "bossID": "e_b05"
         },
         "waveConfig": {
             "waveCount": 5,
