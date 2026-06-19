@@ -1,8 +1,8 @@
 {
     "Level01": {
         "layout": {
-            "normalRoomCount": 3,
-            "specialRoomCount": 1,
+            "normalRoomCount": 1,
+            "specialRoomCount": 0,
             "bossRoomCount": 1
         },
         "spawnConfig": {

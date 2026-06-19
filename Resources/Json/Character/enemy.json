@@ -14,8 +14,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -55,7 +55,7 @@
         }
     },
     "e_002": {
-        "speed": 4.0,
+        "speed": 2.0,
         "drawableType": "Animation",
         "bodyAnimation": {
             "walk": {
@@ -71,8 +71,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 64.0,
+            "height": 64.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -82,8 +82,8 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 10000.0,
-        "attackPower": 600.0,
+        "maxHP": 1000000.0,
+        "attackPower": 1000.0,
         "attackCooldown": 5.0,
         "invincibleDuration": 0.2,
         "weapon": "",
@@ -126,8 +126,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -181,8 +181,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -236,8 +236,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -291,8 +291,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -346,8 +346,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -401,8 +401,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -456,8 +456,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -511,8 +511,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -566,8 +566,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -621,8 +621,8 @@
         },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -690,7 +690,7 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 30000.0,
+        "maxHP": 3000000.0,
         "attackPower": 4500.0,
         "attackCooldown": 4.6,
         "invincibleDuration": 0.2,
