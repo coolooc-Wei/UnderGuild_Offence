@@ -72,8 +72,8 @@ namespace System {
         /* HACK: Use int if ExpValue is not found, typically Scene::ExpValue
          * HACK: Use float if HpValue is not found, typically HpValue
          */
-        const int m_DropExpValue = 5;
-        const float m_DropHealAmount = 10.0f;
+        const int m_DropExpValue = 30;
+        const float m_DropHealAmount = 800.0f;
         const float m_MaxDropDistanceMultiplier = 1.5f;
         const float m_DropCollisionHalfExtent = 8.0f;
 
