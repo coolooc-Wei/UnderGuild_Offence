@@ -82,6 +82,11 @@ private:
     void RearrangeCards();
 
     /**
+     * @brief 依據 m_ScrollIndex 與 m_IsVisible 統一更新各卡牌與其合成按鈕的顯示/隱藏狀態。
+     */
+    void UpdateCardVisibilities();
+
+    /**
      * @brief 為指定傭兵種類建立一張新的 MercenaryDisplayCard。
      *        從 CharacterFactory 查詢圖標路徑（animationPaths[0]）與尺寸。
      * @param typeID 傭兵種類 ID
@@ -108,6 +113,7 @@ private:
 
     bool m_IsVisible = false;
     bool m_InteractionEnabled = true;
+    int  m_ScrollIndex = 0;
 
     // ── MercenaryConditionSystem（不擁有生命週期，由外部 SetConditionSystem 注入）────
     /// 供 UpdateCounts 為各卡牌查詢配方可用性、InitComposeButton 綁定回調使用

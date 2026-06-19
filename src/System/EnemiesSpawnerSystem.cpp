@@ -1,6 +1,9 @@
 #include "System/EnemiesSpawnerSystem.hpp"
 
+#include "Scene/AnimationLite.hpp"
 #include "Core/UGO_Math.hpp"
+#include "System/MercenaryConditionSystem.hpp"
+#include "System/CharacterFactory.hpp"
 
 namespace UGO::System {
 
@@ -10,8 +13,8 @@ namespace UGO::System {
       m_BatchTimer(0.0f),
       m_WaveTimer(0.0f),
       /* Since the warning indicators are stateless, pre-load and share the animation */
-      m_WarningIndicatorAnim(std::make_shared<Util::Animation>(
-          std::vector<std::string>{m_WarningIndicatorPath},
+      m_WarningIndicatorAnim(std::make_shared<Scene::AnimationLite>(
+          Scene::AnimationLite::MakeSharedFrames(std::vector<std::string>{m_WarningIndicatorPath}),
           false, 100, true, 100
       )) {}
     EnemiesSpawnerSystem::~EnemiesSpawnerSystem() = default;
@@ -50,13 +53,13 @@ namespace UGO::System {
         else if (amount2 == -1) { spawnAmount = amount1; }
         else { spawnAmount = Core::RandomInt(amount1, amount2); }
 
-
-        std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
-
         Core::Time::CountDownTimer timer(m_WarningIndicatorDuration);
         timer.Start();
         m_PaddingWaves.push({timer, spawnAmount});
         for (int i=0; i<spawnAmount; ++i) {
+            // choose a type
+            std::string selectedEnemyID = enemyPool[Core::RandomInt(0, enemyPool.size())];
+
             // Choose a side
             Side side;
             float positionScale;
@@ -135,8 +138,25 @@ namespace UGO::System {
 
         // Boss room
         if (!m_SpawnConfig.bossID.empty()) {
-            m_BattleManager.AddBossByID(m_SpawnConfig.bossID, {0.0f, 0.0f});
-            LOG_INFO("Enter the boss room, boss spawned.");
+            Core::WorldPosition spawnPos = {0.0f, 0.0f};
+            if (mf_GetEnemySizeCallback && mf_IsGridWalkableCallback) {
+                Core::Size size = mf_GetEnemySizeCallback(m_SpawnConfig.bossID);
+                float halfWidth = size.x / 2.0f;
+                float halfHeight = size.y / 2.0f;
+                auto range = Core::Map::g_WorldBounds;
+
+                for (int i = 0; i < 50; ++i) {
+                    float rx = Core::RandomFloat(range.minX + halfWidth, range.maxX - halfWidth);
+                    float ry = Core::RandomFloat(range.minY + halfHeight, range.maxY - halfHeight);
+                    Core::WorldPosition testPos = {rx, ry};
+                    if (Core::IsAreaWalkable(testPos, halfWidth, halfHeight, mf_IsGridWalkableCallback)) {
+                        spawnPos = testPos;
+                        break;
+                    }
+                }
+            }
+            m_BattleManager.AddBossByID(m_SpawnConfig.bossID, spawnPos);
+            LOG_INFO("Enter the boss room, boss spawned at ({}, {}).", spawnPos.x, spawnPos.y);
         }
         StartNextWave();
     }
@@ -169,6 +189,35 @@ namespace UGO::System {
         GenerateNextBatch();
         LOG_INFO("Starting wave number {}", ++m_CurrentWaveID);
         m_WaveTimer.Start(m_WaveInterval);
+
+        if (m_MercenaryConditionSystem) {
+            int activeTier = m_MercenaryConditionSystem->GetActiveBondTier("reinforcements");
+            if (activeTier >= 0) {
+                float chance = (activeTier == 0) ? 0.5f : 0.75f;
+                float roll = Core::RandomFloat(0.0f, 1.0f);
+                if (roll <= chance) {
+                    if (m_CharacterFactory) {
+                        std::vector<std::string> legendaryIDs = m_CharacterFactory->GetLegendaryMercenaryIDs();
+                        if (!legendaryIDs.empty()) {
+                            int randIdx = std::rand() % legendaryIDs.size();
+                            std::string selectedID = legendaryIDs[randIdx];
+                            
+                            auto heroes = m_BattleManager.GetAllHeroes();
+                            if (!heroes.empty() && heroes[0]) {
+                                Core::WorldPosition spawnPos = heroes[0]->GetWorldPosition();
+                                spawnPos.x += Core::RandomFloat(-50.0f, 50.0f);
+                                spawnPos.y += Core::RandomFloat(-50.0f, 50.0f);
+                                m_BattleManager.AddMercenaryByID(selectedID, spawnPos);
+                                LOG_INFO("[Reinforcements Bond] Successfully summoned legendary companion '{}' at ({}, {}) (Tier: {}, Chance: {}%)", 
+                                         selectedID, spawnPos.x, spawnPos.y, activeTier + 1, (int)(chance * 100));
+                            }
+                        }
+                    }
+                } else {
+                    LOG_INFO("[Reinforcements Bond] Roll failed (Roll: {}, Chance: {}%)", roll, (int)(chance * 100));
+                }
+            }
+        }
     }
     void EnemiesSpawnerSystem::GenerateNextBatch() {
         if (m_BatchDataList.empty()) {
@@ -202,6 +251,14 @@ namespace UGO::System {
         // clear padding
         m_PaddingWaves = {};
         m_PaddingSpawns = {};
+    }
+
+    void EnemiesSpawnerSystem::Reset() {
+        m_IsSpawnActive = false;
+        m_CurrentWaveID = 0;
+        m_PaddingWaves = {};
+        m_PaddingSpawns = {};
+        m_BatchDataList = {};
     }
 
 }

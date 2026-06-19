@@ -170,5 +170,301 @@
             }
         ],
         "outputTypeID": "s_025"
+    },
+    {
+        "recipeID": "m007_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_007",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_007_1"
+    },
+    {
+        "recipeID": "m007_1_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_007_1",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_007_2"
+    },
+    {
+        "recipeID": "m016_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_016_1"
+    },
+    {
+        "recipeID": "m016_1_upgrade",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016_1",
+                    "requiredCount": 2,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "m_016_2"
+    },
+    {
+        "recipeID": "s_003_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_003"
+    },
+    {
+        "recipeID": "s_007_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_007"
+    },
+    {
+        "recipeID": "s_011_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_011"
+    },
+    {
+        "recipeID": "s_012_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_004_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_004_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_004",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_012"
+    },
+    {
+        "recipeID": "s_018_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_018"
+    },
+    {
+        "recipeID": "s_032_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016_1",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_016",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "s_032"
+    },
+    {
+        "recipeID": "g_013_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "s_011",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "s_012",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_007_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "g_013"
+    },
+    {
+        "recipeID": "g_034_synthesis",
+        "ingredients": [
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "s_007",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_001_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            },
+            {
+                "condition": {
+                    "type": "BY_TYPE_ID_EXACT",
+                    "target": "m_002_2",
+                    "requiredCount": 1,
+                    "countOnlyAlive": false
+                }
+            }
+        ],
+        "outputTypeID": "g_034"
     }
 ]

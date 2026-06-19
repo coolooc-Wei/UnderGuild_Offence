@@ -1,5 +1,6 @@
 #include "System/RewardManager.hpp"
 #include "System/DropSystem.hpp"
+#include "System/MercenaryConditionSystem.hpp"
 #include "Scene/Hero.hpp"
 #include "Scene/Enemy.hpp"
 #include "Core/UGO_Math.hpp"
@@ -19,13 +20,41 @@ namespace UGO::System {
 
     RewardManager::~RewardManager() = default;
 
+    void RewardManager::Reset() {
+        m_PendingMercenaries.clear();
+        for (auto& icon : m_LevelUpIcons) {
+            if (icon && icon->GetGameObject()) { m_Root.RemoveChild(icon->GetGameObject()); }
+        }
+        m_LevelUpIcons.clear();
+        m_LevelUpIconCount = 0;
+    }
+
+    void RewardManager::SetConditionSystem(MercenaryConditionSystem* conditionSystem) {
+        m_ConditionSystem = conditionSystem;
+    }
+
     void RewardManager::OnEnemyDeath(Scene::Enemy* enemy, Scene::Hero* hero) {
         if (!enemy) return;
         
         m_ExpSystem.GrantExpToHero(hero, enemy->GetExpReward());
         LOG_INFO("Granted " + std::to_string(enemy->GetExpReward()) + " EXP to Hero for defeating an enemy!");
         
-        if (UGO::Core::RandomFloat(0.0f, 1.0f) <= enemy->GetDropRate()) {
+        float dropRateBonus = 0.0f;
+        if (m_ConditionSystem) {
+            int blessingTier = m_ConditionSystem->GetActiveBondTier("blessing");
+            if (blessingTier == 0) {
+                dropRateBonus = 0.02f; // Tier 1: +2%
+            } else if (blessingTier == 1) {
+                dropRateBonus = 0.04f; // Tier 2: +4%
+            }
+        }
+
+        float baseDropRate = enemy->GetDropRate();
+        float finalDropRate = baseDropRate + dropRateBonus;
+        if (dropRateBonus != 0.0f) {
+            LOG_INFO("[Blessing Bond] Drop rate modified! Base: {}, Bonus: {}, Final: {}", baseDropRate, dropRateBonus, finalDropRate);
+        }
+        if (UGO::Core::RandomFloat(0.0f, 1.0f) <= finalDropRate) {
             m_DropSystem.SpawnExpPack(enemy->GetWorldPosition(), enemy->GetExpPackValue());
         }
     }

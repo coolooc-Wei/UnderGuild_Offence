@@ -21,15 +21,23 @@ namespace Time {
 
     class CountDownTimer {
     public:
-        CountDownTimer(Second durationInSecond);
+        CountDownTimer(Second durationInSecond, bool silence = false);
         ~CountDownTimer();
         void SetDuration(Second durationInSecond);
         void Start();
         void Start(Second durationInSecond);
+        void SetSilence(bool silence);
         bool IsTimeUp() const;
+        float GetNormalizedProgress() const;
+        float GetRemainingSeconds() const {
+            Tick current = GetCurrentTick();
+            if (current >= endTick) { return 0.0f; }
+            return static_cast<float>(endTick - current) * FIXED_DELTA_TIME;
+        }
     // private:
         TimeStep duration;
         Tick endTick;
+        bool m_Silence;
     };
 
 } // namespace Time

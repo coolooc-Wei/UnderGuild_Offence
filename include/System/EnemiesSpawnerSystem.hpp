@@ -9,7 +9,12 @@
 #include "Core/LevelData.hpp"
 
 namespace UGO {
+namespace Scene {
+    class AnimationLite;
+}
 namespace System {
+    class MercenaryConditionSystem;
+    class CharacterFactory;
 
     class EnemiesSpawnerSystem {
     public:
@@ -33,6 +38,7 @@ namespace System {
         );
         ~EnemiesSpawnerSystem();
 
+        void Reset();
         void Update();
         /* Parameters setting:
          * amount1 = amount2 = -1       --> illegal;
@@ -52,6 +58,16 @@ namespace System {
         using GetEnemySizeCallback = std::function<Core::Size(const std::string&)>;
         void SetGetEnemySizeCallback(GetEnemySizeCallback callback);
 
+        void SetConditionSystem(MercenaryConditionSystem* conditionSystem) { m_MercenaryConditionSystem = conditionSystem; }
+        void SetCharacterFactory(CharacterFactory* characterFactory) { m_CharacterFactory = characterFactory; }
+
+        int GetCurrentWaveID() const { return m_CurrentWaveID; }
+        int GetTotalWaves() const { return m_SpawnConfig.bossID.empty() ? m_WaveConfig.waveCount : m_WaveConfig.bossWaveCount; }
+        float GetBatchCountdown() const {
+            float remaining = m_BatchTimer.GetRemainingSeconds();
+            return remaining > 99.0f ? 0.0f : remaining;
+        }
+
     private:
         void StartNextWave();
         void GenerateNextBatch();
@@ -60,8 +76,10 @@ namespace System {
 
         BattleManager& m_BattleManager;
         EffectAnimationManager& m_EffectAnimationManager;
+        MercenaryConditionSystem* m_MercenaryConditionSystem = nullptr;
+        CharacterFactory* m_CharacterFactory = nullptr;
         const std::string m_WarningIndicatorPath = "../Resources/Image/effactAnimation/EF_MonPosition.png";
-        std::shared_ptr<Util::Animation> m_WarningIndicatorAnim;
+        std::shared_ptr<Scene::AnimationLite> m_WarningIndicatorAnim;
 
         const Core::Time::Second m_WarningIndicatorDuration = 1.0f;
         const Core::Distance m_StepNudgeDistance = 3.0 * (float)Core::TILE_SIZE / 5.0;

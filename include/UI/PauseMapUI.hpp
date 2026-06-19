@@ -49,10 +49,10 @@ private:
     static constexpr float ROOM_SIZE   = 42.0f;  ///< 每個房間格子的顯示尺寸（px）
     static constexpr float ROOM_GAP    = 5.0f;   ///< 相鄰格子中心點之間的額外留白（px）
     static constexpr float ROOM_STRIDE = ROOM_SIZE + ROOM_GAP; ///< 格子步長（px）
-    static constexpr float MAP_Z       = 55.0f;     ///< 整體背景的 Z-Index
-    static constexpr float ROOM_Z      = 56.0f;     ///< 房間底板的 Z-Index
-    static constexpr float ICON_Z      = 57.0f;     ///< 疊加圖示的 Z-Index
-    static constexpr float CONN_Z      = 55.5f;     ///< 連結線的 Z-Index（低於 ROOM_Z，讓房間底板自然遮蓋末端）
+    static constexpr float MAP_Z       = 50.0f;     ///< 整體背景的 Z-Index
+    static constexpr float ROOM_Z      = 51.0f;     ///< 房間底板的 Z-Index
+    static constexpr float ICON_Z      = 52.0f;     ///< 疊加圖示的 Z-Index
+    static constexpr float CONN_Z      = 50.5f;     ///< 連結線的 Z-Index（低於 ROOM_Z，讓房間底板自然遮蓋末端）
 
     // ── 資源路徑常數 ───────────────────────────────────────────────
     static constexpr const char* PATH_BG        = "../Resources/Image/card/Ui_CardBg2.png";

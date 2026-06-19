@@ -19,7 +19,11 @@ namespace UGO::UI {
  */
 class HealthBar {
 public:
-    enum class OwnerType { Ally, Enemy };
+    enum class OwnerType {
+        Ally,
+        Enemy,
+        Barrel
+    };
 
     /**
      * @param root      場景根節點
@@ -27,7 +31,7 @@ public:
      * @param barWidth  血條寬度（通常等於角色寬度）
      */
     HealthBar(Util::Renderer& root, OwnerType ownerType, float barWidth);
-    ~HealthBar() = default;
+    ~HealthBar();
 
     HealthBar(const HealthBar&)            = delete;
     HealthBar& operator=(const HealthBar&) = delete;
@@ -55,16 +59,19 @@ private:
     // ── 版面常數 ─────────────────────────────────────────────────────
     static constexpr float BAR_HEIGHT    = 5.0f;
     static constexpr float BAR_Y_OFFSET  = 4.0f;  // 頭頂再往上的額外間距
-    static constexpr float FILL_Z_INDEX  = 48.0f;
-    static constexpr float BG_Z_INDEX    = 47.0f;
+    static constexpr float FILL_Z_INDEX  = 2.9f;
+    static constexpr float BG_Z_INDEX    = 2.8f;
 
     // 暫時統一使用同一張圖片；之後可依 OwnerType 換圖
     static const std::string ALLIE_IMAGE_PATH;
     static const std::string ENEMY_IMAGE_PATH;
     static const std::string BG_IMAGE_PATH;
+    static const std::string BARREL_IMAGE_PATH;
 
     std::shared_ptr<Scene::BasicObject> m_Background;
     std::shared_ptr<Scene::BasicObject> m_Fill;
+
+    Util::Renderer& m_Root;
 
     float      m_BarWidth   = 32.0f;
     float      m_CurrentHP  = 1.0f;

@@ -137,6 +137,30 @@
             "effect_params": { "entity_id": "m_004_2" }
         },
         {
+            "id": "merc_summon_m007",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_07.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_007" }
+        },
+        {
+            "id": "merc_summon_m007_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_071_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_007_1" }
+        },
+        {
+            "id": "merc_summon_m007_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_072_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_007_2" }
+        },
+        {
             "id": "merc_summon_m008",
             "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_08.png",
             "description": "summon a \nmercenary",
@@ -161,6 +185,70 @@
             "effect_params": { "entity_id": "m_008_2" }
         },
         {
+            "id": "merc_summon_m016",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_16.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_016" }
+        },
+        {
+            "id": "merc_summon_m016_1",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_161_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_016_1" }
+        },
+        {
+            "id": "merc_summon_m016_2",
+            "title": "../Resources/Image/character/mercenaries/BasicUnit/Unit_162_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "m_016_2" }
+        },
+        {
+            "id": "merc_summon_s003",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_03.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_003" }
+        },
+        {
+            "id": "merc_summon_s007",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_07.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_007" }
+        },
+        {
+            "id": "merc_summon_s011",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_11_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_011" }
+        },
+        {
+            "id": "merc_summon_s012",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_12_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_012" }
+        },
+        {
+            "id": "merc_summon_s018",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_18_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_018" }
+        },
+        {
             "id": "merc_summon_s023",
             "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_23_1.png",
             "description": "summon a \nmercenary",
@@ -175,6 +263,14 @@
             "action_target": "CharacterFactory",
             "action_type": "SummonMercenary",
             "effect_params": { "entity_id": "s_025" }
+        },
+        {
+            "id": "merc_summon_s032",
+            "title": "../Resources/Image/character/mercenaries/SUnit/SUnit_32_1.png",
+            "description": "summon a \nmercenary",
+            "action_target": "CharacterFactory",
+            "action_type": "SummonMercenary",
+            "effect_params": { "entity_id": "s_032" }
         }
     ]
 }

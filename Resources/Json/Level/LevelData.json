@@ -1,23 +1,153 @@
 {
-    "test": {
+    "Level01": {
         "layout": {
-            "normalRoomCount": 2,
-            "specialRoomCount": 1,
+            "normalRoomCount": 1,
+            "specialRoomCount": 0,
             "bossRoomCount": 1
         },
         "spawnConfig": {
-            "periodicPool": ["e_001"],
-            "extraPool": ["e_002"],
+            "periodicPool": [
+                "e_001",
+                "e_004",
+                "e_005"
+            ],
+            "extraPool": [
+                "e_015",
+                "e_016"
+            ],
             "bossID": "e_b01"
         },
         "waveConfig": {
             "waveCount": 3,
             "bossWaveCount": 1,
-            "batchCount": 1,
-            "batchInterval": 2.0,
+            "batchCount": 4,
+            "batchInterval": 8.0,
+            "baseEnemyCountPerBatch": 4.0,
+            "enemiesCountGrowthPerDifficulty": 0.5,
+            "difficultyGrowthPerWave": 1,
+            "batchIntervalVariance": 0.3,
+            "enemiesCountVariancePerBatch": 0.2
+        }
+    },
+    "Level02": {
+        "layout": {
+            "normalRoomCount": 4,
+            "specialRoomCount": 1,
+            "bossRoomCount": 1
+        },
+        "spawnConfig": {
+            "periodicPool": [
+                "e_015",
+                "e_016",
+                "e_039"
+            ],
+            "extraPool": [
+                "e_054",
+                "e_060"
+            ],
+            "bossID": "e_b02"
+        },
+        "waveConfig": {
+            "waveCount": 3,
+            "bossWaveCount": 1,
+            "batchCount": 4,
+            "batchInterval": 8.0,
             "baseEnemyCountPerBatch": 4.0,
             "enemiesCountGrowthPerDifficulty": 1.0,
             "difficultyGrowthPerWave": 1,
+            "batchIntervalVariance": 0.3,
+            "enemiesCountVariancePerBatch": 0.2
+        }
+    },
+    "Level03": {
+        "layout": {
+            "normalRoomCount": 3,
+            "specialRoomCount": 2,
+            "bossRoomCount": 1
+        },
+        "spawnConfig": {
+            "periodicPool": [
+                "e_054",
+                "e_060",
+                "e_061"
+            ],
+            "extraPool": [
+                "e_062",
+                "e_084"
+            ],
+            "bossID": "e_b03"
+        },
+        "waveConfig": {
+            "waveCount": 4,
+            "bossWaveCount": 1,
+            "batchCount": 4,
+            "batchInterval": 8.0,
+            "baseEnemyCountPerBatch": 5.0,
+            "enemiesCountGrowthPerDifficulty": 1.5,
+            "difficultyGrowthPerWave": 1,
+            "batchIntervalVariance": 0.3,
+            "enemiesCountVariancePerBatch": 0.2
+        }
+    },
+    "Level04": {
+        "layout": {
+            "normalRoomCount": 4,
+            "specialRoomCount": 2,
+            "bossRoomCount": 1
+        },
+        "spawnConfig": {
+            "periodicPool": [
+                "e_061",
+                "e_062",
+                "e_084"
+            ],
+            "extraPool": [
+                "e_001",
+                "e_004",
+                "e_005"
+            ],
+            "bossID": "e_b04"
+        },
+        "waveConfig": {
+            "waveCount": 4,
+            "bossWaveCount": 1,
+            "batchCount": 5,
+            "batchInterval": 8.0,
+            "baseEnemyCountPerBatch": 6.0,
+            "enemiesCountGrowthPerDifficulty": 2.0,
+            "difficultyGrowthPerWave": 2,
+            "batchIntervalVariance": 0.3,
+            "enemiesCountVariancePerBatch": 0.2
+        }
+    },
+    "Level05": {
+        "layout": {
+            "normalRoomCount": 4,
+            "specialRoomCount": 3,
+            "bossRoomCount": 1
+        },
+        "spawnConfig": {
+            "periodicPool": [
+                "e_001",
+                "e_015",
+                "e_039",
+                "e_054"
+            ],
+            "extraPool": [
+                "e_061",
+                "e_062",
+                "e_084"
+            ],
+            "bossID": "e_b05"
+        },
+        "waveConfig": {
+            "waveCount": 5,
+            "bossWaveCount": 1,
+            "batchCount": 6,
+            "batchInterval": 8.0,
+            "baseEnemyCountPerBatch": 7.0,
+            "enemiesCountGrowthPerDifficulty": 2.5,
+            "difficultyGrowthPerWave": 2,
             "batchIntervalVariance": 0.3,
             "enemiesCountVariancePerBatch": 0.2
         }

@@ -1,5 +1,7 @@
 #include "Scene/BasicObject.hpp"
+#include "Scene/AnimationLite.hpp"
 #include "Core/Coordinate.hpp"
+#include "Resource/ImageCache.hpp"
 
 namespace UGO::Scene {
 
@@ -73,12 +75,14 @@ namespace UGO::Scene {
 
     std::shared_ptr<Util::GameObject> BasicObject::GetGameObject() const { return m_GameObject; }
 
-    std::shared_ptr<Util::Animation> BasicObject::GetAnimation() const { return m_Animation; }
+    std::shared_ptr<AnimationLite> BasicObject::GetAnimation() const { return m_Animation; }
 
     glm::vec2 BasicObject::GetSize() const {
         if (!m_CollisionBox) { LOG_WARN("m_CollisionBox is nullptr."); return {0.0f, 0.0f}; }
         return {m_CollisionBox->GetWidth(), m_CollisionBox->GetHeight()};
     }
+
+    glm::vec2 BasicObject::GetScale() const { return m_Scale; }
 
 
     void BasicObject::SetWorldPosition(const Core::WorldPosition &pos) {
@@ -92,16 +96,18 @@ namespace UGO::Scene {
     }
 
     void BasicObject::SetImage(const std::shared_ptr<Util::Image> &image) { m_Image = image; }
-    void BasicObject::SetImage(const std::string &imagePath) { m_Image = std::make_shared<Util::Image>(imagePath); }
+    void BasicObject::SetImage(const std::string &imagePath) {
+        m_Image = Resource::ImageCache::GetImage(imagePath);
+    }
 
-    void BasicObject::SetAnimation(const std::shared_ptr<Util::Animation> &animation) { m_Animation = animation; }
+    void BasicObject::SetAnimation(const std::shared_ptr<AnimationLite> &animation) { m_Animation = animation; }
     void BasicObject::SetAnimation(
         const std::vector<std::string> &paths,
         bool play,
         std::size_t interval,
         bool looping,
         std::size_t cooldown
-    ) { m_Animation = std::make_shared<Util::Animation>(paths, play, interval, looping, cooldown); }
+    ) { m_Animation = std::make_shared<AnimationLite>(AnimationLite::MakeSharedFrames(paths), play, interval, looping, cooldown); }
 
     void BasicObject::SetAnimationState(const bool play) {
         if (!m_Animation) {

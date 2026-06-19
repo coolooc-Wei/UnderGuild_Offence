@@ -26,6 +26,11 @@ namespace UGO::System {
 
     UpgradeManager::~UpgradeManager() = default;
 
+    void UpgradeManager::Reset() {
+        m_PendingCount = 0;
+        m_CurrentHero = nullptr;
+    }
+
     // ---------- App 設定介面 ----------
     void UpgradeManager::SetOnReadyCallback(std::function<void()> cb) {
         m_OnReadyCallback = std::move(cb);
@@ -53,24 +58,25 @@ namespace UGO::System {
         if (!card) {
             LOG_WARN("[UpgradeManager] Unknown card id: {}", id);
         } else {
+            LOG_INFO("[UpgradeManager] Applying Upgrade Card - ID: {}, Title: '{}', Action: '{}'", card->id, card->title, card->actionType);
             const auto& params = card->effectParams;
 
             if (card->actionType == "Heal" && m_CurrentHero) {
                 float percent = params.value("percent", 0.3f);
                 m_CurrentHero->OnHeal(m_CurrentHero->GetMaxHP() * percent);
-                LOG_INFO("[UpgradeManager] Hero healed {}%", percent * 100.0f);
+                LOG_INFO("[UpgradeManager] Action [Heal] executed - Healed Hero by {}%", percent * 100.0f);
             }
             else if (card->actionType == "AddStatusEffect") {
                 Scene::StatusEffectData data = ParseStatusEffectData(params);
                 if (card->actionTarget == "Hero" && m_CurrentHero) {
                     m_CurrentHero->AddStatusEffect(data);
-                    LOG_INFO("[UpgradeManager] Applied StatusEffect to Hero");
+                    LOG_INFO("[UpgradeManager] Action [AddStatusEffect] executed - StatusEffect type: {}, multiplier: {} applied to Hero", params.value("type", "AttackUp"), params.value("multiplier", 1.0f));
                 }
             }
             else if (card->actionType == "AddGlobalStatusEffect") {
                 Scene::StatusEffectData data = ParseStatusEffectData(params);
                 m_BattleManager.AddGlobalEnemyStatusEffect(data);
-                LOG_INFO("[UpgradeManager] Added global enemy debuff");
+                LOG_INFO("[UpgradeManager] Action [AddGlobalStatusEffect] executed - Global enemy debuff type: {}, multiplier: {} added", params.value("type", "AttackUp"), params.value("multiplier", 1.0f));
             }
             else if (card->actionType == "SummonMercenary") {
                 std::string entityId = params.value("entity_id", "m_001");
@@ -85,12 +91,12 @@ namespace UGO::System {
                     float oy = Core::RandomFloat(-60.0f, 60.0f);
                     m_BattleManager.AddMercenaryByID(entityId, spawnBase + Core::WorldPosition(ox, oy));
                 }
-                LOG_INFO("[UpgradeManager] Summoned {} mercenary/mercenaries", count);
+                LOG_INFO("[UpgradeManager] Action [SummonMercenary] executed - Summoned {} mercenary/mercenaries of type: {}", count, entityId);
             }
             else if (card->actionType == "MercenaryBuff") {
                 Scene::StatusEffectData data = ParseStatusEffectData(params);
                 m_BattleManager.AddStatusEffectToAllMercenaries(data);
-                LOG_INFO("[UpgradeManager] Applied buff to all mercenaries");
+                LOG_INFO("[UpgradeManager] Action [MercenaryBuff] executed - Buff type: {}, multiplier: {} applied to all mercenaries", params.value("type", "AttackUp"), params.value("multiplier", 1.0f));
             }
         }
 
@@ -153,23 +159,31 @@ namespace UGO::System {
         } else {
             // 過濾掉當前同 ID 的卡牌，從剩餘卡牌中隨機選取
             std::vector<const UpgradeCardData*> candidates;
+            std::vector<int> weights;
             candidates.reserve(m_CardPool.size());
+            weights.reserve(m_CardPool.size());
             for (const auto& c : m_CardPool) {
                 if (c.id != currentId) {
                     candidates.push_back(&c);
+                    weights.push_back(GetCardWeight(c));
                 }
             }
-            // 若過濾後仍有候選，從中隨機選取；否則直接全池隨機（理論上不會發生）
+            // 若過濾後仍有候選，從中加權隨機選取；否則全池加權隨機
             if (!candidates.empty()) {
-                std::uniform_int_distribution<size_t> dist(0, candidates.size() - 1);
+                std::discrete_distribution<size_t> dist(weights.begin(), weights.end());
                 m_CurrentCards[slotIndex] = *candidates[dist(rng)];
             } else {
-                std::uniform_int_distribution<size_t> dist(0, m_CardPool.size() - 1);
+                std::vector<int> allWeights;
+                allWeights.reserve(m_CardPool.size());
+                for (const auto& c : m_CardPool) {
+                    allWeights.push_back(GetCardWeight(c));
+                }
+                std::discrete_distribution<size_t> dist(allWeights.begin(), allWeights.end());
                 m_CurrentCards[slotIndex] = m_CardPool[dist(rng)];
             }
         }
 
-        LOG_INFO("[UpgradeManager] Rerolled slot {} -> {}", slotIndex, m_CurrentCards[slotIndex].id);
+        LOG_INFO("[UpgradeManager] Rerolled slot {} -> Card ID: {}, Title: '{}'", slotIndex, m_CurrentCards[slotIndex].id, m_CurrentCards[slotIndex].title);
     }
 
     void UpgradeManager::DrawCards() {
@@ -180,10 +194,40 @@ namespace UGO::System {
         }
 
         std::mt19937 rng(std::random_device{}());
-        std::uniform_int_distribution<size_t> dist(0, m_CardPool.size() - 1);
+        std::vector<int> weights;
+        weights.reserve(m_CardPool.size());
+        for (const auto& card : m_CardPool) {
+            weights.push_back(GetCardWeight(card));
+        }
+
+        std::discrete_distribution<size_t> dist(weights.begin(), weights.end());
         for (auto& slot : m_CurrentCards) {
             slot = m_CardPool[dist(rng)];
         }
+        LOG_INFO("[UpgradeManager] Cards drawn - Slot 0: ID: {}, Title: '{}' | Slot 1: ID: {}, Title: '{}' | Slot 2: ID: {}, Title: '{}'",
+                 m_CurrentCards[0].id, m_CurrentCards[0].title,
+                 m_CurrentCards[1].id, m_CurrentCards[1].title,
+                 m_CurrentCards[2].id, m_CurrentCards[2].title);
+    }
+
+    int UpgradeManager::GetCardWeight(const UpgradeCardData& card) const {
+        if (card.actionType != "SummonMercenary") {
+            return 30; // 非傭兵召喚卡牌機率同二級傭兵
+        }
+
+        std::string entityId = card.effectParams.value("entity_id", "");
+        MercenaryGrade grade = GetMercenaryGradeFromID(entityId);
+        switch (grade) {
+            case MercenaryGrade::Tier1:
+                return 60; // 一級最高
+            case MercenaryGrade::Tier2:
+                return 23; // 二級次之
+            case MercenaryGrade::Tier3:
+                return 12; // 三級再次之
+            case MercenaryGrade::Legendary:
+                return 5;  // 傳說級最低
+        }
+        return 30; // 預防萬一的 fallback
     }
 
     Scene::StatusEffectData UpgradeManager::ParseStatusEffectData(const nlohmann::json& params) const {

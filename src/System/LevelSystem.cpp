@@ -24,6 +24,17 @@ namespace UGO::System {
         }
     }
 
+    void LevelSystem::Reset() {
+        m_DifficultyLevel = 0;
+        m_CurrentRoomState = RoomState::Setting;
+        m_CurrentRoom = nullptr;
+        m_WalkableOverrides.clear();
+        UpdatePortalVisuals(true);
+        m_Layout.clear();
+        m_LayoutMap.clear();
+        m_CurrentLevelData = Core::Level::LevelData{};
+    }
+
     void LevelSystem::GenerateLevel(const std::string& levelID) {
         m_CurrentLevelData = GetLevelData(levelID);
         BuildLayout(m_CurrentLevelData.layoutConfig);
@@ -112,8 +123,19 @@ namespace UGO::System {
         return *m_CurrentRoom;
     }
     const Core::Map::RoomData&  LevelSystem::GetCurrentRoomData() const { return m_MapSystem.GetRoomData(GetCurrentRoom().mapDataID); }
-    bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const { return GetCurrentRoomData().IsWalkable(Core::WorldToGrid(worldPos)); }
-    bool LevelSystem::IsWalkable(const Core::GridPosition& gridPos) const { return GetCurrentRoomData().IsWalkable(gridPos); }
+
+    bool LevelSystem::IsWalkable(const Core::GridPosition& gridPos) const {
+        // isWalkable is overrided
+        if (auto it = m_WalkableOverrides.find(gridPos); it != m_WalkableOverrides.end()) { return it->second; }
+        // normal case
+        return GetCurrentRoomData().IsWalkable(gridPos);
+    }
+
+    bool LevelSystem::IsWalkable(const Core::WorldPosition& worldPos) const { return IsWalkable(Core::WorldToGrid(worldPos)); }
+
+    void LevelSystem::SetWalkableOverride(const Core::GridPosition& gridPos, bool walkable) { m_WalkableOverrides[gridPos] = walkable; }
+    void LevelSystem::ClearWalkableOverride(const Core::GridPosition& gridPos) { m_WalkableOverrides.erase(gridPos); }
+    void LevelSystem::ClearWalkableOverrides() { m_WalkableOverrides.clear(); }
 
     LevelSystem::RoomState LevelSystem::GetRoomState() const { return m_CurrentRoomState; }
 
@@ -213,11 +235,15 @@ namespace UGO::System {
     int LevelSystem::GetDifficultyLevel() const { return m_DifficultyLevel; }
 
     void LevelSystem::EnterStartRoom() {
-        if (m_CurrentRoom) { LOG_INFO("LevelSystem: Entered start room at ({}, {})", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y); }
+        if (m_CurrentRoom) {
+            ClearWalkableOverrides();
+            LOG_INFO("LevelSystem: Entered start room at ({}, {})", m_CurrentRoom->mapPos.x, m_CurrentRoom->mapPos.y); 
+        }
     }
     void LevelSystem::EnterRoom(Core::Map::MapCoord coord) {
         if (!TryMoveToRoom(coord)) { return; }
         m_MapSystem.LoadRoom(GetCurrentRoomData());
+        ClearWalkableOverrides();
         LOG_INFO("LevelSystem: Entered room at ({}, {})", coord.x, coord.y);
     }
 

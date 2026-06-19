@@ -8,6 +8,7 @@
 
 namespace UGO {
 namespace Core {
+    constexpr float PI = 3.1415926535f;
 
     inline Angle FastAtan2(Distance y, Distance x) {
         float abs_y = std::abs(y) + 1e-10f; 

@@ -14,14 +14,18 @@ namespace UGO::Scene {
 namespace UGO::System {
 
     class DropSystem;
+    class MercenaryConditionSystem;
 
     class RewardManager {
     public:
         RewardManager(Util::Renderer& root, CharacterFactory& characterFactory, ExpSystem& expSystem, DropSystem& dropSystem);
         ~RewardManager();
 
+        void Reset();
         void OnEnemyDeath(Scene::Enemy* enemy, Scene::Hero* hero);
         void OnHeroLevelUp(Scene::Hero* hero);
+
+        void SetConditionSystem(MercenaryConditionSystem* conditionSystem);
 
         void AddIcon(std::unique_ptr<Scene::Icon> icon);
         std::vector<Scene::Icon*> GetAllIcons() const;
@@ -31,6 +35,7 @@ namespace UGO::System {
         CharacterFactory& m_CharacterFactory;
         ExpSystem& m_ExpSystem;
         DropSystem& m_DropSystem;
+        MercenaryConditionSystem* m_ConditionSystem = nullptr;
 
         std::vector<std::unique_ptr<Scene::Icon>> m_LevelUpIcons;
         int m_LevelUpIconCount = 0;

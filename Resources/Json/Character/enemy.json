@@ -2,16 +2,20 @@
     "e_001": {
         "speed": 1.5,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/enemy/boss/Boss_1_1.png",
-            "../Resources/Image/character/enemy/boss/Boss_1_2.png",
-            "../Resources/Image/character/enemy/boss/Boss_1_3.png",
-            "../Resources/Image/character/enemy/boss/Boss_1_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_1.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -21,9 +25,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
-        "attackCooldown": 1.0,
+        "maxHP": 8000.0,
+        "attackPower": 400.0,
+        "attackCooldown": 2.0,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -38,7 +42,9 @@
             }
         },
         "damageAnimationData": {
-            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
             "duration": 0.1,
             "isImage": true,
             "offsetAngle": 0.0,
@@ -48,18 +54,23 @@
             }
         }
     },
-    "e_002": {
-        "speed": 1.0,
+    "e_004": {
+        "speed": 2.0,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/enemy/boss/Boss_7_1.png",
-            "../Resources/Image/character/enemy/boss/Boss_7_2.png",
-            "../Resources/Image/character/enemy/boss/Boss_7_3.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_4.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
         "imagePath": "",
         "size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 20.0,
+            "height": 20.0
         },
         "hitBox": {
             "type": "CIRCLE",
@@ -69,8 +80,283 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 100.0,
-        "attackPower": 20.0,
+        "maxHP": 9000.0,
+        "attackPower": 500.0,
+        "attackCooldown": 2.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_005": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_5.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 8000.0,
+        "attackPower": 400.0,
+        "attackCooldown": 2.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_015": {
+        "speed": 3.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_15.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 10000.0,
+        "attackPower": 600.0,
+        "attackCooldown": 2.5,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_016": {
+        "speed": 1.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_16.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 8000.0,
+        "attackPower": 450.0,
+        "attackCooldown": 2.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_039": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_39.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 6000.0,
+        "attackPower": 850.0,
+        "attackCooldown": 3.5,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_054": {
+        "speed": 4.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_54.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 7000.0,
+        "attackPower": 450.0,
         "attackCooldown": 1.0,
         "invincibleDuration": 0.2,
         "weapon": "",
@@ -86,7 +372,9 @@
             }
         },
         "damageAnimationData": {
-            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
             "duration": 0.1,
             "isImage": true,
             "offsetAngle": 0.0,
@@ -96,17 +384,242 @@
             }
         }
     },
-
-
+    "e_060": {
+        "speed": 2.5,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_60.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 8000.0,
+        "attackPower": 500.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_061": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_61.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 9000.0,
+        "attackPower": 550.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_062": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_62.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 6000.0,
+        "attackPower": 750.0,
+        "attackCooldown": 3.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_084": {
+        "speed": 4.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/mon/Mon_N_84.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 20.0,
+            "height": 20.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 9000.0,
+        "attackPower": 650.0,
+        "attackCooldown": 1.5,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
     "e_b01": {
         "speed": 0.2,
         "drawableType": "Animation",
-        "animationPath": [
-            "../Resources/Image/character/enemy/boss/Boss_5_1.png",
-            "../Resources/Image/character/enemy/boss/Boss_5_2.png",
-            "../Resources/Image/character/enemy/boss/Boss_5_3.png",
-            "../Resources/Image/character/enemy/boss/Boss_5_4.png"
-        ],
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/boss/Boss_5_1.png",
+                    "../Resources/Image/character/enemy/boss/Boss_5_2.png",
+                    "../Resources/Image/character/enemy/boss/Boss_5_3.png",
+                    "../Resources/Image/character/enemy/boss/Boss_5_4.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
         "imagePath": "",
         "size": {
             "width": 64.0,
@@ -120,9 +633,9 @@
         "isHitBoxActive": true,
         "isHurtBoxActive": true,
         "isVisible": true,
-        "maxHP": 300.0,
-        "attackPower": 29.0,
-        "attackCooldown": 2.0,
+        "maxHP": 100000.0,
+        "attackPower": 4500.0,
+        "attackCooldown": 4.6,
         "invincibleDuration": 0.2,
         "weapon": "",
         "statusEffects": [],
@@ -139,13 +652,243 @@
             }
         },
         "damageAnimationData": {
-            "animationPath": ["../Resources/Image/effactAnimation/damaged.png"],
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
             "duration": 0.1,
             "isImage": true,
             "offsetAngle": 0.0,
             "size": {
                 "width": 32.0,
                 "height": 32.0
+            }
+        }
+    },
+    "e_b02": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/boss/Boss_2_1.png",
+                    "../Resources/Image/character/enemy/boss/Boss_2_2.png",
+                    "../Resources/Image/character/enemy/boss/Boss_2_3.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 64.0,
+            "height": 64.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 300000.0,
+        "attackPower": 1000.0,
+        "attackCooldown": 5.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_b03": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/boss/Boss_6_1.png",
+                    "../Resources/Image/character/enemy/boss/Boss_6_2.png",
+                    "../Resources/Image/character/enemy/boss/Boss_6_3.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 64.0,
+            "height": 64.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 600000.0,
+        "attackPower": 1000.0,
+        "attackCooldown": 5.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_b04": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/boss/Boss_7_1.png",
+                    "../Resources/Image/character/enemy/boss/Boss_7_2.png",
+                    "../Resources/Image/character/enemy/boss/Boss_7_3.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 64.0,
+            "height": 64.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 900000.0,
+        "attackPower": 1000.0,
+        "attackCooldown": 5.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
+            }
+        }
+    },
+    "e_b05": {
+        "speed": 2.0,
+        "drawableType": "Animation",
+        "bodyAnimation": {
+            "walk": {
+                "paths": [
+                    "../Resources/Image/character/enemy/boss/Boss_A_5_1.png",
+                    "../Resources/Image/character/enemy/boss/Boss_A_5_2.png",
+                    "../Resources/Image/character/enemy/boss/Boss_A_5_3.png"
+                ]
+            },
+            "attack": {
+                "paths": []
+            }
+        },
+        "imagePath": "",
+        "size": {
+            "width": 64.0,
+            "height": 64.0
+        },
+        "hitBox": {
+            "type": "CIRCLE",
+            "radius": 64.0
+        },
+        "isCollidable": true,
+        "isHitBoxActive": true,
+        "isHurtBoxActive": true,
+        "isVisible": true,
+        "maxHP": 1200000.0,
+        "attackPower": 1000.0,
+        "attackCooldown": 5.0,
+        "invincibleDuration": 0.2,
+        "weapon": "",
+        "statusEffects": [],
+        "attackAnimationData": {
+            "animationPath": [],
+            "duration": 0.0,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 0.0,
+                "height": 0.0
+            }
+        },
+        "damageAnimationData": {
+            "animationPath": [
+                "../Resources/Image/effactAnimation/damaged.png"
+            ],
+            "duration": 0.1,
+            "isImage": true,
+            "offsetAngle": 0.0,
+            "size": {
+                "width": 16.0,
+                "height": 16.0
             }
         }
     }

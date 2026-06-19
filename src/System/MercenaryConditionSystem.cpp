@@ -84,8 +84,11 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
     m_Bonds.clear();
     for (const auto& entry : j) {
         BondConfig bond;
-        bond.bondID = entry.at("bondID").get<std::string>();
-        bond.name   = entry.value("name", "");
+        bond.bondID   = entry.at("bondID").get<std::string>();
+        bond.name     = entry.value("name", "");
+        bond.title    = entry.value("Title", "");
+        bond.description = entry.value("Description", "");
+        bond.iconPath = entry.value("IconPath", "");
 
         // 條件
         const auto& condJson = entry.at("condition");
@@ -103,30 +106,50 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
             BondTier tier;
             tier.threshold = tierJson.at("threshold").get<int>();
 
-            const auto& effectJson = tierJson.at("effect");
-            tier.effect.targetSelector = effectJson.value("targetSelector", "ALL_ALLIES");
+            std::string sourceID = bond.bondID + "_tier_" + std::to_string(tier.threshold);
 
-            const auto& effectDataJson = effectJson.at("effectData");
-            std::string effectTypeStr  = effectDataJson.at("type").get<std::string>();
+            auto parseEffect = [&](const nlohmann::json& effJson) -> BondEffect {
+                BondEffect effect;
+                effect.targetSelector = effJson.value("targetSelector", "ALL_ALLIES");
 
-            // 解析 StatusEffectType
-            if      (effectTypeStr == "AttackUp")  { tier.effect.effectData.type = Scene::StatusEffectType::AttackUp; }
-            else if (effectTypeStr == "SpeedUp")   { tier.effect.effectData.type = Scene::StatusEffectType::SpeedUp; }
-            else if (effectTypeStr == "SlowDown")  { tier.effect.effectData.type = Scene::StatusEffectType::SlowDown; }
-            else if (effectTypeStr == "Poison")    { tier.effect.effectData.type = Scene::StatusEffectType::Poison; }
-            else if (effectTypeStr == "Burn")      { tier.effect.effectData.type = Scene::StatusEffectType::Burn; }
-            else if (effectTypeStr == "Freeze")    { tier.effect.effectData.type = Scene::StatusEffectType::Freeze; }
-            else {
-                LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
+                const auto& effectDataJson = effJson.at("effectData");
+                std::string effectTypeStr  = effectDataJson.at("type").get<std::string>();
+
+                if      (effectTypeStr == "AttackUp")  { effect.effectData.type = Scene::StatusEffectType::AttackUp; }
+                else if (effectTypeStr == "SpeedUp")   { effect.effectData.type = Scene::StatusEffectType::SpeedUp; }
+                else if (effectTypeStr == "SlowDown")  { effect.effectData.type = Scene::StatusEffectType::SlowDown; }
+                else if (effectTypeStr == "Poison")    { effect.effectData.type = Scene::StatusEffectType::Poison; }
+                else if (effectTypeStr == "Burn")      { effect.effectData.type = Scene::StatusEffectType::Burn; }
+                else if (effectTypeStr == "Freeze")    { effect.effectData.type = Scene::StatusEffectType::Freeze; }
+                else if (effectTypeStr == "Vampire")   { effect.effectData.type = Scene::StatusEffectType::Vampire; }
+                else if (effectTypeStr == "Blessing")  { effect.effectData.type = Scene::StatusEffectType::Blessing; }
+                else if (effectTypeStr == "LifeLink")  { effect.effectData.type = Scene::StatusEffectType::LifeLink; }
+                else if (effectTypeStr == "MaxHpUp")   { effect.effectData.type = Scene::StatusEffectType::MaxHpUp; }
+                else if (effectTypeStr == "CritChanceUp") { effect.effectData.type = Scene::StatusEffectType::CritChanceUp; }
+                else if (effectTypeStr == "Reinforcements") { effect.effectData.type = Scene::StatusEffectType::Reinforcements; }
+                else if (effectTypeStr == "Invincible") { effect.effectData.type = Scene::StatusEffectType::Invincible; }
+                else if (effectTypeStr == "AttackSpeedUp") { effect.effectData.type = Scene::StatusEffectType::AttackSpeedUp; }
+                else {
+                    LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
+                }
+
+                effect.effectData.multiplier  = effectDataJson.value("multiplier", 1.0f);
+                effect.effectData.isPermanent = effectDataJson.value("isPermanent", false);
+                effect.effectData.duration    = effectDataJson.value("duration", 0.0f);
+                effect.effectData.tickRate    = effectDataJson.value("tickRate", 0.0f);
+                effect.effectData.tickDamage  = effectDataJson.value("tickDamage", 0.0f);
+                effect.effectData.sourceID    = sourceID;
+
+                return effect;
+            };
+
+            if (tierJson.contains("effects")) {
+                for (const auto& effJson : tierJson.at("effects")) {
+                    tier.effects.push_back(parseEffect(effJson));
+                }
+            } else if (tierJson.contains("effect")) {
+                tier.effects.push_back(parseEffect(tierJson.at("effect")));
             }
-
-            tier.effect.effectData.multiplier  = effectDataJson.value("multiplier", 1.0f);
-            tier.effect.effectData.isPermanent = effectDataJson.value("isPermanent", false);
-            tier.effect.effectData.duration    = effectDataJson.value("duration", 0.0f);
-            tier.effect.effectData.tickRate    = effectDataJson.value("tickRate", 0.0f);
-            tier.effect.effectData.tickDamage  = effectDataJson.value("tickDamage", 0.0f);
-            // sourceID 由系統產生，不從 JSON 讀取
-            tier.effect.effectData.sourceID    = bond.bondID + "_tier_" + std::to_string(tier.threshold);
 
             bond.tiers.push_back(std::move(tier));
         }
@@ -259,8 +282,8 @@ bool MercenaryConditionSystem::CanSynthesize(const std::string& recipeID) const 
 
 std::string MercenaryConditionSystem::GetRecipeIDForIngredient(const std::string& typeID) const {
     for (const auto& recipe : m_Recipes) {
-        // 傳說級/神話級（outputTypeID 以 "s_" 開頭）留給專屬 UI 處理，此處略過
-        if (recipe.outputTypeID.rfind("s_", 0) == 0) { continue; }
+        // 傳說級/神話級（outputTypeID 以 "s_" 或 "g_" 開頭）留給專屬 UI 處理，此處略過
+        if (recipe.outputTypeID.rfind("s_", 0) == 0 || recipe.outputTypeID.rfind("g_", 0) == 0) { continue; }
         // 比對第一個原料：類型必須為精確比對且目標符合 typeID
         if (!recipe.ingredients.empty()) {
             const auto& cond = recipe.ingredients[0].condition;
@@ -270,6 +293,16 @@ std::string MercenaryConditionSystem::GetRecipeIDForIngredient(const std::string
         }
     }
     return "";
+}
+
+std::vector<SynthesisRecipe> MercenaryConditionSystem::GetLegendaryRecipes() const {
+    std::vector<SynthesisRecipe> legendaryRecipes;
+    for (const auto& recipe : m_Recipes) {
+        if (recipe.outputTypeID.rfind("s_", 0) == 0 || recipe.outputTypeID.rfind("g_", 0) == 0) {
+            legendaryRecipes.push_back(recipe);
+        }
+    }
+    return legendaryRecipes;
 }
 
 
@@ -321,6 +354,9 @@ bool MercenaryConditionSystem::ExecuteSynthesis(const std::string& recipeID) {
     m_BattleManager.AddMercenaryByID(recipe->outputTypeID, spawnPos);
     LOG_DEBUG("MercenaryConditionSystem: Spawned output mercenary: " + recipe->outputTypeID);
 
+    UpdateBonds();
+    TriggerRainbowRobotEffect();
+
     return true;
 }
 
@@ -329,8 +365,17 @@ bool MercenaryConditionSystem::ExecuteSynthesis(const std::string& recipeID) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
-    const std::string& targetSelector) const
+    const std::string& targetSelector, const BondConfig& bond) const
 {
+    if (targetSelector == "BOND_MEMBERS") {
+        std::vector<Scene::Character*> result;
+        for (Scene::Mercenary* m : m_BattleManager.GetAllMercenaries()) {
+            if (m && MatchesConditionFilter(m, bond.condition)) {
+                result.push_back(static_cast<Scene::Character*>(m));
+            }
+        }
+        return result;
+    }
     if (targetSelector == "ALL_MERCENARIES") {
         // Mercenary* 不能隱式轉換為 Character* 的 vector，需明確轉型
         std::vector<Scene::Character*> result;
@@ -348,14 +393,14 @@ std::vector<Scene::Character*> MercenaryConditionSystem::ResolveBondTargets(
 
 void MercenaryConditionSystem::ActivateBondTier(const BondConfig& bond, int tierIndex) {
     const BondTier& tier = bond.tiers[tierIndex];
-    auto targets = ResolveBondTargets(tier.effect.targetSelector);
-    for (auto* character : targets) {
-        if (character) {
-            character->AddStatusEffect(tier.effect.effectData);
+    for (const auto& effect : tier.effects) {
+        auto targets = ResolveBondTargets(effect.targetSelector, bond);
+        for (auto* character : targets) {
+            if (character && !character->HasStatusEffectBySource(effect.effectData.sourceID)) {
+                character->AddStatusEffect(effect.effectData);
+            }
         }
     }
-    LOG_DEBUG("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
-              std::to_string(tier.threshold) + " activated.");
 }
 
 void MercenaryConditionSystem::DeactivateBond(const BondConfig& bond) {
@@ -369,7 +414,7 @@ void MercenaryConditionSystem::DeactivateBond(const BondConfig& bond) {
             }
         }
     }
-    LOG_DEBUG("MercenaryConditionSystem: Bond [" + bond.bondID + "] deactivated.");
+    LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] deactivated.");
 }
 
 void MercenaryConditionSystem::ProcessBonds() {
@@ -385,9 +430,17 @@ void MercenaryConditionSystem::ProcessBonds() {
             }
         }
 
+        if (bond.bondID == "rainbow_robot" || bond.bondID == "medic" || bond.bondID == "clock_hands") {
+            m_ActiveBondTiers[bond.bondID] = targetTierIndex;
+            continue;
+        }
+
         int& activeTier = m_ActiveBondTiers[bond.bondID];
 
         if (targetTierIndex == activeTier) {
+            if (targetTierIndex != NO_ACTIVE_TIER) {
+                ActivateBondTier(bond, targetTierIndex);
+            }
             continue; // 無變化，跳過
         }
 
@@ -397,6 +450,8 @@ void MercenaryConditionSystem::ProcessBonds() {
         // 若目標層級有效，激活新層級
         if (targetTierIndex != NO_ACTIVE_TIER) {
             ActivateBondTier(bond, targetTierIndex);
+            LOG_INFO("MercenaryConditionSystem: Bond [" + bond.bondID + "] tier " +
+                      std::to_string(bond.tiers[targetTierIndex].threshold) + " activated.");
         }
 
         activeTier = targetTierIndex;
@@ -405,6 +460,45 @@ void MercenaryConditionSystem::ProcessBonds() {
 
 void MercenaryConditionSystem::UpdateBonds() {
     ProcessBonds();
+}
+
+int MercenaryConditionSystem::GetActiveBondTier(const std::string& bondID) const {
+    auto it = m_ActiveBondTiers.find(bondID);
+    if (it != m_ActiveBondTiers.end()) {
+        return it->second;
+    }
+    return -1;
+}
+
+void MercenaryConditionSystem::TriggerRainbowRobotEffect() {
+    int activeTier = GetActiveBondTier("rainbow_robot");
+    if (activeTier == NO_ACTIVE_TIER) {
+        return;
+    }
+    for (const auto& bond : m_Bonds) {
+        if (bond.bondID == "rainbow_robot") {
+            const BondTier& tier = bond.tiers[activeTier];
+            for (const auto& effect : tier.effects) {
+                auto targets = ResolveBondTargets(effect.targetSelector, bond);
+                for (auto* character : targets) {
+                    if (character) {
+                        std::string tempSourceID = "rainbow_robot_synthesis_buff";
+                        character->RemoveStatusEffectBySource(tempSourceID);
+
+                        Scene::StatusEffectData tempEffect = effect.effectData;
+                        tempEffect.duration = 10.0f;
+                        tempEffect.isPermanent = false;
+                        tempEffect.sourceID = tempSourceID;
+
+                        character->AddStatusEffect(tempEffect);
+                        LOG_INFO("[Rainbow Robot Bond] Triggered AttackSpeedUp for synthesis! Target: Character (ID: {}, Type: {}), Multiplier: {}, Duration: {}s",
+                                 character->GetInstanceID(), character->GetTypeID(), tempEffect.multiplier, tempEffect.duration);
+                    }
+                }
+            }
+            break;
+        }
+    }
 }
 
 } // namespace UGO::System

@@ -6,9 +6,12 @@
 #include "UI/Page.hpp"
 #include "UI/UIManager.hpp"
 #include "UI/UpgradePage.hpp"
+#include "UI/MythicSynthesisPage.hpp"
+#include "UI/BondPage.hpp"
 #include "UI/ExperienceBar.hpp"
 #include "UI/HealthBarSystem.hpp"
 #include "Scene/BasicObject.hpp"
+#include "Scene/SceneTypes.hpp"
 #include "Core/Coordinate.hpp"
 #include "Graphics/Camera.hpp"
 
@@ -26,6 +29,7 @@ namespace UGO::System {
     class MapSystem;
     class LevelSystem;
     class MercenaryConditionSystem;
+    class BarrelSystem;
 }
 
 namespace UGO::UI {
@@ -33,6 +37,7 @@ namespace UGO::UI {
     class GameDisplay;
     class MercenaryCountPanel;
     class PauseMapUI;
+    class SelectLevelPage;
 }
 
 namespace UGO {
@@ -84,29 +89,41 @@ private:
     GameState m_CurrentProgressState = GameState::START;
     Util::Renderer m_Root;
     Graphics::Camera m_Camera;
-    
+    struct CheatState {
+        bool isHealthOn = false;
+        Scene::HpValue savedHP = 0.0f;
+        Scene::HpValue savedMaxHP = 0.0f;
+
+        bool isAttackOn = false;
+        Scene::HpValue savedAttackPower = 0.0f;
+        Core::Time::Second savedCooldown = 0.0f;
+    };
+    CheatState m_CheatState;
+
     // UI 系統：由 UIManager 統一管理所有組件的更新與事件派發
     std::unique_ptr<UI::UIManager> m_UIManager;
     
     std::unique_ptr<UI::GameDisplay> m_GameDisplay;
     std::unique_ptr<UI::GameButtons> m_GameButtons;
-    float m_SettlingTimer;
+    std::unique_ptr<UI::SelectLevelPage> m_SelectLevelPage;
+    std::string m_SelectedLevelID = "";
 
 
     // Register Systems
-    std::unique_ptr<System::SteeringSystem>          m_SteeringSystem;
-    std::unique_ptr<System::EffectAnimationManager>  m_EffectAnimationManager;
-    std::unique_ptr<System::CharacterFactory>        m_CharacterFactory;
-    std::unique_ptr<System::ExpSystem>               m_ExpSystem;
-    std::unique_ptr<System::DropSystem>              m_DropSystem;
-    std::unique_ptr<System::RewardManager>           m_RewardManager;
-    std::unique_ptr<System::BattleManager>           m_BattleManager;
-    std::unique_ptr<System::EnemiesSpawnerSystem>    m_EnemiesSpawnerSystem;
-    std::unique_ptr<System::GameRuleSystem>          m_GameRuleSystem;
-    std::unique_ptr<System::UpgradeManager>          m_UpgradeManager;
-    std::unique_ptr<System::MapSystem>               m_MapSystem;
-    std::unique_ptr<System::LevelSystem>             m_LevelSystem;
+    std::unique_ptr<System::SteeringSystem>           m_SteeringSystem;
+    std::unique_ptr<System::EffectAnimationManager>   m_EffectAnimationManager;
+    std::unique_ptr<System::CharacterFactory>         m_CharacterFactory;
+    std::unique_ptr<System::ExpSystem>                m_ExpSystem;
+    std::unique_ptr<System::DropSystem>               m_DropSystem;
+    std::unique_ptr<System::RewardManager>            m_RewardManager;
+    std::unique_ptr<System::BattleManager>            m_BattleManager;
+    std::unique_ptr<System::EnemiesSpawnerSystem>     m_EnemiesSpawnerSystem;
+    std::unique_ptr<System::GameRuleSystem>           m_GameRuleSystem;
+    std::unique_ptr<System::UpgradeManager>           m_UpgradeManager;
+    std::unique_ptr<System::MapSystem>                m_MapSystem;
+    std::unique_ptr<System::LevelSystem>              m_LevelSystem;
     std::unique_ptr<System::MercenaryConditionSystem> m_MercenaryConditionSystem;
+    std::unique_ptr<System::BarrelSystem>             m_BarrelSystem;
 
 
 
@@ -132,6 +149,14 @@ private:
     std::unique_ptr<UI::MercenaryCountPanel> m_MercenaryCountPanel;
     // 暫停時的關卡地圖（手動暫停時顯示，升級暫停時不顯示）
     std::unique_ptr<UI::PauseMapUI> m_PauseMapUI;
+
+    // 傳說/神話合成頁面與狀態
+    std::unique_ptr<UI::MythicSynthesisPage> m_MythicSynthesisPage;
+    bool m_IsMixOpen = false;
+
+    // 羈絆面板與狀態
+    std::unique_ptr<UI::BondPage> m_BondPage;
+    bool m_IsBondOpen = false;
 };
 
 } // namespace UGO

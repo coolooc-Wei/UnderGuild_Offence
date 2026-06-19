@@ -1,4 +1,5 @@
 #include "System/EffectAnimationManager.hpp"
+#include "Scene/AnimationLite.hpp"
 
 namespace UGO::System {
 
@@ -12,6 +13,7 @@ namespace UGO::System {
         m_TotalAmount = InitialEffectAnimationAmount;
         for (int i=0; i<InitialEffectAnimationAmount; ++i) {
             m_pool.emplace_back(std::make_shared<Scene::EffectAnimation>());
+            m_pool[i]->SetZIndex(8.0f);
             m_root.AddChild(m_pool[i]);
         }
 
@@ -20,6 +22,7 @@ namespace UGO::System {
         m_DamageTextTotalAmount = InitialDamageTextAnimationAmount;
         for (int i=0; i<InitialDamageTextAnimationAmount; ++i) {
             m_damageTextPool.emplace_back(std::make_shared<Scene::DamageTextAnimation>());
+            m_damageTextPool[i]->SetZIndex(8.0f);
             m_root.AddChild(m_damageTextPool[i]);
         }
     }
@@ -47,7 +50,7 @@ namespace UGO::System {
     }
 
     std::shared_ptr<Util::GameObject> EffectAnimationManager::Create(
-        Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
+        Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Scene::AnimationLite> animation, bool isImage,
         Core::Angle rotateAngle, Core::Size size
     ) {
         bool createdNew = (m_OnUseAmount >= m_TotalAmount);
@@ -64,11 +67,11 @@ namespace UGO::System {
         return obj;
     }
 
-    std::shared_ptr<Util::GameObject> EffectAnimationManager::CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount) {
+    std::shared_ptr<Util::GameObject> EffectAnimationManager::CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount, bool isCritical) {
         bool createdNew = (m_DamageTextOnUseAmount >= m_DamageTextTotalAmount);
         auto obj = AcquireFromPool(m_damageTextPool, m_DamageTextOnUseAmount, m_DamageTextTotalAmount);
 
-        obj->Start(position, damageAmount);
+        obj->Start(position, damageAmount, isCritical);
         ++m_DamageTextOnUseAmount;
 
         if (createdNew) { LOG_INFO("EffectAnimationManger: 10 more DamageTextAnimation created, {}/{}", m_DamageTextOnUseAmount, m_DamageTextTotalAmount); }

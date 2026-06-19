@@ -26,6 +26,7 @@ namespace UGO::System {
             auto enemy = std::make_unique<Scene::Enemy>(Scene::Character::CharacterParams());
             if (auto go = enemy->GetGameObject()) {
                 go->SetVisible(false);
+                go->SetZIndex(1.0f);
                 m_Root.AddChild(go);
             }
             m_Enemies.push_back(std::move(enemy));
@@ -34,6 +35,7 @@ namespace UGO::System {
             auto mercenary = std::make_unique<Scene::Mercenary>(Scene::Character::CharacterParams());
             if (auto go = mercenary->GetGameObject()) {
                 go->SetVisible(false);
+                go->SetZIndex(2.0f);
                 m_Root.AddChild(go);
             }
             m_Mercenaries.push_back(std::move(mercenary));
@@ -45,6 +47,7 @@ namespace UGO::System {
         auto hero = std::make_unique<Scene::Hero>(std::move(params));
         hero->SetWorldPosition(position);
         hero->GetGameObject()->SetVisible(true);
+        hero->GetGameObject()->SetZIndex(3.0f);
         hero->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
         m_Root.AddChild(hero->GetGameObject());
         LOG_INFO("CharacterFactory: a Hero created");
@@ -66,13 +69,17 @@ namespace UGO::System {
             auto enemy = std::make_unique<Scene::Enemy>(std::move(params));
             if (auto gameObject = enemy->GetGameObject()) {
                 gameObject->SetVisible(true);
+                gameObject->SetZIndex(1.0f);
                 m_Root.AddChild(gameObject);
             }
             rawEnemy = enemy.release();
         }
 
         rawEnemy->SetWorldPosition(position);
-        if (auto gameObject = rawEnemy->GetGameObject()) { gameObject->SetVisible(true); }
+        if (auto gameObject = rawEnemy->GetGameObject()) {
+            gameObject->SetVisible(true);
+            gameObject->SetZIndex(1.0f);
+        }
 
         rawEnemy->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 
@@ -99,13 +106,17 @@ namespace UGO::System {
             auto mercenary = std::make_unique<Scene::Mercenary>(std::move(params));
             if (auto gameObject = mercenary->GetGameObject()) {
                 gameObject->SetVisible(false);
+                gameObject->SetZIndex(2.0f);
                 m_Root.AddChild(gameObject);
             }
             rawMercenary = mercenary.release();
         }
 
         rawMercenary->SetWorldPosition(position);
-        if (auto gameObject = rawMercenary->GetGameObject()) { gameObject->SetVisible(true); }
+        if (auto gameObject = rawMercenary->GetGameObject()) {
+            gameObject->SetVisible(true);
+            gameObject->SetZIndex(2.0f);
+        }
 
         rawMercenary->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 
@@ -160,10 +171,26 @@ namespace UGO::System {
         }
         const auto& cached = it->second;
         // 優先使用第一張動畫幀作為靜態圖標
-        std::string iconPath = (!cached.animationPaths.empty())
-            ? cached.animationPaths[0]
-            : "";
+        std::string iconPath = (!cached.walkAnimPaths.empty()) ? cached.walkAnimPaths[0] : "";
         return { iconPath, cached.size };
+    }
+
+    std::vector<std::string> CharacterFactory::GetLegendaryMercenaryIDs() const {
+        std::vector<std::string> ids;
+        for (auto& [key, value] : m_MercenaryDatabase.items()) {
+            if (key.rfind("s_", 0) == 0) {
+                ids.push_back(key);
+            }
+        }
+        return ids;
+    }
+
+    std::vector<std::string> CharacterFactory::GetAllMercenaryIDs() const {
+        std::vector<std::string> ids;
+        for (auto& [key, value] : m_MercenaryDatabase.items()) {
+            ids.push_back(key);
+        }
+        return ids;
     }
 
     Scene::Character::CharacterParams CharacterFactory::BuildFromCache(const CachedCharacterData& cached) const {
@@ -171,7 +198,7 @@ namespace UGO::System {
 
         newParams.speed              = cached.speed;
         newParams.drawableType       = cached.drawableType;
-        newParams.animation          = std::make_shared<Util::Animation>(cached.animationPaths, false, 50, true, 50);
+        newParams.animation          = nullptr;
         newParams.image              = cached.image;
         newParams.size               = cached.size;
         newParams.isCollidable       = cached.isCollidable;
@@ -182,6 +209,19 @@ namespace UGO::System {
         newParams.attackPower        = cached.attackPower;
         newParams.attackCooldown     = cached.attackCooldown;
         newParams.invincibleDuration = cached.invincibleDuration;
+
+        newParams.bodyAnimation.walk = nullptr;
+        if (!cached.walkAnimPaths.empty()) {
+            newParams.bodyAnimation.walk = std::make_shared<Scene::AnimationLite>(
+                Scene::AnimationLite::MakeSharedFrames(cached.walkAnimPaths), false, 100, true, 100
+            );
+        }
+        newParams.bodyAnimation.attack = nullptr;
+        if (!cached.attackBodyAnimPaths.empty()) {
+            newParams.bodyAnimation.attack = std::make_shared<Scene::AnimationLite>(
+                Scene::AnimationLite::MakeSharedFrames(cached.attackBodyAnimPaths), false, 100, false, 100
+            );
+        }
 
         // HitBox
         switch (cached.hitBoxType) {
@@ -205,7 +245,9 @@ namespace UGO::System {
 
         if (!cached.attackAnimPaths.empty()) {
             newParams.attackAnimationData = Scene::Character::EffectAnimationData{
-                std::make_shared<Util::Animation>(cached.attackAnimPaths, false, 50, false, 50),
+                std::make_shared<Scene::AnimationLite>(
+                    Scene::AnimationLite::MakeSharedFrames(cached.attackAnimPaths), false, 100, false, 100
+                ),
                 cached.attackAnimDuration,
                 cached.attackAnimIsImage,
                 cached.attackAnimOffsetAngle,
@@ -214,7 +256,9 @@ namespace UGO::System {
         }
         if (!cached.damageAnimPaths.empty()) {
             newParams.damageAnimationData = Scene::Character::EffectAnimationData{
-                std::make_shared<Util::Animation>(cached.damageAnimPaths, false, 50, false, 50),
+                std::make_shared<Scene::AnimationLite>(
+                    Scene::AnimationLite::MakeSharedFrames(cached.damageAnimPaths), false, 100, false, 100
+                ),
                 cached.damageAnimDuration,
                 cached.damageAnimIsImage,
                 cached.damageAnimOffsetAngle,
@@ -243,7 +287,17 @@ namespace UGO::System {
             cached.drawableType = Scene::BasicObject::DrawableType::None;
         }
 
-        cached.animationPaths = jsonParams.at("animationPath").get<std::vector<std::string>>();
+        if (jsonParams.contains("bodyAnimation")) {
+            const auto& bodyAnimJson = jsonParams.at("bodyAnimation");
+            if (bodyAnimJson.contains("walk")) {
+                const auto& walkJson = bodyAnimJson.at("walk");
+                cached.walkAnimPaths = walkJson.at("paths").get<std::vector<std::string>>();
+            }
+            if (bodyAnimJson.contains("attack")) {
+                const auto& attackJson = bodyAnimJson.at("attack");
+                cached.attackBodyAnimPaths = attackJson.at("paths").get<std::vector<std::string>>();
+            }
+        }
 
         std::string imagePathStr;
         if (jsonParams.at("imagePath").is_array() && !jsonParams.at("imagePath").empty()) {

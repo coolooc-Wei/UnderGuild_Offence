@@ -30,14 +30,20 @@ namespace System {
         LevelSystem(MapSystem& mapSystem, Util::Renderer& renderer);
         ~LevelSystem();
 
+        void Reset();
         const Core::Level::LevelData& GetLevelData(const Core::Level::LevelID& levelID);
         void GenerateLevel(const std::string& levelID);
         bool IsLevelCompleted() const;
+        const std::vector<std::string>& GetLevelIDs() const { return m_LevelIDs; }
 
         const Core::Map::RoomNode& GetCurrentRoom() const;
         const Core::Map::RoomData& GetCurrentRoomData() const;
         bool IsWalkable(const Core::WorldPosition& worldPos) const;
         bool IsWalkable(const Core::GridPosition& gridPos) const;
+
+        void SetWalkableOverride(const Core::GridPosition& gridPos, bool walkable);
+        void ClearWalkableOverride(const Core::GridPosition& gridPos);
+        void ClearWalkableOverrides();
 
         enum class RoomState {
             Setting,
@@ -115,6 +121,8 @@ namespace System {
         Core::Level::LevelData m_CurrentLevelData;
         Core::Map::RoomNode* m_CurrentRoom = nullptr;
         RoomState m_CurrentRoomState = RoomState::Setting;
+
+        std::unordered_map<Core::GridPosition, bool, Core::Ivec2Hash> m_WalkableOverrides;
 
         // Difficulty controllers
         int m_DifficultyLevel = 0;

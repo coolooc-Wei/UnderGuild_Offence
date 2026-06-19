@@ -22,7 +22,6 @@ namespace Scene {
 
         // Getters
         Core::WorldPosition GetDirection() const;
-        SpeedValue GetSpeed() const;
         HpValue GetDamage() const;
         
 

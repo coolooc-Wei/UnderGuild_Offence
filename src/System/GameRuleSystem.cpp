@@ -4,6 +4,7 @@
 #include "System/BattleManager.hpp"
 #include "System/EnemiesSpawnerSystem.hpp"
 #include "System/DropSystem.hpp"
+#include "System/BarrelSystem.hpp"
 
 namespace UGO::System {
 
@@ -11,12 +12,14 @@ namespace UGO::System {
         LevelSystem&          levelSystem,
         BattleManager&        battleManager,
         EnemiesSpawnerSystem& spawnerSystem,
-        DropSystem&           dropSystem
+        DropSystem&           dropSystem,
+        BarrelSystem&         barrelSystem
     )
     : m_LevelSystem(levelSystem),
       m_BattleManager(battleManager),
       m_EnemiesSpawnerSystem(spawnerSystem),
-      m_DropSystem(dropSystem) {}
+      m_DropSystem(dropSystem),
+      m_BarrelSystem(barrelSystem) {}
     GameRuleSystem::~GameRuleSystem() = default;
 
     void GameRuleSystem::Update() {
@@ -28,7 +31,8 @@ namespace UGO::System {
             m_BattleManager.ClearAllEnemies();
             m_DropSystem.ClearDrops();
 
-            for (auto ally: m_BattleManager.GetAllAllies()) { ally->SetWorldPosition({0.0f, 0.0f}); }
+            for (auto hero: m_BattleManager.GetAllHeroes()) { hero->SetWorldPosition({0.0f, 0.0f}); }
+            m_BattleManager.GatherAllMercenariesToHero();
 
             // Set state machine
             if (m_LevelSystem.IsRoomPreviouslyCleared()) {
@@ -52,6 +56,9 @@ namespace UGO::System {
                 LOG_INFO("GameRuleSystem: Room cleared, stopping spawner.");
                 m_EnemiesSpawnerSystem.PauseBattleRoom();
                 m_LevelSystem.ChangeRoomState(LevelSystem::RoomState::Cleared);
+                if (!heroes.empty()) {
+                    m_DropSystem.CollectAllDrops(heroes[0]->GetWorldPosition());
+                }
             }
         } break;
 
@@ -66,29 +73,12 @@ namespace UGO::System {
                 return;
             }
 
-            /* HACK: Temporary W,A,S,D portal travel */
             std::optional<Core::Map::MapCoord> targetCoord = m_LevelSystem.CheckPortalCollision(*heroBox);
-            if (!targetCoord) {
-                Core::Map::MapCoord dir = {0, 0};
-                if      (Util::Input::IsKeyDown(Util::Keycode::W)) { dir = {0,  1}; }
-                else if (Util::Input::IsKeyDown(Util::Keycode::S)) { dir = {0, -1}; }
-                else if (Util::Input::IsKeyDown(Util::Keycode::A)) { dir = {-1, 0}; }
-                else if (Util::Input::IsKeyDown(Util::Keycode::D)) { dir = { 1, 0}; }
-
-                if (dir.x != 0 || dir.y != 0) {
-                    Core::Map::MapCoord expected = m_LevelSystem.GetCurrentRoom().mapPos + dir;
-                    for (const auto& portal : m_LevelSystem.GetActivePortals()) {
-                        if (portal.targetCoord == expected) {
-                            targetCoord = expected;
-                            break;
-                        }
-                    }
-                }
-            }
-
             if (targetCoord) {
+                m_BarrelSystem.OnLeaveRoom();
                 m_LevelSystem.EnterRoom(*targetCoord);
                 m_LevelSystem.ChangeRoomState(LevelSystem::RoomState::Setting);
+                m_BarrelSystem.OnEnterRoom(*targetCoord);
             }
         } break;
         default: {} break;

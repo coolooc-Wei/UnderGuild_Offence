@@ -1,6 +1,7 @@
 #include "System/DropSystem.hpp"
 #include "Scene/ExpPack.hpp"
 #include "System/ExpSystem.hpp"
+#include "Core/UGO_Math.hpp"
 
 namespace UGO::System {
 
@@ -10,6 +11,9 @@ namespace UGO::System {
     DropSystem::~DropSystem() = default;
 
     void DropSystem::AddDrop(std::unique_ptr<Scene::Drop> drop) {
+        if (drop && drop->GetGameObject()) {
+            drop->GetGameObject()->SetZIndex(-1.0f);
+        }
         m_Root.AddChild(drop->GetGameObject());
         m_AllDrops.push_back(std::move(drop));
     }
@@ -28,7 +32,10 @@ namespace UGO::System {
 
             Core::WorldPosition heroPos = hero->GetWorldPosition();
             float distance = glm::distance(drop->GetWorldPosition(), heroPos);
-            if (distance < m_MagnetRadius) {
+            if (drop->GetState() == Scene::Drop::State::FLYING) {
+                drop->MoveTo(heroPos);
+            }
+            else if (distance < m_MagnetRadius) {
                 drop->MoveTo(heroPos);
             }
 
@@ -48,7 +55,10 @@ namespace UGO::System {
 
     void DropSystem::CollectAllDrops(const Core::WorldPosition& heroPos) {
         for (auto& drop : m_AllDrops) {
-            drop->MoveTo(heroPos);
+            if (drop->GetState() != Scene::Drop::State::FLYING) {
+                drop->MoveTo(heroPos);
+                drop->SetSpeed(Core::RandomFloat(-10.0f, -3.0f));
+            }
         }
     }
 

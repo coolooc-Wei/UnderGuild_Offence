@@ -1,10 +1,12 @@
 #include "UI/MercenaryCountPanel.hpp"
 #include "Util/Time.hpp"
+#include "Util/Input.hpp"
+#include <unordered_set>
 
 namespace UGO::UI {
 
 MercenaryCountPanel::MercenaryCountPanel(Util::Renderer& root, System::CharacterFactory& factory, UIManager& uiManager)
-    : m_Root(root), m_Factory(factory), m_UIManager(uiManager) {
+    : m_Root(root), m_Factory(factory), m_UIManager(uiManager), m_ScrollIndex(0) {
     // 全局合成按鈕已移除，各卡牌自行管理其專屬按鈕（由 CreateCard 初始化）
 }
 
@@ -31,7 +33,6 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, Sys
                                   (prevIt->second.totalCount != counts.totalCount);
         if (countChanged) {
             card->SetCount(counts.aliveCount, counts.totalCount);
-            card->SetVisible(true);
 
             // 將此 typeID 移至 m_DisplayOrder 最前端
             auto it = std::find(m_DisplayOrder.begin(), m_DisplayOrder.end(), typeID);
@@ -42,15 +43,15 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, Sys
                 m_DisplayOrder.insert(m_DisplayOrder.begin(), typeID);
             }
             layoutDirty = true;
+            m_ScrollIndex = 0; // 發生變動時，重置滾動到最左側以顯示最新卡牌
         }
     }
 
-    // ── Step 2：隱藏數量歸零的種類卡牌 ───────────────────────────────────
+    // ── Step 2：從排版中移除數量歸零的種類卡牌 ───────────────────────────
     for (const auto& [typeID, card] : m_Cards) {
         auto it = currentCounts.find(typeID);
         const bool active = (it != currentCounts.end() && it->second.totalCount > 0);
         if (!active) {
-            card->SetVisible(false);
             // 從排版中移除
             auto orderIt = std::find(m_DisplayOrder.begin(), m_DisplayOrder.end(), typeID);
             if (orderIt != m_DisplayOrder.end()) {
@@ -65,24 +66,36 @@ void MercenaryCountPanel::UpdateCounts(const std::unordered_map<std::string, Sys
         RearrangeCards();
     }
 
-    // ── Step 4：各卡牌專屬合成按鈕狀態更新 ───────────────────────────────
-    // 每幀依合成條件判定，控制各張卡牌上方的合成按鈕是否顯示。
-    // 設計意圖：由 Panel 統一查詢系統狀態，再委派給各 Card 控制自身按鈕，
-    //           維持 Panel(Controller) → Card(View) 的 top-down 指令流向。
-    if (m_ConditionSystem) {
-        for (auto& [typeID, card] : m_Cards) {
-            const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
-            if (!recipeID.empty()) {
-                const bool canCompose = m_ConditionSystem->CanSynthesize(recipeID) && m_IsVisible;
-                card->SetComposeButtonVisible(canCompose);
-            }
-        }
-    }
+    // ── Step 4：統一更新顯示狀態與合成按鈕 ──────────────────────────────
+    UpdateCardVisibilities();
 
     m_PreviousCounts = currentCounts;
 }
 
 void MercenaryCountPanel::Update() {
+    if (!m_IsVisible) return;
+
+    if (Util::Input::IfScroll()) {
+        glm::vec2 scroll = Util::Input::GetScrollDistance();
+        float scrollY = scroll.y;
+
+        int totalVisible = static_cast<int>(m_DisplayOrder.size());
+        int prevIndex = m_ScrollIndex;
+
+        if (scrollY > 0.1f) {
+            m_ScrollIndex--;
+        } else if (scrollY < -0.1f) {
+            m_ScrollIndex++;
+        }
+
+        m_ScrollIndex = std::clamp(m_ScrollIndex, 0, std::max(0, totalVisible - 4));
+
+        if (m_ScrollIndex != prevIndex) {
+            RearrangeCards();
+            UpdateCardVisibilities();
+        }
+    }
+
     // 各卡牌的 Update() 已內含合成按鈕的位置同步與脈衝動畫，無需在此額外處理
     for (auto& [typeID, card] : m_Cards) {
         card->Update();
@@ -91,29 +104,12 @@ void MercenaryCountPanel::Update() {
 
 void MercenaryCountPanel::Show() {
     m_IsVisible = true;
-    for (auto& [typeID, card] : m_Cards) {
-        // 只顯示總計數 > 0 的卡牌
-        auto it = m_PreviousCounts.find(typeID);
-        if (it != m_PreviousCounts.end() && it->second.totalCount > 0) {
-            card->SetVisible(true);
-        }
-    }
-    // 面板顯示時，立即重新評估各卡牌的合成按鈕（避免等到下一幀 UpdateCounts）
-    if (m_ConditionSystem) {
-        for (auto& [typeID, card] : m_Cards) {
-            const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
-            if (!recipeID.empty()) {
-                card->SetComposeButtonVisible(m_ConditionSystem->CanSynthesize(recipeID));
-            }
-        }
-    }
+    UpdateCardVisibilities();
 }
 
 void MercenaryCountPanel::Hide() {
     m_IsVisible = false;
-    for (auto& [typeID, card] : m_Cards) {
-        card->SetVisible(false); // SetVisible(false) 內部已連帶隱藏合成按鈕
-    }
+    UpdateCardVisibilities();
 }
 
 void MercenaryCountPanel::SetInteractionEnabled(bool enabled) {
@@ -126,14 +122,47 @@ void MercenaryCountPanel::SetInteractionEnabled(bool enabled) {
 }
 
 void MercenaryCountPanel::RearrangeCards() {
-    int visibleIndex = 0;
-    for (const auto& typeID : m_DisplayOrder) {
+    int totalVisible = static_cast<int>(m_DisplayOrder.size());
+    for (int i = 0; i < totalVisible; ++i) {
+        const auto& typeID = m_DisplayOrder[i];
         auto it = m_Cards.find(typeID);
         if (it == m_Cards.end()) { continue; }
 
-        const float targetX = START_X + static_cast<float>(visibleIndex) * CARD_SPACING;
+        const float targetX = START_X + static_cast<float>(i - m_ScrollIndex) * CARD_SPACING;
         it->second->SetTargetPosition({targetX, PANEL_Y});
-        visibleIndex++;
+    }
+}
+
+void MercenaryCountPanel::UpdateCardVisibilities() {
+    int totalVisible = static_cast<int>(m_DisplayOrder.size());
+    m_ScrollIndex = std::clamp(m_ScrollIndex, 0, std::max(0, totalVisible - 4));
+
+    std::unordered_set<std::string> activeIDs(m_DisplayOrder.begin(), m_DisplayOrder.end());
+
+    // 隱藏未啟用的卡牌（數量為0的卡牌）
+    for (auto& [typeID, card] : m_Cards) {
+        if (activeIDs.find(typeID) == activeIDs.end()) {
+            card->SetVisible(false);
+        }
+    }
+
+    // 更新顯示範圍內的卡牌及其合成按鈕
+    for (int i = 0; i < totalVisible; ++i) {
+        const auto& typeID = m_DisplayOrder[i];
+        auto it = m_Cards.find(typeID);
+        if (it == m_Cards.end()) continue;
+
+        bool inViewport = (i >= m_ScrollIndex && i < m_ScrollIndex + 4);
+        bool shouldBeVisible = m_IsVisible && inViewport;
+        it->second->SetVisible(shouldBeVisible);
+
+        if (m_ConditionSystem) {
+            const std::string recipeID = m_ConditionSystem->GetRecipeIDForIngredient(typeID);
+            if (!recipeID.empty()) {
+                const bool canCompose = m_ConditionSystem->CanSynthesize(recipeID) && shouldBeVisible;
+                it->second->SetComposeButtonVisible(canCompose);
+            }
+        }
     }
 }
 

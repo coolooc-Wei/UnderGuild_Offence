@@ -37,7 +37,6 @@
 
 #include "Util/Time.hpp"
 #include "Util/Image.hpp"
-#include "Util/Animation.hpp"
 #include "Core/Drawable.hpp"
 
 // Third-party includes

@@ -2,25 +2,45 @@
 
 namespace UGO::Scene {
 
+    std::unordered_map<uint64_t, std::shared_ptr<Util::Text>> DamageTextAnimation::s_TextCache;
+
     DamageTextAnimation::DamageTextAnimation() = default;
     DamageTextAnimation::~DamageTextAnimation() = default;
 
-    void DamageTextAnimation::Start(Core::WorldPosition position, HpValue damageAmount) {
+    std::shared_ptr<Util::Text> DamageTextAnimation::GetCachedText(int damageAmount, bool isCritical) {
+        uint64_t key = (static_cast<uint64_t>(isCritical) << 32) | static_cast<uint32_t>(damageAmount);
+
+        if (s_TextCache.find(key) == s_TextCache.end()) {
+            std::string text = "-" + std::to_string(damageAmount);
+            if (isCritical) {
+                text += "!";
+                s_TextCache[key] = std::make_shared<Util::Text>(
+                    "../PTSD/assets/fonts/Inter.ttf", m_TextSize * 1.5f, text,
+                    Util::Color::FromName(Util::Colors::YELLOW)
+                );
+            }
+            else {
+                s_TextCache[key] = std::make_shared<Util::Text>(
+                    "../PTSD/assets/fonts/Inter.ttf", m_TextSize, text,
+                    Util::Color::FromName(Util::Colors::WHITE)
+                );
+            }
+        }
+        return s_TextCache[key];
+    }
+
+    void DamageTextAnimation::Start(Core::WorldPosition position, HpValue damageAmount, bool isCritical) {
         SetVisible(true);
         m_Transform.translation = position;
 
-        std::string text = "-" + std::to_string((int)damageAmount);
-        m_Text = std::make_shared<Util::Text>(
-            "../PTSD/assets/fonts/Inter.ttf", m_TextSize, text,
-            Util::Color::FromName(Util::Colors::WHITE)
-        );
+        m_Text = GetCachedText(static_cast<int>(damageAmount), isCritical);
         SetDrawable(m_Text);
     }
 
     void DamageTextAnimation::End() {
         assert(m_Text != nullptr);
         SetVisible(false);
-        m_Text = nullptr;
+        SetDrawable(nullptr);
         m_IsOccupied = false;
         m_currentFloatingTimes = 0;
     }

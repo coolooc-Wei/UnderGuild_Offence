@@ -63,9 +63,12 @@ void MercenaryDisplayCard::SetVisible(bool visible) {
     if (m_Background) m_Background->GetGameObject()->SetVisible(visible);
     if (m_Icon)       m_Icon->GetGameObject()->SetVisible(visible);
     if (m_TextObj)    m_TextObj->SetVisible(visible);
-    // 卡牌隱藏時，合成按鈕也強制隱藏
+    // 卡牌隱藏時，合成按鈕與文字也強制隱藏
     if (!visible && m_ComposeButton) {
         m_ComposeButton->SetVisible(false);
+        if (m_ComposeButtonTextObj) {
+            m_ComposeButtonTextObj->SetVisible(false);
+        }
     }
 }
 
@@ -86,6 +89,9 @@ void MercenaryDisplayCard::Update() {
         // X 跟隨卡牌居中，Y 在卡牌正上方
         const glm::vec2 btnPos = { m_CurrentPos.x, m_CurrentPos.y + COMPOSE_BTN_Y_OFFSET };
         m_ComposeButton->SetPosition(btnPos);
+        if (m_ComposeButtonTextObj) {
+            m_ComposeButtonTextObj->m_Transform.translation = { btnPos.x + COMPOSE_BTN_TEXT_X_OFFSET, btnPos.y };
+        }
     }
 }
 
@@ -116,11 +122,25 @@ void MercenaryDisplayCard::InitComposeButton(Util::Renderer& root, std::function
     m_ComposeButton->SetOnClickCallback(std::move(callback));
     root.AddChild(m_ComposeButton);
     m_UIManager.Register(m_ComposeButton);
+
+    m_ComposeButtonText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 7, "Synthesis",
+        Util::Color::FromName(Util::Colors::BLACK)
+    );
+    m_ComposeButtonTextObj = std::make_shared<Util::GameObject>();
+    m_ComposeButtonTextObj->SetDrawable(m_ComposeButtonText);
+    m_ComposeButtonTextObj->SetZIndex(Z_INDEX + 4.0f);
+    m_ComposeButtonTextObj->m_Transform.translation = { initPos.x + COMPOSE_BTN_TEXT_X_OFFSET, initPos.y };
+    m_ComposeButtonTextObj->SetVisible(false);
+    root.AddChild(m_ComposeButtonTextObj);
 }
 
 void MercenaryDisplayCard::SetComposeButtonVisible(bool visible) {
     if (!m_ComposeButton) { return; }
     m_ComposeButton->SetVisible(visible);
+    if (m_ComposeButtonTextObj) {
+        m_ComposeButtonTextObj->SetVisible(visible);
+    }
     if (visible) {
         m_PulseTimer = 0.0f; // 每次顯示時重置脸衝計時器，讓動畫從頂部開始
     }

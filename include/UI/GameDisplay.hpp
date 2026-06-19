@@ -15,14 +15,17 @@ public:
     GameDisplay(Util::Renderer& root);
     ~GameDisplay() = default;
 
-    void UpdateHUD(float currentHp, float maxHp, int killCount, int monCount);
+    void UpdateHUD(float currentHp, float maxHp, int killCount, int monCount, int currentWave, int totalWaves, float countdown);
     void ShowResult(bool isWin);
+    void DebugSetHUDVisible(bool visible);
     void SetHUDVisible(bool visible);
     void SetBackgroundVisible(bool visible);
     void SetStateVisible(bool visible);
     void SetPauseVisible(bool visible);
     void SetContinueVisible(bool visible);
     void HideAllResults();
+    void ShowWelcomeBackground(bool visible);
+    void ShowMenuBackground(bool visible);
     void Update();
 
 private:
@@ -43,6 +46,41 @@ private:
     std::shared_ptr<Scene::BasicObject> m_EnemyIcon;
     std::shared_ptr<Util::GameObject> m_ShowMonCount;
     std::shared_ptr<Util::Text> m_MonCountText;
+
+    std::shared_ptr<Util::Text> m_WaveValueText;
+    std::shared_ptr<Util::GameObject> m_ShowWaveValue;
+    std::shared_ptr<Util::Text> m_CountdownText;
+    std::shared_ptr<Util::GameObject> m_ShowCountdown;
+    // std::vector<std::shared_ptr<Scene::BasicObject>> m_LifePointsOff;
+    // std::vector<std::shared_ptr<Scene::BasicObject>> m_LifePointsOn;
+
+    std::shared_ptr<Scene::BasicObject> m_WelcomeBackground;
+    std::shared_ptr<Scene::BasicObject> m_WelcomeTitle;
+    std::shared_ptr<Scene::BasicObject> m_WelcomeTitle_1;
+    std::shared_ptr<Scene::BasicObject> m_WelcomeTitle_2;
+
+    std::shared_ptr<Scene::BasicObject> m_MenuBackground;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu1;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu2;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu3;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu4;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu5;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu6;
+    std::shared_ptr<Scene::BasicObject> m_MenuHasugu7;
+    std::shared_ptr<Scene::BasicObject> m_Mask;
+    std::shared_ptr<Scene::BasicObject> m_Pipe1;
+    std::shared_ptr<Scene::BasicObject> m_Pipe2;
+    std::shared_ptr<Scene::BasicObject> m_Pipe3;
+    std::shared_ptr<Scene::BasicObject> m_Pipe4;
+    std::shared_ptr<Scene::BasicObject> m_Pipe5;
+    std::shared_ptr<Scene::BasicObject> m_Pipe6;
+    std::shared_ptr<Scene::BasicObject> m_Pipe7;
+    std::shared_ptr<Scene::BasicObject> m_Pipe8;
+    std::shared_ptr<Scene::BasicObject> m_Pipe9;
+    std::shared_ptr<Scene::BasicObject> m_MenuHero;
+    std::shared_ptr<Scene::BasicObject> m_MenuSub;
+    std::shared_ptr<Scene::BasicObject> m_MenuCampFire;
+    std::shared_ptr<Scene::BasicObject> s_MenuCampFireFlame;
 };
 
 } // namespace UI

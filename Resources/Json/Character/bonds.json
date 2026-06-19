@@ -1,119 +1,23 @@
 [
     {
-        "bondID": "example_bond_special_combo",
-        "name": "特殊協同",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "m_001,s_025",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 1,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.1,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.3,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "birds",
-        "name": "鳥類",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "cover_fire",
-        "name": "掩護射擊",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
         "bondID": "vampire",
         "name": "吸血鬼",
+        "Title": "Vampire",
+        "Description": "Mencenaries with this badge restore 4% / 8% of their maximum HP when they kill a monster.",
+        "IconPath": "../Resources/Image/synergy/Synergy_11.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_016_2,s_007,s_023,s_032",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "BOND_MEMBERS",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "Vampire",
+                        "multiplier": 0.04,
                         "isPermanent": true
                     }
                 }
@@ -121,76 +25,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "BOND_MEMBERS",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "vigor_potion",
-        "name": "活力藥水",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "necromancer",
-        "name": "死靈",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "Vampire",
+                        "multiplier": 0.08,
                         "isPermanent": true
                     }
                 }
@@ -200,31 +38,36 @@
     {
         "bondID": "rainbow_robot",
         "name": "彩虹機器人",
+        "Title": "Rainbow Robot",
+        "Description": "Whenever a mercenary is merged, all mercenaries gain 50% / 150% attack speed for 10 seconds. (Does not stack.)",
+        "IconPath": "../Resources/Image/synergy/Synergy_18.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_002_2,s_003,s_018,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                        "type": "AttackSpeedUp",
+                        "multiplier": 0.5,
+                        "isPermanent": false,
+                        "duration": 10.0
                     }
                 }
             },
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                        "type": "AttackSpeedUp",
+                        "multiplier": 1.5,
+                        "isPermanent": false,
+                        "duration": 10.0
                     }
                 }
             }
@@ -233,9 +76,12 @@
     {
         "bondID": "multi_race",
         "name": "多種族",
+        "Title": "Multi-Race",
+        "Description": "For each different type of summoned mercenary present, all mercenaries gain +15% / +35% attack power",
+        "IconPath": "../Resources/Image/synergy/Synergy_19.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001_2,m_008_2,s_018,s_023,s_032",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -245,7 +91,7 @@
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 1.15,
                         "isPermanent": true
                     }
                 }
@@ -256,73 +102,7 @@
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "multi_shot",
-        "name": "多重射擊",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "mystic",
-        "name": "神秘",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 1.35,
                         "isPermanent": true
                     }
                 }
@@ -332,18 +112,21 @@
     {
         "bondID": "angel_feather",
         "name": "天使羽毛",
+        "Title": "Angel Feather",
+        "Description": "Summoned or revived mercenaries become invincible for 4 / 8 seconds",
+        "IconPath": "../Resources/Image/synergy/Synergy_9.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_007_2,s_003,s_025,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Invincible",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -352,9 +135,9 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Invincible",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -365,19 +148,22 @@
     {
         "bondID": "reinforcements",
         "name": "支援軍",
+        "Title": "Reinforcements",
+        "Description": "After each wave switch, there is a 50% / 75% chance to obtain a random companion mercenary",
+        "IconPath": "../Resources/Image/synergy/Synergy_13.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001_2,s_003,s_012,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "Reinforcements",
+                        "multiplier": 0.5,
                         "isPermanent": true
                     }
                 }
@@ -385,10 +171,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "Reinforcements",
+                        "multiplier": 0.75,
                         "isPermanent": true
                     }
                 }
@@ -398,42 +184,68 @@
     {
         "bondID": "assault_force",
         "name": "突擊部隊",
+        "Title": "Assault Force",
+        "Description": "Mercenary HP increases by 100% / 250%, and gain 10% / 20% Critical Hit Chance",
+        "IconPath": "../Resources/Image/synergy/Synergy_14.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_007_2,m_008_2,s_011,s_012,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                "effects": [
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "MaxHpUp",
+                            "multiplier": 2.0,
+                            "isPermanent": true
+                        }
+                    },
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "CritChanceUp",
+                            "multiplier": 0.1,
+                            "isPermanent": true
+                        }
                     }
-                }
+                ]
             },
             {
                 "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
+                "effects": [
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "MaxHpUp",
+                            "multiplier": 3.5,
+                            "isPermanent": true
+                        }
+                    },
+                    {
+                        "targetSelector": "ALL_MERCENARIES",
+                        "effectData": {
+                            "type": "CritChanceUp",
+                            "multiplier": 0.2,
+                            "isPermanent": true
+                        }
                     }
-                }
+                ]
             }
         ]
     },
     {
         "bondID": "clock_hands",
         "name": "時鐘指針",
+        "Title": "Clock Hands",
+        "Description": "Generates a mechanical clock hand centered on the hero, dealing 300% / 450% damage to enemies it touches",
+        "IconPath": "../Resources/Image/synergy/Synergy_16.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_004_2,s_023,s_032,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -464,19 +276,22 @@
     {
         "bondID": "valiant",
         "name": "勇猛",
+        "Title": "Valiant",
+        "Description": "All mercenary attack power increases by 150% / 300%",
+        "IconPath": "../Resources/Image/synergy/Synergy_1.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001_2,s_018,s_023,g_013,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 2.5,
                         "isPermanent": true
                     }
                 }
@@ -484,10 +299,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "ALL_MERCENARIES",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 4.0,
                         "isPermanent": true
                     }
                 }
@@ -497,19 +312,22 @@
     {
         "bondID": "willpower",
         "name": "意志",
+        "Title": "Willpower",
+        "Description": "Hero attack power increases by 100% / 200%",
+        "IconPath": "../Resources/Image/synergy/Synergy_2.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_002_2,s_011,s_012,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
             {
                 "threshold": 2,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "HERO",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 2.0,
                         "isPermanent": true
                     }
                 }
@@ -517,10 +335,10 @@
             {
                 "threshold": 4,
                 "effect": {
-                    "targetSelector": "ALL_ALLIES",
+                    "targetSelector": "HERO",
                     "effectData": {
                         "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "multiplier": 3.0,
                         "isPermanent": true
                     }
                 }
@@ -530,9 +348,12 @@
     {
         "bondID": "life_link",
         "name": "生命連結",
+        "Title": "Life Link",
+        "Description": "Mercenary revival time is reduced by 20% / 40%",
+        "IconPath": "../Resources/Image/synergy/Synergy_3.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_004_2,s_007,s_025,g_034",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -541,8 +362,8 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "LifeLink",
+                        "multiplier": 0.2,
                         "isPermanent": true
                     }
                 }
@@ -552,41 +373,8 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "giant_footprint",
-        "name": "巨人腳印",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
+                        "type": "LifeLink",
+                        "multiplier": 0.4,
                         "isPermanent": true
                     }
                 }
@@ -596,9 +384,12 @@
     {
         "bondID": "blessing",
         "name": "祝福",
+        "Title": "Blessing",
+        "Description": "The chance for EXP gems to drop when killing monsters increases by 2% / 4%",
+        "IconPath": "../Resources/Image/synergy/Synergy_8.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_001_2,s_023,s_032,g_013",
             "countOnlyAlive": true
         },
         "tiers": [
@@ -607,7 +398,7 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
+                        "type": "Blessing",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -618,106 +409,7 @@
                 "effect": {
                     "targetSelector": "ALL_ALLIES",
                     "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "dark_energy",
-        "name": "暗黑能量",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "tentacles",
-        "name": "觸手",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 3,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "bondID": "bountiful_orc_barrel",
-        "name": "豐饒的獸人桶",
-        "condition": {
-            "type": "BY_TYPE_LIST",
-            "target": "",
-            "countOnlyAlive": true
-        },
-        "tiers": [
-            {
-                "threshold": 2,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
-                        "multiplier": 1.0,
-                        "isPermanent": true
-                    }
-                }
-            },
-            {
-                "threshold": 4,
-                "effect": {
-                    "targetSelector": "ALL_ALLIES",
-                    "effectData": {
-                        "type": "AttackUp",
+                        "type": "Blessing",
                         "multiplier": 1.0,
                         "isPermanent": true
                     }
@@ -728,9 +420,12 @@
     {
         "bondID": "medic",
         "name": "醫務兵",
+        "Title": "Medic",
+        "Description": "Every 3 seconds, all allied mercenaries around the hero recover 5% / 10% HP. If there are no allied mercenaries nearby, the hero instead recovers 2% HP",
+        "IconPath": "../Resources/Image/synergy/Synergy_6.png",
         "condition": {
             "type": "BY_TYPE_LIST",
-            "target": "",
+            "target": "m_004_2,s_003,s_012,g_013",
             "countOnlyAlive": true
         },
         "tiers": [

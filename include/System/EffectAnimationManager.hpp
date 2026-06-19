@@ -8,6 +8,9 @@
 #include "Scene/SceneTypes.hpp"
 
 namespace UGO {
+namespace Scene {
+    class AnimationLite;
+}
 namespace System {
 
     class EffectAnimationManager {
@@ -18,11 +21,11 @@ namespace System {
         void Update();
 
         std::shared_ptr<Util::GameObject> Create(
-            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Util::Animation> animation, bool isImage,
+            Core::WorldPosition position, Core::Time::Second duration, std::shared_ptr<Scene::AnimationLite> animation, bool isImage,
             Core::Angle rotateAngle, Core::Size size
         );
 
-        std::shared_ptr<Util::GameObject> CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount);
+        std::shared_ptr<Util::GameObject> CreateDamageText(Core::WorldPosition position, Scene::HpValue damageAmount, bool isCritical = false);
 
         void Reset();
 
@@ -32,7 +35,9 @@ namespace System {
             if (onUseAmount >= totalAmount) {
                 pool.reserve(totalAmount + 10);
                 for (int i=0; i<10; ++i) {
-                    pool.emplace_back(std::make_shared<T>());
+                    auto obj = std::make_shared<T>();
+                    obj->SetZIndex(8.0f);
+                    pool.emplace_back(obj);
                     m_root.AddChild(pool[totalAmount++]);
                 }
             }

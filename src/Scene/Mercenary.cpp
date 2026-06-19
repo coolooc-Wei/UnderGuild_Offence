@@ -42,7 +42,14 @@ namespace UGO::Scene {
     }
     ActivateHitBox(false);
     ActivateHurtBox(false);
-    m_RespawnTimer.Start(8.0f);
+    
+    float reduction = GetRespawnTimeReduction();
+    float baseDuration = 8.0f;
+    float finalDuration = baseDuration * (1.0f - reduction);
+    if (reduction != 0.0f) {
+        LOG_INFO("[LifeLink Bond] Mercenary respawn cooldown reduced! Base: {}s, Reduction: {}%, Final: {}s", baseDuration, reduction * 100.0f, finalDuration);
+    }
+    m_RespawnTimer.Start(finalDuration);
   }
 
   void Mercenary::Respawn(const Core::WorldPosition& spawnPosition) {
