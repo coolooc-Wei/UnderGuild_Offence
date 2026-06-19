@@ -22,6 +22,11 @@ namespace UGO::Scene {
         /* Returns true if the animation has ended */
         bool Update();
     private:
+        std::shared_ptr<Util::Text> GetCachedText(int damageAmount);
+
+
+        static std::unordered_map<int, std::shared_ptr<Util::Text>> s_TextCache;
+
         std::shared_ptr<Util::Text> m_Text = nullptr;
         Core::Time::CountDownTimer m_AnimationDuration = Core::Time::CountDownTimer(0);
         bool m_IsOccupied = false;

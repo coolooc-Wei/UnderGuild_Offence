@@ -96,7 +96,6 @@ private:
     std::unique_ptr<UI::GameButtons> m_GameButtons;
     std::unique_ptr<UI::SelectLevelPage> m_SelectLevelPage;
     std::string m_SelectedLevelID = "test";
-    float m_SettlingTimer;
 
 
     // Register Systems
