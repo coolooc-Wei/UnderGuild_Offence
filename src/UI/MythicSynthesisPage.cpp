@@ -26,7 +26,7 @@ MythicSynthesisPage::MythicSynthesisPage(
     m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Background->SetSize(400.0f, 520.0f);
     m_Background->GetGameObject()->m_Transform.translation = {0.0f, -10.0f};
-    m_Background->GetGameObject()->SetZIndex(70.0f);
+    m_Background->GetGameObject()->SetZIndex(80.0f);
     m_Background->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Background->GetGameObject());
 
@@ -35,7 +35,7 @@ MythicSynthesisPage::MythicSynthesisPage(
     m_Title->SetImage("../Resources/Image/title/Title_Mix.png");
     m_Title->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Title->SetSize(150.0f, 60.0f);
-    m_Title->GetGameObject()->SetZIndex(71.0f);
+    m_Title->GetGameObject()->SetZIndex(81.0f);
     m_Title->GetGameObject()->m_Transform.translation = {0.0f, 270.0f};
     m_Title->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Title->GetGameObject());
@@ -47,7 +47,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         "../Resources/Image/button/Icon_Esc.png",
         "../Resources/Image/button/Icon_Esc.png"
     );
-    m_CloseButton->SetZIndex(71.0f);
+    m_CloseButton->SetZIndex(81.0f);
     m_CloseButton->SetVisible(false);
     m_CloseButton->SetOnClickCallback([this]() {
         if (m_OnCloseCallback) {
@@ -65,7 +65,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         "../Resources/Image/button/UISprite.png",
         "../Resources/Image/button/UISprite.png"
     );
-    m_BondButton->SetZIndex(71.0f);
+    m_BondButton->SetZIndex(81.0f);
     m_BondButton->SetVisible(false);
     m_BondButton->SetOnClickCallback([this]() {
         if (m_OnBondCallback) {
@@ -81,7 +81,7 @@ MythicSynthesisPage::MythicSynthesisPage(
     );
     m_BondButtonTextObj = std::make_shared<Util::GameObject>();
     m_BondButtonTextObj->SetDrawable(m_BondButtonText);
-    m_BondButtonTextObj->SetZIndex(72.0f);
+    m_BondButtonTextObj->SetZIndex(82.0f);
     m_BondButtonTextObj->m_Transform.translation = {135.0f, 260.0f}; // Align text slightly to offset width of "bonds"
     m_BondButtonTextObj->SetVisible(false);
     m_Root.AddChild(m_BondButtonTextObj);
@@ -98,7 +98,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         row.rowBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.rowBg->SetSize(340.0f, 86.0f);
         row.rowBg->GetGameObject()->m_Transform.translation = {0.0f, rowY};
-        row.rowBg->GetGameObject()->SetZIndex(71.0f);
+        row.rowBg->GetGameObject()->SetZIndex(81.0f);
         row.rowBg->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.rowBg->GetGameObject());
 
@@ -107,7 +107,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         row.outputCardBg->SetImage("../Resources/Image/card/Bt_14 #49210.png");
         row.outputCardBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.outputCardBg->SetSize(42.0f, 42.0f);
-        row.outputCardBg->GetGameObject()->SetZIndex(72.0f);
+        row.outputCardBg->GetGameObject()->SetZIndex(82.0f);
         row.outputCardBg->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
         row.outputCardBg->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.outputCardBg->GetGameObject());
@@ -116,7 +116,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         row.outputIcon = std::make_shared<Scene::BasicObject>();
         row.outputIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.outputIcon->SetSize(30.0f, 30.0f);
-        row.outputIcon->GetGameObject()->SetZIndex(73.0f);
+        row.outputIcon->GetGameObject()->SetZIndex(83.0f);
         row.outputIcon->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
         row.outputIcon->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.outputIcon->GetGameObject());
@@ -125,7 +125,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         row.outputGrade = std::make_shared<Scene::BasicObject>();
         row.outputGrade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.outputGrade->SetSize(42.0f, 42.0f);
-        row.outputGrade->GetGameObject()->SetZIndex(74.0f);
+        row.outputGrade->GetGameObject()->SetZIndex(84.0f);
         row.outputGrade->GetGameObject()->m_Transform.translation = {-120.0f, rowY};
         row.outputGrade->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.outputGrade->GetGameObject());
@@ -135,7 +135,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         row.minusSign->SetImage("../Resources/Image/title/Icon_Minus.png");
         row.minusSign->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.minusSign->SetSize(24.0f, 8.0f);
-        row.minusSign->GetGameObject()->SetZIndex(72.0f);
+        row.minusSign->GetGameObject()->SetZIndex(82.0f);
         row.minusSign->GetGameObject()->m_Transform.translation = {-80.0f, rowY};
         row.minusSign->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.minusSign->GetGameObject());
@@ -147,21 +147,21 @@ MythicSynthesisPage::MythicSynthesisPage(
             ing.cardBg->SetImage("../Resources/Image/card/Bt_14 #49210.png");
             ing.cardBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             ing.cardBg->SetSize(42.0f, 42.0f);
-            ing.cardBg->GetGameObject()->SetZIndex(72.0f);
+            ing.cardBg->GetGameObject()->SetZIndex(82.0f);
             ing.cardBg->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.cardBg->GetGameObject());
 
             ing.icon = std::make_shared<Scene::BasicObject>();
             ing.icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             ing.icon->SetSize(30.0f, 30.0f);
-            ing.icon->GetGameObject()->SetZIndex(73.0f);
+            ing.icon->GetGameObject()->SetZIndex(83.0f);
             ing.icon->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.icon->GetGameObject());
 
             ing.grade = std::make_shared<Scene::BasicObject>();
             ing.grade->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             ing.grade->SetSize(42.0f, 42.0f);
-            ing.grade->GetGameObject()->SetZIndex(74.0f);
+            ing.grade->GetGameObject()->SetZIndex(84.0f);
             ing.grade->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.grade->GetGameObject());
 
@@ -169,7 +169,7 @@ MythicSynthesisPage::MythicSynthesisPage(
             ing.checkmark->SetImage("../Resources/Image/button/Check.png");
             ing.checkmark->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             ing.checkmark->SetSize(12.0f, 12.0f);
-            ing.checkmark->GetGameObject()->SetZIndex(75.0f);
+            ing.checkmark->GetGameObject()->SetZIndex(85.0f);
             ing.checkmark->GetGameObject()->SetVisible(false);
             m_Root.AddChild(ing.checkmark->GetGameObject());
 
@@ -179,7 +179,7 @@ MythicSynthesisPage::MythicSynthesisPage(
             );
             ing.countObj = std::make_shared<Util::GameObject>();
             ing.countObj->SetDrawable(ing.countText);
-            ing.countObj->SetZIndex(75.0f);
+            ing.countObj->SetZIndex(85.0f);
             ing.countObj->SetVisible(false);
             m_Root.AddChild(ing.countObj);
 
@@ -192,7 +192,7 @@ MythicSynthesisPage::MythicSynthesisPage(
             plus->SetImage("../Resources/Image/title/Icon_Plus_1.png");
             plus->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             plus->SetSize(12.0f, 12.0f);
-            plus->GetGameObject()->SetZIndex(72.0f);
+            plus->GetGameObject()->SetZIndex(82.0f);
             plus->GetGameObject()->SetVisible(false);
             m_Root.AddChild(plus->GetGameObject());
             row.plusSigns.push_back(plus);
@@ -204,7 +204,7 @@ MythicSynthesisPage::MythicSynthesisPage(
             70.0f, 32.0f,
             "../Resources/Image/button/UISprite.png"
         );
-        row.synthesizeButton->SetZIndex(73.0f);
+        row.synthesizeButton->SetZIndex(83.0f);
         row.synthesizeButton->SetVisible(false);
         m_Root.AddChild(row.synthesizeButton);
         m_UIManager.Register(row.synthesizeButton);
@@ -215,7 +215,7 @@ MythicSynthesisPage::MythicSynthesisPage(
         );
         row.synthesizeButtonTextObj = std::make_shared<Util::GameObject>();
         row.synthesizeButtonTextObj->SetDrawable(row.synthesizeButtonText);
-        row.synthesizeButtonTextObj->SetZIndex(74.0f);
+        row.synthesizeButtonTextObj->SetZIndex(84.0f);
         row.synthesizeButtonTextObj->m_Transform.translation = {SYNTHESIZE_BTN_X + SYNTHESIZE_BTN_TEXT_X_OFFSET, rowY};
         row.synthesizeButtonTextObj->SetVisible(false);
         m_Root.AddChild(row.synthesizeButtonTextObj);

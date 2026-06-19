@@ -46,7 +46,7 @@ BondPage::BondPage(
     m_Background->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Background->SetSize(494.0f, 598.0f);
     m_Background->GetGameObject()->m_Transform.translation = {0.0f, -13.0f};
-    m_Background->GetGameObject()->SetZIndex(80.0f);
+    m_Background->GetGameObject()->SetZIndex(90.0f);
     m_Background->GetGameObject()->SetVisible(false);
     m_Root.AddChild(m_Background->GetGameObject());
 
@@ -59,7 +59,7 @@ BondPage::BondPage(
     m_TitleObj = std::make_shared<Util::GameObject>();
     m_TitleObj->SetDrawable(m_TitleText);
     m_TitleObj->m_Transform.translation = {-32.0f, 253.5f}; // Align "bonds" text to center
-    m_TitleObj->SetZIndex(81.0f);
+    m_TitleObj->SetZIndex(91.0f);
     m_TitleObj->SetVisible(false);
     m_Root.AddChild(m_TitleObj);
 
@@ -71,7 +71,7 @@ BondPage::BondPage(
         "../Resources/Image/button/Icon_Esc.png",
         "../Resources/Image/button/Icon_Esc.png"
     );
-    m_CloseButton->SetZIndex(81.0f);
+    m_CloseButton->SetZIndex(91.0f);
     m_CloseButton->SetVisible(false);
     m_CloseButton->SetOnClickCallback([this]() {
         if (m_OnCloseCallback) {
@@ -93,7 +93,7 @@ BondPage::BondPage(
         row.rowBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.rowBg->SetSize(416.0f, 91.0f);
         row.rowBg->GetGameObject()->m_Transform.translation = {0.0f, rowY + 52.0f};
-        row.rowBg->GetGameObject()->SetZIndex(81.0f);
+        row.rowBg->GetGameObject()->SetZIndex(91.0f);
         row.rowBg->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.rowBg->GetGameObject());
 
@@ -103,7 +103,7 @@ BondPage::BondPage(
         row.synergyIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         row.synergyIcon->SetSize(28.0f, 28.0f);
         row.synergyIcon->GetGameObject()->m_Transform.translation = {-175.5f, rowY + 62.0f};
-        row.synergyIcon->GetGameObject()->SetZIndex(82.0f);
+        row.synergyIcon->GetGameObject()->SetZIndex(92.0f);
         row.synergyIcon->GetGameObject()->SetVisible(false);
         m_Root.AddChild(row.synergyIcon->GetGameObject());
 
@@ -116,7 +116,7 @@ BondPage::BondPage(
             );
             indicator.obj = std::make_shared<Util::GameObject>();
             indicator.obj->SetDrawable(indicator.text);
-            indicator.obj->SetZIndex(82.0f);
+            indicator.obj->SetZIndex(92.0f);
             indicator.obj->SetVisible(false);
             m_Root.AddChild(indicator.obj);
             row.tierIndicators.push_back(indicator);
@@ -131,7 +131,7 @@ BondPage::BondPage(
             );
             separator.obj = std::make_shared<Util::GameObject>();
             separator.obj->SetDrawable(separator.text);
-            separator.obj->SetZIndex(82.0f);
+            separator.obj->SetZIndex(92.0f);
             separator.obj->SetVisible(false);
             m_Root.AddChild(separator.obj);
             row.tierSeparators.push_back(separator);
@@ -147,7 +147,7 @@ BondPage::BondPage(
             card.cardBg->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             card.cardBg->SetSize(28.0f, 38.0f);
             card.cardBg->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-            card.cardBg->GetGameObject()->SetZIndex(82.0f);
+            card.cardBg->GetGameObject()->SetZIndex(92.0f);
             card.cardBg->GetGameObject()->SetVisible(false);
             m_Root.AddChild(card.cardBg->GetGameObject());
 
@@ -157,7 +157,7 @@ BondPage::BondPage(
             card.icon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             card.icon->SetSize(28.0f, 38.0f);
             card.icon->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-            card.icon->GetGameObject()->SetZIndex(83.0f);
+            card.icon->GetGameObject()->SetZIndex(93.0f);
             card.icon->GetGameObject()->SetVisible(false);
             m_Root.AddChild(card.icon->GetGameObject());
 
@@ -167,7 +167,7 @@ BondPage::BondPage(
             card.checkmark->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             card.checkmark->SetSize(12.0f, 12.0f);
             card.checkmark->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-            card.checkmark->GetGameObject()->SetZIndex(85.0f);
+            card.checkmark->GetGameObject()->SetZIndex(94.0f);
             card.checkmark->GetGameObject()->SetVisible(false);
             m_Root.AddChild(card.checkmark->GetGameObject());
 
@@ -181,7 +181,7 @@ BondPage::BondPage(
         );
         row.titleObj = std::make_shared<Util::GameObject>();
         row.titleObj->SetDrawable(row.titleText);
-        row.titleObj->SetZIndex(82.0f);
+        row.titleObj->SetZIndex(92.0f);
         row.titleObj->SetVisible(false);
         m_Root.AddChild(row.titleObj);
 
@@ -192,7 +192,7 @@ BondPage::BondPage(
         );
         row.descObj = std::make_shared<Util::GameObject>();
         row.descObj->SetDrawable(row.descText);
-        row.descObj->SetZIndex(82.0f);
+        row.descObj->SetZIndex(92.0f);
         row.descObj->SetVisible(false);
         m_Root.AddChild(row.descObj);
 

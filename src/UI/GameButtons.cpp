@@ -13,7 +13,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
     );
-    m_StartMenuButton->SetZIndex(70.0f);
+    m_StartMenuButton->SetZIndex(12.0f);
     m_StartMenuButton->SetVisible(false); // 初始隱藏
     m_StartMenuButton->SetOnClickCallback(onMenu);
     root.AddChild(m_StartMenuButton);
@@ -27,7 +27,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
     );
-    m_StartGameButton->SetZIndex(70.0f);
+    m_StartGameButton->SetZIndex(14.0f);
     m_StartGameButton->SetVisible(false); // 初始隱藏
     m_StartGameButton->SetOnClickCallback(onStart);
     root.AddChild(m_StartGameButton);
@@ -43,7 +43,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
         "../Resources/Image/button/Bt_12_1.png",
         "../Resources/Image/button/Bt_12_2.png"
     );
-    m_PauseButton->SetZIndex(10.0f);
+    m_PauseButton->SetZIndex(30.0f);
     m_PauseButton->SetVisible(false); // 初始隱藏
     m_PauseButton->SetOnClickCallback(onPause);
     root.AddChild(m_PauseButton);
@@ -57,7 +57,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
         "../Resources/Image/button/Bt_12_1.png",
         "../Resources/Image/button/Bt_12_2.png"
     );
-    m_ContinueButton->SetZIndex(60.0f);
+    m_ContinueButton->SetZIndex(30.0f);
     m_ContinueButton->SetVisible(false);
     m_ContinueButton->SetOnClickCallback(onContinue);
     root.AddChild(m_ContinueButton);
@@ -69,7 +69,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_PauseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_PauseIcon->SetSize(40.0f, 40.0f);
     m_PauseIcon->GetGameObject()->m_Transform.translation = pausePos + glm::vec2{1.0f, 2.0f};
-    m_PauseIcon->GetGameObject()->SetZIndex(100.0f);
+    m_PauseIcon->GetGameObject()->SetZIndex(31.0f);
     m_PauseIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_PauseIcon->GetGameObject());
 
@@ -78,7 +78,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_ContinueIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_ContinueIcon->SetSize(30.0f, 30.0f);
     m_ContinueIcon->GetGameObject()->m_Transform.translation = pausePos + glm::vec2{2.0f, 2.0f};
-    m_ContinueIcon->GetGameObject()->SetZIndex(100.0f);
+    m_ContinueIcon->GetGameObject()->SetZIndex(31.0f);
     m_ContinueIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_ContinueIcon->GetGameObject());
 
@@ -91,7 +91,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
         "../Resources/Image/button/Bt_12_2.png",
         "../Resources/Image/button/Bt_12_2.png"
     );
-    m_MixButton->SetZIndex(10.0f);
+    m_MixButton->SetZIndex(22.0f);
     m_MixButton->SetVisible(false);
     m_MixButton->SetOnClickCallback(onMix);
     root.AddChild(m_MixButton);
@@ -104,7 +104,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_CombineTextObj = std::make_shared<Util::GameObject>();
     m_CombineTextObj->SetDrawable(m_CombineText);
     m_CombineTextObj->m_Transform.translation = glm::vec2{ -565.0f, -220.0f };
-    m_CombineTextObj->SetZIndex(11.0f);
+    m_CombineTextObj->SetZIndex(23.0f);
     m_CombineTextObj->SetVisible(false);
     root.AddChild(m_CombineTextObj);
 
@@ -113,7 +113,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_RedDot->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_RedDot->SetSize(16.0f, 16.0f);
     m_RedDot->GetGameObject()->m_Transform.translation = mixPos + glm::vec2{70.0f, 20.0f};
-    m_RedDot->GetGameObject()->SetZIndex(12.0f);
+    m_RedDot->GetGameObject()->SetZIndex(24.0f);
     m_RedDot->GetGameObject()->SetVisible(false);
     root.AddChild(m_RedDot->GetGameObject());
     
@@ -125,7 +125,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_StartMenuTextObj = std::make_shared<Util::GameObject>();
     m_StartMenuTextObj->SetDrawable(m_StartMenuText);
     m_StartMenuTextObj->m_Transform.translation = glm::vec2{ 10.0f, -320.0f };
-    m_StartMenuTextObj->SetZIndex(71.0f);
+    m_StartMenuTextObj->SetZIndex(13.0f);
     m_StartMenuTextObj->SetVisible(false);
     root.AddChild(m_StartMenuTextObj);
 
@@ -137,7 +137,7 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_StartGameTextObj = std::make_shared<Util::GameObject>();
     m_StartGameTextObj->SetDrawable(m_StartGameText);
     m_StartGameTextObj->m_Transform.translation = glm::vec2{ 10.0f, -320.0f };
-    m_StartGameTextObj->SetZIndex(71.0f);
+    m_StartGameTextObj->SetZIndex(14.5f);
     m_StartGameTextObj->SetVisible(false);
     root.AddChild(m_StartGameTextObj);
 }

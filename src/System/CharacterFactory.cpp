@@ -26,6 +26,7 @@ namespace UGO::System {
             auto enemy = std::make_unique<Scene::Enemy>(Scene::Character::CharacterParams());
             if (auto go = enemy->GetGameObject()) {
                 go->SetVisible(false);
+                go->SetZIndex(1.0f);
                 m_Root.AddChild(go);
             }
             m_Enemies.push_back(std::move(enemy));
@@ -34,6 +35,7 @@ namespace UGO::System {
             auto mercenary = std::make_unique<Scene::Mercenary>(Scene::Character::CharacterParams());
             if (auto go = mercenary->GetGameObject()) {
                 go->SetVisible(false);
+                go->SetZIndex(2.0f);
                 m_Root.AddChild(go);
             }
             m_Mercenaries.push_back(std::move(mercenary));
@@ -45,6 +47,7 @@ namespace UGO::System {
         auto hero = std::make_unique<Scene::Hero>(std::move(params));
         hero->SetWorldPosition(position);
         hero->GetGameObject()->SetVisible(true);
+        hero->GetGameObject()->SetZIndex(3.0f);
         hero->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
         m_Root.AddChild(hero->GetGameObject());
         LOG_INFO("CharacterFactory: a Hero created");
@@ -66,13 +69,17 @@ namespace UGO::System {
             auto enemy = std::make_unique<Scene::Enemy>(std::move(params));
             if (auto gameObject = enemy->GetGameObject()) {
                 gameObject->SetVisible(true);
+                gameObject->SetZIndex(1.0f);
                 m_Root.AddChild(gameObject);
             }
             rawEnemy = enemy.release();
         }
 
         rawEnemy->SetWorldPosition(position);
-        if (auto gameObject = rawEnemy->GetGameObject()) { gameObject->SetVisible(true); }
+        if (auto gameObject = rawEnemy->GetGameObject()) {
+            gameObject->SetVisible(true);
+            gameObject->SetZIndex(1.0f);
+        }
 
         rawEnemy->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 
@@ -99,13 +106,17 @@ namespace UGO::System {
             auto mercenary = std::make_unique<Scene::Mercenary>(std::move(params));
             if (auto gameObject = mercenary->GetGameObject()) {
                 gameObject->SetVisible(false);
+                gameObject->SetZIndex(2.0f);
                 m_Root.AddChild(gameObject);
             }
             rawMercenary = mercenary.release();
         }
 
         rawMercenary->SetWorldPosition(position);
-        if (auto gameObject = rawMercenary->GetGameObject()) { gameObject->SetVisible(true); }
+        if (auto gameObject = rawMercenary->GetGameObject()) {
+            gameObject->SetVisible(true);
+            gameObject->SetZIndex(2.0f);
+        }
 
         rawMercenary->SetIsGridWalkableCallback(mf_IsGridWalkableCallback);
 

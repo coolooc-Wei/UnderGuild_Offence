@@ -14,7 +14,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
     if (imgSize.x > 0 && imgSize.y > 0) {
         m_Overlay->m_Transform.scale = { OVERLAY_WIDTH / imgSize.x, OVERLAY_HEIGHT / imgSize.y };
     }
-    m_Overlay->SetZIndex(60.0f);
+    m_Overlay->SetZIndex(70.0f);
     m_Overlay->SetVisible(false);
     m_Root.AddChild(m_Overlay);
 
@@ -28,7 +28,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         float bgScale = 380.0f / bgSize.x;
         m_BackgroundOverlay->m_Transform.scale = { bgScale, bgScale };
     }
-    m_BackgroundOverlay->SetZIndex(61.0f);
+    m_BackgroundOverlay->SetZIndex(71.0f);
     m_BackgroundOverlay->SetVisible(false);
     m_Root.AddChild(m_BackgroundOverlay);
 
@@ -42,7 +42,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         float titleBgScale = 60.0f / titleBgSize.x;
         m_TitleBg->m_Transform.scale = { titleBgScale, titleBgScale };
     }
-    m_TitleBg->SetZIndex(62.0f);
+    m_TitleBg->SetZIndex(72.0f);
     m_TitleBg->SetVisible(false);
     m_Root.AddChild(m_TitleBg);
 
@@ -56,7 +56,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         float titleWordScale = 120.0f / titleWordSize.x;
         m_TitleWord->m_Transform.scale = { titleWordScale, titleWordScale };
     }
-    m_TitleWord->SetZIndex(63.0f);
+    m_TitleWord->SetZIndex(73.0f);
     m_TitleWord->SetVisible(false);
     m_Root.AddChild(m_TitleWord);
 
@@ -67,7 +67,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         "../Resources/Image/button/Point_2.png",
         "../Resources/Image/button/Point_2.png"
     );
-    m_PrevButton->SetZIndex(62.0f);
+    m_PrevButton->SetZIndex(72.0f);
     m_PrevButton->SetVisible(false);
     m_PrevButton->SetOnClickCallback([this]() {
         CycleSelectedLevel(-1);
@@ -81,7 +81,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         "../Resources/Image/button/Point_right_2.png",
         "../Resources/Image/button/Point_right_2.png"
     );
-    m_NextButton->SetZIndex(62.0f);
+    m_NextButton->SetZIndex(72.0f);
     m_NextButton->SetVisible(false);
     m_NextButton->SetOnClickCallback([this]() {
         CycleSelectedLevel(1);
@@ -96,7 +96,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
     m_LevelDetailsTextObj = std::make_shared<Util::GameObject>();
     m_LevelDetailsTextObj->SetDrawable(m_LevelDetailsText);
     m_LevelDetailsTextObj->m_Transform.translation = { 10.0f, -160.0f };
-    m_LevelDetailsTextObj->SetZIndex(62.0f);
+    m_LevelDetailsTextObj->SetZIndex(72.0f);
     m_LevelDetailsTextObj->SetVisible(false);
     m_Root.AddChild(m_LevelDetailsTextObj);
 
@@ -107,7 +107,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         "../Resources/Image/button/Bt_2_1.png",
         "../Resources/Image/button/Bt_02_1.png"
     );
-    m_EnterGameButton->SetZIndex(62.0f);
+    m_EnterGameButton->SetZIndex(72.0f);
     m_EnterGameButton->SetVisible(false);
     m_EnterGameButton->SetOnClickCallback([this]() {
         if (m_OnEnterGameCallback && !m_SelectedLevelID.empty()) {
@@ -123,7 +123,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
     m_EnterTextObj = std::make_shared<Util::GameObject>();
     m_EnterTextObj->SetDrawable(m_EnterText);
     m_EnterTextObj->m_Transform.translation = { 10.0f, -230.0f };
-    m_EnterTextObj->SetZIndex(63.0f);
+    m_EnterTextObj->SetZIndex(73.0f);
     m_EnterTextObj->SetVisible(false);
     m_Root.AddChild(m_EnterTextObj);
 
@@ -134,7 +134,7 @@ SelectLevelPage::SelectLevelPage(Util::Renderer& root, UIManager& uiManager, con
         "../Resources/Image/button/Icon_Esc.png",
         "../Resources/Image/button/Icon_Esc.png"
     );
-    m_CloseButton->SetZIndex(61.0f);
+    m_CloseButton->SetZIndex(71.0f);
     m_CloseButton->SetVisible(false);
     m_CloseButton->SetOnClickCallback([this]() {
         if (m_OnCancelCallback) {

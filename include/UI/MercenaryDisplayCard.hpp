@@ -31,7 +31,7 @@ public:
     static constexpr float CARD_HEIGHT = 68.0f;
     static constexpr float ICON_OFFSET_Y = 12.0f;   ///< 圖標相對卡牌中心向上偏移
     static constexpr float TEXT_OFFSET_Y = -20.0f;  ///< 文字相對卡牌中心向下偏移
-    static constexpr float Z_INDEX = 90.0f;
+    static constexpr float Z_INDEX = 24.0f;
 
     /**
      * @brief 建構一張傭兵計數卡牌。

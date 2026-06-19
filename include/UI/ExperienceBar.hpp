@@ -63,8 +63,8 @@ private:
     // 畫面上方邊緣 y = +360，條中心往下偏移半個條高
     static constexpr float BAR_Y          = 360.0f - BAR_HEIGHT * 0.5f;
     // 填充條的 Z-Index（高於背景，低於對話框）
-    static constexpr float FILL_Z_INDEX   = 96.0f;
-    static constexpr float BG_Z_INDEX     = 95.0f;
+    static constexpr float FILL_Z_INDEX   = 41.0f;
+    static constexpr float BG_Z_INDEX     = 40.0f;
 
     static const std::string FILL_IMAGE_PATH;
 

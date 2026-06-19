@@ -29,7 +29,7 @@ namespace UGO::UI {
         m_Overlay->SetDrawable(overlayImg);
         m_Overlay->m_Transform.translation = {0.0f, 0.0f};
         m_Overlay->m_Transform.scale       = {1.0f, 2.0f};
-        m_Overlay->SetZIndex(50.0f);
+        m_Overlay->SetZIndex(60.0f);
         m_Overlay->SetVisible(false);
         m_Root.AddChild(m_Overlay);
 
@@ -37,7 +37,7 @@ namespace UGO::UI {
         m_SelectIcon->SetImage("../Resources/Image/title/Title_Select.png");
         m_SelectIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         m_SelectIcon->SetSize(150, 60);
-        m_SelectIcon->GetGameObject()->SetZIndex(54.0f);
+        m_SelectIcon->GetGameObject()->SetZIndex(65.0f);
         m_SelectIcon->GetGameObject()->m_Transform.translation = {0.0f, 170.0f};
         m_SelectIcon->GetGameObject()->SetVisible(false);
         m_Root.AddChild(m_SelectIcon->GetGameObject());
@@ -53,7 +53,7 @@ namespace UGO::UI {
                 CARD_WIDTH, CARD_HEIGHT,
                 cardBgPath, cardBgPath, cardBgPath
             );
-            m_CardButtons[i]->SetZIndex(51.0f);
+            m_CardButtons[i]->SetZIndex(61.0f);
             m_CardButtons[i]->SetVisible(false);
             m_Root.AddChild(m_CardButtons[i]);
             m_UIManager.Register(m_CardButtons[i]);
@@ -73,7 +73,7 @@ namespace UGO::UI {
             m_TitlePictures[i]->SetDrawableType(Scene::BasicObject::DrawableType::Image);
             m_TitlePictures[i]->SetSize(180.0f, 270.0f);
             m_TitlePictures[i]->GetGameObject()->m_Transform.translation = {cx, cy + 50.0f};
-            m_TitlePictures[i]->GetGameObject()->SetZIndex(52.0f);
+            m_TitlePictures[i]->GetGameObject()->SetZIndex(62.0f);
             m_TitlePictures[i]->GetGameObject()->SetVisible(false);
             m_Root.AddChild(m_TitlePictures[i]->GetGameObject());
 
@@ -85,7 +85,7 @@ namespace UGO::UI {
             m_DescObjs[i] = std::make_shared<Util::GameObject>();
             m_DescObjs[i]->SetDrawable(m_DescTexts[i]);
             m_DescObjs[i]->m_Transform.translation = {cx + 10.0f, cy - 30.0f};
-            m_DescObjs[i]->SetZIndex(52.0f);
+            m_DescObjs[i]->SetZIndex(62.0f);
             m_DescObjs[i]->SetVisible(false);
             m_Root.AddChild(m_DescObjs[i]);
 
@@ -97,7 +97,7 @@ namespace UGO::UI {
                 REFRESH_BTN_WIDTH, REFRESH_BTN_HEIGHT,
                 refreshIdlePath, refreshHoverPath, refreshPresPath
             );
-            m_Refresh[i]->SetZIndex(51.0f);
+            m_Refresh[i]->SetZIndex(61.0f);
             m_Refresh[i]->SetVisible(false);
             m_Root.AddChild(m_Refresh[i]);
             m_UIManager.Register(m_Refresh[i]);
@@ -129,7 +129,7 @@ namespace UGO::UI {
                 float scale = REFRESH_BTN_HEIGHT / (iconSize.y*2);
                 m_RefreshIcons[i]->m_Transform.scale = {scale, scale};
             }
-            m_RefreshIcons[i]->SetZIndex(53.0f);
+            m_RefreshIcons[i]->SetZIndex(63.0f);
             m_RefreshIcons[i]->SetVisible(false);
             m_Root.AddChild(m_RefreshIcons[i]);
 
@@ -146,7 +146,7 @@ namespace UGO::UI {
                     REFRESH_BTN_HEIGHT / ovSize.y
                 };
             }
-            m_RefreshOverlays[i]->SetZIndex(54.0f);
+            m_RefreshOverlays[i]->SetZIndex(64.0f);
             m_RefreshOverlays[i]->SetVisible(false);
             m_Root.AddChild(m_RefreshOverlays[i]);
         }

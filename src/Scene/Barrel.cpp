@@ -11,6 +11,7 @@ namespace UGO::Scene {
         SetDrawableType(DrawableType::Image);
         SetSize(Core::TILE_SIZE, Core::TILE_SIZE);
         GetGameObject()->SetVisible(true);
+        GetGameObject()->SetZIndex(0.5f);
 
         m_InteractBox = std::make_unique<Core::CircleBox>(params.position, params.interactionRadius);
 

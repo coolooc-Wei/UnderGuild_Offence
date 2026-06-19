@@ -11,6 +11,9 @@ namespace UGO::System {
     DropSystem::~DropSystem() = default;
 
     void DropSystem::AddDrop(std::unique_ptr<Scene::Drop> drop) {
+        if (drop && drop->GetGameObject()) {
+            drop->GetGameObject()->SetZIndex(-1.0f);
+        }
         m_Root.AddChild(drop->GetGameObject());
         m_AllDrops.push_back(std::move(drop));
     }

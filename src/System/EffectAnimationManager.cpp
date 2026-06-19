@@ -13,6 +13,7 @@ namespace UGO::System {
         m_TotalAmount = InitialEffectAnimationAmount;
         for (int i=0; i<InitialEffectAnimationAmount; ++i) {
             m_pool.emplace_back(std::make_shared<Scene::EffectAnimation>());
+            m_pool[i]->SetZIndex(8.0f);
             m_root.AddChild(m_pool[i]);
         }
 
@@ -21,6 +22,7 @@ namespace UGO::System {
         m_DamageTextTotalAmount = InitialDamageTextAnimationAmount;
         for (int i=0; i<InitialDamageTextAnimationAmount; ++i) {
             m_damageTextPool.emplace_back(std::make_shared<Scene::DamageTextAnimation>());
+            m_damageTextPool[i]->SetZIndex(8.0f);
             m_root.AddChild(m_damageTextPool[i]);
         }
     }

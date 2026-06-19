@@ -11,7 +11,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     );
     m_ShowHp->SetDrawable(m_HPValueText);
     m_ShowHp->m_Transform.translation = {0.0f, -300.0f};
-    m_ShowHp->SetZIndex(41.0f);
+    m_ShowHp->SetZIndex(21.0f);
     m_ShowHp->SetVisible(false); // Default hidden
     root.AddChild(m_ShowHp);
 
@@ -22,7 +22,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     );
     m_ShowKillCount->SetDrawable(m_KillCountText);
     m_ShowKillCount->m_Transform.translation = {0.0f, -340.0f};
-    m_ShowKillCount->SetZIndex(41.0f);
+    m_ShowKillCount->SetZIndex(21.0f);
     m_ShowKillCount->SetVisible(false); // Default hidden
     root.AddChild(m_ShowKillCount);
 
@@ -31,7 +31,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Win->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Win->SetSize(200.0f, 100.0f);
     m_Win->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
-    m_Win->GetGameObject()->SetZIndex(100.0f);
+    m_Win->GetGameObject()->SetZIndex(99.0f);
     m_Win->GetGameObject()->SetVisible(false);
     root.AddChild(m_Win->GetGameObject());
 
@@ -40,7 +40,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Lose->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Lose->SetSize(200.0f, 100.0f);
     m_Lose->GetGameObject()->m_Transform.translation = {0.0f, -100.0f};
-    m_Lose->GetGameObject()->SetZIndex(100.0f);
+    m_Lose->GetGameObject()->SetZIndex(99.0f);
     m_Lose->GetGameObject()->SetVisible(false);
     root.AddChild(m_Lose->GetGameObject());
 
@@ -49,7 +49,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WinLoseBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WinLoseBackground->SetSize(300.0f, 604.5f);
     m_WinLoseBackground->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_WinLoseBackground->GetGameObject()->SetZIndex(60.0f);
+    m_WinLoseBackground->GetGameObject()->SetZIndex(98.0f);
     m_WinLoseBackground->GetGameObject()->SetVisible(false);
     root.AddChild(m_WinLoseBackground->GetGameObject());
 
@@ -58,7 +58,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_LoseIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_LoseIcon->SetSize(150.0f, 150.0f);
     m_LoseIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_LoseIcon->GetGameObject()->SetZIndex(100.0f);
+    m_LoseIcon->GetGameObject()->SetZIndex(99.0f);
     m_LoseIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_LoseIcon->GetGameObject());
 
@@ -67,7 +67,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WinIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WinIcon->SetSize(150.0f, 150.0f);
     m_WinIcon->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_WinIcon->GetGameObject()->SetZIndex(100.0f);
+    m_WinIcon->GetGameObject()->SetZIndex(99.0f);
     m_WinIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_WinIcon->GetGameObject());
 
@@ -76,7 +76,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Wave->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Wave->SetSize(75.0f, 25.0f);
     m_Wave->GetGameObject()->m_Transform.translation = {-600.0f, 320.0f};
-    m_Wave->GetGameObject()->SetZIndex(40.0f);
+    m_Wave->GetGameObject()->SetZIndex(20.0f);
     m_Wave->GetGameObject()->SetVisible(false);
     root.AddChild(m_Wave->GetGameObject());
 
@@ -85,7 +85,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_TimeBG->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_TimeBG->SetSize(100.0f, 35.0f);
     m_TimeBG->GetGameObject()->m_Transform.translation = {-590.0f, 230.0f};
-    m_TimeBG->GetGameObject()->SetZIndex(40.0f);
+    m_TimeBG->GetGameObject()->SetZIndex(20.0f);
     m_TimeBG->GetGameObject()->SetVisible(false);
     root.AddChild(m_TimeBG->GetGameObject());
 
@@ -94,7 +94,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_EnemyIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_EnemyIcon->SetSize(30.0f, 30.0f);
     m_EnemyIcon->GetGameObject()->m_Transform.translation = {-620.0f, 190.0f};
-    m_EnemyIcon->GetGameObject()->SetZIndex(40.0f);
+    m_EnemyIcon->GetGameObject()->SetZIndex(20.0f);
     m_EnemyIcon->GetGameObject()->SetVisible(false);
     root.AddChild(m_EnemyIcon->GetGameObject());
 
@@ -105,7 +105,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     );
     m_ShowMonCount->SetDrawable(m_MonCountText);
     m_ShowMonCount->m_Transform.translation = {-565.0f, 190.0f};
-    m_ShowMonCount->SetZIndex(41.0f);
+    m_ShowMonCount->SetZIndex(21.0f);
     m_ShowMonCount->SetVisible(false); // Default hidden
     m_ShowMonCount->AddChild(m_ShowKillCount); // 怪物數量顯示在擊殺數量旁
     root.AddChild(m_ShowMonCount);
@@ -118,7 +118,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_ShowWaveValue = std::make_shared<Util::GameObject>();
     m_ShowWaveValue->SetDrawable(m_WaveValueText);
     m_ShowWaveValue->m_Transform.translation = {-585.0f, 280.0f};
-    m_ShowWaveValue->SetZIndex(41.0f);
+    m_ShowWaveValue->SetZIndex(21.0f);
     m_ShowWaveValue->SetVisible(false);
     root.AddChild(m_ShowWaveValue);
 
@@ -130,7 +130,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_ShowCountdown = std::make_shared<Util::GameObject>();
     m_ShowCountdown->SetDrawable(m_CountdownText);
     m_ShowCountdown->m_Transform.translation = {-580.0f, 230.0f};
-    m_ShowCountdown->SetZIndex(41.0f);
+    m_ShowCountdown->SetZIndex(21.0f);
     m_ShowCountdown->SetVisible(false);
     root.AddChild(m_ShowCountdown);
 
@@ -146,7 +146,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
         hpOff->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         hpOff->SetSize(30.0f, 30.0f);
         hpOff->GetGameObject()->m_Transform.translation = {xPos, heartY};
-        hpOff->GetGameObject()->SetZIndex(40.0f);
+        hpOff->GetGameObject()->SetZIndex(20.0f);
         hpOff->GetGameObject()->SetVisible(false);
         root.AddChild(hpOff->GetGameObject());
         m_LifePointsOff.push_back(hpOff);
@@ -156,7 +156,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
         hpOn->SetDrawableType(Scene::BasicObject::DrawableType::Image);
         hpOn->SetSize(30.0f, 30.0f);
         hpOn->GetGameObject()->m_Transform.translation = {xPos, heartY};
-        hpOn->GetGameObject()->SetZIndex(41.0f);
+        hpOn->GetGameObject()->SetZIndex(21.0f);
         hpOn->GetGameObject()->SetVisible(false);
         root.AddChild(hpOn->GetGameObject());
         m_LifePointsOn.push_back(hpOn);
@@ -167,7 +167,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WelcomeBackground->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WelcomeBackground->SetSize(464.6f, 780.0f);
     m_WelcomeBackground->GetGameObject()->m_Transform.translation = {0.0f, -20.0f};
-    m_WelcomeBackground->GetGameObject()->SetZIndex(50.0f);
+    m_WelcomeBackground->GetGameObject()->SetZIndex(10.0f);
     m_WelcomeBackground->GetGameObject()->SetVisible(false);
     root.AddChild(m_WelcomeBackground->GetGameObject());
 
@@ -176,7 +176,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WelcomeTitle->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WelcomeTitle->SetSize(280.0f, 180.0f);
     m_WelcomeTitle->GetGameObject()->m_Transform.translation = {0.0f, 200.0f};
-    m_WelcomeTitle->GetGameObject()->SetZIndex(51.0f);
+    m_WelcomeTitle->GetGameObject()->SetZIndex(11.0f);
     m_WelcomeTitle->GetGameObject()->SetVisible(false);
     root.AddChild(m_WelcomeTitle->GetGameObject());
 
@@ -185,7 +185,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WelcomeTitle_1->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WelcomeTitle_1->SetSize(250.0f, 3.0f);
     m_WelcomeTitle_1->GetGameObject()->m_Transform.translation = {0.0f, 100.0f};
-    m_WelcomeTitle_1->GetGameObject()->SetZIndex(51.0f);
+    m_WelcomeTitle_1->GetGameObject()->SetZIndex(11.0f);
     m_WelcomeTitle_1->GetGameObject()->SetVisible(false);
     root.AddChild(m_WelcomeTitle_1->GetGameObject());
 
@@ -194,7 +194,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_WelcomeTitle_2->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_WelcomeTitle_2->SetSize(90.0f, 30.0f);
     m_WelcomeTitle_2->GetGameObject()->m_Transform.translation = {0.0f, 60.0f};
-    m_WelcomeTitle_2->GetGameObject()->SetZIndex(51.0f);
+    m_WelcomeTitle_2->GetGameObject()->SetZIndex(11.0f);
     m_WelcomeTitle_2->GetGameObject()->SetVisible(false);
     root.AddChild(m_WelcomeTitle_2->GetGameObject());
 
@@ -212,7 +212,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu1->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu1->SetSize(220.0f, 318.8f);
     m_MenuHasugu1->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_MenuHasugu1->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu1->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu1->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu1->GetGameObject());
 
@@ -221,7 +221,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu2->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu2->SetSize(220.0f, 318.8f);
     m_MenuHasugu2->GetGameObject()->m_Transform.translation = {320.0f, 180.0f};
-    m_MenuHasugu2->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu2->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu2->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu2->GetGameObject());
 
@@ -230,7 +230,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu3->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu3->SetSize(220.0f, 318.8f);
     m_MenuHasugu3->GetGameObject()->m_Transform.translation = {180.0f, -320.0f};
-    m_MenuHasugu3->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu3->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu3->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu3->GetGameObject());
 
@@ -239,7 +239,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu4->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu4->SetSize(220.0f, 318.8f);
     m_MenuHasugu4->GetGameObject()->m_Transform.translation = {540.0f, -140.0f};
-    m_MenuHasugu4->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu4->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu4->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu4->GetGameObject());
 
@@ -248,7 +248,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu5->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu5->SetSize(220.0f, 318.8f);
     m_MenuHasugu5->GetGameObject()->m_Transform.translation = {-220.0f, 340.0f};
-    m_MenuHasugu5->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu5->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu5->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu5->GetGameObject());
 
@@ -257,7 +257,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu6->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu6->SetSize(220.0f, 318.8f);
     m_MenuHasugu6->GetGameObject()->m_Transform.translation = {-290.0f, -110.0f};
-    m_MenuHasugu6->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu6->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu6->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu6->GetGameObject());
 
@@ -266,7 +266,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHasugu7->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHasugu7->SetSize(220.0f, 318.8f);
     m_MenuHasugu7->GetGameObject()->m_Transform.translation = {-580.0f, -30.0f};
-    m_MenuHasugu7->GetGameObject()->SetZIndex(51.0f);
+    m_MenuHasugu7->GetGameObject()->SetZIndex(12.0f);
     m_MenuHasugu7->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHasugu7->GetGameObject());
 
@@ -275,7 +275,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Mask->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Mask->SetSize(1800.0f, 1200.0f);
     m_Mask->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_Mask->GetGameObject()->SetZIndex(54.0f);
+    m_Mask->GetGameObject()->SetZIndex(13.0f);
     m_Mask->GetGameObject()->SetVisible(false);
     root.AddChild(m_Mask->GetGameObject());
 
@@ -284,7 +284,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe1->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe1->SetSize(110.0f, 33.0f);
     m_Pipe1->GetGameObject()->m_Transform.translation = {-150.0f, -20.0f};
-    m_Pipe1->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe1->GetGameObject()->SetZIndex(11.0f);
     m_Pipe1->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe1->GetGameObject());
 
@@ -293,7 +293,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe2->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe2->SetSize(440.0f, 33.0f);
     m_Pipe2->GetGameObject()->m_Transform.translation = {50.0f, 295.0f};
-    m_Pipe2->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe2->GetGameObject()->SetZIndex(11.0f);
     m_Pipe2->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe2->GetGameObject());
 
@@ -302,7 +302,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe3->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe3->SetSize(140.0f, 100.0f);
     m_Pipe3->GetGameObject()->m_Transform.translation = {160.0f, 110.0f};
-    m_Pipe3->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe3->GetGameObject()->SetZIndex(11.0f);
     m_Pipe3->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe3->GetGameObject());
 
@@ -311,7 +311,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe4->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe4->SetSize(140.0f, 33.0f);
     m_Pipe4->GetGameObject()->m_Transform.translation = {-430.0f, -70.0f};
-    m_Pipe4->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe4->GetGameObject()->SetZIndex(11.0f);
     m_Pipe4->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe4->GetGameObject());
 
@@ -320,7 +320,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe5->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe5->SetSize(180.0f, 120.0f);
     m_Pipe5->GetGameObject()->m_Transform.translation = {360.0f, -200.0f};
-    m_Pipe5->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe5->GetGameObject()->SetZIndex(11.0f);
     m_Pipe5->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe5->GetGameObject());
 
@@ -329,7 +329,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe6->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe6->SetSize(80.0f, 100.0f);
     m_Pipe6->GetGameObject()->m_Transform.translation = {-165.0f, -190.0f};
-    m_Pipe6->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe6->GetGameObject()->SetZIndex(11.0f);
     m_Pipe6->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe6->GetGameObject());
 
@@ -338,7 +338,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe7->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe7->SetSize(140.0f, 35.0f);
     m_Pipe7->GetGameObject()->m_Transform.translation = {-70.0f, -222.0f};
-    m_Pipe7->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe7->GetGameObject()->SetZIndex(11.0f);
     m_Pipe7->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe7->GetGameObject());
 
@@ -347,7 +347,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe8->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe8->SetSize(90.0f, 80.0f);
     m_Pipe8->GetGameObject()->m_Transform.translation = {-10.0f, -245.0f};
-    m_Pipe8->GetGameObject()->SetZIndex(46.0f);
+    m_Pipe8->GetGameObject()->SetZIndex(11.1f);
     m_Pipe8->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe8->GetGameObject());
 
@@ -356,7 +356,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_Pipe9->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_Pipe9->SetSize(140.0f, 35.0f);
     m_Pipe9->GetGameObject()->m_Transform.translation = {65.0f, -265.0f};
-    m_Pipe9->GetGameObject()->SetZIndex(45.0f);
+    m_Pipe9->GetGameObject()->SetZIndex(11.0f);
     m_Pipe9->GetGameObject()->SetVisible(false);
     root.AddChild(m_Pipe9->GetGameObject());
 
@@ -365,7 +365,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuHero->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuHero->SetSize(50.0f, 50.0f);
     m_MenuHero->GetGameObject()->m_Transform.translation = {-30.0f, 40.0f};
-    m_MenuHero->GetGameObject()->SetZIndex(54.0f);
+    m_MenuHero->GetGameObject()->SetZIndex(12.0f);
     m_MenuHero->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuHero->GetGameObject());
 
@@ -374,7 +374,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuSub->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuSub->SetSize(30.0f, 30.0f);
     m_MenuSub->GetGameObject()->m_Transform.translation = {40.0f, 20.0f};
-    m_MenuSub->GetGameObject()->SetZIndex(54.0f);
+    m_MenuSub->GetGameObject()->SetZIndex(12.0f);
     m_MenuSub->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuSub->GetGameObject());
 
@@ -383,7 +383,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     m_MenuCampFire->SetDrawableType(Scene::BasicObject::DrawableType::Image);
     m_MenuCampFire->SetSize(40.0f, 40.0f);
     m_MenuCampFire->GetGameObject()->m_Transform.translation = {0.0f, 0.0f};
-    m_MenuCampFire->GetGameObject()->SetZIndex(52.0f);
+    m_MenuCampFire->GetGameObject()->SetZIndex(12.0f);
     m_MenuCampFire->GetGameObject()->SetVisible(false);
     root.AddChild(m_MenuCampFire->GetGameObject());
 
@@ -401,7 +401,7 @@ GameDisplay::GameDisplay(Util::Renderer& root) {
     s_MenuCampFireFlame->SetDrawableType(Scene::BasicObject::DrawableType::Animation);
     s_MenuCampFireFlame->SetSize(40.0f, 40.0f);
     s_MenuCampFireFlame->GetGameObject()->m_Transform.translation = {0.0f, 10.0f};
-    s_MenuCampFireFlame->GetGameObject()->SetZIndex(52.1f);
+    s_MenuCampFireFlame->GetGameObject()->SetZIndex(12.1f);
     s_MenuCampFireFlame->GetGameObject()->SetVisible(false);
     root.AddChild(s_MenuCampFireFlame->GetGameObject());
 }

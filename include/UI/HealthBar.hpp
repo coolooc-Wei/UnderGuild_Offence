@@ -59,8 +59,8 @@ private:
     // ── 版面常數 ─────────────────────────────────────────────────────
     static constexpr float BAR_HEIGHT    = 5.0f;
     static constexpr float BAR_Y_OFFSET  = 4.0f;  // 頭頂再往上的額外間距
-    static constexpr float FILL_Z_INDEX  = 48.0f;
-    static constexpr float BG_Z_INDEX    = 47.0f;
+    static constexpr float FILL_Z_INDEX  = 2.9f;
+    static constexpr float BG_Z_INDEX    = 2.8f;
 
     // 暫時統一使用同一張圖片；之後可依 OwnerType 換圖
     static const std::string ALLIE_IMAGE_PATH;

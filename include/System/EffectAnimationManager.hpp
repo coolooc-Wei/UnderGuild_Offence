@@ -35,7 +35,9 @@ namespace System {
             if (onUseAmount >= totalAmount) {
                 pool.reserve(totalAmount + 10);
                 for (int i=0; i<10; ++i) {
-                    pool.emplace_back(std::make_shared<T>());
+                    auto obj = std::make_shared<T>();
+                    obj->SetZIndex(8.0f);
+                    pool.emplace_back(obj);
                     m_root.AddChild(pool[totalAmount++]);
                 }
             }

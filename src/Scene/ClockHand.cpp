@@ -39,6 +39,7 @@ namespace UGO::Scene {
         SetImage("../Resources/Image/effactAnimation/Ef_Synergy_16_1.png");
         SetDrawableType(BasicObject::DrawableType::Image);
         SetSize(24.0f, 200.0f);
+        GetGameObject()->SetZIndex(2.5f);
     }
 
     ClockHand::~ClockHand() = default;
