@@ -20,6 +20,15 @@ namespace UGO::System {
 
     RewardManager::~RewardManager() = default;
 
+    void RewardManager::Reset() {
+        m_PendingMercenaries.clear();
+        for (auto& icon : m_LevelUpIcons) {
+            if (icon && icon->GetGameObject()) { m_Root.RemoveChild(icon->GetGameObject()); }
+        }
+        m_LevelUpIcons.clear();
+        m_LevelUpIconCount = 0;
+    }
+
     void RewardManager::SetConditionSystem(MercenaryConditionSystem* conditionSystem) {
         m_ConditionSystem = conditionSystem;
     }

@@ -3,7 +3,7 @@
 namespace UGO {
 namespace UI {
 
-GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix)
+GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix, std::function<void()> onBackToMenu)
     : m_Root(root), m_UIManager(uiManager) {
 
     m_StartMenuButton = std::make_shared<UI::Button>(
@@ -129,6 +129,31 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_StartGameTextObj->SetZIndex(71.0f);
     m_StartGameTextObj->SetVisible(false);
     root.AddChild(m_StartGameTextObj);
+
+    // ── 遊戲結束頁面的「Back To Menu」按鈕與文字 ──
+    m_BackToMenuButton = std::make_shared<UI::Button>(
+        glm::vec2{0.0f, -250.0f},
+        200.0f, 60.0f,
+        "../Resources/Image/button/Bt_02.png",
+        "../Resources/Image/button/Bt_2_1.png",
+        "../Resources/Image/button/Bt_02_1.png"
+    );
+    m_BackToMenuButton->SetZIndex(70.0f);
+    m_BackToMenuButton->SetVisible(false);
+    m_BackToMenuButton->SetOnClickCallback(onBackToMenu);
+    root.AddChild(m_BackToMenuButton);
+    uiManager.Register(m_BackToMenuButton);
+
+    m_BackToMenuText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 24, "Back To Menu",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_BackToMenuTextObj = std::make_shared<Util::GameObject>();
+    m_BackToMenuTextObj->SetDrawable(m_BackToMenuText);
+    m_BackToMenuTextObj->m_Transform.translation = glm::vec2{ 10.0f, -250.0f };
+    m_BackToMenuTextObj->SetZIndex(71.0f);
+    m_BackToMenuTextObj->SetVisible(false);
+    root.AddChild(m_BackToMenuTextObj);
 }
 
 GameButtons::~GameButtons() {
@@ -152,6 +177,10 @@ GameButtons::~GameButtons() {
         m_Root.RemoveChild(m_MixButton);
         m_UIManager.Unregister(m_MixButton);
     }
+    if (m_BackToMenuButton) {
+        m_Root.RemoveChild(m_BackToMenuButton);
+        m_UIManager.Unregister(m_BackToMenuButton);
+    }
     if (m_PauseIcon && m_PauseIcon->GetGameObject()) {
         m_Root.RemoveChild(m_PauseIcon->GetGameObject());
     }
@@ -166,6 +195,9 @@ GameButtons::~GameButtons() {
     }
     if (m_StartGameTextObj) {
         m_Root.RemoveChild(m_StartGameTextObj);
+    }
+    if (m_BackToMenuTextObj) {
+        m_Root.RemoveChild(m_BackToMenuTextObj);
     }
 }
 
@@ -211,6 +243,15 @@ void GameButtons::SetMixButtonVisible(bool visible) {
     }
     if (m_MixIcon) {
         m_MixIcon->GetGameObject()->SetVisible(visible);
+    }
+}
+
+void GameButtons::SetBackToMenuButtonVisible(bool visible) {
+    if (m_BackToMenuButton) {
+        m_BackToMenuButton->SetVisible(visible);
+    }
+    if (m_BackToMenuTextObj) {
+        m_BackToMenuTextObj->SetVisible(visible);
     }
 }
 

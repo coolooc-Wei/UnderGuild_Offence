@@ -162,6 +162,24 @@ namespace UGO::System {
         m_IsCacheDirty = true;
     }
 
+    void BattleManager::Reset() {
+        m_AllHeroes.clear();
+        m_EnemyPool.clear();
+        m_MercenaryPool.clear();
+        
+        m_GlobalEnemyDebuffs.clear();
+        m_CurrentBoss = nullptr;
+        m_EnemyKillCount = 0;
+
+        for (auto& hand : m_ClockHands) {
+            if (hand && hand->GetGameObject()) { m_Root.RemoveChild(hand->GetGameObject()); }
+        }
+        m_ClockHands.clear();
+        m_CurrentClockHandsTier = -1;
+
+        m_IsCacheDirty = true;
+    }
+
     void BattleManager::AddHero(Scene::Character::CharacterParams&& params, const Core::WorldPosition& position) {
         m_IsCacheDirty = true;
         m_AllHeroes.emplace_back(std::move(m_CharacterFactory.CreateHero(std::move(params), position)));

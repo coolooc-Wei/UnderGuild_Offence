@@ -31,6 +31,7 @@ namespace System {
         ~BattleManager();
 
         void RebuildCaches() const;
+        void Reset();
 
         std::vector<Scene::Hero*> GetAllHeroes() const;
         std::vector<Scene::Character*> GetAllHeroesAsCharacters() const;

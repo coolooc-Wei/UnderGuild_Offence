@@ -13,7 +13,7 @@ namespace UI {
 
 class GameButtons {
 public:
-    GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix);
+    GameButtons(Util::Renderer& root, UIManager& uiManager, std::function<void()> onMenu, std::function<void()> onStart, std::function<void()> onPause, std::function<void()> onContinue, std::function<void()> onMix, std::function<void()> onBackToMenu);
     ~GameButtons();
 
     void SetStartButtonVisible(bool visible);
@@ -21,6 +21,7 @@ public:
     void SetContinueButtonVisible(bool visible);
     void SetStartMenuButtonVisible(bool visible);
     void SetMixButtonVisible(bool visible);
+    void SetBackToMenuButtonVisible(bool visible);
 
 private:
     Util::Renderer& m_Root;
@@ -31,6 +32,7 @@ private:
     std::shared_ptr<UI::Button> m_PauseButton;
     std::shared_ptr<UI::Button> m_ContinueButton;
     std::shared_ptr<UI::Button> m_MixButton;
+    std::shared_ptr<UI::Button> m_BackToMenuButton;
 
     std::shared_ptr<Scene::BasicObject> m_PauseIcon;
     std::shared_ptr<Scene::BasicObject> m_ContinueIcon;
@@ -41,6 +43,9 @@ private:
 
     std::shared_ptr<Util::Text> m_StartGameText;
     std::shared_ptr<Util::GameObject> m_StartGameTextObj;
+
+    std::shared_ptr<Util::Text> m_BackToMenuText;
+    std::shared_ptr<Util::GameObject> m_BackToMenuTextObj;
 };
 
 } // namespace UI

@@ -77,6 +77,7 @@ namespace UGO {
                 if (m_GameDisplay) {
                     m_GameDisplay->ShowWelcomeBackground(false);
                     m_GameDisplay->ShowMenuBackground(true);
+                    m_GameDisplay->HideAllResults();
                 }
             } break;
             case GameState::LEVEL_INIT: {
@@ -191,6 +192,7 @@ namespace UGO {
             m_GameButtons->SetPauseButtonVisible(state == GameState::GAMING && !m_IsMixOpen);
             m_GameButtons->SetContinueButtonVisible(state == GameState::PAUSE && !m_IsUpgradePause && !m_IsMixOpen);
             m_GameButtons->SetMixButtonVisible(state == GameState::GAMING && !m_IsMixOpen);
+            m_GameButtons->SetBackToMenuButtonVisible(state == GameState::END);
         }
 
         LOG_INFO("Changing GameState to: {}", stateName);

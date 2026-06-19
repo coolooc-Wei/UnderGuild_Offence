@@ -203,6 +203,21 @@ void UGO::App::Start() {
                     m_MythicSynthesisPage->Show();
                 }
                 ChangeGameState(GameState::PAUSE);
+            },
+            [this]() { // onBackToMenu
+                LOG_INFO("[UI] Back to Menu button clicked!");
+                m_BattleManager->Reset();
+                m_EnemiesSpawnerSystem->Reset();
+                m_RewardManager->Reset();
+                m_LevelSystem->Reset();
+                m_UpgradeManager->Reset();
+
+                m_DropSystem->ClearDrops();
+                m_BarrelSystem->Clear();
+                m_MapSystem->ClearRoom();
+                m_EffectAnimationManager->Reset();
+
+                ChangeGameState(GameState::MENU);
             }
         );
 
