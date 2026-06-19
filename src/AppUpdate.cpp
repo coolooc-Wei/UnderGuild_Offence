@@ -183,6 +183,18 @@ void UGO::App::Update() {
     // 傭兵罈結同步：每幀更新罈結層級與 Buff
     if (m_MercenaryConditionSystem) {
         m_MercenaryConditionSystem->UpdateBonds();
+
+        // 當有特殊傭兵可合成時，在 mixButton 的右上角顯示紅點提示
+        if (m_GameButtons) {
+            bool canSynthesizeAnyLegendary = false;
+            for (const auto& recipe : m_MercenaryConditionSystem->GetLegendaryRecipes()) {
+                if (m_MercenaryConditionSystem->CanSynthesize(recipe.recipeID)) {
+                    canSynthesizeAnyLegendary = true;
+                    break;
+                }
+            }
+            m_GameButtons->SetRedDotVisible(canSynthesizeAnyLegendary);
+        }
     }
 
 

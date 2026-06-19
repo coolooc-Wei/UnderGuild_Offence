@@ -107,6 +107,15 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     m_CombineTextObj->SetZIndex(11.0f);
     m_CombineTextObj->SetVisible(false);
     root.AddChild(m_CombineTextObj);
+
+    m_RedDot = std::make_shared<Scene::BasicObject>();
+    m_RedDot->SetImage("../Resources/Image/card/point.png");
+    m_RedDot->SetDrawableType(Scene::BasicObject::DrawableType::Image);
+    m_RedDot->SetSize(16.0f, 16.0f);
+    m_RedDot->GetGameObject()->m_Transform.translation = mixPos + glm::vec2{70.0f, 20.0f};
+    m_RedDot->GetGameObject()->SetZIndex(12.0f);
+    m_RedDot->GetGameObject()->SetVisible(false);
+    root.AddChild(m_RedDot->GetGameObject());
     
     // ── Welcome 頁面的「Enter Sewer」文字 ──
     m_StartMenuText = std::make_shared<Util::Text>(
@@ -169,6 +178,9 @@ GameButtons::~GameButtons() {
     if (m_StartGameTextObj) {
         m_Root.RemoveChild(m_StartGameTextObj);
     }
+    if (m_RedDot && m_RedDot->GetGameObject()) {
+        m_Root.RemoveChild(m_RedDot->GetGameObject());
+    }
 }
 
 void GameButtons::SetStartButtonVisible(bool visible) {
@@ -208,11 +220,24 @@ void GameButtons::SetContinueButtonVisible(bool visible) {
 }
 
 void GameButtons::SetMixButtonVisible(bool visible) {
+    m_MixButtonVisible = visible;
     if (m_MixButton) {
         m_MixButton->SetVisible(visible);
     }
     if (m_CombineTextObj) {
         m_CombineTextObj->SetVisible(visible);
+    }
+    UpdateRedDotVisibility();
+}
+
+void GameButtons::SetRedDotVisible(bool visible) {
+    m_RedDotEnabled = visible;
+    UpdateRedDotVisibility();
+}
+
+void GameButtons::UpdateRedDotVisibility() {
+    if (m_RedDot && m_RedDot->GetGameObject()) {
+        m_RedDot->GetGameObject()->SetVisible(m_MixButtonVisible && m_RedDotEnabled);
     }
 }
 

@@ -21,8 +21,11 @@ public:
     void SetContinueButtonVisible(bool visible);
     void SetStartMenuButtonVisible(bool visible);
     void SetMixButtonVisible(bool visible);
+    void SetRedDotVisible(bool visible);
 
 private:
+    void UpdateRedDotVisibility();
+
     Util::Renderer& m_Root;
     UIManager& m_UIManager;
 
@@ -42,6 +45,10 @@ private:
 
     std::shared_ptr<Util::Text> m_StartGameText;
     std::shared_ptr<Util::GameObject> m_StartGameTextObj;
+
+    bool m_MixButtonVisible = false;
+    bool m_RedDotEnabled = false;
+    std::shared_ptr<Scene::BasicObject> m_RedDot;
 };
 
 } // namespace UI
