@@ -5,6 +5,8 @@
 #include "Scene/ClockHand.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
+#include "Core/MapData.hpp"
+#include "Core/Box.hpp"
 #include "System/MercenaryConditionSystem.hpp"
 
 namespace {
@@ -140,6 +142,15 @@ namespace UGO::System {
                 mercenary->SetWorldPosition(targetPos);
             }
         }
+    }
+
+    bool BattleManager::IsGridOccupied(const Core::GridPosition& gridPos) const {
+        Core::RectangleBox checkBox(Core::GridToWorld(gridPos), Core::TILE_SIZE, Core::TILE_SIZE);
+        for (auto* character : GetAllCharacters()) {
+            auto* cBox = character->GetCollisionBox();
+            if (cBox && checkBox.IsCollidingWith(*cBox)) { return true; }
+        }
+        return false;
     }
 
 

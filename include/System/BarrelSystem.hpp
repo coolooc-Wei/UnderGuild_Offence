@@ -33,6 +33,7 @@ namespace System {
         };
 
         using IsGridWalkableCallback = std::function<bool(const Core::GridPosition&)>;
+        using IsGridOccupiedCallback = std::function<bool(const Core::GridPosition&)>;
 
         BarrelSystem(Util::Renderer& root, DropSystem& dropSystem, LevelSystem& levelSystem);
         ~BarrelSystem();
@@ -41,8 +42,10 @@ namespace System {
 
         void OnEnterRoom(const Core::Map::MapCoord& coord);
         void OnLeaveRoom();
+        void Clear();
 
         void SetIsGridWalkableCallback(IsGridWalkableCallback callback);
+        void SetIsGridOccupiedCallback(IsGridOccupiedCallback callback);
 
     private:
         void StartCooldown();
@@ -87,6 +90,7 @@ namespace System {
         Core::Time::CountDownTimer m_CooldownTimer = Core::Time::CountDownTimer(0.0f);
 
         IsGridWalkableCallback mf_IsGridWalkableCallback = nullptr;
+        IsGridOccupiedCallback mf_IsGridOccupiedCallback = nullptr;
 
     };
 

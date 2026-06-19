@@ -49,6 +49,7 @@ void UGO::App::Start() {
     m_EnemiesSpawnerSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
     m_EnemiesSpawnerSystem->SetGetEnemySizeCallback([this](const std::string& id){ return this->m_CharacterFactory->GetEnemySize(id); });
     m_BarrelSystem->SetIsGridWalkableCallback([this](const Core::GridPosition& gridPos){ return this->m_LevelSystem->IsWalkable(gridPos); });
+    m_BarrelSystem->SetIsGridOccupiedCallback([this](const Core::GridPosition& gridPos) { return this->m_BattleManager->IsGridOccupied(gridPos); });
 
     // Add pages
     m_Pages[GameState::WELCOME] = std::make_shared<UI::Page>("Welcome - Press ENTER");

@@ -40,6 +40,7 @@ namespace System {
         std::vector<Scene::Character*> GetAllCharacters() const;
         std::vector<Scene::Character*> GetAllAllies() const;
         void GatherAllMercenariesToHero();
+        bool IsGridOccupied(const Core::GridPosition& gridPos) const;
 
         bool IsHeroAlive() const;
         int GetEnemyCount() const;

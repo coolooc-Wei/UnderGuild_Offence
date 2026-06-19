@@ -116,6 +116,7 @@ namespace UGO {
             case GameState::END: {
                 m_MapSystem->ClearRoom();
                 m_DropSystem->ClearDrops();
+                m_BarrelSystem->Clear();
                 m_EffectAnimationManager->Reset();
 
                 if (m_GameDisplay) {
