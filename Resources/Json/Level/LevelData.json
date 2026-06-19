@@ -15,7 +15,7 @@
                 "e_015",
                 "e_016"
             ],
-            "bossID": "e_002"
+            "bossID": "e_b02"
         },
         "waveConfig": {
             "waveCount": 3,
@@ -75,7 +75,7 @@
                 "e_062",
                 "e_084"
             ],
-            "bossID": "e_002"
+            "bossID": "e_b02"
         },
         "waveConfig": {
             "waveCount": 4,
