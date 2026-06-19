@@ -128,6 +128,7 @@ void MercenaryConditionSystem::LoadBonds(const std::string& jsonPath) {
                 else if (effectTypeStr == "CritChanceUp") { effect.effectData.type = Scene::StatusEffectType::CritChanceUp; }
                 else if (effectTypeStr == "Reinforcements") { effect.effectData.type = Scene::StatusEffectType::Reinforcements; }
                 else if (effectTypeStr == "Invincible") { effect.effectData.type = Scene::StatusEffectType::Invincible; }
+                else if (effectTypeStr == "AttackSpeedUp") { effect.effectData.type = Scene::StatusEffectType::AttackSpeedUp; }
                 else {
                     LOG_DEBUG("MercenaryConditionSystem: Unknown StatusEffectType: " + effectTypeStr);
                 }
@@ -353,6 +354,9 @@ bool MercenaryConditionSystem::ExecuteSynthesis(const std::string& recipeID) {
     m_BattleManager.AddMercenaryByID(recipe->outputTypeID, spawnPos);
     LOG_DEBUG("MercenaryConditionSystem: Spawned output mercenary: " + recipe->outputTypeID);
 
+    UpdateBonds();
+    TriggerRainbowRobotEffect();
+
     return true;
 }
 
@@ -428,6 +432,11 @@ void MercenaryConditionSystem::ProcessBonds() {
             }
         }
 
+        if (bond.bondID == "rainbow_robot") {
+            m_ActiveBondTiers[bond.bondID] = targetTierIndex;
+            continue;
+        }
+
         int& activeTier = m_ActiveBondTiers[bond.bondID];
 
         if (targetTierIndex == activeTier) {
@@ -456,6 +465,37 @@ int MercenaryConditionSystem::GetActiveBondTier(const std::string& bondID) const
         return it->second;
     }
     return -1;
+}
+
+void MercenaryConditionSystem::TriggerRainbowRobotEffect() {
+    int activeTier = GetActiveBondTier("rainbow_robot");
+    if (activeTier == NO_ACTIVE_TIER) {
+        return;
+    }
+    for (const auto& bond : m_Bonds) {
+        if (bond.bondID == "rainbow_robot") {
+            const BondTier& tier = bond.tiers[activeTier];
+            for (const auto& effect : tier.effects) {
+                auto targets = ResolveBondTargets(effect.targetSelector, bond);
+                for (auto* character : targets) {
+                    if (character) {
+                        std::string tempSourceID = "rainbow_robot_synthesis_buff";
+                        character->RemoveStatusEffectBySource(tempSourceID);
+
+                        Scene::StatusEffectData tempEffect = effect.effectData;
+                        tempEffect.duration = 10.0f;
+                        tempEffect.isPermanent = false;
+                        tempEffect.sourceID = tempSourceID;
+
+                        character->AddStatusEffect(tempEffect);
+                        LOG_INFO("[Rainbow Robot Bond] Triggered AttackSpeedUp for synthesis! Target: Character (ID: {}, Type: {}), Multiplier: {}, Duration: {}s",
+                                 character->GetInstanceID(), character->GetTypeID(), tempEffect.multiplier, tempEffect.duration);
+                    }
+                }
+            }
+            break;
+        }
+    }
 }
 
 } // namespace UGO::System

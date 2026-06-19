@@ -25,6 +25,7 @@ namespace Scene {
         CritChanceUp,
         Reinforcements,
         Invincible,
+        AttackSpeedUp,
     };
 
     struct StatusEffectData {

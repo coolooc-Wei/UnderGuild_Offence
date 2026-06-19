@@ -33,6 +33,7 @@ namespace UGO::Scene {
       m_MaxHP(params.maxHP),
       m_CurrentHP(params.maxHP),
       m_AttackPower(params.attackPower),
+      m_BaseAttackCooldown(params.attackCooldown),
       m_AttackCooldown(params.attackCooldown),
       m_InvincibleTimer(params.invincibleDuration),
       m_TypeID(params.typeID),
@@ -51,6 +52,7 @@ namespace UGO::Scene {
         m_CurrentHP = params.maxHP;
         m_AttackPower = params.attackPower;
         m_TypeID = params.typeID;
+        m_BaseAttackCooldown = params.attackCooldown;
         m_AttackCooldown.SetDuration(params.attackCooldown);
         m_InvincibleTimer.SetDuration(params.invincibleDuration);
         m_Weapon = std::move(params.weapon);
@@ -190,7 +192,9 @@ namespace UGO::Scene {
 
     void Character::OnAttack() {
         if (m_AttackCooldown.IsTimeUp()) {
-            m_AttackCooldown.Start();
+            float speedMultiplier = GetAttackSpeedMultiplier();
+            Core::Time::Second actualDuration = m_BaseAttackCooldown / speedMultiplier;
+            m_AttackCooldown.Start(actualDuration);
             ActivateHitBox(false);
             if (m_AttackAnimation) { ChangeAnimationState(AnimationState::Attack); }
             else { LOG_INFO("Character has no attack animation"); }
@@ -262,7 +266,10 @@ namespace UGO::Scene {
         m_AttackPower = attackPower;
     }
 
-    void Character::SetAttackCooldownDuration(Core::Time::Second duration) { m_AttackCooldown.SetDuration(duration); }
+    void Character::SetAttackCooldownDuration(Core::Time::Second duration) {
+        m_BaseAttackCooldown = duration;
+        m_AttackCooldown.SetDuration(duration);
+    }
     void Character::SetInvincibleDuration(Core::Time::Second duration) { m_InvincibleTimer.SetDuration(duration); }
     void Character::TriggerInvincible(Core::Time::Second duration) {
         m_InvincibleTimer.SetDuration(duration);
@@ -337,5 +344,15 @@ namespace UGO::Scene {
 
     void Character::SetAttackAnimationData(const EffectAnimationData& data) { m_AttackAnimationData = data; }
     void Character::SetDamageAnimationData(const EffectAnimationData& data) { m_DamageAnimationData = data; }
+
+    float Character::GetAttackSpeedMultiplier() const {
+        float multiplier = 1.0f;
+        for (const auto& effect : m_StatusEffects) {
+            if (effect && effect->GetType() == StatusEffectType::AttackSpeedUp) {
+                multiplier += effect->GetMultiplier();
+            }
+        }
+        return multiplier;
+    }
 
 }
