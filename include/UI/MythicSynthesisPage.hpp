@@ -67,6 +67,8 @@ private:
 
         // Synthesis Button
         std::shared_ptr<UI::Button> synthesizeButton;
+        std::shared_ptr<Util::GameObject> synthesizeButtonTextObj;
+        std::shared_ptr<Util::Text> synthesizeButtonText;
     };
 
     Util::Renderer& m_Root;
@@ -98,6 +100,9 @@ private:
 
     // Helper to determine Grade overlay image path based on mercenary typeID
     std::string GetGradeImagePath(const std::string& typeID) const;
+
+    static constexpr float SYNTHESIZE_BTN_X = 120.0f;
+    static constexpr float SYNTHESIZE_BTN_TEXT_X_OFFSET = 8.0f;
 };
 
 } // namespace UGO::UI

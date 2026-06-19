@@ -119,14 +119,17 @@ private:
     // ── 合成按鈕 ─────────────────────────────────────────────────────────
     std::shared_ptr<UI::Button> m_ComposeButton = nullptr;
     float m_PulseTimer = 0.0f;
+    std::shared_ptr<Util::GameObject> m_ComposeButtonTextObj = nullptr;
+    std::shared_ptr<Util::Text>       m_ComposeButtonText = nullptr;
 
     /// 合成按鈕尺寸：寬為卡牌的 3/4，圖片使用 UISprite.png
-    static constexpr float COMPOSE_BTN_W   = CARD_WIDTH * 0.75f;  ///< 39.0f
+    static constexpr float COMPOSE_BTN_W   = CARD_WIDTH * 0.9f;  ///< 39.0f
     static constexpr float COMPOSE_BTN_H   = 24.0f;
     static constexpr float COMPOSE_BTN_GAP = 4.0f;                ///< 按鈕與卡牌頂部的間距
     /// 按鈕中心相對卡牌中心的 Y 偏移量（卡牌半高 + 按鈕半高 + 間距）
     static constexpr float COMPOSE_BTN_Y_OFFSET =
         CARD_HEIGHT * 0.5f + COMPOSE_BTN_H * 0.5f + COMPOSE_BTN_GAP;
+    static constexpr float COMPOSE_BTN_TEXT_X_OFFSET = 8.0f; ///< 文字相對按鈕中心的 X 偏移量
 };
 
 } // namespace UGO::UI

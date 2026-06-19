@@ -200,7 +200,7 @@ MythicSynthesisPage::MythicSynthesisPage(
 
         // Synthesis Button
         row.synthesizeButton = std::make_shared<UI::Button>(
-            glm::vec2{120.0f, rowY},
+            glm::vec2{SYNTHESIZE_BTN_X, rowY},
             70.0f, 32.0f,
             "../Resources/Image/button/UISprite.png"
         );
@@ -208,6 +208,18 @@ MythicSynthesisPage::MythicSynthesisPage(
         row.synthesizeButton->SetVisible(false);
         m_Root.AddChild(row.synthesizeButton);
         m_UIManager.Register(row.synthesizeButton);
+
+        row.synthesizeButtonText = std::make_shared<Util::Text>(
+            fontPath, 10, "Synthesis",
+            Util::Color::FromName(Util::Colors::BLACK)
+        );
+        row.synthesizeButtonTextObj = std::make_shared<Util::GameObject>();
+        row.synthesizeButtonTextObj->SetDrawable(row.synthesizeButtonText);
+        row.synthesizeButtonTextObj->SetZIndex(74.0f);
+        row.synthesizeButtonTextObj->m_Transform.translation = {SYNTHESIZE_BTN_X + SYNTHESIZE_BTN_TEXT_X_OFFSET, rowY};
+        row.synthesizeButtonTextObj->SetVisible(false);
+        m_Root.AddChild(row.synthesizeButtonTextObj);
+
         m_Rows.push_back(row);
     }
 }
@@ -266,6 +278,9 @@ MythicSynthesisPage::~MythicSynthesisPage() {
             m_Root.RemoveChild(row.synthesizeButton);
             m_UIManager.Unregister(row.synthesizeButton);
         }
+        if (row.synthesizeButtonTextObj) {
+            m_Root.RemoveChild(row.synthesizeButtonTextObj);
+        }
     }
     if (m_Background && m_Background->GetGameObject()) {
         m_Root.RemoveChild(m_Background->GetGameObject());
@@ -312,6 +327,9 @@ void MythicSynthesisPage::Hide() {
             plus->GetGameObject()->SetVisible(false);
         }
         row.synthesizeButton->SetVisible(false);
+        if (row.synthesizeButtonTextObj) {
+            row.synthesizeButtonTextObj->SetVisible(false);
+        }
     }
 }
 
@@ -472,7 +490,10 @@ void MythicSynthesisPage::UpdateDisplay() {
             }
 
             // Synthesize Button
-            row.synthesizeButton->m_Transform.translation = {120.0f, rowY};
+            row.synthesizeButton->m_Transform.translation = {SYNTHESIZE_BTN_X, rowY};
+            if (row.synthesizeButtonTextObj) {
+                row.synthesizeButtonTextObj->m_Transform.translation = {SYNTHESIZE_BTN_X + SYNTHESIZE_BTN_TEXT_X_OFFSET, rowY};
+            }
             std::string rID = recipe.recipeID;
             row.synthesizeButton->SetOnClickCallback([this, rID]() {
                 if (m_ConditionSystem.ExecuteSynthesis(rID)) {
@@ -486,6 +507,9 @@ void MythicSynthesisPage::UpdateDisplay() {
             bool canSynthesize = m_ConditionSystem.CanSynthesize(rID);
             row.synthesizeButton->SetVisible(canSynthesize);
             row.synthesizeButton->SetEnabled(canSynthesize);
+            if (row.synthesizeButtonTextObj) {
+                row.synthesizeButtonTextObj->SetVisible(canSynthesize);
+            }
 
             // Row Bg
             row.rowBg->GetGameObject()->SetVisible(true);
@@ -508,6 +532,9 @@ void MythicSynthesisPage::UpdateDisplay() {
                 plus->GetGameObject()->SetVisible(false);
             }
             row.synthesizeButton->SetVisible(false);
+            if (row.synthesizeButtonTextObj) {
+                row.synthesizeButtonTextObj->SetVisible(false);
+            }
         }
     }
 }
