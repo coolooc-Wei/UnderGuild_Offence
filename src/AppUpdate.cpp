@@ -187,11 +187,6 @@ void UGO::App::Update() {
     m_GameRuleSystem->Update();
     /* END HACK */
 
-    /* DO NOT DELETE THIS LINE.
-     * IT IS USED FOR THE GAME TIMING.
-     */
-    Core::Time::AdvanceTick();
-
   } break;
   case GameState::SETTLING: {
       m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
@@ -218,6 +213,13 @@ void UGO::App::Update() {
   case GameState::END: {
   } break;
   default: {} break;
+  }
+
+  /* DO NOT DELETE THIS LINE.
+   * IT IS USED FOR THE GAME TIMING.
+   */
+  if (m_CurrentGameState != GameState::PAUSE) {
+      Core::Time::AdvanceTick();
   }
 
   /* HACK: Remove maybe */
