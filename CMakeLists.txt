@@ -51,6 +51,16 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 endif()
 
+# option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+# if(ENABLE_ASAN)
+#     if(MSVC)
+#         target_compile_options(${PROJECT_NAME} PRIVATE /fsanitize=address /Zi)
+#     else()
+#         target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address -fno-omit-frame-pointer -g)
+#         target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+#     endif()
+# endif()
+
 option(UGO_DISABLE_LOG_DEBUG "Suppress LOG_DEBUG output at compile time" OFF)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

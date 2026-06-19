@@ -254,8 +254,8 @@ namespace UGO::Scene {
             if (m_WalkAnimation) {
                 SetAnimation(m_WalkAnimation);
                 SetDrawableType(DrawableType::Animation);
-                SetSize(GetSize().x, GetSize().y);
                 m_WalkAnimation->SetCurrentFrame(0);
+                SetSize(GetSize().x, GetSize().y);
                 m_WalkAnimation->Pause();
             }
             else { SetDrawableType(DrawableType::None); }
@@ -273,8 +273,8 @@ namespace UGO::Scene {
             if (m_AttackAnimation) {
                 SetAnimation(m_AttackAnimation);
                 SetDrawableType(DrawableType::Animation);
-                SetSize(GetSize().x, GetSize().y);
                 m_AttackAnimation->SetCurrentFrame(0);
+                SetSize(GetSize().x, GetSize().y);
                 m_AttackAnimation->SetLooping(false);
                 m_AttackAnimation->Play();
             }
@@ -284,6 +284,7 @@ namespace UGO::Scene {
 
     Character::EffectAnimationData Character::GetAttackAnimationData() const { return m_AttackAnimationData; }
     Character::EffectAnimationData Character::GetDamageAnimationData() const { return m_DamageAnimationData; }
+    AnimationState Character::GetAnimationState() const { return m_AnimationState; }
 
     void Character::SetAttackAnimationData(const EffectAnimationData& data) { m_AttackAnimationData = data; }
     void Character::SetDamageAnimationData(const EffectAnimationData& data) { m_DamageAnimationData = data; }

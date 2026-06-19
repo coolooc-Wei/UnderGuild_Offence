@@ -114,6 +114,10 @@ namespace UGO {
                 m_EffectAnimationManager->Reset();
             } break;
             case GameState::END: {
+                m_MapSystem->ClearRoom();
+                m_DropSystem->ClearDrops();
+                m_EffectAnimationManager->Reset();
+
                 if (m_GameDisplay) {
                     /* URGENT: the logic need to be check */
                     int enemyCount = m_BattleManager->GetEnemyCount();

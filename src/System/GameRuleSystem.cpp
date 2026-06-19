@@ -55,6 +55,9 @@ namespace UGO::System {
                 LOG_INFO("GameRuleSystem: Room cleared, stopping spawner.");
                 m_EnemiesSpawnerSystem.PauseBattleRoom();
                 m_LevelSystem.ChangeRoomState(LevelSystem::RoomState::Cleared);
+                if (!heroes.empty()) {
+                    m_DropSystem.CollectAllDrops(heroes[0]->GetWorldPosition());
+                }
             }
         } break;
 

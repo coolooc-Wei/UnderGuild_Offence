@@ -82,6 +82,8 @@ namespace UGO::Scene {
         return {m_CollisionBox->GetWidth(), m_CollisionBox->GetHeight()};
     }
 
+    glm::vec2 BasicObject::GetScale() const { return m_Scale; }
+
 
     void BasicObject::SetWorldPosition(const Core::WorldPosition &pos) {
         /* TODO: Check if the position is valid

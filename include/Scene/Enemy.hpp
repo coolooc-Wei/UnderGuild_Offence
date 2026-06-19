@@ -23,6 +23,7 @@ namespace Scene {
         void Update() override;
         void OnDraw() override;
 
+        void SetIsBoss(bool isBoss);
 
         // Events
         void OnAttack() override;  // Set facing direction
@@ -34,9 +35,15 @@ namespace Scene {
         ExpValue GetExpPackValue() const;
 
     private:
+        static constexpr float m_BounceRatio = 0.035f;
+        static constexpr Core::Time::Second m_BouncePeriod = 0.25f;
+
         ExpValue m_ExpReward = 30.0f;
         float m_DropRate = 0.3f;          // 30% drop rate
         ExpValue m_ExpPackValue = 30.0f; // Value of dropped pack
+
+        bool m_IsBoss = false;
+        size_t m_BounceTickOffset = 0;
     };
 
 } // namespace Scene

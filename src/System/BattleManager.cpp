@@ -151,7 +151,10 @@ namespace UGO::System {
 
     void BattleManager::AddBossByID(const std::string& enemyID, const Core::WorldPosition& position) {
         AddEnemyByID(enemyID, position);
-        if (!m_EnemyPool.empty()) { m_CurrentBoss = m_EnemyPool.back().get(); }
+        if (!m_EnemyPool.empty()) { 
+            m_CurrentBoss = m_EnemyPool.back().get(); 
+            m_CurrentBoss->SetIsBoss(true);
+        }
     }
 
     bool BattleManager::IsBossAlive() const { return m_CurrentBoss != nullptr; }

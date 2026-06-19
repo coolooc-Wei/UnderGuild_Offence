@@ -71,7 +71,6 @@ void UGO::App::Update() {
             m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
         }
 
-        m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }
 
@@ -155,15 +154,6 @@ void UGO::App::Update() {
 
     // When Game over (Win or Lose)
     if (gameResult != System::GameRuleSystem::GameResult::IN_PROGRESS) {
-        if (gameResult == System::GameRuleSystem::GameResult::WIN) {
-            // Collect all remaining drops at level end
-            auto heroes = m_BattleManager->GetAllHeroes();
-            if (!heroes.empty()) {
-                m_DropSystem->CollectAllDrops(heroes[0]->GetWorldPosition());
-            }
-        }
-
-        m_SettlingTimer = 0.0f;
         ChangeGameState(GameState::SETTLING);
     }
 
@@ -177,26 +167,16 @@ void UGO::App::Update() {
 
   } break;
   case GameState::SETTLING: {
-      m_SettlingTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
-
       // Keep updating drops so they can fly
       auto heroes = m_BattleManager->GetAllHeroes();
-      if (!heroes.empty()) {
-          m_DropSystem->UpdateDrops(heroes[0]);
-      }
-      else{
-        m_DropSystem->ClearDrops();
-        m_EffectAnimationManager->Reset();
-        ChangeGameState(GameState::END);
-      }
+      if (!heroes.empty()) { m_DropSystem->UpdateDrops(heroes[0]); }
+      else { ChangeGameState(GameState::END); }
 
       // Keep updating movement (transform sync) but NO AI/Keyboard update
       m_BattleManager->UpdateMovement();
 
-      // Check for completion or timeout
-      if (m_DropSystem->GetAllDrops().empty() || m_SettlingTimer >= 5.0f) { ChangeGameState(GameState::END); }
-
-      m_MapSystem->ClearRoom();
+      // Check for completion
+      if (m_DropSystem->GetAllDrops().empty()) { ChangeGameState(GameState::END); }
   } break;
   case GameState::END: {
   } break;
