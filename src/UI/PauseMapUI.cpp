@@ -18,7 +18,7 @@ PauseMapUI::PauseMapUI(Util::Renderer& root, System::LevelSystem& levelSystem)
     // 縮放至全螢幕（1280x720）
     glm::vec2 bgSize = bgImg->GetSize();
     if (bgSize.x > 0 && bgSize.y > 0) {
-        m_Background->m_Transform.scale = { 1280.0f / bgSize.x, 720.0f / bgSize.y };
+        m_Background->m_Transform.scale = { 640.0f / bgSize.x, 360.0f / bgSize.y };
     }
     m_Background->SetZIndex(MAP_Z);
     m_Background->SetVisible(false);

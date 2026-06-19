@@ -21,7 +21,7 @@ namespace UGO::UI {
         const std::string refreshHoverPath= "../Resources/Image/button/Bt_12_1.png";
         const std::string refreshPresPath = "../Resources/Image/button/Bt_12_2.png";
         const std::string rerollIconPath  = "../Resources/Image/button/Icon_Reroll.png";
-        const std::string overlayPath     = "../Resources/Image/card/Bg_Card_Grade.png";
+        const std::string overlayPath     = "../Resources/Image/button/Bt_12_2.png";
 
         // ── 背景遮罩 ──────────────────────────────────────────
         m_Overlay = std::make_shared<Util::GameObject>();

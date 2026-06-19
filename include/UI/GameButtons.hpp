@@ -34,7 +34,8 @@ private:
 
     std::shared_ptr<Scene::BasicObject> m_PauseIcon;
     std::shared_ptr<Scene::BasicObject> m_ContinueIcon;
-    std::shared_ptr<Scene::BasicObject> m_MixIcon;
+    std::shared_ptr<Util::Text> m_CombineText;
+    std::shared_ptr<Util::GameObject> m_CombineTextObj;
 
     std::shared_ptr<Util::Text> m_StartMenuText;
     std::shared_ptr<Util::GameObject> m_StartMenuTextObj;

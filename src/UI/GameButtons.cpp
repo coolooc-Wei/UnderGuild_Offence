@@ -86,9 +86,9 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     const glm::vec2 mixPos = glm::vec2{-570.0f, -220.0f};
     m_MixButton = std::make_shared<UI::Button>(
         mixPos,
-        50.0f, 50.0f,
-        "../Resources/Image/button/Bt_12.png",
+        150.0f, 50.0f,
         "../Resources/Image/button/Bt_12_1.png",
+        "../Resources/Image/button/Bt_12_2.png",
         "../Resources/Image/button/Bt_12_2.png"
     );
     m_MixButton->SetZIndex(10.0f);
@@ -97,15 +97,17 @@ GameButtons::GameButtons(Util::Renderer& root, UIManager& uiManager, std::functi
     root.AddChild(m_MixButton);
     uiManager.Register(m_MixButton);
 
-    m_MixIcon = std::make_shared<Scene::BasicObject>();
-    m_MixIcon->SetImage("../Resources/Image/title/Title_Mix.png");
-    m_MixIcon->SetDrawableType(Scene::BasicObject::DrawableType::Image);
-    m_MixIcon->SetSize(35.0f, 35.0f);
-    m_MixIcon->GetGameObject()->m_Transform.translation = mixPos;
-    m_MixIcon->GetGameObject()->SetZIndex(100.0f);
-    m_MixIcon->GetGameObject()->SetVisible(false);
-    root.AddChild(m_MixIcon->GetGameObject());
-
+    m_CombineText = std::make_shared<Util::Text>(
+        "../PTSD/assets/fonts/Inter.ttf", 14, "Combination",
+        Util::Color::FromName(Util::Colors::WHITE)
+    );
+    m_CombineTextObj = std::make_shared<Util::GameObject>();
+    m_CombineTextObj->SetDrawable(m_CombineText);
+    m_CombineTextObj->m_Transform.translation = glm::vec2{ -565.0f, -220.0f };
+    m_CombineTextObj->SetZIndex(11.0f);
+    m_CombineTextObj->SetVisible(false);
+    root.AddChild(m_CombineTextObj);
+    
     // ── Welcome 頁面的「Enter Sewer」文字 ──
     m_StartMenuText = std::make_shared<Util::Text>(
         "../PTSD/assets/fonts/Inter.ttf", 18, "Enter Sewer",
@@ -158,8 +160,8 @@ GameButtons::~GameButtons() {
     if (m_ContinueIcon && m_ContinueIcon->GetGameObject()) {
         m_Root.RemoveChild(m_ContinueIcon->GetGameObject());
     }
-    if (m_MixIcon && m_MixIcon->GetGameObject()) {
-        m_Root.RemoveChild(m_MixIcon->GetGameObject());
+    if (m_CombineTextObj) {
+        m_Root.RemoveChild(m_CombineTextObj);
     }
     if (m_StartMenuTextObj) {
         m_Root.RemoveChild(m_StartMenuTextObj);
@@ -209,8 +211,8 @@ void GameButtons::SetMixButtonVisible(bool visible) {
     if (m_MixButton) {
         m_MixButton->SetVisible(visible);
     }
-    if (m_MixIcon) {
-        m_MixIcon->GetGameObject()->SetVisible(visible);
+    if (m_CombineTextObj) {
+        m_CombineTextObj->SetVisible(visible);
     }
 }
 
