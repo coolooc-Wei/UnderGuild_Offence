@@ -23,6 +23,7 @@ namespace Scene {
         LifeLink,
         MaxHpUp,
         CritChanceUp,
+        Reinforcements,
     };
 
     struct StatusEffectData {

@@ -2,6 +2,8 @@
 
 #include "Scene/AnimationLite.hpp"
 #include "Core/UGO_Math.hpp"
+#include "System/MercenaryConditionSystem.hpp"
+#include "System/CharacterFactory.hpp"
 
 namespace UGO::System {
 
@@ -170,6 +172,35 @@ namespace UGO::System {
         GenerateNextBatch();
         LOG_INFO("Starting wave number {}", ++m_CurrentWaveID);
         m_WaveTimer.Start(m_WaveInterval);
+
+        if (m_MercenaryConditionSystem) {
+            int activeTier = m_MercenaryConditionSystem->GetActiveBondTier("reinforcements");
+            if (activeTier >= 0) {
+                float chance = (activeTier == 0) ? 0.5f : 0.75f;
+                float roll = Core::RandomFloat(0.0f, 1.0f);
+                if (roll <= chance) {
+                    if (m_CharacterFactory) {
+                        std::vector<std::string> legendaryIDs = m_CharacterFactory->GetLegendaryMercenaryIDs();
+                        if (!legendaryIDs.empty()) {
+                            int randIdx = std::rand() % legendaryIDs.size();
+                            std::string selectedID = legendaryIDs[randIdx];
+                            
+                            auto heroes = m_BattleManager.GetAllHeroes();
+                            if (!heroes.empty() && heroes[0]) {
+                                Core::WorldPosition spawnPos = heroes[0]->GetWorldPosition();
+                                spawnPos.x += Core::RandomFloat(-50.0f, 50.0f);
+                                spawnPos.y += Core::RandomFloat(-50.0f, 50.0f);
+                                m_BattleManager.AddMercenaryByID(selectedID, spawnPos);
+                                LOG_INFO("[Reinforcements Bond] Successfully summoned legendary companion '{}' at ({}, {}) (Tier: {}, Chance: {}%)", 
+                                         selectedID, spawnPos.x, spawnPos.y, activeTier + 1, (int)(chance * 100));
+                            }
+                        }
+                    }
+                } else {
+                    LOG_INFO("[Reinforcements Bond] Roll failed (Roll: {}, Chance: {}%)", roll, (int)(chance * 100));
+                }
+            }
+        }
     }
     void EnemiesSpawnerSystem::GenerateNextBatch() {
         if (m_BatchDataList.empty()) {
