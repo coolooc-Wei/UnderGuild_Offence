@@ -2,6 +2,7 @@
 
 #include "Scene/BasicObject.hpp"
 #include "Scene/Character.hpp"
+#include "Scene/ClockHand.hpp"
 #include "Core/UGO_Math.hpp"
 #include "Core/Coordinate.hpp"
 #include "System/MercenaryConditionSystem.hpp"
@@ -40,7 +41,13 @@ namespace UGO::System {
 
         m_MedicTimer.Start();
     }
-    BattleManager::~BattleManager() {}
+    BattleManager::~BattleManager() {
+        for (auto& hand : m_ClockHands) {
+            if (hand && hand->GetGameObject()) {
+                m_Root.RemoveChild(hand->GetGameObject());
+            }
+        }
+    }
 
     void BattleManager::RebuildCaches() const {
         if (!m_IsCacheDirty) { return; }
@@ -473,13 +480,26 @@ namespace UGO::System {
                                          merc->GetInstanceID(), merc->GetTypeID(), healAmount, healPercentage * 100.0f);
                             }
                         } else {
-                            float heroHealPercentage = 0.02f;
+                             float heroHealPercentage = 0.02f;
                             float healAmount = hero->GetMaxHP() * heroHealPercentage;
                             hero->OnHeal(healAmount);
                             LOG_INFO("[Medic Bond] No nearby mercenaries. Healed Hero for {} HP (2%)", healAmount);
                         }
                     }
                 }
+            }
+        }
+
+        // 時鐘指針 (Clock Hands) 羈絆效果處理
+        if (m_ConditionSystem) {
+            int activeTier = m_ConditionSystem->GetActiveBondTier("clock_hands");
+            UpdateClockHands(activeTier);
+        }
+
+        // Update all Clock Hands
+        for (auto& hand : m_ClockHands) {
+            if (hand) {
+                hand->Update();
             }
         }
     }
@@ -531,6 +551,59 @@ namespace UGO::System {
             }
         }
         m_IsCacheDirty = true;
+    }
+
+    void BattleManager::UpdateClockHands(int activeTier) {
+        if (activeTier == m_CurrentClockHandsTier) {
+            if (activeTier >= 0) {
+                float damageMultiplier = (activeTier == 0) ? 3.0f : 4.5f;
+                for (auto& hand : m_ClockHands) {
+                    if (hand) {
+                        hand->SetDamageMultiplier(damageMultiplier);
+                    }
+                }
+            }
+            return;
+        }
+
+        // Clean up old hands
+        for (auto& hand : m_ClockHands) {
+            if (hand && hand->GetGameObject()) {
+                m_Root.RemoveChild(hand->GetGameObject());
+            }
+        }
+        m_ClockHands.clear();
+
+        m_CurrentClockHandsTier = activeTier;
+
+        if (activeTier < 0) {
+            LOG_INFO("[Clock Hands Bond] Deactivated. All clock hands removed.");
+            return;
+        }
+
+        auto heroes = GetAllHeroes();
+        if (heroes.empty() || !heroes[0]) {
+            return;
+        }
+        auto* hero = heroes[0];
+
+        float damageMultiplier = (activeTier == 0) ? 3.0f : 4.5f;
+
+        // Both Tier 1 (activeTier == 0) and Tier 2 (activeTier == 1) spawn exactly 1 clock hand
+        // length: 180.0f, speed: 2.0f rad/s
+        auto hand = std::make_unique<Scene::ClockHand>(
+            *this,
+            m_EffectAnimationManager,
+            hero,
+            180.0f,          // length
+            2.0f,           // speed (rad/s)
+            damageMultiplier,
+            0.5f            // hit cooldown (seconds)
+        );
+        m_Root.AddChild(hand->GetGameObject());
+        m_ClockHands.push_back(std::move(hand));
+        LOG_INFO("[Clock Hands Bond] Tier {} Activated. Spawned 1 clock hand (Damage: {}%).",
+                 activeTier + 1, static_cast<int>(damageMultiplier * 100.0f));
     }
 
 } // namespace UGO::System

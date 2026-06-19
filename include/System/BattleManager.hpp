@@ -13,6 +13,9 @@
 #include "System/RewardManager.hpp"
 
 namespace UGO {
+namespace Scene {
+    class ClockHand;
+}
 namespace System {
     class MercenaryConditionSystem;
 
@@ -141,6 +144,9 @@ namespace System {
         const Core::Distance m_offsetDis = 32.0f;
         std::vector<Scene::StatusEffectData> m_GlobalEnemyDebuffs; ///< 套用至所有後續生成敵人
 
+        std::vector<std::unique_ptr<Scene::ClockHand>> m_ClockHands;
+        int m_CurrentClockHandsTier = -1;
+        void UpdateClockHands(int activeTier);
     };
 
 } // namespace System
